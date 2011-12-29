@@ -12,9 +12,9 @@ Note: RPG Ambience only works on Windows computers.
 # Playing audiovisuals
 - If your audiovisual has a Key attribute, you play it by simply pressing the defined key.
 - If your audiovisual has a Name attribute, you play it by typing in the name and then pressing Enter.
-	- You can save time by just typing in the first few letters of the name, but this is unreliable if there are scenes with similar names.
-	- Names are case insensitive.
-	- You can use backspace to remove letters as usual.
+    - You can save time by just typing in the first few letters of the name, but this is unreliable if there are scenes with similar names.
+    - Names are case insensitive.
+    - You can use backspace to remove letters as usual.
 
 # Keyboard commands
 - Enter: End the currently playing effect if there is one. Otherwise, end the currently playing scene.
@@ -23,26 +23,26 @@ Note: RPG Ambience only works on Windows computers.
 # Sample adventure
 <Adventure xmlns="clr-namespace:Ambience;assembly=Ambience">
     <Adventure.Scenes>
-		<!-- Scene with key. -->
+        <!-- Scene with key. -->
         <AudioVisual
-			Key="F1"
-			Sound="C:\Music\Forest.mp3"
-			Image="C:\Images\Forest.jpg"/>
-		<!-- Scene with name. -->
+            Key="F1"
+            Sound="C:\Music\Forest.mp3"
+            Image="C:\Images\Forest.jpg"/>
+        <!-- Scene with name. -->
         <AudioVisual
             Name="Cave"
-			Sound="C:\Music\Cave.mp3"
-			Image="C:\Images\Cave.mp3"/>
+            Sound="C:\Music\Cave.mp3"
+            Image="C:\Images\Cave.mp3"/>
     </Adventure.Scenes>
     <Adventure.Effects>
-		<!-- Effect with image and white background. -->
+        <!-- Effect with image and white background. -->
         <AudioVisual
-			Key="F2"
-			Image="C:\Images\Ogre.jpg"
-			Background="White"/>
-		<!-- Sound effect. -->
+            Key="F2"
+            Image="C:\Images\Ogre.jpg"
+            Background="White"/>
+        <!-- Sound effect. -->
         <AudioVisual
-			Key="F3"
+            Key="F3"
             Sound="C:\Sounds\Dragon.mp3"/>
     </Adventure.Effects>
 </Adventure>

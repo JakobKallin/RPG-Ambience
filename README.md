@@ -4,10 +4,11 @@ RPG Ambience allows you to play sounds and display visuals during your tabletop 
 Note: RPG Ambience only works on Windows computers.
 
 ## How to use
-1. Create an adventure file in a text editor. (There is a sample adventure file below.)
-2. Open Ambience.exe and choose the adventure file when prompted.
-3. Double-click inside the newly opened Ambience window to put it in fullscreen mode.
-4. Use the keyboard to control your audiovisuals and bring your adventure to life!
+1. Download Ambience.exe and put it in any folder on your computer.
+2. Create an adventure file in a text editor. (There is a sample adventure file below.)
+3. Open Ambience.exe and choose the adventure file when prompted.
+4. Double-click inside the newly opened Ambience window to put it in fullscreen mode.
+5. Use the keyboard to control your audiovisuals and bring your adventure to life!
 
 ## Playing audiovisuals
 - If your audiovisual has a Key attribute, you play it by simply pressing the defined key.

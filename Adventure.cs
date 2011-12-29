@@ -21,56 +21,6 @@ namespace Ambience
         {
             Scenes = new List<AudioVisual>();
             Effects = new List<AudioVisual>();
-            /*var logo = new AudioVisual()
-            {
-                Key = Key.F12,
-                Background = Brushes.Black,
-                Image = new Uri(@"C:\star-wars.png"),
-                Sound = new Uri(@"C:\intro.mp3")
-            };
-
-            var text = new AudioVisual()
-            {
-                Key = Key.F11,
-                Background = Brushes.Black,
-                FadeDuration = 2,
-                Delay = 2,
-                Text = new Text
-                {
-                    String = "För länge sedan i en galax långt,\nlångt bort. . . .",
-                    Font = new FontFamily("Franklin Gothic Medium"),
-                    Color = Brushes.Cyan,
-                    Size = 40
-                },
-                Next = logo
-            };
-            Effects.Add(text);
-            Effects.Add(logo);
-
-            var clonetroopers = new AudioVisual()
-            {
-                Key = Key.F2,
-                Background = Brushes.White,
-                Image = new Uri(@"C:\clonetroopers.jpg"),
-                Sound = new Uri(@"C:\medley.mp3")
-            };
-            Scenes.Add(clonetroopers);
-            Effects.Add(new AudioVisual()
-            {
-                Key = Key.F1,
-                Background = Brushes.White,
-                Image = new Uri(@"C:\parchment.jpg"),
-                Sound = new Uri(@"C:\door.mp3"),
-                Text = new Text()
-                {
-                    String = "Vi har eran prässt.\nGe oss våran\nprässt ok trolformelln eler så dör hann.",
-                    Font = new FontFamily("Perpetua"),
-                    Color = Brushes.Black,
-                    Style = FontStyles.Italic,
-                    Size = 40
-                },
-                Next = clonetroopers
-            });*/
         }
 
         public AudioVisual KeyedScene(Key key)

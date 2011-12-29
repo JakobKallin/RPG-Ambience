@@ -21,31 +21,31 @@ Note: RPG Ambience only works on Windows computers.
 - Escape: Leave fullscreen mode.
 
 ## Sample adventure
-<Adventure xmlns="clr-namespace:Ambience;assembly=Ambience">
-    <Adventure.Scenes>
-        <!-- Scene with key. -->
-        <AudioVisual
-            Key="F1"
-            Sound="C:\Music\Forest.mp3"
-            Image="C:\Images\Forest.jpg"/>
-        <!-- Scene with name. -->
-        <AudioVisual
-            Name="Cave"
-            Sound="C:\Music\Cave.mp3"
-            Image="C:\Images\Cave.mp3"/>
-    </Adventure.Scenes>
-    <Adventure.Effects>
-        <!-- Effect with image and white background. -->
-        <AudioVisual
-            Key="F2"
-            Image="C:\Images\Ogre.jpg"
-            Background="White"/>
-        <!-- Sound effect. -->
-        <AudioVisual
-            Key="F3"
-            Sound="C:\Sounds\Dragon.mp3"/>
-    </Adventure.Effects>
-</Adventure>
+	<Adventure xmlns="clr-namespace:Ambience;assembly=Ambience">
+		<Adventure.Scenes>
+			<!-- Scene with key. -->
+			<AudioVisual
+				Key="F1"
+				Sound="C:\Music\Forest.mp3"
+				Image="C:\Images\Forest.jpg"/>
+			<!-- Scene with name. -->
+			<AudioVisual
+				Name="Cave"
+				Sound="C:\Music\Cave.mp3"
+				Image="C:\Images\Cave.mp3"/>
+		</Adventure.Scenes>
+		<Adventure.Effects>
+			<!-- Effect with image and white background. -->
+			<AudioVisual
+				Key="F2"
+				Image="C:\Images\Ogre.jpg"
+				Background="White"/>
+			<!-- Sound effect. -->
+			<AudioVisual
+				Key="F3"
+				Sound="C:\Sounds\Dragon.mp3"/>
+		</Adventure.Effects>
+	</Adventure>
 
 ## Experimental features
 - Adding text to audiovisuals.

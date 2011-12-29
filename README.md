@@ -4,7 +4,7 @@ RPG Ambience allows you to play sounds and display visuals during your tabletop 
 Note: RPG Ambience only works on Windows computers.
 
 ## How to use
-1. Download Ambience.exe and put it in any folder on your computer.
+1. Download [Ambience.exe](https://github.com/downloads/JakobKallin/RPG-Ambience/Ambience.exe) and put it in any folder on your computer.
 2. Create an adventure file in a text editor. (There is a sample adventure file below.)
 3. Open Ambience.exe and choose the adventure file when prompted.
 4. Double-click inside the newly opened Ambience window to put it in fullscreen mode.

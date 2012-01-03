@@ -38,6 +38,9 @@ $(window).load(function() {
 	
 	var effectSpeaker = document.getElementById('effect-sound');
 	
+	var sceneIsPlaying = false;
+	var effectIsPlaying = false;
+	
 	function keyStringFromKeyCode(keyCode) {
 		if ( keyCode in keyStrings ) {
 			return keyStrings[keyCode];
@@ -70,20 +73,32 @@ $(window).load(function() {
 		stopScene();
 		stopEffect();
 		playAudiovisual(scene, sceneStage, sceneSpeaker);
+		sceneIsPlaying = true;
 	}
 	
 	function stopScene() {
 		stopAudiovisual(sceneStage, sceneSpeaker);
+		sceneIsPlaying = false;
 		stopEffect();
 	}
 	
 	function playEffect(effect) {
 		stopEffect();
 		playAudiovisual(effect, effectStage, effectSpeaker);
+		effectIsPlaying = true;
 	}
 	
 	function stopEffect() {
 		stopAudiovisual(effectStage, effectSpeaker);
+		effectIsPlaying = false;
+	}
+	
+	function stopOne() {
+		if ( effectIsPlaying ) {
+			stopEffect();
+		} else if ( sceneIsPlaying ) {
+			stopScene();
+		}
 	}
 	
 	function playAudiovisual(scene, stage, speaker) {
@@ -119,8 +134,7 @@ $(window).load(function() {
 		var keyString = keyStringFromKeyCode(event.which);
 		if ( keyString === 'Enter' ) {
 			event.preventDefault();
-			stopScene();
-			stopEffect();
+			stopOne();
 		} else if ( keyString !== null ) {
 			var scene = keyedScene(keyString);
 			if ( scene === null ) {

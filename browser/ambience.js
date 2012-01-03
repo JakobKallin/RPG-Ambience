@@ -2,7 +2,11 @@ $(window).load(function() {
 	var scenes = [
 		{ key: 'F1', image: 'fates.jpg', sound: 'fates.mp3' },
 		{ key: 'F2', image: 'clone.jpg' },
-		{ key: 'F3', image: 'jedi.jpg', sound: 'saber.wav' }
+		{ key: 'F3', image: 'jedi.jpg', background: 'white' }
+	];
+	
+	var effects = [
+		{ key: 'F4', image: 'saber.png', sound: 'saber.mp3' }
 	];
 	
 	var keyStrings = {
@@ -21,11 +25,18 @@ $(window).load(function() {
 		123: 'F12'
 	};
 	
-	var stage = document.getElementById('stage');
-	var sceneSound = document.getElementById('scene-sound');
-	if ( typeof sceneSound.loop !== 'boolean' ) {
-		sceneSound.addEventListener('ended', function() { this.currentTime = 0; }, false);
+	var defaultBackground = 'black';
+	$(document.body).css('background-color', defaultBackground);
+	
+	var sceneStage = document.getElementById('scene-stage');
+	var effectStage = document.getElementById('effect-stage');
+	
+	var sceneSpeaker = document.getElementById('scene-sound');
+	if ( typeof sceneSpeaker.loop !== 'boolean' ) {
+		sceneSpeaker.addEventListener('ended', function() { this.currentTime = 0; }, false);
 	}
+	
+	var effectSpeaker = document.getElementById('effect-sound');
 	
 	function keyStringFromKeyCode(keyCode) {
 		if ( keyCode in keyStrings ) {
@@ -45,25 +56,62 @@ $(window).load(function() {
 		return null;
 	}
 	
+	function keyedEffect(keyString) {
+		for ( var i = 0; i < effects.length; i++ ) {
+			var effect = effects[i];
+			if ( effect.key === keyString ) {
+				return effect;
+			}
+		}
+		return null;
+	}
+	
 	function playScene(scene) {
 		stopScene();
-		
+		stopEffect();
+		playAudiovisual(scene, sceneStage, sceneSpeaker);
+	}
+	
+	function stopScene() {
+		stopAudiovisual(sceneStage, sceneSpeaker);
+		stopEffect();
+	}
+	
+	function playEffect(effect) {
+		stopEffect();
+		playAudiovisual(effect, effectStage, effectSpeaker);
+	}
+	
+	function stopEffect() {
+		stopAudiovisual(effectStage, effectSpeaker);
+	}
+	
+	function playAudiovisual(scene, stage, speaker) {
 		if ( scene.image ) {
 			$(stage).css('background-image', 'url(' + scene.image + ')');
 		}
 		
 		if ( scene.sound ) {
-			sceneSound.setAttribute('src', scene.sound);
+			speaker.setAttribute('src', scene.sound);
 			//sceneSound.load(); // Doesn't seem to be necessary.
-			sceneSound.play();
+			speaker.play();
 		}
+		
+		if ( scene.background ) {
+			$(stage).css('background-color', scene.background);
+		} else {
+			$(stage).css('background-color', defaultBackground);
+		}
+		
+		$(stage).css('visibility', 'visible');
 	}
 	
-	function stopScene() {
-		$(stage).css('background-image', '');
-		if ( sceneSound ) {
-			sceneSound.pause();
-			sceneSound.removeAttribute('src');
+	function stopAudiovisual(stage, speaker) {
+		$(stage).css('visibility', 'hidden');
+		
+		if ( speaker ) {
+			speaker.pause();
+			speaker.removeAttribute('src');
 		}
 	}
 	
@@ -72,9 +120,16 @@ $(window).load(function() {
 		if ( keyString === 'Enter' ) {
 			event.preventDefault();
 			stopScene();
+			stopEffect();
 		} else if ( keyString !== null ) {
 			var scene = keyedScene(keyString);
-			if ( scene !== null ) {
+			if ( scene === null ) {
+				var effect = keyedEffect(keyString);
+				if ( effect !== null ) {
+					event.preventDefault();
+					playEffect(effect);
+				}
+			} else {
 				event.preventDefault();
 				playScene(scene);
 			}

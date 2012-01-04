@@ -1,13 +1,13 @@
 $(window).load(function() {
 	var scenes = [
-		{ key: 'F1', image: 'fates.jpg', sound: 'fates.mp3' },
-		{ key: 'F2', image: 'clone.jpg' },
-		{ key: 'F3', image: 'jedi.jpg', background: 'white' }
+		{ key: 'F1', name: 'fates', image: 'fates.jpg', sound: 'fates.mp3' },
+		{ key: 'F2', name: 'clones', image: 'clones.jpg' },
+		{ key: 'F3', name: 'alliance', image: 'alliance.svg', background: 'white' }
 	];
 	
 	var effects = [
-		{ key: 'F4', image: 'saber.png', sound: 'saber.mp3', background: 'transparent' },
-		{ key: 'F5', sound: 'saber.mp3' }
+		{ key: 'F4', name: 'saber', image: 'saber.png', sound: 'saber.mp3', background: 'transparent' },
+		{ key: 'F5', name: 'sabersound', sound: 'saber.mp3' }
 	];
 	
 	var keyStrings = {
@@ -52,12 +52,48 @@ $(window).load(function() {
 	var sceneIsPlaying = false;
 	var effectIsPlaying = false;
 	
+	var commandForm = document.getElementById('command-form');
+	
+	function hideForm() {
+		$(commandForm).css('right', $(window).width());
+	}
+	hideForm();
+	$(window).resize(hideForm);
+	
+	$(commandForm).submit(function() {
+		event.preventDefault();
+		
+		if ( $(commandInput).val() === '' ) {
+			stopOne();
+		} else {
+			var audiovisualName = $(commandInput).val();
+			playNamedAudiovisual(audiovisualName);
+			$(commandInput).val('');
+		}
+	});
+	
+	var commandInput = document.getElementById('command-input');
+	$(commandInput).focus();
+	$(document).click(function() { $(commandInput).focus(); });
+	
 	function keyStringFromKeyCode(keyCode) {
 		if ( keyCode in keyStrings ) {
 			return keyStrings[keyCode];
 		} else {
 			return null;
 		}
+	}
+	
+	function namedScene(name) {
+		return scenes.first(function(scene) {
+			return scene.name && scene.name === name;
+		});
+	}
+	
+	function namedEffect(name) {
+		return effects.first(function(effect) {
+			return effect.name && effect.name === name;
+		});
 	}
 	
 	function keyedScene(keyString) {
@@ -148,12 +184,21 @@ $(window).load(function() {
 		}
 	}
 	
+	function playNamedAudiovisual(name) {
+		var scene = namedScene(name);
+		if ( scene === null ) {
+			var effect = namedEffect(name);
+			if ( effect !== null ) {
+				playEffect(effect);
+			}
+		} else {
+			playScene(scene);
+		}
+	}
+	
 	$(document).keydown(function(event) {
 		var keyString = keyStringFromKeyCode(event.which);
-		if ( keyString === 'Enter' ) {
-			event.preventDefault();
-			stopOne();
-		} else if ( keyString !== null ) {
+		if ( keyString !== null ) {
 			var scene = keyedScene(keyString);
 			if ( scene === null ) {
 				var effect = keyedEffect(keyString);

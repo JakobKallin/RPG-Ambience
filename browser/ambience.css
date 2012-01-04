@@ -15,3 +15,8 @@ html, body {
 	background-size: contain;
 	visibility: hidden;
 }
+
+#command-form {
+	position: absolute;
+	top: 0;
+}

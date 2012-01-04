@@ -3,10 +3,15 @@
 	<head>
 		<title>Ambience</title>
 		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="functional.js"></script>
 		<script type="text/javascript" src="ambience.js"></script>
 		<link rel="stylesheet" type="text/css" href="ambience.css">
 	</head>
 	<body>
+		<form id="command-form" autocomplete="off">
+			<input type="text" id="command-input">
+			<button type="submit">Submit</button>
+		</form>
 		<div id="scene-stage" class="stage">
 			<audio id="scene-sound" loop>
 		</div>

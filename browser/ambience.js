@@ -6,7 +6,7 @@ $(window).load(function() {
 	];
 	
 	var effects = [
-		{ key: 'F4', image: 'saber.png', sound: 'saber.mp3' },
+		{ key: 'F4', image: 'saber.png', sound: 'saber.mp3', background: 'transparent' },
 		{ key: 'F5', sound: 'saber.mp3' }
 	];
 	
@@ -38,6 +38,16 @@ $(window).load(function() {
 	}
 	
 	var effectSpeaker = document.getElementById('effect-sound');
+	var onAudioEffectEnded = null;
+	effectSpeaker.addEventListener(
+		'ended',
+		function() {
+			if ( onAudioEffectEnded !== null) {
+				onAudioEffectEnded();
+			}
+		},
+		false
+	);
 	
 	var sceneIsPlaying = false;
 	var effectIsPlaying = false;
@@ -87,11 +97,16 @@ $(window).load(function() {
 		stopEffect();
 		playAudiovisual(effect, effectStage, effectSpeaker);
 		effectIsPlaying = true;
+		
+		if ( !effect.image && !effect.background ) {
+			onAudioEffectEnded = stopEffect;
+		}
 	}
 	
 	function stopEffect() {
 		stopAudiovisual(effectStage, effectSpeaker);
 		effectIsPlaying = false;
+		onAudioEffectEnded = null;
 	}
 	
 	function stopOne() {

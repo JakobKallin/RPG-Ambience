@@ -6,7 +6,8 @@ $(window).load(function() {
 	];
 	
 	var effects = [
-		{ key: 'F4', image: 'saber.png', sound: 'saber.mp3' }
+		{ key: 'F4', image: 'saber.png', sound: 'saber.mp3' },
+		{ key: 'F5', sound: 'saber.mp3' }
 	];
 	
 	var keyStrings = {
@@ -114,15 +115,17 @@ $(window).load(function() {
 		
 		if ( scene.background ) {
 			$(stage).css('background-color', scene.background);
-		} else {
-			$(stage).css('background-color', defaultBackground);
 		}
 		
-		$(stage).css('visibility', 'visible');
+		if ( scene.image || scene.background ) {
+			$(stage).css('visibility', 'visible');
+		}
 	}
 	
 	function stopAudiovisual(stage, speaker) {
 		$(stage).css('visibility', 'hidden');
+		$(stage).css('background-color', defaultBackground);
+		$(stage).css('background-image', '');
 		
 		if ( speaker ) {
 			speaker.pause();

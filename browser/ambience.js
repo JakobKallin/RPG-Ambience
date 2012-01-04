@@ -63,7 +63,7 @@ $(window).load(function() {
 	$(commandForm).submit(function() {
 		event.preventDefault();
 		
-		if ( $(commandInput).val() === '' ) {
+		if ( $(commandInput).val().length === 0 ) {
 			stopOne();
 		} else {
 			var audiovisualName = $(commandInput).val();
@@ -85,15 +85,23 @@ $(window).load(function() {
 	}
 	
 	function namedScene(name) {
-		return scenes.first(function(scene) {
-			return scene.name && scene.name === name;
-		});
+		if ( name.length > 0 ) {
+			return scenes.first(function(scene) {
+				return scene.name && scene.name.startsWith(name);
+			});
+		} else {
+			return null;
+		}
 	}
 	
 	function namedEffect(name) {
-		return effects.first(function(effect) {
-			return effect.name && effect.name === name;
-		});
+		if ( name.length > 0 ) {
+			return effects.first(function(effect) {
+				return effect.name && effect.name.startsWith(name);
+			});
+		} else {
+			return null;
+		}
 	}
 	
 	function keyedScene(keyString) {

@@ -7,3 +7,7 @@ Array.prototype.first = function(predicate) {
 	}
 	return null;
 };
+
+String.prototype.startsWith = function(prefix) {
+	return this.indexOf(prefix) === 0;
+};

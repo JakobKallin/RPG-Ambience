@@ -11,6 +11,7 @@ $(window).load(function() {
 	];
 	
 	var keyStrings = {
+		8: 'Backspace',
 		13: 'Enter',
 		112: 'F1',
 		113: 'F2',
@@ -52,29 +53,28 @@ $(window).load(function() {
 	var sceneIsPlaying = false;
 	var effectIsPlaying = false;
 	
-	var commandForm = document.getElementById('command-form');
-	
-	function hideForm() {
-		$(commandForm).css('right', $(window).width());
-	}
-	hideForm();
-	$(window).resize(hideForm);
-	
-	$(commandForm).submit(function() {
-		event.preventDefault();
-		
-		if ( $(commandInput).val().length === 0 ) {
+	var command = '';
+	function executeCommand(command) {
+		console.log('Executing command: ' + command);
+		console.log('Command length: ' + command.length);
+		if ( command.length === 0 ) {
 			stopOne();
 		} else {
-			var audiovisualName = $(commandInput).val();
+			var audiovisualName = command;
 			playNamedAudiovisual(audiovisualName);
-			$(commandInput).val('');
 		}
-	});
+	}
 	
-	var commandInput = document.getElementById('command-input');
-	$(commandInput).focus();
-	$(document).click(function() { $(commandInput).focus(); });
+	function resetCommand() {
+		command = '';
+		console.log('Command reset');
+	}
+	
+	function backspaceCommand() {
+		if ( command.length > 0 ) {
+			command = command.substring(0, command.length - 1);
+		}
+	}
 	
 	function keyStringFromKeyCode(keyCode) {
 		if ( keyCode in keyStrings ) {
@@ -206,18 +206,37 @@ $(window).load(function() {
 	
 	$(document).keydown(function(event) {
 		var keyString = keyStringFromKeyCode(event.which);
-		if ( keyString !== null ) {
+		
+		if ( keyString === 'Enter' ) {
+			executeCommand(command);
+			resetCommand();
+		} else if ( keyString === 'Backspace' ) {
+			event.preventDefault();
+			backspaceCommand();
+		} else if ( keyString !== null ) {
 			var scene = keyedScene(keyString);
 			if ( scene === null ) {
 				var effect = keyedEffect(keyString);
 				if ( effect !== null ) {
 					event.preventDefault();
 					playEffect(effect);
+					resetCommand();
 				}
 			} else {
 				event.preventDefault();
 				playScene(scene);
+				resetCommand();
 			}
+		}
+	});
+	
+	$(document).keypress(function(event) {
+		var keyCode = event.which;
+		if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
+			event.preventDefault();
+			var character = String.fromCharCode(keyCode);
+			command += character;
+			console.log('Command: ' + command);
 		}
 	});
 });

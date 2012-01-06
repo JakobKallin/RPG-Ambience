@@ -1,14 +1,31 @@
 $(window).load(function() {
-	var scenes = [
-		{ key: 'F1', name: 'fates', image: 'fates.jpg', sound: 'fates.mp3' },
-		{ key: 'F2', name: 'clones', image: 'clones.jpg' },
-		{ key: 'F3', name: 'alliance', image: 'alliance.svg', background: 'white' }
-	];
+	var scenes;
+	var effects;
 	
-	var effects = [
-		{ key: 'F4', name: 'saber', image: 'saber.png', sound: 'saber.mp3', background: 'transparent' },
-		{ key: 'F5', name: 'sabersound', sound: 'saber.mp3' }
-	];
+	var menu = document.getElementById('menu');
+	var fileChooser = document.getElementById('file-chooser');
+	$(fileChooser).change(function(event) {
+		hideMenu();
+		loadAdventureFile(this.files[0]);
+	});
+	
+	function loadAdventureFile(file) {
+		var reader = new FileReader();
+		reader.onload = function() {
+			var json = JSON.parse(this.result);
+			loadAdventure(json);
+		};
+		reader.readAsText(file);
+	}
+	
+	function loadAdventure(config) {
+		scenes = config.scenes;
+		effects = config.effects;
+	}
+	
+	function hideMenu() {
+		$(menu).hide();
+	}
 	
 	var keyStrings = {
 		8: 'Backspace',

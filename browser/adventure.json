@@ -1,0 +1,12 @@
+{
+	"scenes": [
+		{ "key": "F1", "name": "fates", "image": "fates.jpg", "sound": "fates.mp3" },
+		{ "key": "F2", "name": "clones", "image": "clones.jpg" },
+		{ "key": "F3", "name": "alliance", "image": "alliance.svg", "background": "white" }
+	],
+	
+	"effects": [
+		{ "key": "F4", "name": "saber", "image": "saber.png", "sound": "saber.mp3", "background": "transparent" },
+		{ "key": "F5", "name": "sabersound", "sound": "saber.mp3" }
+	]
+}

@@ -59,13 +59,51 @@ $(window).load(function() {
 	var defaultBackground = 'black';
 	$(document.body).css('background-color', defaultBackground);
 	
-	var sceneStage = document.getElementById('scene-stage');
-	var effectStage = document.getElementById('effect-stage');
+	function stage(node, speaker) {
+		var isPlaying = false;
+		return {
+			isPlaying: function() {
+				return isPlaying;
+			},
+			playAudiovisual: function(audiovisual) {
+				if ( audiovisual.image ) {
+					$(node).css('background-image', 'url(' + audiovisual.image + ')');
+				}
+				
+				if ( audiovisual.sound ) {
+					speaker.setAttribute('src', audiovisual.sound);
+					//sceneSound.load(); // Doesn't seem to be necessary.
+					speaker.play();
+				}
+				
+				if ( audiovisual.background ) {
+					$(node).css('background-color', audiovisual.background);
+				}
+				
+				if ( audiovisual.image || audiovisual.background ) {
+					$(node).css('visibility', 'visible');
+				}
+				
+				isPlaying = true;
+			},
+			stopAudiovisual: function() {
+				$(node).css('visibility', 'hidden');
+				$(node).css('background-color', defaultBackground);
+				$(node).css('background-image', '');
+				
+				speaker.pause();
+				speaker.removeAttribute('src');
+				
+				isPlaying = false;
+			}
+		};
+	};
 	
 	var sceneSpeaker = document.getElementById('scene-sound');
 	if ( typeof sceneSpeaker.loop !== 'boolean' ) {
 		sceneSpeaker.addEventListener('ended', function() { this.currentTime = 0; }, false);
 	}
+	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker);
 	
 	var effectSpeaker = document.getElementById('effect-sound');
 	var onAudioEffectEnded = null;
@@ -78,9 +116,7 @@ $(window).load(function() {
 		},
 		false
 	);
-	
-	var sceneIsPlaying = false;
-	var effectIsPlaying = false;
+	var effectStage = stage(document.getElementById('effect-stage'), effectSpeaker);
 	
 	var command = '';
 	function executeCommand(command) {
@@ -158,20 +194,17 @@ $(window).load(function() {
 	function playScene(scene) {
 		stopScene();
 		stopEffect();
-		playAudiovisual(scene, sceneStage, sceneSpeaker);
-		sceneIsPlaying = true;
+		sceneStage.playAudiovisual(scene);
 	}
 	
 	function stopScene() {
-		stopAudiovisual(sceneStage, sceneSpeaker);
-		sceneIsPlaying = false;
+		sceneStage.stopAudiovisual();
 		stopEffect();
 	}
 	
 	function playEffect(effect) {
 		stopEffect();
-		playAudiovisual(effect, effectStage, effectSpeaker);
-		effectIsPlaying = true;
+		effectStage.playAudiovisual(effect);
 		
 		if ( !effect.image && !effect.background ) {
 			onAudioEffectEnded = stopEffect;
@@ -179,47 +212,15 @@ $(window).load(function() {
 	}
 	
 	function stopEffect() {
-		stopAudiovisual(effectStage, effectSpeaker);
-		effectIsPlaying = false;
+		effectStage.stopAudiovisual();
 		onAudioEffectEnded = null;
 	}
 	
 	function stopOne() {
-		if ( effectIsPlaying ) {
+		if ( effectStage.isPlaying() ) {
 			stopEffect();
-		} else if ( sceneIsPlaying ) {
+		} else if ( sceneStage.isPlaying() ) {
 			stopScene();
-		}
-	}
-	
-	function playAudiovisual(scene, stage, speaker) {
-		if ( scene.image ) {
-			$(stage).css('background-image', 'url(' + scene.image + ')');
-		}
-		
-		if ( scene.sound ) {
-			speaker.setAttribute('src', scene.sound);
-			//sceneSound.load(); // Doesn't seem to be necessary.
-			speaker.play();
-		}
-		
-		if ( scene.background ) {
-			$(stage).css('background-color', scene.background);
-		}
-		
-		if ( scene.image || scene.background ) {
-			$(stage).css('visibility', 'visible');
-		}
-	}
-	
-	function stopAudiovisual(stage, speaker) {
-		$(stage).css('visibility', 'hidden');
-		$(stage).css('background-color', defaultBackground);
-		$(stage).css('background-image', '');
-		
-		if ( speaker ) {
-			speaker.pause();
-			speaker.removeAttribute('src');
 		}
 	}
 	

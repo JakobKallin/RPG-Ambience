@@ -108,6 +108,8 @@ $(window).load(function() {
 	function keyStringFromKeyCode(keyCode) {
 		if ( keyCode in keyStrings ) {
 			return keyStrings[keyCode];
+		} else if ( String.fromCharCode(keyCode) !== '' ) {
+			return String.fromCharCode(keyCode);
 		} else {
 			return null;
 		}
@@ -116,7 +118,7 @@ $(window).load(function() {
 	function namedScene(name) {
 		if ( name.length > 0 ) {
 			return scenes.first(function(scene) {
-				return scene.name && scene.name.startsWith(name);
+				return scene.name && scene.name.toUpperCase().startsWith(name);
 			});
 		} else {
 			return null;
@@ -126,7 +128,7 @@ $(window).load(function() {
 	function namedEffect(name) {
 		if ( name.length > 0 ) {
 			return effects.first(function(effect) {
-				return effect.name && effect.name.startsWith(name);
+				return effect.name && effect.name.toUpperCase().startsWith(name);
 			});
 		} else {
 			return null;
@@ -136,7 +138,7 @@ $(window).load(function() {
 	function keyedScene(keyString) {
 		for ( var i = 0; i < scenes.length; i++ ) {
 			var scene = scenes[i];
-			if ( scene.key === keyString ) {
+			if ( scene.key.toUpperCase() === keyString.toUpperCase() ) {
 				return scene;
 			}
 		}
@@ -146,7 +148,7 @@ $(window).load(function() {
 	function keyedEffect(keyString) {
 		for ( var i = 0; i < effects.length; i++ ) {
 			var effect = effects[i];
-			if ( effect.key === keyString ) {
+			if ( effect.key.toUpperCase() === keyString.toUpperCase() ) {
 				return effect;
 			}
 		}

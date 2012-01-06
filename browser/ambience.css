@@ -1,5 +1,9 @@
-html, body {
+* {
 	margin: 0;
+	padding: 0;
+}
+
+html, body {
 	width: 100%;
 	height: 100%;
 }
@@ -12,7 +16,13 @@ html, body {
 	width: 100%;
 	height: 100%;
 	color: white;
-	font-family: sans-serif;
+}
+
+#menu p {
+	margin: 0.5em 0;
+	font-family: Georgia, serif;
+	font-style: italic;
+	font-size: 1.5em;
 }
 
 #menu form {

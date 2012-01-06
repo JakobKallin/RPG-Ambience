@@ -4,9 +4,21 @@ $(window).load(function() {
 	
 	var menu = document.getElementById('menu');
 	var fileChooser = document.getElementById('file-chooser');
-	$(fileChooser).change(function(event) {
+	$(fileChooser).change(function() {
 		hideMenu();
 		loadAdventureFile(this.files[0]);
+	});
+	
+	menu.addEventListener('drop', function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+		hideMenu();
+		loadAdventureFile(event.dataTransfer.files[0]);
+	});
+	menu.addEventListener('dragover', function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+		event.dataTransfer.dropEffect = 'copy';
 	});
 	
 	function loadAdventureFile(file) {

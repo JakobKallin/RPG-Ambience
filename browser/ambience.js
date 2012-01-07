@@ -154,7 +154,7 @@ $(window).load(function() {
 	function namedScene(name) {
 		if ( name.length > 0 ) {
 			return scenes.first(function(scene) {
-				return scene.name && scene.name.toUpperCase().startsWith(name);
+				return scene.name && scene.name.toUpperCase().startsWith(name.toUpperCase());
 			});
 		} else {
 			return null;
@@ -164,7 +164,7 @@ $(window).load(function() {
 	function namedEffect(name) {
 		if ( name.length > 0 ) {
 			return effects.first(function(effect) {
-				return effect.name && effect.name.toUpperCase().startsWith(name);
+				return effect.name && effect.name.toUpperCase().startsWith(name.toUpperCase());
 			});
 		} else {
 			return null;

@@ -6,7 +6,14 @@
 	],
 	
 	"effects": [
-		{ "key": "F4", "name": "saber", "image": "saber.png", "sound": "saber.mp3", "background": "transparent", "fade": 1.5 },
+		{
+			"key": "F4", 
+			"name": "saber", 
+			"image": "saber.png", 
+			"background": "transparent", 
+			"fade": 1.5,
+			"text": { "string": "An elegant weapon for a more civilized age.", "color": "white", "font-style": "italic" }
+		},
 		{ "key": "F5", "name": "sabersound", "sound": "saber.mp3" },
 		{ "key": "S", "sound": "saber.mp3" }
 	]

@@ -42,6 +42,12 @@ html, body {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: contain;
+	text-align: center;
+}
+
+.stage span {
+	display: table-cell;
+	vertical-align: middle;
 }
 
 #command-form {

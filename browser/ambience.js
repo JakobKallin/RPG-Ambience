@@ -60,7 +60,7 @@ $(window).load(function() {
 	var defaultBackground = 'black';
 	$(document.body).css('background-color', defaultBackground);
 	
-	function stage(node, speaker) {
+	function stage(node, speaker, sign) {
 		var currentAudiovisual = null;
 		var isFadingOut = false;
 		
@@ -70,6 +70,15 @@ $(window).load(function() {
 			$(node).css('background-color', defaultBackground);
 			$(node).css('background-image', '');
 			$(node).css('opacity', 0);
+			
+			if ( currentAudiovisual && currentAudiovisual.text ) {
+				$(sign).text('');
+				for ( var cssProperty in currentAudiovisual.text ) {
+					if ( cssProperty !== 'text' ) {
+						$(sign).css(cssProperty, '');
+					}
+				}
+			}
 			
 			speaker.pause();
 			speaker.removeAttribute('src');
@@ -116,7 +125,7 @@ $(window).load(function() {
 				}
 				
 				if ( audiovisual.image || audiovisual.background ) {
-					$(node).css('display', 'block');
+					$(node).css('display', 'table');
 					
 					if ( audiovisual.fade ) {
 						var fadeDuration = audiovisual.fade * 1000;
@@ -125,6 +134,16 @@ $(window).load(function() {
 					}
 					
 					$(node).animate({opacity: 1}, fadeDuration);
+				}
+				
+				if ( audiovisual.text ) {
+					$(sign).text(audiovisual.text.string || '');
+					for ( var cssProperty in audiovisual.text ) {
+						if ( cssProperty !== 'text' ) {
+							var cssValue = audiovisual.text[cssProperty];
+							$(sign).css(cssProperty, cssValue);
+						}
+					}
 				}
 				
 				currentAudiovisual = audiovisual;
@@ -138,7 +157,7 @@ $(window).load(function() {
 	if ( typeof sceneSpeaker.loop !== 'boolean' ) {
 		sceneSpeaker.addEventListener('ended', function() { this.currentTime = 0; }, false);
 	}
-	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker);
+	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
 	
 	var effectSpeaker = document.getElementById('effect-sound');
 	var onAudioEffectEnded = null;
@@ -151,7 +170,7 @@ $(window).load(function() {
 		},
 		false
 	);
-	var effectStage = stage(document.getElementById('effect-stage'), effectSpeaker);
+	var effectStage = stage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
 	
 	var command = '';
 	function executeCommand(command) {
@@ -277,8 +296,8 @@ $(window).load(function() {
 	}
 	
 	function enableStages() {
-		$(sceneStage).css('display', 'block');
-		$(effectStage).css('display', 'block');
+		$(sceneStage).css('display', 'table');
+		$(effectStage).css('display', 'table');
 		
 		$(document).keydown(function(event) {
 			var keyString = keyStringFromKeyCode(event.which);

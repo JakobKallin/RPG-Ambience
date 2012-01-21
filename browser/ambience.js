@@ -120,8 +120,6 @@ $(window).load(function() {
 	
 	var command = '';
 	function executeCommand(command) {
-		console.log('Executing command: ' + command);
-		console.log('Command length: ' + command.length);
 		if ( command.length === 0 ) {
 			stopOne();
 		} else {
@@ -132,7 +130,6 @@ $(window).load(function() {
 	
 	function resetCommand() {
 		command = '';
-		console.log('Command reset');
 	}
 	
 	function backspaceCommand() {
@@ -268,7 +265,6 @@ $(window).load(function() {
 			event.preventDefault();
 			var character = String.fromCharCode(keyCode);
 			command += character;
-			console.log('Command: ' + command);
 		}
 	});
 });

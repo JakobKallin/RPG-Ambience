@@ -61,19 +61,51 @@ $(window).load(function() {
 	$(document.body).css('background-color', defaultBackground);
 	
 	function stage(node, speaker) {
-		var isPlaying = false;
+		var currentAudiovisual = null;
+		var isFading = false;
+		
+		function stopAudiovisual() {
+			$(node).stop(true, true); // Complete all animations, then stop them.
+			$(node).css('display', 'none');
+			$(node).css('background-color', defaultBackground);
+			$(node).css('background-image', '');
+			$(node).css('opacity', 0);
+			
+			speaker.pause();
+			speaker.removeAttribute('src');
+			
+			currentAudiovisual = null;
+			isFading = false;
+		}
+		
+		function fadeOutAudiovisual() {
+			if ( isFading ) {
+				stopAudiovisual();
+			} else {
+				if ( currentAudiovisual.fade ) {
+					var fadeDuration = currentAudiovisual.fade * 1000;
+				} else {
+					var fadeDuration = 0;
+				}
+				
+				$(node).animate({opacity: 0}, fadeDuration, stopAudiovisual);
+				isFading = true;
+			}
+		}
+		
 		return {
 			isPlaying: function() {
-				return isPlaying;
+				return currentAudiovisual !== null;
 			},
 			playAudiovisual: function(audiovisual) {
 				if ( audiovisual.image ) {
 					$(node).css('background-image', 'url(' + audiovisual.image + ')');
 				}
 				
+				// Locks up scene audio when effect both fades in and has audio for some reason.
 				if ( audiovisual.sound ) {
 					speaker.setAttribute('src', audiovisual.sound);
-					//sceneSound.load(); // Doesn't seem to be necessary.
+					//speaker.load(); // Doesn't seem to be necessary.
 					speaker.play();
 				}
 				
@@ -90,23 +122,13 @@ $(window).load(function() {
 						var fadeDuration = 0;
 					}
 					
-					$(node).animate({'opacity': 1}, fadeDuration);
+					$(node).animate({opacity: 1}, fadeDuration);
 				}
 				
-				isPlaying = true;
+				currentAudiovisual = audiovisual;
 			},
-			stopAudiovisual: function() {
-				$(node).stop(true, true); // Complete all animations, then stop them.
-				$(node).css('display', 'none');
-				$(node).css('background-color', defaultBackground);
-				$(node).css('background-image', '');
-				$(node).css('opacity', 0);
-				
-				speaker.pause();
-				speaker.removeAttribute('src');
-				
-				isPlaying = false;
-			}
+			stopAudiovisual: stopAudiovisual,
+			fadeOutAudiovisual: fadeOutAudiovisual
 		};
 	};
 	
@@ -132,7 +154,7 @@ $(window).load(function() {
 	var command = '';
 	function executeCommand(command) {
 		if ( command.length === 0 ) {
-			stopOne();
+			fadeOutOne();
 		} else {
 			var audiovisualName = command;
 			playNamedAudiovisual(audiovisualName);
@@ -224,11 +246,19 @@ $(window).load(function() {
 		onAudioEffectEnded = null;
 	}
 	
-	function stopOne() {
+	function fadeOutEffect() {
+		effectStage.fadeOutAudiovisual();
+	}
+	
+	function fadeOutScene() {
+		sceneStage.fadeOutAudiovisual();
+	}
+	
+	function fadeOutOne() {
 		if ( effectStage.isPlaying() ) {
-			stopEffect();
+			fadeOutEffect();
 		} else if ( sceneStage.isPlaying() ) {
-			stopScene();
+			fadeOutScene();
 		}
 	}
 	

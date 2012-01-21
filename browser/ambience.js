@@ -62,7 +62,7 @@ $(window).load(function() {
 	
 	function stage(node, speaker) {
 		var currentAudiovisual = null;
-		var isFading = false;
+		var isFadingOut = false;
 		
 		function stopAudiovisual() {
 			$(node).stop(true, true); // Complete all animations, then stop them.
@@ -75,13 +75,15 @@ $(window).load(function() {
 			speaker.removeAttribute('src');
 			
 			currentAudiovisual = null;
-			isFading = false;
+			isFadingOut = false;
 		}
 		
 		function fadeOutAudiovisual() {
-			if ( isFading ) {
+			if ( isFadingOut ) {
 				stopAudiovisual();
 			} else {
+				$(node).stop(true); // Stop all animations, because it might be fading in.
+				
 				if ( currentAudiovisual.fade ) {
 					var fadeDuration = currentAudiovisual.fade * 1000;
 				} else {
@@ -89,7 +91,7 @@ $(window).load(function() {
 				}
 				
 				$(node).animate({opacity: 0}, fadeDuration, stopAudiovisual);
-				isFading = true;
+				isFadingOut = true;
 			}
 		}
 		

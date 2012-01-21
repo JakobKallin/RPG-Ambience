@@ -32,8 +32,8 @@ $(window).load(function() {
 	}
 	
 	function loadAdventure(config) {
-		scenes = config.scenes;
-		effects = config.effects;
+		scenes = config.scenes || [];
+		effects = config.effects || [];
 	}
 	
 	function hideMenu() {

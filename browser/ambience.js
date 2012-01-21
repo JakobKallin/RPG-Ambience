@@ -129,7 +129,7 @@ $(window).load(function() {
 					$(node).css('background-color', audiovisual.background);
 				}
 				
-				if ( audiovisual.image || audiovisual.background ) {
+				if ( audiovisual.image || audiovisual.background || audiovisual.text ) {
 					$(node).css('display', 'table');
 					
 					if ( audiovisual.fade ) {

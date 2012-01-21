@@ -28,6 +28,7 @@ $(window).load(function() {
 			loadAdventure(json);
 		};
 		reader.readAsText(file);
+		enableStages();
 	}
 	
 	function loadAdventure(config) {
@@ -81,15 +82,25 @@ $(window).load(function() {
 				}
 				
 				if ( audiovisual.image || audiovisual.background ) {
-					$(node).css('visibility', 'visible');
+					$(node).css('display', 'block');
+					
+					if ( audiovisual.fade ) {
+						var fadeDuration = audiovisual.fade * 1000;
+					} else {
+						var fadeDuration = 0;
+					}
+					
+					$(node).animate({'opacity': 1}, fadeDuration);
 				}
 				
 				isPlaying = true;
 			},
 			stopAudiovisual: function() {
-				$(node).css('visibility', 'hidden');
+				$(node).stop(true, true); // Complete all animations, then stop them.
+				$(node).css('display', 'none');
 				$(node).css('background-color', defaultBackground);
 				$(node).css('background-image', '');
+				$(node).css('opacity', 0);
 				
 				speaker.pause();
 				speaker.removeAttribute('src');
@@ -233,38 +244,43 @@ $(window).load(function() {
 		}
 	}
 	
-	$(document).keydown(function(event) {
-		var keyString = keyStringFromKeyCode(event.which);
+	function enableStages() {
+		$(sceneStage).css('display', 'block');
+		$(effectStage).css('display', 'block');
 		
-		if ( keyString === 'Enter' ) {
-			executeCommand(command);
-			resetCommand();
-		} else if ( keyString === 'Backspace' ) {
-			event.preventDefault();
-			backspaceCommand();
-		} else if ( keyString !== null ) {
-			var scene = keyedScene(keyString);
-			if ( scene === null ) {
-				var effect = keyedEffect(keyString);
-				if ( effect !== null ) {
+		$(document).keydown(function(event) {
+			var keyString = keyStringFromKeyCode(event.which);
+			
+			if ( keyString === 'Enter' ) {
+				executeCommand(command);
+				resetCommand();
+			} else if ( keyString === 'Backspace' ) {
+				event.preventDefault();
+				backspaceCommand();
+			} else if ( keyString !== null ) {
+				var scene = keyedScene(keyString);
+				if ( scene === null ) {
+					var effect = keyedEffect(keyString);
+					if ( effect !== null ) {
+						event.preventDefault();
+						playEffect(effect);
+						resetCommand();
+					}
+				} else {
 					event.preventDefault();
-					playEffect(effect);
+					playScene(scene);
 					resetCommand();
 				}
-			} else {
-				event.preventDefault();
-				playScene(scene);
-				resetCommand();
 			}
-		}
-	});
-	
-	$(document).keypress(function(event) {
-		var keyCode = event.which;
-		if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
-			event.preventDefault();
-			var character = String.fromCharCode(keyCode);
-			command += character;
-		}
-	});
+		});
+		
+		$(document).keypress(function(event) {
+			var keyCode = event.which;
+			if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
+				event.preventDefault();
+				var character = String.fromCharCode(keyCode);
+				command += character;
+			}
+		});
+	}
 });

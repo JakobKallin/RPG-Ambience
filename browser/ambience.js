@@ -63,6 +63,7 @@ $(window).load(function() {
 	function stage(node, speaker, sign) {
 		var currentAudiovisual = null;
 		var isFadingOut = false;
+		var currentSoundIndex = 0; // Only used for scenes with multiple sounds.
 		
 		function stopAudiovisual() {
 			$(node).stop(true, true); // Complete all animations, then stop them.
@@ -115,7 +116,11 @@ $(window).load(function() {
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
 				if ( audiovisual.sound ) {
-					speaker.setAttribute('src', audiovisual.sound);
+					if ( jQuery.isArray(audiovisual.sound) ) {
+						speaker.src = audiovisual.sound[0];
+					} else {
+						speaker.src = audiovisual.sound;
+					}
 					//speaker.load(); // Doesn't seem to be necessary.
 					speaker.play();
 				}
@@ -149,15 +154,22 @@ $(window).load(function() {
 				currentAudiovisual = audiovisual;
 			},
 			stopAudiovisual: stopAudiovisual,
-			fadeOutAudiovisual: fadeOutAudiovisual
+			fadeOutAudiovisual: fadeOutAudiovisual,
+			playNextSound: function() {
+				if ( jQuery.isArray(currentAudiovisual.sound) ) {
+					currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.sound.length
+					speaker.src = currentAudiovisual.sound[currentSoundIndex];
+					speaker.play();
+				} else {
+					speaker.currentTime = 0;
+				}
+			}
 		};
 	};
 	
 	var sceneSpeaker = document.getElementById('scene-sound');
-	if ( typeof sceneSpeaker.loop !== 'boolean' ) {
-		sceneSpeaker.addEventListener('ended', function() { this.currentTime = 0; }, false);
-	}
 	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
+	sceneSpeaker.addEventListener('ended', sceneStage.playNextSound, false);
 	
 	var effectSpeaker = document.getElementById('effect-sound');
 	var onAudioEffectEnded = null;

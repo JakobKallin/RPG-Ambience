@@ -142,7 +142,7 @@ $(window).load(function() {
 				}
 				
 				if ( audiovisual.text ) {
-					$(sign).text(audiovisual.text.string || '');
+					$(sign).html(audiovisual.text.html || '');
 					for ( var cssProperty in audiovisual.text ) {
 						if ( cssProperty !== 'text' ) {
 							var cssValue = audiovisual.text[cssProperty];

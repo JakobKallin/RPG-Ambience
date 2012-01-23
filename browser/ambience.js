@@ -22,13 +22,21 @@ $(window).load(function() {
 	});
 	
 	function loadAdventureFile(file) {
-		var reader = new FileReader();
-		reader.onload = function() {
-			var json = JSON.parse(this.result);
-			loadAdventure(json);
-		};
-		reader.readAsText(file);
-		enableStages();
+		try {
+			var reader = new FileReader();
+			reader.onload = function() {
+				try {
+					var json = JSON.parse(this.result);
+				} catch (error) {
+					alert('There was an error loading the adventure file:\n' + error.message);
+				}
+				loadAdventure(json);
+			};
+			reader.readAsText(file);
+			enableStages();
+		} catch (error) {
+			alert(error.message);
+		}
 	}
 	
 	function loadAdventure(config) {

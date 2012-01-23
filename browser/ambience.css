@@ -48,6 +48,8 @@ html, body {
 .stage span {
 	display: table-cell;
 	vertical-align: middle;
+	color: white;
+	text-rendering: optimizeLegibility;
 }
 
 #command-form {

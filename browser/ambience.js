@@ -81,7 +81,12 @@ $(window).load(function() {
 				}
 			}
 			
-			speaker.pause();
+			if ( !speaker.ended ) {
+				try {
+					speaker.currentTime = 0;
+				} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
+				speaker.pause();
+			}
 			speaker.removeAttribute('src');
 			
 			currentAudiovisual = null;

@@ -118,8 +118,9 @@ $(window).load(function() {
 		var currentAudiovisual = null;
 		var isFadingOut = false;
 		var currentSoundIndex = 0;
+		var currentSoundURI = null;
 		
-		function stopAudiovisual() {
+		function stopAudiovisual(newAudiovisual) {
 			$(node).stop(true, true); // Complete all animations, then stop them.
 			$(node).css('display', 'none');
 			$(node).css('background-color', defaultBackground);
@@ -135,13 +136,17 @@ $(window).load(function() {
 				}
 			}
 			
-			if ( !speaker.ended ) {
-				try {
-					speaker.currentTime = 0;
-				} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
-				speaker.pause();
+			// When stopping a scene, we also pass along the new scene so that we don't restart the sound if the currently playing sound is the same as the new one.
+			if ( !newAudiovisual || (newAudiovisual && newAudiovisual.isAudial && newAudiovisual.soundURIs[0] !== currentSoundURI) ) {
+				if ( !speaker.ended ) {
+					try {
+						speaker.currentTime = 0;
+					} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
+					speaker.pause();
+				}
+				speaker.removeAttribute('src');
+				currentSoundURI = null;
 			}
-			speaker.removeAttribute('src');
 			
 			currentAudiovisual = null;
 			isFadingOut = false;
@@ -167,8 +172,9 @@ $(window).load(function() {
 				}
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
-				if ( audiovisual.soundURIs ) {
+				if ( audiovisual.soundURIs && audiovisual.soundURIs[0] !== currentSoundURI ) {
 					speaker.src = audiovisual.soundURIs[0];
+					currentSoundURI = audiovisual.soundURIs[0];
 					speaker.play();
 				}
 				
@@ -198,6 +204,7 @@ $(window).load(function() {
 			playNextSound: function() {
 				currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.soundURIs.length
 				speaker.src = currentAudiovisual.soundURIs[currentSoundIndex];
+				currentSoundURI = currentAudiovisual.soundURIs[currentSoundIndex];
 				speaker.play();
 			}
 		};
@@ -291,13 +298,12 @@ $(window).load(function() {
 	}
 	
 	function playScene(scene) {
-		stopScene();
-		stopEffect();
+		stopScene(scene);
 		sceneStage.playAudiovisual(scene);
 	}
 	
-	function stopScene() {
-		sceneStage.stopAudiovisual();
+	function stopScene(newScene) {
+		sceneStage.stopAudiovisual(newScene);
 		stopEffect();
 	}
 	

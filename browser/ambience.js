@@ -40,8 +40,54 @@ $(window).load(function() {
 	}
 	
 	function loadAdventure(config) {
-		scenes = config.scenes || [];
-		effects = config.effects || [];
+		scenes = config.scenes.map(createAudiovisual) || [];
+		effects = config.effects.map(createAudiovisual) || [];
+	}
+	
+	function createAudiovisual(config) {
+		return {
+			get key() {
+				return config.key || null;
+			},
+			get name() {
+				return config.name || null;
+			},
+			get imageURI() {
+				if ( config.image ) {
+					return encodeURI(config.image);
+				} else {
+					return null;
+				}
+			},
+			get soundURIs() {
+				if ( jQuery.isArray(config.sound) ) {
+					return config.sound.map(function(soundURI) { return encodeURI(soundURI); });
+				} else if ( config.sound ) {
+					return [encodeURI(config.sound)];
+				} else {
+					return null;
+				}
+			},
+			get backgroundColor() {
+				return config.background || null;
+			},
+			get text() {
+				return config.text || null;
+			},
+			get isVisual() {
+				return this.imageURI !== null || this.backgroundColor !== null || this.text !== null;
+			},
+			get isAudial() {
+				return this.soundURIs !== null;
+			},
+			get fadeDuration() {
+				if ( config.fade ) {
+					return config.fade * 1000;
+				} else {
+					return 0;
+				}
+			}
+		};
 	}
 	
 	function hideMenu() {
@@ -71,7 +117,7 @@ $(window).load(function() {
 	function stage(node, speaker, sign) {
 		var currentAudiovisual = null;
 		var isFadingOut = false;
-		var currentSoundIndex = 0; // Only used for scenes with multiple sounds.
+		var currentSoundIndex = 0;
 		
 		function stopAudiovisual() {
 			$(node).stop(true, true); // Complete all animations, then stop them.
@@ -106,14 +152,7 @@ $(window).load(function() {
 				stopAudiovisual();
 			} else {
 				$(node).stop(true); // Stop all animations, because it might be fading in.
-				
-				if ( currentAudiovisual.fade ) {
-					var fadeDuration = currentAudiovisual.fade * 1000;
-				} else {
-					var fadeDuration = 0;
-				}
-				
-				$(node).animate({opacity: 0}, fadeDuration, stopAudiovisual);
+				$(node).animate({opacity: 0}, currentAudiovisual.fadeDuration, stopAudiovisual);
 				isFadingOut = true;
 			}
 		}
@@ -123,35 +162,23 @@ $(window).load(function() {
 				return currentAudiovisual !== null;
 			},
 			playAudiovisual: function(audiovisual) {
-				if ( audiovisual.image ) {
-					$(node).css('background-image', 'url(' + audiovisual.image + ')');
+				if ( audiovisual.imageURI ) {
+					$(node).css('background-image', 'url(' + audiovisual.imageURI + ')');
 				}
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
-				if ( audiovisual.sound ) {
-					if ( jQuery.isArray(audiovisual.sound) ) {
-						speaker.src = audiovisual.sound[0];
-					} else {
-						speaker.src = audiovisual.sound;
-					}
-					//speaker.load(); // Doesn't seem to be necessary.
+				if ( audiovisual.soundURIs ) {
+					speaker.src = audiovisual.soundURIs[0];
 					speaker.play();
 				}
 				
-				if ( audiovisual.background ) {
-					$(node).css('background-color', audiovisual.background);
+				if ( audiovisual.backgroundColor ) {
+					$(node).css('background-color', audiovisual.backgroundColor);
 				}
 				
-				if ( audiovisual.image || audiovisual.background || audiovisual.text ) {
+				if ( audiovisual.isVisual ) {
 					$(node).css('display', 'table');
-					
-					if ( audiovisual.fade ) {
-						var fadeDuration = audiovisual.fade * 1000;
-					} else {
-						var fadeDuration = 0;
-					}
-					
-					$(node).animate({opacity: 1}, fadeDuration);
+					$(node).animate({opacity: 1}, audiovisual.fadeDuration);
 				}
 				
 				if ( audiovisual.text ) {
@@ -169,13 +196,9 @@ $(window).load(function() {
 			stopAudiovisual: stopAudiovisual,
 			fadeOutAudiovisual: fadeOutAudiovisual,
 			playNextSound: function() {
-				if ( jQuery.isArray(currentAudiovisual.sound) ) {
-					currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.sound.length
-					speaker.src = currentAudiovisual.sound[currentSoundIndex];
-					speaker.play();
-				} else {
-					speaker.currentTime = 0;
-				}
+				currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.soundURIs.length
+				speaker.src = currentAudiovisual.soundURIs[currentSoundIndex];
+				speaker.play();
 			}
 		};
 	};
@@ -282,7 +305,7 @@ $(window).load(function() {
 		stopEffect();
 		effectStage.playAudiovisual(effect);
 		
-		if ( !effect.image && !effect.background ) {
+		if ( !effect.isVisual ) {
 			onAudioEffectEnded = stopEffect;
 		}
 	}

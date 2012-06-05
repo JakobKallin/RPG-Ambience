@@ -121,8 +121,7 @@ window.addEventListener('load', function() {
 		123: 'F12'
 	};
 	
-	var defaultBackground = 'black';
-	$(document.body).css('background-color', defaultBackground);
+	var defaultBackground = $(document.body).css('background-color');
 	
 	function stage(node, speaker, sign) {
 		var currentAudiovisual = null;

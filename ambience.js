@@ -1,4 +1,4 @@
-$(window).load(function() {
+window.addEventListener('load', function() {
 	var scenes;
 	var effects;
 	
@@ -354,7 +354,7 @@ $(window).load(function() {
 		$(sceneStage).css('display', 'table');
 		$(effectStage).css('display', 'table');
 		
-		$(document).keydown(function(event) {
+		document.addEventListener('keydown', function(event) {
 			var keyString = keyStringFromKeyCode(event.which);
 			
 			if ( keyString === 'Enter' ) {
@@ -380,7 +380,7 @@ $(window).load(function() {
 			}
 		});
 		
-		$(document).keypress(function(event) {
+		document.addEventListener('keypress', function(event) {
 			var keyCode = event.which;
 			if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
 				event.preventDefault();

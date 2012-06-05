@@ -70,7 +70,7 @@ window.addEventListener('load', function() {
 				}
 			},
 			get soundPaths() {
-				if ( jQuery.isArray(config.sound) ) {
+				if ( config.sound instanceof Array ) {
 					return config.sound.map(function(soundPath) { return encodeURI(soundPath); });
 				} else if ( config.sound ) {
 					return [encodeURI(config.sound)];

@@ -7,11 +7,11 @@ window.addEventListener('load', function() {
 	var defaultBackground = $(document.body).css('background-color');
 	
 	var sceneSpeaker = document.getElementById('scene-sound');
-	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
+	var sceneStage = createStage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
 	
 	var effectSpeaker = document.getElementById('effect-sound');
 	var onAudioEffectEnded = null;
-	var effectStage = stage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
+	var effectStage = createStage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
 	
 	var command = '';
 	
@@ -138,7 +138,7 @@ window.addEventListener('load', function() {
 		$(menu).hide();
 	}
 	
-	function stage(node, speaker, sign) {
+	function createStage(node, speaker, sign) {
 		var currentAudiovisual = null;
 		var isFadingOut = false;
 		var currentSoundIndex = 0;

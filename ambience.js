@@ -41,8 +41,17 @@ window.addEventListener('load', function() {
 	}
 	
 	function loadAdventure(config) {
-		scenes = config.scenes.map(createAudiovisual) || [];
-		effects = config.effects.map(createAudiovisual) || [];
+		if ( config.scenes === undefined ) {
+			scenes = [];
+		} else {
+			scenes = config.scenes.map(createAudiovisual);
+		}
+		
+		if ( config.effects === undefined ) {
+			effects = [];
+		} else {
+			effects = config.effects.map(createAudiovisual);
+		}
 	}
 	
 	function createAudiovisual(config) {

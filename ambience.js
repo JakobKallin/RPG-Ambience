@@ -249,8 +249,7 @@ window.addEventListener('load', function() {
 		if ( command.length === 0 ) {
 			fadeOutOne();
 		} else {
-			var audiovisualName = command;
-			playNamedAudiovisual(audiovisualName);
+			playNamedAudiovisual(command);
 		}
 	}
 	
@@ -378,7 +377,7 @@ window.addEventListener('load', function() {
 				executeCommand(command);
 				resetCommand();
 			} else if ( keyString === 'Backspace' ) {
-				event.preventDefault();
+				event.preventDefault(); // Prevent Back button.
 				backspaceCommand();
 			} else if ( keyString !== null ) {
 				var scene = keyedScene(keyString);

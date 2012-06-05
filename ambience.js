@@ -93,6 +93,9 @@ window.addEventListener('load', function() {
 			get name() {
 				return config.name || null;
 			},
+			get hasName() {
+				return this.name !== null;
+			},
 			get imagePath() {
 				if ( config.image ) {
 					return encodeURI(config.image);
@@ -272,19 +275,20 @@ window.addEventListener('load', function() {
 	}
 	
 	function namedScene(name) {
-		if ( name.length > 0 ) {
-			return scenes.first(function(scene) {
-				return scene.name && scene.name.toUpperCase().startsWith(name.toUpperCase());
-			});
-		} else {
-			return null;
-		}
+		return namedAudiovisual(name, scenes);
 	}
 	
 	function namedEffect(name) {
+		return namedAudiovisual(name, effects);
+	}
+	
+	function namedAudiovisual(name, list) {
 		if ( name.length > 0 ) {
-			return effects.first(function(effect) {
-				return effect.name && effect.name.toUpperCase().startsWith(name.toUpperCase());
+			return list.first(function(audiovisual) {
+				return (
+					audiovisual.hasName &&
+					audiovisual.name.toUpperCase().startsWith(name.toUpperCase())
+				);
 			});
 		} else {
 			return null;

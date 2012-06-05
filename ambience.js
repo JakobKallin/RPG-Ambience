@@ -5,14 +5,12 @@ window.addEventListener('load', function() {
 	var menu = document.getElementById('menu');
 	var fileChooser = document.getElementById('file-chooser');
 	$(fileChooser).change(function() {
-		hideMenu();
 		loadAdventureFile(this.files[0]);
 	});
 	
 	menu.addEventListener('drop', function(event) {
 		event.stopPropagation();
 		event.preventDefault();
-		hideMenu();
 		loadAdventureFile(event.dataTransfer.files[0]);
 	});
 	
@@ -28,13 +26,12 @@ window.addEventListener('load', function() {
 			reader.onload = function() {
 				try {
 					var json = JSON.parse(this.result);
+					loadAdventure(json);
 				} catch (error) {
 					alert('There was an error loading the adventure file:\n' + error.message);
 				}
-				loadAdventure(json);
 			};
 			reader.readAsText(file);
-			enableStages();
 		} catch (error) {
 			alert(error.message);
 		}
@@ -52,6 +49,9 @@ window.addEventListener('load', function() {
 		} else {
 			effects = config.effects.map(createAudiovisual);
 		}
+		
+		hideMenu();
+		enableStages();
 	}
 	
 	function createAudiovisual(config) {

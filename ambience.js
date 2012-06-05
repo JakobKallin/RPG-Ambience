@@ -32,7 +32,7 @@ window.addEventListener('load', function() {
 		123: 'F12'
 	};
 	
-	$(fileChooser).change(function() {
+	fileChooser.addEventListener('change', function() {
 		loadAdventureFile(this.files[0]);
 	});
 	

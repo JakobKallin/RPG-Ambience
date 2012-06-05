@@ -152,28 +152,46 @@ window.addEventListener('load', function() {
 			$(node).css('opacity', 0);
 			
 			if ( currentAudiovisual && currentAudiovisual.text ) {
-				$(sign).text('');
-				for ( var cssProperty in currentAudiovisual.text ) {
-					if ( cssProperty !== 'text' ) {
-						$(sign).css(cssProperty, '');
-					}
-				}
+				resetText();
 			}
 			
-			// When stopping a scene, we also pass along the new scene so that we don't restart the sound if the currently playing sound is the same as the new one.
-			if ( !newAudiovisual || (newAudiovisual && newAudiovisual.isAudial && newAudiovisual.soundPaths[0] !== currentSoundPath) ) {
-				if ( !speaker.ended ) {
-					try {
-						speaker.currentTime = 0;
-					} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
-					speaker.pause();
-				}
-				speaker.removeAttribute('src');
-				currentSoundPath = null;
+			if ( newSoundDiffersFromCurrentSound(newAudiovisual) ) {
+				stopSpeaker();
 			}
 			
 			currentAudiovisual = null;
 			isFadingOut = false;
+		}
+		
+		function resetText() {
+			$(sign).text('');
+			for ( var cssProperty in currentAudiovisual.text ) {
+				if ( cssProperty !== 'text' ) {
+					$(sign).css(cssProperty, '');
+				}
+			}
+		}
+		
+		function newSoundDiffersFromCurrentSound(newAudiovisual) {
+			if ( newAudiovisual === undefined ) {
+				return true;
+			} else {
+				return (
+					newAudiovisual.isAudial &&
+					newAudiovisual.soundPaths[0] !== currentSoundPath
+				);
+			}
+		}
+		
+		function stopSpeaker() {
+			if ( !speaker.ended ) {
+				try {
+					speaker.currentTime = 0;
+				} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
+				speaker.pause();
+			}
+			speaker.removeAttribute('src');
+			currentSoundPath = null;
 		}
 		
 		function fadeOutAudiovisual() {

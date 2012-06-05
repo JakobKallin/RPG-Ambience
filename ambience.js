@@ -4,6 +4,34 @@ window.addEventListener('load', function() {
 	
 	var menu = document.getElementById('menu');
 	var fileChooser = document.getElementById('file-chooser');
+	var defaultBackground = $(document.body).css('background-color');
+	
+	var sceneSpeaker = document.getElementById('scene-sound');
+	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
+	
+	var effectSpeaker = document.getElementById('effect-sound');
+	var onAudioEffectEnded = null;
+	var effectStage = stage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
+	
+	var command = '';
+	
+	var keyStrings = {
+		8: 'Backspace',
+		13: 'Enter',
+		112: 'F1',
+		113: 'F2',
+		114: 'F3',
+		115: 'F4',
+		116: 'F5',
+		117: 'F6',
+		118: 'F7',
+		119: 'F8',
+		120: 'F9',
+		121: 'F10',
+		122: 'F11',
+		123: 'F12'
+	};
+	
 	$(fileChooser).change(function() {
 		loadAdventureFile(this.files[0]);
 	});
@@ -38,6 +66,12 @@ window.addEventListener('load', function() {
 	}
 	
 	function loadAdventure(config) {
+		parseConfig(config);
+		hideMenu();
+		enableStages();
+	}
+	
+	function parseConfig(config) {
 		if ( config.scenes === undefined ) {
 			scenes = [];
 		} else {
@@ -49,9 +83,6 @@ window.addEventListener('load', function() {
 		} else {
 			effects = config.effects.map(createAudiovisual);
 		}
-		
-		hideMenu();
-		enableStages();
 	}
 	
 	function createAudiovisual(config) {
@@ -103,25 +134,6 @@ window.addEventListener('load', function() {
 	function hideMenu() {
 		$(menu).hide();
 	}
-	
-	var keyStrings = {
-		8: 'Backspace',
-		13: 'Enter',
-		112: 'F1',
-		113: 'F2',
-		114: 'F3',
-		115: 'F4',
-		116: 'F5',
-		117: 'F6',
-		118: 'F7',
-		119: 'F8',
-		120: 'F9',
-		121: 'F10',
-		122: 'F11',
-		123: 'F12'
-	};
-	
-	var defaultBackground = $(document.body).css('background-color');
 	
 	function stage(node, speaker, sign) {
 		var currentAudiovisual = null;
@@ -219,12 +231,7 @@ window.addEventListener('load', function() {
 		};
 	};
 	
-	var sceneSpeaker = document.getElementById('scene-sound');
-	var sceneStage = stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
 	sceneSpeaker.addEventListener('ended', sceneStage.playNextSound, false);
-	
-	var effectSpeaker = document.getElementById('effect-sound');
-	var onAudioEffectEnded = null;
 	effectSpeaker.addEventListener(
 		'ended',
 		function() {
@@ -234,9 +241,7 @@ window.addEventListener('load', function() {
 		},
 		false
 	);
-	var effectStage = stage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
 	
-	var command = '';
 	function executeCommand(command) {
 		if ( command.length === 0 ) {
 			fadeOutOne();

@@ -166,7 +166,7 @@ window.addEventListener('load', function() {
 			$(node).css('background-image', '');
 			$(node).css('opacity', 0);
 			
-			if ( currentAudiovisual && currentAudiovisual.text ) {
+			if ( currentAudiovisual && currentAudiovisual.hasText ) {
 				resetText();
 			}
 			

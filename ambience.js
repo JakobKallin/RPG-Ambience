@@ -229,6 +229,7 @@ window.addEventListener('load', function() {
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
 				if ( audiovisual.isAudial ) {
+					// -1 because the index is either incremented or randomized in the playNextSound method.
 					currentSoundIndex = -1;
 					playNextSound();
 				}

@@ -115,6 +115,13 @@ window.addEventListener('load', function() {
 					return null;
 				}
 			},
+			get soundOrder() {
+				if ( config.soundOrder === 'random' ) {
+					return 'random';
+				} else {
+					return 'normal';
+				}
+			},
 			get backgroundColor() {
 				return config.background || null;
 			},
@@ -149,7 +156,7 @@ window.addEventListener('load', function() {
 	
 	function createStage(node, speaker, sign) {
 		var currentAudiovisual = null;
-		var currentSoundIndex = 0;
+		var currentSoundIndex = null;
 		var isFadingOut = false;
 		
 		function stopAudiovisual() {
@@ -166,7 +173,7 @@ window.addEventListener('load', function() {
 			stopSpeaker();
 			
 			currentAudiovisual = null;
-			currentSoundIndex = 0;
+			currentSoundIndex = null;
 			isFadingOut = false;
 		}
 		
@@ -177,6 +184,16 @@ window.addEventListener('load', function() {
 					$(sign).css(cssProperty, '');
 				}
 			}
+		}
+		
+		function playNextSound() {
+			if ( currentAudiovisual.soundOrder === 'random' ) {
+				currentSoundIndex = currentAudiovisual.soundPaths.randomIndex();
+			} else {
+				currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.soundPaths.length;
+			}
+			speaker.src = currentAudiovisual.soundPaths[currentSoundIndex];
+			speaker.play();
 		}
 		
 		function stopSpeaker() {
@@ -204,14 +221,16 @@ window.addEventListener('load', function() {
 				return currentAudiovisual !== null;
 			},
 			playAudiovisual: function(audiovisual) {
+				currentAudiovisual = audiovisual;
+				
 				if ( audiovisual.hasImage ) {
 					$(node).css('background-image', 'url(' + audiovisual.imagePath + ')');
 				}
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
 				if ( audiovisual.isAudial ) {
-					speaker.src = audiovisual.soundPaths[0];
-					speaker.play();
+					currentSoundIndex = -1;
+					playNextSound();
 				}
 				
 				if ( audiovisual.hasBackgroundColor ) {
@@ -232,16 +251,10 @@ window.addEventListener('load', function() {
 						}
 					}
 				}
-				
-				currentAudiovisual = audiovisual;
 			},
 			stopAudiovisual: stopAudiovisual,
 			fadeOutAudiovisual: fadeOutAudiovisual,
-			playNextSound: function() {
-				currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.soundPaths.length
-				speaker.src = currentAudiovisual.soundPaths[currentSoundIndex];
-				speaker.play();
-			}
+			playNextSound: playNextSound
 		};
 	};
 	

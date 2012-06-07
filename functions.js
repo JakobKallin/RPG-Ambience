@@ -8,6 +8,10 @@ Array.prototype.first = function(predicate) {
 	return null;
 };
 
+Array.prototype.randomIndex = function() {
+	return Math.floor(Math.random() * this.length);
+};
+
 String.prototype.startsWith = function(prefix) {
 	return this.indexOf(prefix) === 0;
 };

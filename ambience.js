@@ -305,24 +305,18 @@ window.addEventListener('load', function() {
 		}
 	}
 	
+	function keyedAudiovisual(keyString, list) {
+		return list.first(function(audiovisual) {
+			return audiovisual.key.toUpperCase() === keyString.toUpperCase();
+		});
+	}
+	
 	function keyedScene(keyString) {
-		for ( var i = 0; i < scenes.length; i++ ) {
-			var scene = scenes[i];
-			if ( scene.key.toUpperCase() === keyString.toUpperCase() ) {
-				return scene;
-			}
-		}
-		return null;
+		return keyedAudiovisual(keyString, scenes);
 	}
 	
 	function keyedEffect(keyString) {
-		for ( var i = 0; i < effects.length; i++ ) {
-			var effect = effects[i];
-			if ( effect.key.toUpperCase() === keyString.toUpperCase() ) {
-				return effect;
-			}
-		}
-		return null;
+		return keyedAudiovisual(keyString, effects);
 	}
 	
 	function playScene(scene) {

@@ -103,9 +103,12 @@ window.addEventListener('load', function() {
 					return null;
 				}
 			},
+			get hasImage() {
+				return this.imagePath !== null;
+			},
 			get soundPaths() {
 				if ( config.sound instanceof Array ) {
-					return config.sound.map(function(soundPath) { return encodeURI(soundPath); });
+					return config.sound.map(encodeURI);
 				} else if ( config.sound ) {
 					return [encodeURI(config.sound)];
 				} else {
@@ -115,8 +118,14 @@ window.addEventListener('load', function() {
 			get backgroundColor() {
 				return config.background || null;
 			},
+			get hasBackgroundColor() {
+				return this.backgroundColor !== null;
+			},
 			get text() {
 				return config.text || null;
+			},
+			get hasText() {
+				return this.text !== null;
 			},
 			get isVisual() {
 				return this.imagePath !== null || this.backgroundColor !== null || this.text !== null;
@@ -195,17 +204,17 @@ window.addEventListener('load', function() {
 				return currentAudiovisual !== null;
 			},
 			playAudiovisual: function(audiovisual) {
-				if ( audiovisual.imagePath ) {
+				if ( audiovisual.hasImage ) {
 					$(node).css('background-image', 'url(' + audiovisual.imagePath + ')');
 				}
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
-				if ( audiovisual.soundPaths ) {
+				if ( audiovisual.isAudial ) {
 					speaker.src = audiovisual.soundPaths[0];
 					speaker.play();
 				}
 				
-				if ( audiovisual.backgroundColor ) {
+				if ( audiovisual.hasBackgroundColor ) {
 					$(node).css('background-color', audiovisual.backgroundColor);
 				}
 				
@@ -214,7 +223,7 @@ window.addEventListener('load', function() {
 					$(node).animate({opacity: 1}, audiovisual.fadeDuration);
 				}
 				
-				if ( audiovisual.text ) {
+				if ( audiovisual.hasText ) {
 					$(sign).html(audiovisual.text.string || '');
 					for ( var cssProperty in audiovisual.text ) {
 						if ( cssProperty !== 'text' ) {

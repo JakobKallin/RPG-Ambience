@@ -140,11 +140,10 @@ window.addEventListener('load', function() {
 	
 	function createStage(node, speaker, sign) {
 		var currentAudiovisual = null;
-		var isFadingOut = false;
 		var currentSoundIndex = 0;
-		var currentSoundPath = null;
+		var isFadingOut = false;
 		
-		function stopAudiovisual(newAudiovisual) {
+		function stopAudiovisual() {
 			$(node).stop(true, true); // Complete all animations, then stop them.
 			$(node).css('display', 'none');
 			$(node).css('background-color', defaultBackground);
@@ -155,11 +154,10 @@ window.addEventListener('load', function() {
 				resetText();
 			}
 			
-			if ( newSoundDiffersFromCurrentSound(newAudiovisual) ) {
-				stopSpeaker();
-			}
+			stopSpeaker();
 			
 			currentAudiovisual = null;
+			currentSoundIndex = 0;
 			isFadingOut = false;
 		}
 		
@@ -172,17 +170,6 @@ window.addEventListener('load', function() {
 			}
 		}
 		
-		function newSoundDiffersFromCurrentSound(newAudiovisual) {
-			if ( newAudiovisual === undefined ) {
-				return true;
-			} else {
-				return (
-					newAudiovisual.isAudial &&
-					newAudiovisual.soundPaths[0] !== currentSoundPath
-				);
-			}
-		}
-		
 		function stopSpeaker() {
 			if ( !speaker.ended ) {
 				try {
@@ -191,7 +178,6 @@ window.addEventListener('load', function() {
 				speaker.pause();
 			}
 			speaker.removeAttribute('src');
-			currentSoundPath = null;
 		}
 		
 		function fadeOutAudiovisual() {
@@ -214,9 +200,8 @@ window.addEventListener('load', function() {
 				}
 				
 				// Locks up scene audio when effect both fades in and has audio for some reason.
-				if ( audiovisual.soundPaths && audiovisual.soundPaths[0] !== currentSoundPath ) {
+				if ( audiovisual.soundPaths ) {
 					speaker.src = audiovisual.soundPaths[0];
-					currentSoundPath = audiovisual.soundPaths[0];
 					speaker.play();
 				}
 				
@@ -246,7 +231,6 @@ window.addEventListener('load', function() {
 			playNextSound: function() {
 				currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.soundPaths.length
 				speaker.src = currentAudiovisual.soundPaths[currentSoundIndex];
-				currentSoundPath = currentAudiovisual.soundPaths[currentSoundIndex];
 				speaker.play();
 			}
 		};
@@ -337,8 +321,8 @@ window.addEventListener('load', function() {
 		sceneStage.playAudiovisual(scene);
 	}
 	
-	function stopScene(newScene) {
-		sceneStage.stopAudiovisual(newScene);
+	function stopScene() {
+		sceneStage.stopAudiovisual();
 		stopEffect();
 	}
 	

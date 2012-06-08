@@ -200,7 +200,8 @@ window.addEventListener('load', function() {
 	}
 	
 	function hideMenu() {
-		$(menu).hide();
+		// Menu is removed entirely so that keyboard focus cannot remain on invisible submit button.
+		$(menu).remove();
 	}
 	
 	function createStage(node, speaker, sign) {

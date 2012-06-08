@@ -165,6 +165,15 @@ window.addEventListener('load', function() {
 					audiovisual.text = {};
 				}
 				
+				if ( textConfig.string !== undefined ) {
+					if ( textConfig.string instanceof Array ) {
+						audiovisual.text.lines = textConfig.string;
+					} else {
+						audiovisual.text.lines = [textConfig.string];
+					}
+					delete textConfig.string;
+				}
+				
 				for ( var property in textConfig ) {
 					audiovisual.text[property] = textConfig[property];
 				}
@@ -284,7 +293,8 @@ window.addEventListener('load', function() {
 				}
 				
 				if ( audiovisual.hasText ) {
-					$(sign).html(audiovisual.text.string || '');
+					var string = audiovisual.text.lines.join('<br>');
+					$(sign).html(string);
 					for ( var cssProperty in audiovisual.text ) {
 						if ( cssProperty !== 'text' ) {
 							var cssValue = audiovisual.text[cssProperty];

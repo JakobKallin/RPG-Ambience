@@ -158,8 +158,16 @@ window.addEventListener('load', function() {
 			'background': function(value) {
 				audiovisual.backgroundColor = value;
 			},
-			'text': function(value) {
-				audiovisual.text = value;
+			'text': function(textConfig) {
+				if ( template.hasText ) {
+					audiovisual.text = Object.create(template.text);
+				} else {
+					audiovisual.text = {};
+				}
+				
+				for ( var property in textConfig ) {
+					audiovisual.text[property] = textConfig[property];
+				}
 			},
 			'fade': function(value) {
 				audiovisual.fadeDuration = value * 1000;

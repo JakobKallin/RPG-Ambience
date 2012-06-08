@@ -72,82 +72,114 @@ window.addEventListener('load', function() {
 	}
 	
 	function parseConfig(config) {
+		templates = [];
+		for ( var templateName in config.templates ) {
+			var templateConfig = config.templates[templateName];
+			templates[templateName] = audiovisualFromConfig(templateConfig, templates);
+		}
+		
 		if ( config.scenes === undefined ) {
 			scenes = [];
 		} else {
-			scenes = config.scenes.map(createAudiovisual);
+			scenes = config.scenes.map(function(sceneConfig) {
+				return audiovisualFromConfig(sceneConfig, templates);
+			});
 		}
 		
 		if ( config.effects === undefined ) {
 			effects = [];
 		} else {
-			effects = config.effects.map(createAudiovisual);
+			effects = config.effects.map(function(effectConfig) {
+				return audiovisualFromConfig(effectConfig, templates);
+			});
 		}
 	}
 	
-	function createAudiovisual(config) {
-		return {
-			get key() {
-				return config.key || null;
+	var baseAudiovisual = {
+		fadeDuration: 0,
+		soundOrder: 'linear',
+		get hasName() {
+			return this.name !== undefined;
+		},
+		get isVisual() {
+			return (
+				this.imagePath !== undefined ||
+				this.backgroundColor !== undefined ||
+				this.text !== undefined
+			);
+		},
+		get isAudial() {
+			return this.soundPaths !== undefined;
+		},
+		get hasImage() {
+			return this.imagePath !== undefined;
+		},
+		get hasBackgroundColor() {
+			return this.backgroundColor !== undefined;
+		},
+		get hasText() {
+			return this.text !== undefined;
+		}
+	};
+	
+	function audiovisualFromConfig(config, templateList) {
+		var audiovisual;
+		var template;
+		var templateName = config.template;
+		
+		if ( templateName === undefined ) {
+			template = baseAudiovisual;
+		} else if ( templateName in templateList ) {
+			template = templateList[templateName];
+		} else {
+			throw new Error('There is no template named ' + templateName + '.');
+		}
+		
+		audiovisual = Object.create(template);
+		var read = {
+			'key': function(value) {
+				audiovisual.key = value;
 			},
-			get name() {
-				return config.name || null;
+			'name': function(value) {
+				audiovisual.name = value;
 			},
-			get hasName() {
-				return this.name !== null;
+			'image': function(value) {
+				audiovisual.imagePath = encodeURI(value);
 			},
-			get imagePath() {
-				if ( config.image ) {
-					return encodeURI(config.image);
-				} else {
-					return null;
+			'sound': function(value) {
+				if ( !(value instanceof Array) ) {
+					value = [value];
 				}
+				audiovisual.soundPaths = value.map(encodeURI);
 			},
-			get hasImage() {
-				return this.imagePath !== null;
+			'soundOrder': function(value) {
+				audiovisual.soundOrder = value;
 			},
-			get soundPaths() {
-				if ( config.sound instanceof Array ) {
-					return config.sound.map(encodeURI);
-				} else if ( config.sound ) {
-					return [encodeURI(config.sound)];
-				} else {
-					return null;
-				}
+			'background': function(value) {
+				audiovisual.backgroundColor = value;
 			},
-			get soundOrder() {
-				if ( config.soundOrder === 'random' ) {
-					return 'random';
-				} else {
-					return 'normal';
-				}
+			'text': function(value) {
+				audiovisual.text = value;
 			},
-			get backgroundColor() {
-				return config.background || null;
-			},
-			get hasBackgroundColor() {
-				return this.backgroundColor !== null;
-			},
-			get text() {
-				return config.text || null;
-			},
-			get hasText() {
-				return this.text !== null;
-			},
-			get isVisual() {
-				return this.imagePath !== null || this.backgroundColor !== null || this.text !== null;
-			},
-			get isAudial() {
-				return this.soundPaths !== null;
-			},
-			get fadeDuration() {
-				if ( config.fade ) {
-					return config.fade * 1000;
-				} else {
-					return 0;
-				}
+			'fade': function(value) {
+				audiovisual.fadeDuration = value * 1000;
 			}
 		};
+		
+		// Because names and keys are used to select audiovisuals, we don't want to inherit them from templates. They are simply set to undefined, and might be redefined in the loop below.
+		audiovisual.name = undefined;
+		audiovisual.key = undefined;
+		
+		for ( var property in read ) {
+			var value = config[property];
+			
+			if ( value !== undefined ) {
+				var callback = read[property];
+				callback(value);
+			}
+		}
+		
+		return audiovisual;
 	}
 	
 	function hideMenu() {

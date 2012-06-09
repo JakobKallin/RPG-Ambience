@@ -53,8 +53,8 @@ window.addEventListener('load', function() {
 			var reader = new FileReader();
 			reader.onload = function() {
 				try {
-					var json = JSON.parse(this.result);
-					loadAdventure(json);
+					var config = jsyaml.load(this.result);
+					loadAdventure(config);
 				} catch (error) {
 					alert('There was an error loading the adventure file:\n' + error.message);
 				}

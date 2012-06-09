@@ -1,0 +1,3 @@
+[submodule "js-yaml"]
+	path = js-yaml
+	url = git://github.com/nodeca/js-yaml.git

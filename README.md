@@ -1,7 +1,7 @@
 # RPG Ambience
 RPG Ambience allows you to play sounds and display visuals during your tabletop RPG sessions using your computer's keyboard. It reads audiovisuals from an adventure file that you define beforehand. There are two types of audiovisuals: scenes and effects. Both consist of an image and/or a sound, but scenes loop their sound while effects play it only once.
 
-Note: RPG Ambience only works on Windows computers.
+*Note: RPG Ambience only works on Windows computers. A cross-platform version is in development in the [browser branch](/JakobKallin/RPG-Ambience/tree/browser).*
 
 ## How to use
 1. Download [Ambience.exe](https://github.com/downloads/JakobKallin/RPG-Ambience/Ambience.exe) and put it in any folder on your computer.

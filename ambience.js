@@ -14,10 +14,12 @@ window.addEventListener('load', function() {
 	var effectStage = createStage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
 	
 	var command = '';
+	var paused = false;
 	
 	var keyStrings = {
 		8: 'Backspace',
 		13: 'Enter',
+		32: 'Space',
 		112: 'F1',
 		113: 'F2',
 		114: 'F3',
@@ -300,7 +302,13 @@ window.addEventListener('load', function() {
 			},
 			stopAudiovisual: stopAudiovisual,
 			fadeOutAudiovisual: fadeOutAudiovisual,
-			playNextSound: playNextSound
+			playNextSound: playNextSound,
+			pause: function() {
+				speaker.pause();
+			},
+			resume: function() {
+				speaker.play();
+			}
 		};
 	};
 	
@@ -385,6 +393,7 @@ window.addEventListener('load', function() {
 	
 	function stopScene() {
 		sceneStage.stopAudiovisual();
+		paused = false;
 		stopEffect();
 	}
 	
@@ -400,6 +409,27 @@ window.addEventListener('load', function() {
 	function stopEffect() {
 		effectStage.stopAudiovisual();
 		onAudioEffectEnded = null;
+		paused = false;
+	}
+	
+	function pause() {
+		if ( sceneStage.isPlaying() ) {
+			sceneStage.pause()
+		}
+		
+		if ( effectStage.isPlaying() ) {
+			effectStage.pause();
+		}
+	}
+	
+	function resume() {
+		if ( sceneStage.isPlaying() ) {
+			sceneStage.resume();
+		}
+		
+		if ( effectStage.isPlaying() ) {
+			effectStage.resume();
+		}
 	}
 	
 	function fadeOutEffect() {
@@ -443,6 +473,15 @@ window.addEventListener('load', function() {
 			} else if ( keyString === 'Backspace' ) {
 				event.preventDefault(); // Prevent Back button.
 				backspaceCommand();
+			} else if ( keyString === 'Space' ) {
+				event.preventDefault();
+				if ( paused ) {
+					resume();
+					paused = false;
+				} else {
+					pause();
+					paused = true;
+				}
 			} else if ( keyString !== null ) {
 				var scene = keyedScene(keyString);
 				if ( scene === null ) {

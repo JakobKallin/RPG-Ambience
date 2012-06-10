@@ -1,0 +1,32 @@
+scenes:
+    -
+        key: F1
+        image: examples/ishtar_rooftop.jpg
+    -
+        key: F2
+        sound: examples/8-Circling_Dragons.mp3
+    -
+        key: F3
+        text: Once upon a time…
+        text-style:
+            font-family: Georgia
+            font-size: 40px
+    -
+        key: F4
+        image: examples/shaman-previz.jpg
+        fade: 2
+    -
+        key: F5
+        sound-order: random
+        sound:
+            - examples/8-Circling_Dragons.mp3
+            - examples/9-Trailer_Music.mp3
+    -
+        key: F7
+        image: examples/jack-face-details.jpg
+        background: white
+effects:
+    -
+        key: F6
+        image: examples/sintel-wallpaper-dragon.jpg
+        sound: examples/dragon.wav

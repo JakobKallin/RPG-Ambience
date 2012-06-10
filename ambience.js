@@ -119,6 +119,9 @@ window.addEventListener('load', function() {
 		},
 		get hasText() {
 			return this.text !== undefined;
+		},
+		get hasTextStyle() {
+			return this.textStyle !== undefined;
 		}
 	};
 	
@@ -158,24 +161,18 @@ window.addEventListener('load', function() {
 			'background': function(value) {
 				audiovisual.backgroundColor = value;
 			},
-			'text': function(textConfig) {
-				if ( template.hasText ) {
-					audiovisual.text = Object.create(template.text);
+			'text': function(value) {
+				audiovisual.text = value;
+			},
+			'text-style': function(value) {
+				if ( template.hasTextStyle ) {
+					audiovisual.textStyle = Object.create(template.textStyle);
 				} else {
-					audiovisual.text = {};
+					audiovisual.textStyle = {};
 				}
 				
-				if ( textConfig.string !== undefined ) {
-					if ( textConfig.string instanceof Array ) {
-						audiovisual.text.lines = textConfig.string;
-					} else {
-						audiovisual.text.lines = [textConfig.string];
-					}
-					delete textConfig.string;
-				}
-				
-				for ( var property in textConfig ) {
-					audiovisual.text[property] = textConfig[property];
+				for ( var property in value ) {
+					audiovisual.textStyle[property] = value[property];
 				}
 			},
 			'fade': function(value) {
@@ -294,13 +291,10 @@ window.addEventListener('load', function() {
 				}
 				
 				if ( audiovisual.hasText ) {
-					var string = audiovisual.text.lines.join('<br>');
-					$(sign).html(string);
-					for ( var cssProperty in audiovisual.text ) {
-						if ( cssProperty !== 'text' ) {
-							var cssValue = audiovisual.text[cssProperty];
-							$(sign).css(cssProperty, cssValue);
-						}
+					$(sign).text(audiovisual.text);
+					for ( var cssProperty in audiovisual.textStyle ) {
+						var cssValue = audiovisual.textStyle[cssProperty];
+						$(sign).css(cssProperty, cssValue);
 					}
 				}
 			},

@@ -152,7 +152,7 @@ window.addEventListener('load', function() {
 				}
 				audiovisual.soundPaths = value.map(encodeURI);
 			},
-			'soundOrder': function(value) {
+			'sound-order': function(value) {
 				audiovisual.soundOrder = value;
 			},
 			'background': function(value) {

@@ -103,6 +103,9 @@ window.addEventListener('load', function() {
 		get hasName() {
 			return this.name !== undefined;
 		},
+		get hasKey() {
+			return this.key !== undefined;
+		},
 		get isVisual() {
 			return (
 				this.imagePath !== undefined ||
@@ -374,7 +377,10 @@ window.addEventListener('load', function() {
 	
 	function keyedAudiovisual(keyString, list) {
 		return list.first(function(audiovisual) {
-			return audiovisual.key.toUpperCase() === keyString.toUpperCase();
+			return (
+				audiovisual.hasKey &&
+				audiovisual.key.toUpperCase() === keyString.toUpperCase()
+			);
 		});
 	}
 	

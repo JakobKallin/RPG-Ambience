@@ -158,3 +158,7 @@ Note that Google Chrome must be started with the `--allow-file-access-from-files
 Ambience supports all audio and image formats that your browser supports. This typically includes WAV, JPG, PNG, and GIF. In modern desktop browsers, it also includes SVG.
 
 Note that Mozilla Firefox does not support MP3 audio.
+
+## Credits
+
+All images and audio in [the demo][demo] are taken from the movie [Sintel](http://www.sintel.org/) by the [Blender Foundation](http://www.blender.org/blenderorg/blender-foundation/).

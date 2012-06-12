@@ -1,4 +1,4 @@
-[demo]: http://github.com/JakobKallin/RPG-Ambience/
+[demo]: http://github.com/JakobKallin/RPG-Ambience/demo.html
 [yaml]: http://en.wikipedia.org/wiki/YAML
 [effect]: #effect
 
@@ -40,6 +40,7 @@ scenes:
 Scenes have the following properties:
 
 - [`background`](#background)
+- [`fade`](#fade)
 - [`image`](#image)
 - [`key`](#key)
 - [`name`](#name)
@@ -56,7 +57,17 @@ image: examples/jack-face-details.jpg
 background: white
 ```
 
-To play this example, [open the demo][demo] and press `F7`.
+To try this example, [open the demo][demo] and press `F1`.
+
+### Fade
+The `fade` property defines how many seconds a scene's visuals will take to appear and disappear when the scene is started and stopped.
+
+```yaml
+image: examples/shaman-previz.jpg
+fade: 2
+```
+
+To try this example, [open the demo][demo] and press `F2`.
 
 ### Image
 The `image` property defines the path of an image that will be displayed when the scene is playing. The image will be centered in the browser window and automatically scale to fill the window without losing proportion or being clipped.
@@ -66,7 +77,7 @@ The `image` property defines the path of an image that will be displayed when th
 image: examples/ishtar_rooftop.jpg
 ```
 
-To play this example, [open the demo][demo] and press `F1`.
+To try this example, [open the demo][demo] and press `F3`.
 
 ### Key
 The `key` property defines a key that can be pressed to start the scene.
@@ -75,28 +86,34 @@ For more information about controlling scene playback, see [Starting, stopping, 
 
 #### Example
 ```yaml
-key: F1
+key: F3
 image: examples/ishtar_rooftop.jpg
 ```
 
-To play this example, [open the demo][demo] and press `F1`.
+To try this example, [open the demo][demo] and press `F3`.
 
 ### Name
 The `name` property defines a name that can be typed to start the scene.
 
 For more information about controlling scene playback, see [Starting, stopping, and pausing scenes](#starting-stopping-and-pausing-scenes).
 
+#### Example
+```yaml
+name: dragons
+sound: examples/8-Circling_Dragons.mp3
+```
+
+To try this example, [open the demo][demo], type "dragons", and press `Enter`.
+
 ### Sound
 The `sound` property defines the path of a sound file that will be looped when the scene is playing. The property can be a list of paths, in which case all of the sounds will be looped in order.
-
-*Note: To play sounds without looping, use an [effect][effect].*
 
 #### Example
 ```yaml
 sound: examples/8-Circling_Dragons.mp3
 ```
 
-To play this example, [open the demo][demo] and press `F2`.
+To try this example, [open the demo][demo] and press `F4`.
 
 ### Sound order
 If a list of sound files has been defined in the `sound` property, the `sound-order` property defines which order these sounds will be played in.
@@ -113,7 +130,7 @@ sound:
     - examples/9-Trailer_Music.mp3
 ```
 
-To play this example, [open the demo][demo] and press `F2`.
+To try this example, [open the demo][demo] and press `F5`. Each time you press `F5`, one of the two sound files will be played at random.
 
 ### Text and text style
 The `text` property defines a message that will be displayed when the scene is playing.
@@ -128,7 +145,7 @@ textStyle:
     font-size: 40px
 ```
 
-To play this example, [open the demo][demo] and press `F2`.
+To try this example, [open the demo][demo] and press `F6`.
 
 ## Technical details
 

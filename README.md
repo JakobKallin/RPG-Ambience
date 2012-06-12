@@ -1,4 +1,4 @@
-[demo]: http://github.com/JakobKallin/RPG-Ambience/demo.html
+[demo]: http://jakobkallin.github.com/RPG-Ambience/demo.html
 [yaml]: http://en.wikipedia.org/wiki/YAML
 [effect]: #effect
 

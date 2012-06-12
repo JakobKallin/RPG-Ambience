@@ -1,13 +1,24 @@
 [demo]: http://github.com/JakobKallin/RPG-Ambience/
+[yaml]: http://en.wikipedia.org/wiki/YAML
 [effect]: #effect
 
 # RPG Ambience
 
-RPG Ambience enables you to play audio and show visuals in fullscreen during an RPG session, using your monitor as the stage. The audio and visuals are grouped into **scenes**, which you define in an **adventure file**. You control the scenes using your keyboard, which lets you start, stop, and pause them at any time during the session.
+RPG Ambience enables you to play audio and show visuals in fullscreen during tabletop RPG sessions, using your monitor as the stage. The audio and visuals are grouped into **scenes**, which you define in an **adventure file**. You control the scenes using your keyboard, which lets you start, stop, and pause them at any time during the session.
+
+## Starting, stopping, and pausing scenes
+
+Playback of scenes can be controlled in the following ways:
+
+- **Starting a scene:**
+    - **By key:** If the scene has a `key` defined, pressing this key starts the scene.
+    - **By name:** If the scene has a `name` defined, typing this name and pressing `Enter` starts the scene. It is enough to type the start of the name.
+- **Stopping a scene:** Pressing `Enter` stops the currently playing scene.
+- **Pausing a scene:** Pressing `Space` pauses the currently playing scene. Pressing `Space` again resumes it.
 
 ## Structure of an adventure file
 
-An adventure file is a YAML document that defines the audio and visuals available to you during the session. The central part of this document is a list of scenes, each of which contains **properties** that define how it appears and behaves. Ambience prompts you for an adventure file when it starts.
+An adventure file is a [YAML][yaml] document that defines the audio and visuals available to you during the session. The central part of this document is a list of scenes, each of which contains **properties** that define how it appears and behaves. Ambience prompts you for an adventure file when it starts.
 
 ### Example
 
@@ -34,8 +45,8 @@ Scenes have the following properties:
 - [`name`](#name)
 - [`sound`](#sound)
 - [`sound-order`](#sound-order)
-- [`text`](#text)
-- [`text-style`](#text-style)
+- [`text`](#text-and-text-style)
+- [`text-style`](#text-and-text-style)
 
 ### Background
 The `background` property defines a color that will fill the background of the browser window when the scene is playing. The default is `black`.
@@ -59,6 +70,21 @@ To play this example, [open the demo][demo] and press `F1`.
 
 ### Key
 The `key` property defines a key that can be pressed to start the scene.
+
+For more information about controlling scene playback, see [Starting, stopping, and pausing scenes](#starting-stopping-and-pausing-scenes).
+
+#### Example
+```yaml
+key: F1
+image: examples/ishtar_rooftop.jpg
+```
+
+To play this example, [open the demo][demo] and press `F1`.
+
+### Name
+The `name` property defines a name that can be typed to start the scene.
+
+For more information about controlling scene playback, see [Starting, stopping, and pausing scenes](#starting-stopping-and-pausing-scenes).
 
 ### Sound
 The `sound` property defines the path of a sound file that will be looped when the scene is playing. The property can be a list of paths, in which case all of the sounds will be looped in order.
@@ -90,9 +116,9 @@ sound:
 To play this example, [open the demo][demo] and press `F2`.
 
 ### Text and text style
-The `text` property defines a message that will be displayed when the scene is playing. The property can be a list of messages, in which case each message will be displayed on a separate line.
+The `text` property defines a message that will be displayed when the scene is playing.
 
-The `textStyle` property defines how the message defined in the `text` property will look. It consists of many different properties that define aspects of the text's appearance. The list of possible properties is the same as [those used in CSS](http://reference.sitepoint.com/css/typography).
+The `text-style` property defines how the message defined in the `text` property will look. It consists of many different properties that define aspects of the text's appearance. The list of possible properties is the same as [those used in CSS](http://reference.sitepoint.com/css/typography).
 
 #### Example
 ```yaml

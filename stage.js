@@ -3,7 +3,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
     var soundIndex = null;
     var isFadingOut = false;
 	
-	var defaultBackground = $(document.body).css('background-color');
+	var defaultBackground = document.body.style.backgroundColor;
 	
 	if ( endsWithAudio ) {
 		var onAudioEnded = stopIfOnlyAudial;
@@ -14,10 +14,10 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
     
     function stopAudiovisual() {
         $(node).stop(true, true); // Complete all animations, then stop them.
-        $(node).css('display', 'none');
-        $(node).css('background-color', defaultBackground);
-        $(node).css('background-image', '');
-        $(node).css('opacity', 0);
+        node.style.display = 'none';
+        node.style.backgroundColor = defaultBackground;
+        node.style.backgroundImage = '';
+        node.style.opacity = 0;
         
         if ( hasAudiovisual() && audiovisual.hasText ) {
             resetText();
@@ -34,7 +34,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
         $(sign).text('');
         for ( var cssProperty in audiovisual.text ) {
             if ( cssProperty !== 'text' ) {
-                $(sign).css(cssProperty, '');
+				sign.style[cssProperty] = '';
             }
         }
     }
@@ -86,7 +86,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
             audiovisual = newAudiovisual;
             
             if ( audiovisual.hasImage ) {
-                $(node).css('background-image', 'url(' + audiovisual.imagePath + ')');
+                node.style.backgroundImage = 'url(' + audiovisual.imagePath + ')';
             }
             
             // Locks up scene audio when effect both fades in and has audio for some reason.
@@ -97,11 +97,11 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
             }
             
             if ( audiovisual.hasBackgroundColor ) {
-                $(node).css('background-color', audiovisual.backgroundColor);
+                node.style.backgroundColor = audiovisual.backgroundColor;
             }
             
             if ( audiovisual.isVisual ) {
-                $(node).css('display', 'table');
+                node.style.display = 'table';
                 $(node).animate({opacity: 1}, audiovisual.fadeDuration);
             }
             
@@ -109,7 +109,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
                 $(sign).text(audiovisual.text);
                 for ( var cssProperty in audiovisual.textStyle ) {
                     var cssValue = audiovisual.textStyle[cssProperty];
-                    $(sign).css(cssProperty, cssValue);
+                    sign.style[cssProperty] = cssValue;
                 }
             }
         },

@@ -192,8 +192,8 @@ window.addEventListener('load', function() {
 	}
 	
 	function enableStages() {
-		$(sceneStage).css('display', 'table');
-		$(effectStage).css('display', 'table');
+		sceneNode.style.display = 'table';
+		effectNode.style.display = 'table';
 		
 		document.addEventListener('keydown', onKeyDown);
 		document.addEventListener('keypress', onKeyPress);

@@ -102,7 +102,7 @@ window.addEventListener('load', function() {
 	
 	function hideMenu() {
 		// Menu is removed entirely so that keyboard focus cannot remain on invisible submit button.
-		$(menu).remove();
+		menu.parentNode.removeChild(menu);
 	}
 	
 	function executeCommand(command) {

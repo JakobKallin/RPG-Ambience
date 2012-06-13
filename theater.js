@@ -22,39 +22,32 @@ Ambience.Theater = function(sceneStage, effectStage) {
 		paused = false;
 	}
 	
-	function pause() {
-		if ( sceneStage.isPlaying() ) {
-			sceneStage.pause()
-		}
-		
-		if ( effectStage.isPlaying() ) {
-			effectStage.pause();
-		}
-	}
-	
-	function resume() {
-		if ( sceneStage.isPlaying() ) {
-			sceneStage.resume();
-		}
-		
-		if ( effectStage.isPlaying() ) {
-			effectStage.resume();
-		}
-	}
-	
 	function togglePlayback() {
-		if ( this.isPlaying ) {
+		if ( !hasAudiovisual() ) {
+			return;
+		}
+		
+		if ( isPlaying() ) {
 			sceneStage.pause();
 			effectStage.pause();
+			paused = true;
 		} else {
 			sceneStage.resume();
 			effectStage.resume();
+			paused = false;
 		}
 	}
 	
-	this.__defineGetter__('isPlaying', function() {
+	function isPlaying() {
 		return !paused;
-	});
+	};
+	
+	function hasAudiovisual() {
+		return (
+			sceneStage.hasAudiovisual ||
+			effectStage.hasAudiovisual
+		);
+	};
 	
 	function fadeOutEffect() {
 		effectStage.fadeOutAudiovisual();

@@ -40,6 +40,10 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
     }
     
     function playNextSound() {
+		if ( !hasAudiovisual() ) {
+			return;
+		}
+		
         if ( currentAudiovisual.soundOrder === 'random' ) {
             currentSoundIndex = currentAudiovisual.soundPaths.randomIndex();
         } else {
@@ -73,6 +77,10 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
 		if ( currentAudiovisual !== null && !currentAudiovisual.isVisual ) {
 			stopAudiovisual();
 		}
+	}
+	
+	function hasAudiovisual() {
+		return currentAudiovisual !== null;
 	}
     
     return {
@@ -114,10 +122,17 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
         fadeOutAudiovisual: fadeOutAudiovisual,
         playNextSound: playNextSound,
         pause: function() {
-            speaker.pause();
+			if ( currentAudiovisual.isAudial ) {
+				speaker.pause();
+			}
         },
         resume: function() {
-            speaker.play();
-        }
+			if ( currentAudiovisual.isAudial ) {
+				speaker.play();
+			}
+        },
+		get hasAudiovisual() {
+			return hasAudiovisual();
+		}
     };
 };

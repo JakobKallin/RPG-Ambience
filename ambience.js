@@ -8,14 +8,15 @@ Ambience.start = function() {
 	var fileChooser = document.getElementById('file-chooser');
 	
 	var sceneSpeaker = document.getElementById('scene-sound');
-	var sceneStage = new Ambience.Stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'));
+	var sceneStage = new Ambience.Stage(document.getElementById('scene-stage'), sceneSpeaker, document.getElementById('scene-text'), false);
 	
 	var effectSpeaker = document.getElementById('effect-sound');
 	var onAudioEffectEnded = null;
-	var effectStage = Ambience.Stage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'));
+	var effectStage = Ambience.Stage(document.getElementById('effect-stage'), effectSpeaker, document.getElementById('effect-text'), true);
+	
+	var theater = new Ambience.Theater(sceneStage, effectStage);
 	
 	var command = '';
-	var paused = false;
 	
 	var keyStrings = {
 		8: 'Backspace',
@@ -103,17 +104,6 @@ Ambience.start = function() {
 		$(menu).remove();
 	}
 	
-	sceneSpeaker.addEventListener('ended', sceneStage.playNextSound, false);
-	effectSpeaker.addEventListener(
-		'ended',
-		function() {
-			if ( onAudioEffectEnded !== null) {
-				onAudioEffectEnded();
-			}
-		},
-		false
-	);
-	
 	function executeCommand(command) {
 		if ( command.length === 0 ) {
 			fadeOutOne();
@@ -180,65 +170,11 @@ Ambience.start = function() {
 		return keyedAudiovisual(keyString, effects);
 	}
 	
-	function playScene(scene) {
-		stopScene(scene);
-		sceneStage.playAudiovisual(scene);
-	}
-	
-	function stopScene() {
-		sceneStage.stopAudiovisual();
-		paused = false;
-		stopEffect();
-	}
-	
-	function playEffect(effect) {
-		stopEffect();
-		effectStage.playAudiovisual(effect);
-		
-		if ( !effect.isVisual ) {
-			onAudioEffectEnded = stopEffect;
-		}
-	}
-	
-	function stopEffect() {
-		effectStage.stopAudiovisual();
-		onAudioEffectEnded = null;
-		paused = false;
-	}
-	
-	function pause() {
-		if ( sceneStage.isPlaying() ) {
-			sceneStage.pause()
-		}
-		
-		if ( effectStage.isPlaying() ) {
-			effectStage.pause();
-		}
-	}
-	
-	function resume() {
-		if ( sceneStage.isPlaying() ) {
-			sceneStage.resume();
-		}
-		
-		if ( effectStage.isPlaying() ) {
-			effectStage.resume();
-		}
-	}
-	
-	function fadeOutEffect() {
-		effectStage.fadeOutAudiovisual();
-	}
-	
-	function fadeOutScene() {
-		sceneStage.fadeOutAudiovisual();
-	}
-	
 	function fadeOutOne() {
 		if ( effectStage.isPlaying() ) {
-			fadeOutEffect();
+			theater.fadeOutEffect();
 		} else if ( sceneStage.isPlaying() ) {
-			fadeOutScene();
+			theater.fadeOutScene();
 		}
 	}
 	
@@ -247,10 +183,10 @@ Ambience.start = function() {
 		if ( scene === null ) {
 			var effect = namedEffect(name);
 			if ( effect !== null ) {
-				playEffect(effect);
+				theater.playEffect(effect);
 			}
 		} else {
-			playScene(scene);
+			theater.playScene(scene);
 		}
 	}
 	
@@ -273,25 +209,19 @@ Ambience.start = function() {
 			backspaceCommand();
 		} else if ( keyString === 'Space' ) {
 			event.preventDefault();
-			if ( paused ) {
-				resume();
-				paused = false;
-			} else {
-				pause();
-				paused = true;
-			}
+			theater.togglePlayback();
 		} else if ( keyString !== null ) {
 			var scene = keyedScene(keyString);
 			if ( scene === null ) {
 				var effect = keyedEffect(keyString);
 				if ( effect !== null ) {
 					event.preventDefault();
-					playEffect(effect);
+					theater.playEffect(effect);
 					resetCommand();
 				}
 			} else {
 				event.preventDefault();
-				playScene(scene);
+				theater.playScene(scene);
 				resetCommand();
 			}
 		}

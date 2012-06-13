@@ -1,9 +1,16 @@
-Ambience.Stage = function(node, speaker, sign) {
+Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
     var currentAudiovisual = null;
     var currentSoundIndex = null;
     var isFadingOut = false;
 	
 	var defaultBackground = $(document.body).css('background-color');
+	
+	if ( endsWithAudio ) {
+		var onAudioEnded = stopIfOnlyAudial;
+	} else {
+		var onAudioEnded = playNextSound;
+	}
+	speaker.addEventListener('ended', onAudioEnded);
     
     function stopAudiovisual() {
         $(node).stop(true, true); // Complete all animations, then stop them.
@@ -61,6 +68,12 @@ Ambience.Stage = function(node, speaker, sign) {
             isFadingOut = true;
         }
     }
+	
+	function stopIfOnlyAudial() {
+		if ( currentAudiovisual !== null && !currentAudiovisual.isVisual ) {
+			stopAudiovisual();
+		}
+	}
     
     return {
         isPlaying: function() {

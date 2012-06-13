@@ -31,7 +31,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
     }
     
     function resetText() {
-        $(sign).text('');
+        sign.textContent = '';
         for ( var cssProperty in audiovisual.text ) {
             if ( cssProperty !== 'text' ) {
 				sign.style[cssProperty] = '';
@@ -106,7 +106,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
             }
             
             if ( audiovisual.hasText ) {
-                $(sign).text(audiovisual.text);
+                sign.textContent = audiovisual.text;
                 for ( var cssProperty in audiovisual.textStyle ) {
                     var cssValue = audiovisual.textStyle[cssProperty];
                     sign.style[cssProperty] = cssValue;

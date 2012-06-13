@@ -1,6 +1,6 @@
 Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
-    var currentAudiovisual = null;
-    var currentSoundIndex = null;
+    var audiovisual = null;
+    var soundIndex = null;
     var isFadingOut = false;
 	
 	var defaultBackground = $(document.body).css('background-color');
@@ -19,20 +19,20 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
         $(node).css('background-image', '');
         $(node).css('opacity', 0);
         
-        if ( currentAudiovisual && currentAudiovisual.hasText ) {
+        if ( hasAudiovisual() && audiovisual.hasText ) {
             resetText();
         }
         
         stopSpeaker();
         
-        currentAudiovisual = null;
-        currentSoundIndex = null;
+        audiovisual = null;
+        soundIndex = null;
         isFadingOut = false;
     }
     
     function resetText() {
         $(sign).text('');
-        for ( var cssProperty in currentAudiovisual.text ) {
+        for ( var cssProperty in audiovisual.text ) {
             if ( cssProperty !== 'text' ) {
                 $(sign).css(cssProperty, '');
             }
@@ -40,17 +40,15 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
     }
     
     function playNextSound() {
-		if ( !hasAudiovisual() ) {
-			return;
+		if ( hasAudiovisual() ) {
+			if ( audiovisual.soundOrder === 'random' ) {
+				soundIndex = audiovisual.soundPaths.randomIndex();
+			} else {
+				soundIndex = (soundIndex + 1) % audiovisual.soundPaths.length;
+			}
+			speaker.src = audiovisual.soundPaths[soundIndex];
+			speaker.play();
 		}
-		
-        if ( currentAudiovisual.soundOrder === 'random' ) {
-            currentSoundIndex = currentAudiovisual.soundPaths.randomIndex();
-        } else {
-            currentSoundIndex = (currentSoundIndex + 1) % currentAudiovisual.soundPaths.length;
-        }
-        speaker.src = currentAudiovisual.soundPaths[currentSoundIndex];
-        speaker.play();
     }
     
     function stopSpeaker() {
@@ -68,27 +66,24 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
             stopAudiovisual();
         } else {
             $(node).stop(true); // Stop all animations, because it might be fading in.
-            $(node).animate({opacity: 0}, currentAudiovisual.fadeDuration, stopAudiovisual);
+            $(node).animate({opacity: 0}, audiovisual.fadeDuration, stopAudiovisual);
             isFadingOut = true;
         }
     }
 	
 	function stopIfOnlyAudial() {
-		if ( currentAudiovisual !== null && !currentAudiovisual.isVisual ) {
+		if ( audiovisual !== null && !audiovisual.isVisual ) {
 			stopAudiovisual();
 		}
 	}
 	
 	function hasAudiovisual() {
-		return currentAudiovisual !== null;
+		return audiovisual !== null;
 	}
     
     return {
-        isPlaying: function() {
-            return currentAudiovisual !== null;
-        },
-        playAudiovisual: function(audiovisual) {
-            currentAudiovisual = audiovisual;
+        playAudiovisual: function(newAudiovisual) {
+            audiovisual = newAudiovisual;
             
             if ( audiovisual.hasImage ) {
                 $(node).css('background-image', 'url(' + audiovisual.imagePath + ')');
@@ -97,7 +92,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
             // Locks up scene audio when effect both fades in and has audio for some reason.
             if ( audiovisual.isAudial ) {
                 // -1 because the index is either incremented or randomized in the playNextSound method.
-                currentSoundIndex = -1;
+                soundIndex = -1;
                 playNextSound();
             }
             
@@ -122,12 +117,12 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
         fadeOutAudiovisual: fadeOutAudiovisual,
         playNextSound: playNextSound,
         pause: function() {
-			if ( currentAudiovisual.isAudial ) {
+			if ( hasAudiovisual() && audiovisual.isAudial ) {
 				speaker.pause();
 			}
         },
         resume: function() {
-			if ( currentAudiovisual.isAudial ) {
+			if ( hasAudiovisual() && audiovisual.isAudial ) {
 				speaker.play();
 			}
         },

@@ -171,9 +171,9 @@ Ambience.start = function() {
 	}
 	
 	function fadeOutOne() {
-		if ( effectStage.isPlaying() ) {
+		if ( effectStage.hasAudiovisual ) {
 			theater.fadeOutEffect();
-		} else if ( sceneStage.isPlaying() ) {
+		} else if ( sceneStage.hasAudiovisual ) {
 			theater.fadeOutScene();
 		}
 	}

@@ -258,48 +258,51 @@ Ambience.start = function() {
 		$(sceneStage).css('display', 'table');
 		$(effectStage).css('display', 'table');
 		
-		document.addEventListener('keydown', function(event) {
-			var keyString = keyStringFromKeyCode(event.which);
-			
-			if ( keyString === 'Enter' ) {
-				executeCommand(command);
-				resetCommand();
-			} else if ( keyString === 'Backspace' ) {
-				event.preventDefault(); // Prevent Back button.
-				backspaceCommand();
-			} else if ( keyString === 'Space' ) {
-				event.preventDefault();
-				if ( paused ) {
-					resume();
-					paused = false;
-				} else {
-					pause();
-					paused = true;
-				}
-			} else if ( keyString !== null ) {
-				var scene = keyedScene(keyString);
-				if ( scene === null ) {
-					var effect = keyedEffect(keyString);
-					if ( effect !== null ) {
-						event.preventDefault();
-						playEffect(effect);
-						resetCommand();
-					}
-				} else {
+		document.addEventListener('keydown', onKeyDown);
+		document.addEventListener('keypress', onKeyPress);
+	}
+	
+	function onKeyDown(event) {
+		var keyString = keyStringFromKeyCode(event.which);
+		
+		if ( keyString === 'Enter' ) {
+			executeCommand(command);
+			resetCommand();
+		} else if ( keyString === 'Backspace' ) {
+			event.preventDefault(); // Prevent Back button.
+			backspaceCommand();
+		} else if ( keyString === 'Space' ) {
+			event.preventDefault();
+			if ( paused ) {
+				resume();
+				paused = false;
+			} else {
+				pause();
+				paused = true;
+			}
+		} else if ( keyString !== null ) {
+			var scene = keyedScene(keyString);
+			if ( scene === null ) {
+				var effect = keyedEffect(keyString);
+				if ( effect !== null ) {
 					event.preventDefault();
-					playScene(scene);
+					playEffect(effect);
 					resetCommand();
 				}
-			}
-		});
-		
-		document.addEventListener('keypress', function(event) {
-			var keyCode = event.which;
-			if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
+			} else {
 				event.preventDefault();
-				var character = String.fromCharCode(keyCode);
-				command += character;
+				playScene(scene);
+				resetCommand();
 			}
-		});
+		}
+	}
+	
+	function onKeyPress(event) {
+		var keyCode = event.which;
+		if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
+			event.preventDefault();
+			var character = String.fromCharCode(keyCode);
+			command += character;
+		}
 	}
 };

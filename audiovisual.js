@@ -1,9 +1,10 @@
 Ambience.audiovisual = {};
 
-Ambience.audiovisual.base = {
+Ambience.audiovisual.scene = {
 	type: 'scene',
 	fadeDuration: 0,
 	soundOrder: 'linear',
+	loops: true,
 	get hasName() {
 		return this.name !== undefined;
 	},
@@ -40,13 +41,21 @@ Ambience.audiovisual.base = {
 	}
 };
 
+Ambience.audiovisual.effect = Object.create(Ambience.audiovisual.scene);
+Ambience.audiovisual.effect.type = 'effect';
+Ambience.audiovisual.effect.loops = false;
+
 Ambience.audiovisual.fromConfig = function(config, templateList) {
 	var audiovisual;
 	var template;
 	var templateName = config.template;
 	
 	if ( templateName === undefined ) {
-		template = Ambience.audiovisual.base;
+		if ( config.type === 'effect' ) {
+			template = Ambience.audiovisual.effect;
+		} else {
+			template = Ambience.audiovisual.scene;
+		}
 	} else if ( templateName in templateList ) {
 		template = templateList[templateName];
 	} else {
@@ -78,6 +87,10 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 		},
 		'sound-order': function(value) {
 			audiovisual.soundOrder = value;
+		},
+		'loop': function(value) {
+			// The difference between "loop" and "loops" is intentional.
+			audiovisual.loops = value;
 		},
 		'background': function(value) {
 			audiovisual.backgroundColor = value;

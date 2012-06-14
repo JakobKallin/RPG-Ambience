@@ -1,4 +1,4 @@
-Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
+Ambience.Stage = function(node, speaker, sign) {
 	var audiovisual = null;
 	var soundIndex = null;
 	var isFadingIn = false;
@@ -6,12 +6,7 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
-	if ( endsWithAudio ) {
-		var onAudioEnded = stopIfOnlyAudial;
-	} else {
-		var onAudioEnded = playNextSound;
-	}
-	speaker.addEventListener('ended', onAudioEnded);
+	speaker.addEventListener('ended', playNextSound);
 	
 	function playAudiovisual(newAudiovisual) {
 		audiovisual = newAudiovisual;
@@ -77,13 +72,23 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
 	
 	function playNextSound() {
 		if ( hasAudiovisual() ) {
+			// We need this so that we stop audio-only effects after they have actually played once.
+			var audioHasPlayedBefore = soundIndex !== -1;
+			
 			if ( audiovisual.soundOrder === 'random' ) {
 				soundIndex = audiovisual.soundPaths.randomIndex();
 			} else {
 				soundIndex = (soundIndex + 1) % audiovisual.soundPaths.length;
 			}
-			speaker.src = audiovisual.soundPaths[soundIndex];
-			speaker.play();
+			
+			var allSoundsHavePlayed = audioHasPlayedBefore && soundIndex === 0;
+			var oneShotAudioOnly = !audiovisual.loops && !audiovisual.isVisual;
+			if ( oneShotAudioOnly && allSoundsHavePlayed ) {
+				stopAudiovisual();
+			} else if ( audiovisual.loops || !allSoundsHavePlayed ) {
+				speaker.src = audiovisual.soundPaths[soundIndex];
+				speaker.play();
+			}
 		}
 	}
 	
@@ -104,12 +109,6 @@ Ambience.Stage = function(node, speaker, sign, endsWithAudio) {
 			$(node).stop(true); // Stop all animations, because it might be fading in.
 			$(node).animate({opacity: 0}, audiovisual.fadeDuration, stopAudiovisual);
 			isFadingOut = true;
-		}
-	}
-	
-	function stopIfOnlyAudial() {
-		if ( audiovisual !== null && !audiovisual.isVisual ) {
-			stopAudiovisual();
 		}
 	}
 	

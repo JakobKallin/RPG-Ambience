@@ -176,7 +176,7 @@ To try this example, [open the demo][demo] and press `F8`.
 
 ## Effects
 
-Effects are a variation of scenes that allow you to add ambience into a scene that is already playing. An effect plays alongside any currently playing scene: its audio plays simultaneously with the scene's audio while its visuals display on top of the scene's visuals. In addition, an effects plays its audio only once instead of looping.
+Effects are a variation of scenes that allow you to add ambience into a scene that is already playing. An effect plays alongside any currently playing scene: its audio plays simultaneously with the scene's audio while its visuals display on top of the scene's visuals. In addition, an effect plays its audio only once instead of looping.
 
 To create an effect, define a scene as usual and then set its `type` property to `effect`. The effect can then be started just like other scenes.
 

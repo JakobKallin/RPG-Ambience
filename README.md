@@ -180,6 +180,8 @@ Effects are a variation of scenes that allow you to add ambience into a scene th
 
 To create an effect, define a scene as usual and then set its `type` property to `effect`. The effect can then be started just like other scenes.
 
+When an effect is playing, pressing `Enter` only stops the effect. Pressing `Enter` again stops any currently playing scene.
+
 ### Example
 
 ```yaml

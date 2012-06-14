@@ -22,23 +22,23 @@ scenes:
             - examples/9-Trailer_Music.mp3
     -
         key: F6
+        text-style:
+            font-style: italic
+        template: intro
+    -
+        key: F7
+        text-style:
+            font-weight: bold
+        template: intro
+    -
+        key: F8
         text: Once upon a time…
         text-style:
             font-family: Georgia
             font-size: 40px
     -
-        key: F7
-        text-style:
-            font-style: italic
-        template: intro
-    -
-        key: F8
-        text-style:
-            font-weight: bold
-        template: intro
-    -
-        type: effect
         key: F9
+        type: effect
         image: examples/sintel-wallpaper-dragon.jpg
         sound: examples/dragon.wav
 templates:

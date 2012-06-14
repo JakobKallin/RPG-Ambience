@@ -46,6 +46,7 @@ Scenes have the following properties:
 - [`name`](#name)
 - [`sound`](#sound)
 - [`sound-order`](#sound-order)
+- [`template`](#template)
 - [`text`](#text-and-text-style)
 - [`text-style`](#text-and-text-style)
 
@@ -132,23 +133,8 @@ sound:
 
 To try this example, [open the demo][demo] and press `F5`. Each time you press `F5`, one of the two sound files will be played at random.
 
-### Text and text style
-The `text` property defines a message that will be displayed when the scene is playing.
-
-The `text-style` property defines how the message defined in the `text` property will look. It consists of many different properties that define aspects of the text's appearance. The list of possible properties is the same as [those used in CSS](http://reference.sitepoint.com/css/typography).
-
-#### Example
-```yaml
-text: Once upon a time…
-textStyle:
-    font-family: Georgia
-    font-size: 40px
-```
-
-To try this example, [open the demo][demo] and press `F6`.
-
 ### Template
-When you have several scenes that share common properties, the `template` property lets you define all of those common properties in a single place. Templates are defined in a separate part of the adventure file and are referred to by name.
+When you have several scenes that share common properties, the `template` property lets you define all of those common properties in a single place. Templates are defined in a separate part of the adventure file and used in a scene by setting its `template` property to a template's name.
 
 #### Example
 ```yaml
@@ -171,7 +157,38 @@ templates:
             font-size: 40px
 ```
 
-To try this example, [open the demo][demo] and press `F7` and `F8`.
+To try this example, [open the demo][demo] and press `F6` and `F7`.
+
+### Text and text style
+The `text` property defines a message that will be displayed when the scene is playing.
+
+The `text-style` property defines how the message defined in the `text` property will look. It consists of many different properties that define aspects of the text's appearance. The list of possible properties is the same as [those used in CSS](http://reference.sitepoint.com/css/typography).
+
+#### Example
+```yaml
+text: Once upon a time…
+textStyle:
+    font-family: Georgia
+    font-size: 40px
+```
+
+To try this example, [open the demo][demo] and press `F8`.
+
+## Effects
+
+Effects are a variation of scenes that allow you to add ambience into a scene that is already playing. An effect plays alongside any currently playing scene: its audio plays simultaneously with the scene's audio while its visuals display on top of the scene's visuals. In addition, an effects plays its audio only once instead of looping.
+
+To create an effect, define a scene as usual and then set its `type` property to `effect`. The effect can then be started just like other scenes.
+
+### Example
+
+```yaml
+type: effect
+image: examples/sintel-wallpaper-dragon.jpg
+sound: examples/dragon.wav
+```
+
+To try this example, [open the demo][demo] and press `F9`.
 
 ## Technical details
 

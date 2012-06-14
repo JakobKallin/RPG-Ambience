@@ -26,8 +26,8 @@ scenes:
         text-style:
             font-family: Georgia
             font-size: 40px
-effects:
     -
+        type: effect
         key: F7
         image: examples/sintel-wallpaper-dragon.jpg
         sound: examples/dragon.wav

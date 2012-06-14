@@ -50,8 +50,7 @@ window.addEventListener('load', function() {
 		123: 'F12'
 	};
 	
-	var scenes;
-	var effects;
+	var audiovisuals;
 	
 	function loadAdventureFile(file) {
 		try {
@@ -84,18 +83,10 @@ window.addEventListener('load', function() {
 		}
 		
 		if ( config.scenes === undefined ) {
-			scenes = [];
+			audiovisuals = [];
 		} else {
-			scenes = config.scenes.map(function(sceneConfig) {
+			audiovisuals = config.scenes.map(function(sceneConfig) {
 				return Ambience.audiovisual.fromConfig(sceneConfig, templates);
-			});
-		}
-		
-		if ( config.effects === undefined ) {
-			effects = [];
-		} else {
-			effects = config.effects.map(function(effectConfig) {
-				return Ambience.audiovisual.fromConfig(effectConfig, templates);
 			});
 		}
 	}
@@ -133,17 +124,9 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	function namedScene(name) {
-		return namedAudiovisual(name, scenes);
-	}
-	
-	function namedEffect(name) {
-		return namedAudiovisual(name, effects);
-	}
-	
-	function namedAudiovisual(name, list) {
+	function namedAudiovisual(name) {
 		if ( name.length > 0 ) {
-			return list.first(function(audiovisual) {
+			return audiovisuals.first(function(audiovisual) {
 				return (
 					audiovisual.hasName &&
 					audiovisual.name.toUpperCase().startsWith(name.toUpperCase())
@@ -154,21 +137,13 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	function keyedAudiovisual(keyString, list) {
-		return list.first(function(audiovisual) {
+	function keyedAudiovisual(keyString) {
+		return audiovisuals.first(function(audiovisual) {
 			return (
 				audiovisual.hasKey &&
 				audiovisual.key.toUpperCase() === keyString.toUpperCase()
 			);
 		});
-	}
-	
-	function keyedScene(keyString) {
-		return keyedAudiovisual(keyString, scenes);
-	}
-	
-	function keyedEffect(keyString) {
-		return keyedAudiovisual(keyString, effects);
 	}
 	
 	function fadeOutOne() {
@@ -180,15 +155,8 @@ window.addEventListener('load', function() {
 	}
 	
 	function playNamedAudiovisual(name) {
-		var scene = namedScene(name);
-		if ( scene === null ) {
-			var effect = namedEffect(name);
-			if ( effect !== null ) {
-				theater.playEffect(effect);
-			}
-		} else {
-			theater.playScene(scene);
-		}
+		var audiovisual = namedAudiovisual(name);
+		theater.play(audiovisual);
 	}
 	
 	function enableStages() {
@@ -212,17 +180,10 @@ window.addEventListener('load', function() {
 			event.preventDefault();
 			theater.togglePlayback();
 		} else if ( keyString !== null ) {
-			var scene = keyedScene(keyString);
-			if ( scene === null ) {
-				var effect = keyedEffect(keyString);
-				if ( effect !== null ) {
-					event.preventDefault();
-					theater.playEffect(effect);
-					resetCommand();
-				}
-			} else {
+			var audiovisual = keyedAudiovisual(keyString);
+			if ( audiovisual !== null ) {
 				event.preventDefault();
-				theater.playScene(scene);
+				theater.play(audiovisual);
 				resetCommand();
 			}
 		}

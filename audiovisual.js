@@ -1,6 +1,7 @@
 Ambience.audiovisual = {};
 
 Ambience.audiovisual.base = {
+	type: 'scene',
 	fadeDuration: 0,
 	soundOrder: 'linear',
 	get hasName() {
@@ -8,6 +9,12 @@ Ambience.audiovisual.base = {
 	},
 	get hasKey() {
 		return this.key !== undefined;
+	},
+	get isScene() {
+		return this.type === 'scene';
+	},
+	get isEffect() {
+		return this.type === 'effect';
 	},
 	get isVisual() {
 		return (
@@ -48,6 +55,12 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 	
 	audiovisual = Object.create(template);
 	var read = {
+		'type': function(value) {
+			if ( value !== 'effect' ) {
+				value = 'scene';
+			}
+			audiovisual.type = value;
+		},
 		'key': function(value) {
 			audiovisual.key = value;
 		},

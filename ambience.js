@@ -1,8 +1,16 @@
 Ambience = function(sceneStage, effectStage) {
 	var paused = false;
 	
+	function play(audiovisual) {
+		if ( audiovisual.isScene ) {
+			playScene(audiovisual);
+		} else {
+			playEffect(audiovisual);
+		}
+	}
+	
 	function playScene(scene) {
-		this.stopScene(scene);
+		stopScene(scene);
 		sceneStage.playAudiovisual(scene);
 	}
 	
@@ -58,6 +66,7 @@ Ambience = function(sceneStage, effectStage) {
 	}
 	
 	return {
+		play: play,
 		playScene: playScene,
 		stopScene: stopScene,
 		playEffect: playEffect,

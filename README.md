@@ -147,6 +147,32 @@ textStyle:
 
 To try this example, [open the demo][demo] and press `F6`.
 
+### Template
+When you have several scenes that share common properties, the `template` property lets you define all of those common properties in a single place. Templates are defined in a separate part of the adventure file and are referred to by name.
+
+#### Example
+```yaml
+scenes:
+    [...]
+    -
+        template: intro
+        text-style:
+            font-style: italic
+    -
+        template: intro
+        text-style:
+            font-weight: bold
+    [...]
+templates:
+    intro:
+        text: A long time ago…
+        text-style:
+            font-family: Georgia
+            font-size: 40px
+```
+
+To try this example, [open the demo][demo] and press `F7` and `F8`.
+
 ## Technical details
 
 ### Local files and URLs

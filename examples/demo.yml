@@ -27,7 +27,23 @@ scenes:
             font-family: Georgia
             font-size: 40px
     -
-        type: effect
         key: F7
+        text-style:
+            font-style: italic
+        template: intro
+    -
+        key: F8
+        text-style:
+            font-weight: bold
+        template: intro
+    -
+        type: effect
+        key: F9
         image: examples/sintel-wallpaper-dragon.jpg
         sound: examples/dragon.wav
+templates:
+    intro:
+        text: A long time ago…
+        text-style:
+            font-family: Georgia
+            font-size: 40px

@@ -34,6 +34,9 @@ Ambience.audiovisual.scene = {
 	get hasVideo() {
 		return this.videoPath !== undefined;
 	},
+	get hasSound() {
+		return this.soundPaths !== undefined;
+	},
 	get hasBackgroundColor() {
 		return this.backgroundColor !== undefined;
 	},

@@ -136,14 +136,24 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 		// Pausing is currently disallowed during fading because we first need to find out the time remaining for the animation when it's resumed.
 		if ( isFadingIn || isFadingOut ) {
 			return;
-		} else if ( hasAudiovisual() && audiovisual.isAudial ) {
-			speaker.pause();
+		} else if ( hasAudiovisual() ) {
+			if ( audiovisual.hasSound ) {
+				speaker.pause();
+			}
+			if ( audiovisual.hasVideo ) {
+				videoNode.pause();
+			}
 		}
 	}
 	
 	function resume() {
-		if ( hasAudiovisual() && audiovisual.isAudial ) {
-			speaker.play();
+		if ( hasAudiovisual() ) {
+			if ( audiovisual.hasSound ) {
+				speaker.play();
+			}
+			if ( audiovisual.hasVideo ) {
+				videoNode.play();
+			}
 		}
 	}
 	

@@ -10,28 +10,44 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 	
 	function playAudiovisual(newAudiovisual) {
 		audiovisual = newAudiovisual;
-		
+		playImage();
+		playSound();
+		playBackgroundColor();
+		playFadeIn();
+		playText();
+		playVideo();
+	}
+	
+	function playImage() {
 		if ( audiovisual.hasImage ) {
 			node.style.backgroundImage = 'url(' + audiovisual.imagePath + ')';
 		}
-		
+	}
+	
+	function playSound() {
 		// Locks up scene audio when effect both fades in and has audio for some reason.
-		if ( audiovisual.isAudial ) {
+		if ( audiovisual.hasSound ) {
 			// -1 because the index is either incremented or randomized in the playNextSound method.
 			soundIndex = -1;
 			playNextSound();
 		}
-		
+	}
+	
+	function playBackgroundColor() {
 		if ( audiovisual.hasBackgroundColor ) {
 			node.style.backgroundColor = audiovisual.backgroundColor;
 		}
-		
+	}
+	
+	function playFadeIn() {
 		if ( audiovisual.isVisual ) {
 			node.style.display = 'table';
 			isFadingIn = true;
 			$(node).animate({opacity: 1}, audiovisual.fadeDuration, onFadeInEnded);
 		}
-		
+	}
+	
+	function playText() {
 		if ( audiovisual.hasText ) {
 			sign.textContent = audiovisual.text;
 			for ( var cssProperty in audiovisual.textStyle ) {
@@ -39,7 +55,9 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 				sign.style[cssProperty] = cssValue;
 			}
 		}
-		
+	}
+	
+	function playVideo() {
 		if ( audiovisual.hasVideo ) {
 			videoNode.src = audiovisual.videoPath;
 			videoNode.play();

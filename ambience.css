@@ -46,6 +46,12 @@ html, body {
 	text-align: center;
 }
 
+.stage video {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
 .stage span {
 	display: table-cell;
 	vertical-align: middle;

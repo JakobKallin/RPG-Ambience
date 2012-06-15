@@ -20,6 +20,7 @@ Ambience.audiovisual.scene = {
 	get isVisual() {
 		return (
 			this.imagePath !== undefined ||
+			this.videoPath !== undefined ||
 			this.backgroundColor !== undefined ||
 			this.text !== undefined
 		);
@@ -29,6 +30,9 @@ Ambience.audiovisual.scene = {
 	},
 	get hasImage() {
 		return this.imagePath !== undefined;
+	},
+	get hasVideo() {
+		return this.videoPath !== undefined;
 	},
 	get hasBackgroundColor() {
 		return this.backgroundColor !== undefined;
@@ -108,6 +112,9 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 			for ( var property in value ) {
 				audiovisual.textStyle[property] = value[property];
 			}
+		},
+		'video': function(value) {
+			audiovisual.videoPath = value;
 		},
 		'fade': function(value) {
 			audiovisual.fadeDuration = value * 1000;

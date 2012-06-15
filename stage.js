@@ -1,4 +1,4 @@
-Ambience.Stage = function(node, speaker, sign) {
+Ambience.Stage = function(node, speaker, sign, videoNode) {
 	var audiovisual = null;
 	var soundIndex = null;
 	var isFadingIn = false;
@@ -39,6 +39,11 @@ Ambience.Stage = function(node, speaker, sign) {
 				sign.style[cssProperty] = cssValue;
 			}
 		}
+		
+		if ( audiovisual.hasVideo ) {
+			videoNode.src = audiovisual.videoPath;
+			videoNode.play();
+		}
 	}
 	
 	function onFadeInEnded() {
@@ -57,6 +62,7 @@ Ambience.Stage = function(node, speaker, sign) {
 		}
 		
 		stopSpeaker();
+		stopVideo();
 		
 		audiovisual = null;
 		soundIndex = null;
@@ -100,6 +106,16 @@ Ambience.Stage = function(node, speaker, sign) {
 			speaker.pause();
 		}
 		speaker.removeAttribute('src');
+	}
+	
+	function stopVideo() {
+		if ( !videoNode.ended ) {
+			try {
+				videoNode.currentTime = 0;
+			} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
+			videoNode.pause();
+		}
+		videoNode.removeAttribute('src');
 	}
 	
 	function fadeOutAudiovisual() {

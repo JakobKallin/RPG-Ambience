@@ -1,13 +1,15 @@
 window.addEventListener('load', function() {
 	var sceneNode = document.getElementById('scene-stage');
 	var sceneSpeaker = document.getElementById('scene-sound');
-	var sceneText = document.getElementById('scene-text')
-	var sceneStage = new Ambience.Stage(sceneNode, sceneSpeaker, sceneText, false);
+	var sceneText = document.getElementById('scene-text');
+	var sceneVideo = document.getElementById('scene-video');
+	var sceneStage = new Ambience.Stage(sceneNode, sceneSpeaker, sceneText, sceneVideo);
 	
 	var effectNode = document.getElementById('effect-stage');
 	var effectSpeaker = document.getElementById('effect-sound');
 	var effectText = document.getElementById('effect-text');
-	var effectStage = Ambience.Stage(effectNode, effectSpeaker, effectText, true);
+	var effectVideo = document.getElementById('effect-video');
+	var effectStage = Ambience.Stage(effectNode, effectSpeaker, effectText, effectVideo);
 	
 	var theater = new Ambience(sceneStage, effectStage);
 	

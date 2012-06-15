@@ -38,6 +38,9 @@ scenes:
             font-size: 40px
     -
         key: F9
+        video: examples/sintel-360p.webm
+    -
+        key: F10
         type: effect
         image: examples/sintel-wallpaper-dragon.jpg
         sound: examples/dragon.wav

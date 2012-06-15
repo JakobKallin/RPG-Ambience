@@ -20,7 +20,7 @@ Ambience.audiovisual.scene = {
 	get isVisual() {
 		return (
 			this.imagePath !== undefined ||
-			this.videoPath !== undefined ||
+			this.videoPaths !== undefined ||
 			this.backgroundColor !== undefined ||
 			this.text !== undefined
 		);
@@ -32,7 +32,7 @@ Ambience.audiovisual.scene = {
 		return this.imagePath !== undefined;
 	},
 	get hasVideo() {
-		return this.videoPath !== undefined;
+		return this.videoPaths !== undefined;
 	},
 	get hasSound() {
 		return this.soundPaths !== undefined;
@@ -117,7 +117,13 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 			}
 		},
 		'video': function(value) {
-			audiovisual.videoPath = value;
+			if ( !(value instanceof Array) ) {
+				value = [value];
+			}
+			audiovisual.videoPaths = value.map(encodeURI);
+		},
+		'video-order': function(value) {
+			audiovisual.videoOrder = value;
 		},
 		'fade': function(value) {
 			audiovisual.fadeDuration = value * 1000;

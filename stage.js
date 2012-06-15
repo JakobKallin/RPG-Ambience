@@ -1,12 +1,14 @@
 Ambience.Stage = function(node, speaker, sign, videoNode) {
 	var audiovisual = null;
 	var soundIndex = null;
+	var videoIndex = null;
 	var isFadingIn = false;
 	var isFadingOut = false;
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
 	speaker.addEventListener('ended', playNextSound);
+	videoNode.addEventListener('ended', playNextVideo);
 	
 	function playAudiovisual(newAudiovisual) {
 		audiovisual = newAudiovisual;
@@ -59,8 +61,8 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 	
 	function playVideo() {
 		if ( audiovisual.hasVideo ) {
-			videoNode.src = audiovisual.videoPath;
-			videoNode.play();
+			videoIndex = -1;
+			playNextVideo();
 		}
 	}
 	
@@ -112,6 +114,27 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 			} else if ( audiovisual.loops || !allSoundsHavePlayed ) {
 				speaker.src = audiovisual.soundPaths[soundIndex];
 				speaker.play();
+			}
+		}
+	}
+	
+	function playNextVideo() {
+		if ( hasAudiovisual() ) {
+			// We need this so that we stop audio-only effects after they have actually played once.
+			var videoHasPlayedBefore = videoIndex !== -1;
+			
+			if ( audiovisual.videoOrder === 'random' ) {
+				videoIndex = audiovisual.videoPaths.randomIndex();
+			} else {
+				videoIndex = (videoIndex + 1) % audiovisual.videoPaths.length;
+			}
+			
+			var allVideosHavePlayed = videoHasPlayedBefore && videoIndex === 0;
+			if ( allVideosHavePlayed ) {
+				stopAudiovisual();
+			} else if ( audiovisual.loops || !allVideosHavePlayed ) {
+				videoNode.src = audiovisual.videoPaths[videoIndex];
+				videoNode.play();
 			}
 		}
 	}

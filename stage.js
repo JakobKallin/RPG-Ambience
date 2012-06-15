@@ -1,4 +1,4 @@
-Ambience.Stage = function(node, speaker, sign, videoNode) {
+Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var audiovisual = null;
 	var soundIndex = null;
 	var videoIndex = null;
@@ -22,7 +22,7 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 	
 	function playImage() {
 		if ( audiovisual.hasImage ) {
-			node.style.backgroundImage = 'url(' + audiovisual.imagePath + ')';
+			imageNode.style.backgroundImage = 'url(' + audiovisual.imagePath + ')';
 		}
 	}
 	
@@ -43,7 +43,7 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 	
 	function playFadeIn() {
 		if ( audiovisual.isVisual ) {
-			node.style.display = 'table';
+			node.style.visibility = 'visible';
 			isFadingIn = true;
 			$(node).animate({opacity: 1}, audiovisual.fadeDuration, onFadeInEnded);
 		}
@@ -61,6 +61,7 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 	
 	function playVideo() {
 		if ( audiovisual.hasVideo ) {
+			videoNode.style.visibility = 'visible';
 			videoIndex = -1;
 			playNextVideo();
 		}
@@ -72,9 +73,9 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 	
 	function stopAudiovisual() {
 		$(node).stop(true, true); // Complete all animations, then stop them.
-		node.style.display = 'none';
+		node.style.visibility = 'hidden';
 		node.style.backgroundColor = defaultBackground;
-		node.style.backgroundImage = '';
+		imageNode.style.backgroundImage = '';
 		node.style.opacity = 0;
 		
 		if ( hasAudiovisual() && audiovisual.hasText ) {
@@ -157,6 +158,7 @@ Ambience.Stage = function(node, speaker, sign, videoNode) {
 			videoNode.pause();
 		}
 		videoNode.removeAttribute('src');
+		videoNode.style.visibility = 'hidden';
 	}
 	
 	function fadeOutAudiovisual() {

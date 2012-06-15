@@ -33,33 +33,46 @@ html, body {
 }
 
 .stage {
-	display: none;
-	opacity: 0;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.stage .image {
+	position: absolute;
+	top: 0;
+	left: 0;
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: contain;
-	text-align: center;
-}
-
-.stage video {
 	display: block;
 	width: 100%;
 	height: 100%;
 }
 
-.stage span {
-	display: table-cell;
-	vertical-align: middle;
-	color: white;
-	text-rendering: optimizeLegibility;
-}
-
-#command-form {
+.stage .video {
 	position: absolute;
 	top: 0;
+	left: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.stage .text {
+	display: table;
+	height: 100%;
+	margin: 0 auto;
+}
+
+.stage .text div {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	color: white;
+	text-rendering: optimizeLegibility;
 }

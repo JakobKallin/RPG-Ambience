@@ -38,8 +38,18 @@ function Animation(object, property, endValue, duration) {
 		timer = window.setInterval(tick, interval);
 	};
 	
+	this.pause = function() {
+		self.cancel();
+		
+		var elapsed = (tickIndex + 1) * interval;
+		var newDuration = duration - elapsed;
+		duration = newDuration;
+	};
+	
 	this.cancel = function() {
-		window.clearInterval(timer);
+		if ( timer !== null ) {
+			window.clearInterval(timer);
+		}
 	};
 	
 	this.complete = function() {

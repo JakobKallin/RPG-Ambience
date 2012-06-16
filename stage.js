@@ -4,6 +4,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var videoIndex = null;
 	var isFadingIn = false;
 	var isFadingOut = false;
+	var fadeAnimation = new Animation(node.style, 'opacity');
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
@@ -45,7 +46,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		if ( audiovisual.isVisual ) {
 			node.style.visibility = 'visible';
 			isFadingIn = true;
-			$(node).animate({opacity: 1}, audiovisual.fadeDuration, onFadeInEnded);
+			fadeAnimation.start(1, audiovisual.fadeDuration, onFadeInEnded);
 		}
 	}
 	
@@ -84,6 +85,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		
 		stopSpeaker();
 		stopVideo();
+		fadeAnimation.stop();
 		
 		audiovisual = null;
 		soundIndex = null;
@@ -165,9 +167,11 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		if ( isFadingOut ) {
 			stopAudiovisual();
 		} else {
-			$(node).stop(true); // Stop all animations, because it might be fading in.
-			$(node).animate({opacity: 0}, audiovisual.fadeDuration, stopAudiovisual);
+			if ( isFadingIn ) {
+				fadeAnimation.stop();
+			}
 			isFadingOut = true;
+			fadeAnimation.start(0, audiovisual.fadeDuration, stopAudiovisual);
 		}
 	}
 	
@@ -176,15 +180,15 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function pause() {
-		// Pausing is currently disallowed during fading because we first need to find out the time remaining for the animation when it's resumed.
-		if ( isFadingIn || isFadingOut ) {
-			return;
-		} else if ( hasAudiovisual() ) {
+		if ( hasAudiovisual() ) {
 			if ( audiovisual.hasSound ) {
 				speaker.pause();
 			}
 			if ( audiovisual.hasVideo ) {
 				videoNode.pause();
+			}
+			if ( isFadingIn || isFadingOut ) {
+				fadeAnimation.pause();
 			}
 		}
 	}
@@ -196,6 +200,9 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			}
 			if ( audiovisual.hasVideo ) {
 				videoNode.play();
+			}
+			if ( isFadingIn || isFadingOut ) {
+				fadeAnimation.resume();
 			}
 		}
 	}

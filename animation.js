@@ -8,6 +8,7 @@ function Animation(object, property) {
 	var endValue;
 	var duration;
 	var onCompleted;
+	var onStopped;
 	
 	var difference;
 	var tickCount;
@@ -30,13 +31,17 @@ function Animation(object, property) {
 		}
 	};
 	
-	this.start = function(newEndValue, newDuration, newOnCompleted) {
-		self.stop();
+	this.start = function(newEndValue, newDuration, newOnCompleted, newonStopped) {
+		if ( hasStarted ) {
+			self.stop();
+		}
+		
 		hasStarted = true;
 		
 		endValue = newEndValue;
 		duration = newDuration;
 		onCompleted = newOnCompleted;
+		onStopped = newonStopped;
 		
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;
@@ -57,8 +62,13 @@ function Animation(object, property) {
 		if ( timer !== null ) {
 			window.clearInterval(timer);
 		}
+		
 		hasStarted = false;
 		isPaused = false;
+		
+		if ( onStopped !== undefined ) {
+			onStopped();
+		}
 	};
 	
 	this.complete = function() {

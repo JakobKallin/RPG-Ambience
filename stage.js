@@ -47,7 +47,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		if ( audiovisual.isVisual ) {
 			node.style.visibility = 'visible';
 			isFadingIn = true;
-			fadeAnimation.start(1, audiovisual.fadeDuration, onFadeInEnded);
+			fadeAnimation.start(1, audiovisual.fadeDuration, undefined, onFadeInEnded);
 		}
 	}
 	
@@ -74,7 +74,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function stopAudiovisual() {
-		$(node).stop(true, true); // Complete all animations, then stop them.
 		node.style.visibility = 'hidden';
 		node.style.backgroundColor = defaultBackground;
 		imageNode.style.backgroundImage = '';

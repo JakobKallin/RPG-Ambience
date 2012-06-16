@@ -2,6 +2,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var audiovisual = null;
 	var soundIndex = null;
 	var videoIndex = null;
+	var isPaused = false;
 	var isFadingIn = false;
 	var isFadingOut = false;
 	var fadeAnimation = new Animation(node.style, 'opacity');
@@ -89,6 +90,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		
 		audiovisual = null;
 		soundIndex = null;
+		
+		isPaused = false;
 		isFadingOut = false;
 	}
 	
@@ -164,12 +167,14 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function fadeOutAudiovisual() {
+		// This should work even if the stage is currently paused, so we have to unpause it to prevent incorrect state.
+		if ( isPaused ) {
+			isPaused = false;
+		}
+		
 		if ( isFadingOut ) {
 			stopAudiovisual();
 		} else {
-			if ( isFadingIn ) {
-				fadeAnimation.stop();
-			}
 			isFadingOut = true;
 			fadeAnimation.start(0, audiovisual.fadeDuration, stopAudiovisual);
 		}
@@ -180,7 +185,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function pause() {
-		if ( hasAudiovisual() ) {
+		if ( hasAudiovisual() && !isPaused ) {
 			if ( audiovisual.hasSound ) {
 				speaker.pause();
 			}
@@ -190,11 +195,12 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.pause();
 			}
+			isPaused = true;
 		}
 	}
 	
 	function resume() {
-		if ( hasAudiovisual() ) {
+		if ( hasAudiovisual() && isPaused ) {
 			if ( audiovisual.hasSound ) {
 				speaker.play();
 			}
@@ -204,6 +210,15 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.resume();
 			}
+			isPaused = false;
+		}
+	}
+	
+	function togglePlayback() {
+		if ( isPaused ) {
+			resume();
+		} else {
+			pause();
 		}
 	}
 	
@@ -211,9 +226,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		playAudiovisual: playAudiovisual,
 		stopAudiovisual: stopAudiovisual,
 		fadeOutAudiovisual: fadeOutAudiovisual,
-		playNextSound: playNextSound,
-		pause: pause,
-		resume: resume,
+		togglePlayback: togglePlayback,
 		get hasAudiovisual() {
 			return hasAudiovisual();
 		}

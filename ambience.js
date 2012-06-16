@@ -1,6 +1,4 @@
 Ambience = function(sceneStage, effectStage) {
-	var paused = false;
-	
 	function play(audiovisual) {
 		if ( audiovisual.isScene ) {
 			playScene(audiovisual);
@@ -16,7 +14,6 @@ Ambience = function(sceneStage, effectStage) {
 	
 	function stopScene() {
 		sceneStage.stopAudiovisual();
-		paused = false;
 		stopEffect();
 	}
 	
@@ -27,28 +24,14 @@ Ambience = function(sceneStage, effectStage) {
 	
 	function stopEffect() {
 		effectStage.stopAudiovisual();
-		paused = false;
 	}
 	
 	function togglePlayback() {
-		if ( !hasAudiovisual() ) {
-			return;
-		}
-		
-		if ( isPlaying() ) {
-			sceneStage.pause();
-			effectStage.pause();
-			paused = true;
-		} else {
-			sceneStage.resume();
-			effectStage.resume();
-			paused = false;
+		if ( hasAudiovisual() ) {
+			sceneStage.togglePlayback();
+			effectStage.togglePlayback();
 		}
 	}
-	
-	function isPlaying() {
-		return !paused;
-	};
 	
 	function hasAudiovisual() {
 		return (

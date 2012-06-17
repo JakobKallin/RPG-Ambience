@@ -1,18 +1,41 @@
 Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
-	var audiovisual = null;
-	var soundIndex = null;
-	var videoIndex = null;
-	var isPaused = false;
-	var isFadingIn = false;
-	var isFadingOut = false;
+	var audiovisual;
+	var soundIndex;
+	var videoIndex;
+	
+	var isPaused;
+	var isFadingIn;
+	var isFadingOut;
+	
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	var soundFade = new Animation(speaker, 'volume');
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
 	speaker.addEventListener('ended', playNextSound);
-	speaker.volume = 0; // We will fade this in later.
 	videoNode.addEventListener('ended', playNextVideo);
+	
+	reset();
+	
+	function reset() {
+		node.style.visibility = 'hidden';
+		node.style.backgroundColor = defaultBackground;
+		imageNode.style.backgroundImage = '';
+		node.style.opacity = 0;
+		
+		resetText();
+		stopSound();
+		stopVideo();
+		stopFadeIn();
+		
+		audiovisual = null;
+		soundIndex = null;
+		videoIndex = null;
+		
+		isPaused = false;
+		isFadingIn = false;
+		isFadingOut = false;
+	}
 	
 	function playAudiovisual(newAudiovisual) {
 		audiovisual = newAudiovisual;
@@ -79,31 +102,13 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		isFadingIn = false;
 	}
 	
-	function stopAudiovisual() {
-		node.style.visibility = 'hidden';
-		node.style.backgroundColor = defaultBackground;
-		imageNode.style.backgroundImage = '';
-		node.style.opacity = 0;
-		
-		if ( hasAudiovisual() && audiovisual.hasText ) {
-			resetText();
-		}
-		
-		stopSound();
-		stopVideo();
-		stopFadeIn();
-		
-		audiovisual = null;
-		soundIndex = null;
-		
-		isPaused = false;
-		isFadingOut = false;
-	}
-	
 	function resetText() {
 		sign.textContent = '';
-		for ( var cssProperty in audiovisual.textStyle ) {
-			sign.style[cssProperty] = '';
+		
+		if ( hasAudiovisual() && audiovisual.hasTextStyle ) {
+			for ( var cssProperty in audiovisual.textStyle ) {
+				sign.style[cssProperty] = '';
+			}
 		}
 	}
 	
@@ -121,7 +126,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			var allSoundsHavePlayed = audioHasPlayedBefore && soundIndex === 0;
 			var oneShotAudioOnly = !audiovisual.loops && !audiovisual.isVisual;
 			if ( oneShotAudioOnly && allSoundsHavePlayed ) {
-				stopAudiovisual();
+				reset();
 			} else if ( audiovisual.loops || !allSoundsHavePlayed ) {
 				speaker.src = audiovisual.soundPaths[soundIndex];
 				speaker.play();
@@ -142,7 +147,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			
 			var allVideosHavePlayed = videoHasPlayedBefore && videoIndex === 0;
 			if ( allVideosHavePlayed ) {
-				stopAudiovisual();
+				reset();
 			} else if ( audiovisual.loops || !allVideosHavePlayed ) {
 				videoNode.src = audiovisual.videoPaths[videoIndex];
 				videoNode.play();
@@ -158,6 +163,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			speaker.pause();
 		}
 		speaker.removeAttribute('src');
+		speaker.volume = 0; // We will fade this in later.
 	}
 	
 	function stopVideo() {
@@ -184,7 +190,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			}
 			
 			if ( isFadingOut ) {
-				stopAudiovisual();
+				reset();
 			} else {
 				isFadingOut = true;
 				
@@ -193,13 +199,16 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 					soundFade.start(0, audiovisual.fadeDuration);
 				}
 				
-				fadeAnimation.start(0, audiovisual.fadeDuration, stopAudiovisual);
+				fadeAnimation.start(0, audiovisual.fadeDuration, reset);
 			}
 		}
 	}
 	
 	function hasAudiovisual() {
-		return audiovisual !== null;
+		return (
+			audiovisual !== null &&
+			audiovisual !== undefined // It's undefined when the stage has just been created.
+		);
 	}
 	
 	function pause() {
@@ -244,7 +253,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	return {
 		playAudiovisual: playAudiovisual,
-		stopAudiovisual: stopAudiovisual,
+		stopAudiovisual: reset,
 		fadeOutAudiovisual: fadeOutAudiovisual,
 		togglePlayback: togglePlayback,
 		get hasAudiovisual() {

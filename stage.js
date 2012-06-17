@@ -5,6 +5,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	var isPaused;
 	var soundHasEnded;
+	var videoHasEnded;
 	var isFadingIn;
 	var isFadingOut;
 	
@@ -35,6 +36,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		
 		isPaused = false;
 		soundHasEnded = false;
+		videoHasEnded = false;
 		isFadingIn = false;
 		isFadingOut = false;
 	}
@@ -150,9 +152,9 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			}
 			
 			var allVideosHavePlayed = videoHasPlayedBefore && videoIndex === 0;
-			if ( allVideosHavePlayed ) {
-				reset();
-			} else if ( audiovisual.loops || !allVideosHavePlayed ) {
+			if ( allVideosHavePlayed && !audiovisual.loops ) {
+				videoHasEnded = true;
+			} else {
 				videoNode.src = audiovisual.videoPaths[videoIndex];
 				videoNode.play();
 			}
@@ -220,7 +222,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			if ( audiovisual.hasSound && !soundHasEnded ) {
 				speaker.pause();
 			}
-			if ( audiovisual.hasVideo ) {
+			if ( audiovisual.hasVideo && !videoHasEnded ) {
 				videoNode.pause();
 			}
 			if ( isFadingIn || isFadingOut ) {
@@ -236,7 +238,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			if ( audiovisual.hasSound && !soundHasEnded ) {
 				speaker.play();
 			}
-			if ( audiovisual.hasVideo ) {
+			if ( audiovisual.hasVideo && !videoHasEnded ) {
 				videoNode.play();
 			}
 			if ( isFadingIn || isFadingOut ) {

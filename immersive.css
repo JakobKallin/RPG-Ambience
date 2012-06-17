@@ -1,0 +1,22 @@
+#menu {
+	display: table;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: white;
+}
+
+#menu p {
+	margin: 0.5em 0;
+	font-family: Georgia, serif;
+	font-style: italic;
+	font-size: 1.5em;
+}
+
+#menu form {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}

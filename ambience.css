@@ -51,5 +51,6 @@ html, body {
 	vertical-align: middle;
 	text-align: center;
 	color: white;
+	white-space: pre;
 	text-rendering: optimizeLegibility;
 }

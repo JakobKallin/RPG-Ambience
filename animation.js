@@ -59,24 +59,28 @@ function Animation(object, property) {
 	};
 	
 	this.stop = function() {
-		if ( timer !== null ) {
-			window.clearInterval(timer);
-		}
-		
-		hasStarted = false;
-		isPaused = false;
-		
-		if ( onStopped !== undefined ) {
-			onStopped();
+		if ( hasStarted ) {
+			if ( timer !== null ) {
+				window.clearInterval(timer);
+			}
+			
+			hasStarted = false;
+			isPaused = false;
+			
+			if ( onStopped !== undefined ) {
+				onStopped();
+			}
 		}
 	};
 	
 	this.complete = function() {
-		this.stop();
-		object[property] = endValue; // If there are rounding errors.
-		
-		if ( onCompleted !== undefined ) {
-			onCompleted();
+		if ( hasStarted ) {
+			this.stop();
+			object[property] = endValue; // If there are rounding errors.
+			
+			if ( onCompleted !== undefined ) {
+				onCompleted();
+			}
 		}
 	}
 	

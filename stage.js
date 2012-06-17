@@ -6,10 +6,12 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var isFadingIn = false;
 	var isFadingOut = false;
 	var fadeAnimation = new Animation(node.style, 'opacity');
+	var soundFade = new Animation(speaker, 'volume');
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
 	speaker.addEventListener('ended', playNextSound);
+	speaker.volume = 1; // We will fade this in later.
 	videoNode.addEventListener('ended', playNextVideo);
 	
 	function playAudiovisual(newAudiovisual) {
@@ -49,6 +51,10 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			isFadingIn = true;
 			fadeAnimation.start(1, audiovisual.fadeDuration, undefined, onFadeInEnded);
 		}
+		
+		if ( audiovisual.hasSound ) {
+			soundFade.start(1, audiovisual.fadeDuration);
+		}
 	}
 	
 	function playText() {
@@ -83,9 +89,9 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			resetText();
 		}
 		
-		stopSpeaker();
+		stopSound();
 		stopVideo();
-		fadeAnimation.stop();
+		stopFadeIn();
 		
 		audiovisual = null;
 		soundIndex = null;
@@ -144,7 +150,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 	}
 	
-	function stopSpeaker() {
+	function stopSound() {
 		if ( !speaker.ended ) {
 			try {
 				speaker.currentTime = 0;
@@ -165,17 +171,30 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		videoNode.style.visibility = 'hidden';
 	}
 	
+	function stopFadeIn() {
+		fadeAnimation.stop();
+		soundFade.complete();
+	}
+	
 	function fadeOutAudiovisual() {
-		// This should work even if the stage is currently paused, so we have to unpause it to prevent incorrect state.
-		if ( isPaused ) {
-			isPaused = false;
-		}
-		
-		if ( isFadingOut ) {
-			stopAudiovisual();
-		} else {
-			isFadingOut = true;
-			fadeAnimation.start(0, audiovisual.fadeDuration, stopAudiovisual);
+		if ( hasAudiovisual() ) {
+			// This should work even if the stage is currently paused, so we have to unpause it to prevent incorrect state.
+			if ( isPaused ) {
+				isPaused = false;
+			}
+			
+			if ( isFadingOut ) {
+				stopAudiovisual();
+			} else {
+				isFadingOut = true;
+				
+				// Must be above the stage fade, because it will complete immediately and set audiovisual to null.
+				if ( audiovisual.hasSound ) {
+					soundFade.start(0, audiovisual.fadeDuration);
+				}
+				
+				fadeAnimation.start(0, audiovisual.fadeDuration, stopAudiovisual);
+			}
 		}
 	}
 	
@@ -193,6 +212,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			}
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.pause();
+				soundFade.pause();
 			}
 			isPaused = true;
 		}
@@ -208,6 +228,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			}
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.resume();
+				soundFade.resume();
 			}
 			isPaused = false;
 		}

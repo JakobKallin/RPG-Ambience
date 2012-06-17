@@ -80,7 +80,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 		
 		if ( audiovisual.hasSound ) {
-			soundFade.start(1, audiovisual.fadeDuration);
+			soundFade.start(1, audiovisual.soundFadeDuration);
 		}
 	}
 	
@@ -202,7 +202,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 				
 				// Must be above the stage fade, because it will complete immediately and set audiovisual to null.
 				if ( audiovisual.hasSound ) {
-					soundFade.start(0, audiovisual.fadeDuration);
+					soundFade.start(0, audiovisual.soundFadeDuration);
 				}
 				
 				fadeAnimation.start(0, audiovisual.fadeDuration, reset);

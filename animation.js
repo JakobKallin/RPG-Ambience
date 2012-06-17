@@ -13,6 +13,7 @@ function Animation(object, property) {
 	var difference;
 	var tickCount;
 	var amount;
+	var direction;
 	
 	var value; // Separate state variable to avoid automatic type conversions.
 	var timer;
@@ -24,6 +25,13 @@ function Animation(object, property) {
 	var tick = function() {
 		tickIndex += 1;
 		value += amount;
+		
+		if ( direction === 'increase' ) {
+			value = Math.min(value, endValue);
+		} else {
+			value = Math.max(value, endValue);
+		}
+		
 		object[property] = value;
 		
 		if ( tickIndex === lastTickIndex ) {
@@ -46,6 +54,12 @@ function Animation(object, property) {
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;
 		tickCount = duration / interval;
+		
+		if ( endValue >= startValue ) {
+			direction = 'increase';
+		} else {
+			direction = 'decrease';
+		}
 		
 		if ( tickCount === 0 ) {
 			this.complete(); // If we don't do this, we would divide by zero when calculating amount.

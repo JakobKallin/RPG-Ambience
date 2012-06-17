@@ -11,7 +11,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var defaultBackground = document.body.style.backgroundColor;
 	
 	speaker.addEventListener('ended', playNextSound);
-	speaker.volume = 1; // We will fade this in later.
+	speaker.volume = 0; // We will fade this in later.
 	videoNode.addEventListener('ended', playNextVideo);
 	
 	function playAudiovisual(newAudiovisual) {

@@ -4,6 +4,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var videoIndex;
 	
 	var isPaused;
+	var soundHasEnded;
 	var isFadingIn;
 	var isFadingOut;
 	
@@ -33,6 +34,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		videoIndex = null;
 		
 		isPaused = false;
+		soundHasEnded = false;
 		isFadingIn = false;
 		isFadingOut = false;
 	}
@@ -127,7 +129,9 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			var oneShotAudioOnly = !audiovisual.loops && !audiovisual.isVisual;
 			if ( oneShotAudioOnly && allSoundsHavePlayed ) {
 				reset();
-			} else if ( audiovisual.loops || !allSoundsHavePlayed ) {
+			} else if ( allSoundsHavePlayed && !audiovisual.loops  ) {
+				soundHasEnded = true;
+			} else {
 				speaker.src = audiovisual.soundPaths[soundIndex];
 				speaker.play();
 			}
@@ -213,7 +217,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function pause() {
 		if ( hasAudiovisual() && !isPaused ) {
-			if ( audiovisual.hasSound ) {
+			if ( audiovisual.hasSound && !soundHasEnded ) {
 				speaker.pause();
 			}
 			if ( audiovisual.hasVideo ) {
@@ -229,7 +233,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function resume() {
 		if ( hasAudiovisual() && isPaused ) {
-			if ( audiovisual.hasSound ) {
+			if ( audiovisual.hasSound && !soundHasEnded ) {
 				speaker.play();
 			}
 			if ( audiovisual.hasVideo ) {

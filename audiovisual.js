@@ -20,10 +20,10 @@ Ambience.audiovisual.scene = {
 		return this.type === 'effect';
 	},
 	get isVisual() {
+		// backgroundColor should be in this, but it makes sound-only effects block the scene. Will be fixed.
 		return (
 			this.imagePath !== undefined ||
 			this.videoPaths !== undefined ||
-			this.backgroundColor !== undefined ||
 			this.text !== undefined
 		);
 	},

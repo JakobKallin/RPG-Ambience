@@ -6,11 +6,12 @@ function Animation(object, property) {
 	var interval = 20;
 	var startValue;
 	var endValue;
-	var duration;
+	var speed;
 	var onCompleted;
 	var onStopped;
 	
 	var difference;
+	var duration;
 	var tickCount;
 	var amount;
 	var direction;
@@ -39,7 +40,7 @@ function Animation(object, property) {
 		}
 	};
 	
-	this.start = function(newEndValue, newDuration, newOnCompleted, newonStopped) {
+	this.start = function(newEndValue, newSpeed, newOnCompleted, newonStopped) {
 		if ( hasStarted ) {
 			self.stop();
 		}
@@ -47,13 +48,15 @@ function Animation(object, property) {
 		hasStarted = true;
 		
 		endValue = newEndValue;
-		duration = newDuration;
+		speed = newSpeed;
 		onCompleted = newOnCompleted;
 		onStopped = newonStopped;
 		
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;
-		tickCount = duration / interval;
+		duration = speed * Math.abs(difference);
+		// If we don't round, we might get a non-integer tick count, which screws up tickIndex === lastTickIndex in tick() function.
+		tickCount = Math.round(duration / interval);
 		
 		if ( endValue >= startValue ) {
 			direction = 'increase';
@@ -62,7 +65,7 @@ function Animation(object, property) {
 		}
 		
 		if ( tickCount === 0 ) {
-			this.complete(); // If we don't do this, we would divide by zero when calculating amount.
+			self.complete(); // If we don't do this, we would divide by zero when calculating amount.
 		} else {
 			amount = difference / tickCount;
 			tickIndex = -1;
@@ -89,7 +92,7 @@ function Animation(object, property) {
 	
 	this.complete = function() {
 		if ( hasStarted ) {
-			this.stop();
+			self.stop();
 			object[property] = endValue; // If there are rounding errors.
 			
 			if ( onCompleted !== undefined ) {
@@ -101,10 +104,6 @@ function Animation(object, property) {
 	this.pause = function() {
 		if ( hasStarted && !isPaused ) {
 			window.clearInterval(timer);
-			
-			var elapsed = (tickIndex + 1) * interval;
-			var newDuration = duration - elapsed;
-			duration = newDuration;
 			isPaused = true;
 		}
 	};

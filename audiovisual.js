@@ -6,6 +6,7 @@ Ambience.audiovisual.scene = {
 	soundFades: false,
 	soundOrder: 'linear',
 	loops: true,
+	backgroundColor: 'black',
 	get hasName() {
 		return this.name !== undefined;
 	},

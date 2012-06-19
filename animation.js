@@ -6,12 +6,13 @@ function Animation(object, property) {
 	var interval = 20;
 	var startValue;
 	var endValue;
-	var speed;
+	
+	// We could use a speed instead of a duration, but that makes it difficult to fade to and from values other than 1.
+	var duration;
 	var onCompleted;
 	var onStopped;
 	
 	var difference;
-	var duration;
 	var tickCount;
 	var amount;
 	var direction;
@@ -40,7 +41,7 @@ function Animation(object, property) {
 		}
 	};
 	
-	this.start = function(newEndValue, newSpeed, newOnCompleted, newonStopped) {
+	this.start = function(newEndValue, newDuration, newOnCompleted, newonStopped) {
 		if ( hasStarted ) {
 			self.stop();
 		}
@@ -48,14 +49,13 @@ function Animation(object, property) {
 		hasStarted = true;
 		
 		endValue = newEndValue;
-		speed = newSpeed;
+		duration = newDuration;
 		onCompleted = newOnCompleted;
 		onStopped = newonStopped;
 		
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;
-		duration = speed * Math.abs(difference);
-		// If we don't round, we might get a non-integer tick count, which screws up tickIndex === lastTickIndex in tick() function.
+		// If we don't round, we might get a non-integer tick count, which breaks the test at the end of the tick() function.
 		tickCount = Math.round(duration / interval);
 		
 		if ( endValue >= startValue ) {
@@ -104,6 +104,10 @@ function Animation(object, property) {
 	this.pause = function() {
 		if ( hasStarted && !isPaused ) {
 			window.clearInterval(timer);
+			
+			var elapsed = (tickIndex + 1) * interval;
+			var newDuration = duration - elapsed;
+			duration = newDuration;
 			isPaused = true;
 		}
 	};

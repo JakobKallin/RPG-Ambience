@@ -7,6 +7,7 @@ Ambience.audiovisual.scene = {
 	soundOrder: 'linear',
 	loops: true,
 	backgroundColor: 'black',
+	volume: 1,
 	get hasName() {
 		return this.name !== undefined;
 	},
@@ -140,6 +141,9 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 		},
 		'fade-sound': function(value) {
 			audiovisual.soundFades = value;
+		},
+		'volume': function(value) {
+			audiovisual.volume = value;
 		}
 	};
 	

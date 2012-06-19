@@ -75,12 +75,13 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	function playFadeIn() {
 		if ( audiovisual.isVisual ) {
 			node.style.visibility = 'visible';
-			isFadingIn = true;
-			fadeAnimation.start(1, audiovisual.fadeDuration, undefined, onFadeInEnded);
 		}
 		
+		isFadingIn = true;
+		fadeAnimation.start(1, audiovisual.fadeDuration, undefined, onFadeInEnded);
+		
 		if ( audiovisual.hasSound ) {
-			soundFade.start(1, audiovisual.soundFadeDuration);
+			soundFade.start(audiovisual.volume, audiovisual.soundFadeDuration);
 		}
 	}
 	
@@ -200,12 +201,18 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			} else {
 				isFadingOut = true;
 				
-				// Must be above the stage fade, because it will complete immediately and set audiovisual to null.
+				// Must be above the stage fade, because that might complete immediately and set audiovisual to null.
 				if ( audiovisual.hasSound ) {
-					soundFade.start(0, audiovisual.soundFadeDuration);
+					// The current volume compared to the audiovisual's defined volume, if it has been halfway faded in.
+					var volumePercentage = speaker.volume / audiovisual.volume;
+					var soundFadeDuration = audiovisual.soundFadeDuration * volumePercentage;
+					soundFade.start(0, soundFadeDuration);
 				}
 				
-				fadeAnimation.start(0, audiovisual.fadeDuration, reset);
+				// The current opacity compared to 1, if the audiovisual has been halfway faded in.
+				var opacityPercentage = node.style.opacity / 1;
+				var fadeDuration = audiovisual.fadeDuration * opacityPercentage;
+				fadeAnimation.start(0, fadeDuration, reset);
 			}
 		}
 	}

@@ -1,9 +1,11 @@
 Ambience = function(sceneStage, effectStage) {
 	function play(audiovisual) {
-		if ( audiovisual.isScene ) {
-			playScene(audiovisual);
-		} else {
-			playEffect(audiovisual);
+		if ( audiovisual ) {
+			if ( audiovisual.isScene ) {
+				playScene(audiovisual);
+			} else {
+				playEffect(audiovisual);
+			}
 		}
 	}
 	

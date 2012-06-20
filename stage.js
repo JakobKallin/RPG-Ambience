@@ -78,7 +78,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 		
 		isFadingIn = true;
-		fadeAnimation.start(1, audiovisual.fadeDuration, undefined, onFadeInEnded);
+		fadeAnimation.start(1, audiovisual.fadeDuration, {ended: onFadeInEnded});
 		
 		if ( audiovisual.hasSound ) {
 			soundFade.start(audiovisual.volume, audiovisual.soundFadeDuration);
@@ -212,7 +212,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 				// The current opacity compared to 1, if the audiovisual has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;
 				var fadeDuration = audiovisual.fadeDuration * opacityPercentage;
-				fadeAnimation.start(0, fadeDuration, reset);
+				fadeAnimation.start(0, fadeDuration, {completed: reset});
 			}
 		}
 	}

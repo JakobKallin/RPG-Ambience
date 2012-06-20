@@ -10,7 +10,7 @@ function Animation(object, property) {
 	// We could use a speed instead of a duration, but that makes it difficult to fade to and from values other than 1.
 	var duration;
 	var onCompleted;
-	var onStopped;
+	var onEnded;
 	
 	var difference;
 	var tickCount;
@@ -41,7 +41,11 @@ function Animation(object, property) {
 		}
 	};
 	
-	this.start = function(newEndValue, newDuration, newOnCompleted, newonStopped) {
+	this.start = function(newEndValue, newDuration, callbacks) {
+		if ( !callbacks ) {
+			callbacks = {};
+		}
+		
 		if ( hasStarted ) {
 			self.stop();
 		}
@@ -50,8 +54,8 @@ function Animation(object, property) {
 		
 		endValue = newEndValue;
 		duration = newDuration;
-		onCompleted = newOnCompleted;
-		onStopped = newonStopped;
+		onCompleted = callbacks.completed;
+		onEnded = callbacks.ended;
 		
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;
@@ -84,8 +88,8 @@ function Animation(object, property) {
 			hasStarted = false;
 			isPaused = false;
 			
-			if ( onStopped !== undefined ) {
-				onStopped();
+			if ( onEnded !== undefined ) {
+				onEnded();
 			}
 		}
 	};

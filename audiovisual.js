@@ -3,7 +3,8 @@ Ambience.audiovisual = {};
 Ambience.audiovisual.scene = {
 	type: 'scene',
 	fadeDuration: 0,
-	soundFades: false,
+	fadesIn: true,
+	fadesOut: true,
 	soundOrder: 'linear',
 	loops: true,
 	backgroundColor: 'black',
@@ -49,11 +50,17 @@ Ambience.audiovisual.scene = {
 	get hasTextStyle() {
 		return this.textStyle !== undefined;
 	},
-	get soundFadeDuration() {
-		if ( this.soundFades ) {
+	get fadeInDuration() {
+		if ( this.fadesIn ) {
 			return this.fadeDuration;
 		} else {
-			// This makes the sound stop right when the visual fade-out starts. It should stop when the visual fade-out ends.
+			return 0;
+		}
+	},
+	get fadeOutDuration() {
+		if ( this.fadesOut ) {
+			return this.fadeDuration;
+		} else {
 			return 0;
 		}
 	}
@@ -139,8 +146,11 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 		'fade': function(value) {
 			audiovisual.fadeDuration = value * 1000;
 		},
-		'fade-sound': function(value) {
-			audiovisual.soundFades = value;
+		'fade-in': function(value) {
+			audiovisual.fadesIn = value;
+		},
+		'fade-out': function(value) {
+			audiovisual.fadesOut = value;
 		},
 		'volume': function(value) {
 			audiovisual.volume = value;

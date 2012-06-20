@@ -53,7 +53,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function playImage() {
 		if ( audiovisual.hasImage ) {
-			imageNode.style.backgroundImage = 'url(' + audiovisual.imagePath + ')';
+			imageNode.style.backgroundImage = 'url("' + audiovisual.imagePath + '")';
 		}
 	}
 	

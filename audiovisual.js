@@ -70,10 +70,14 @@ Ambience.audiovisual.effect = Object.create(Ambience.audiovisual.scene);
 Ambience.audiovisual.effect.type = 'effect';
 Ambience.audiovisual.effect.loops = false;
 
-Ambience.audiovisual.fromConfig = function(config, templateList) {
+Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
 	var audiovisual;
 	var template;
 	var templateName = config.template;
+	
+	if ( !basePath ) {
+		basePath = '';
+	}
 	
 	if ( templateName === undefined ) {
 		if ( config.type === 'effect' ) {
@@ -86,6 +90,10 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 	} else {
 		throw new Error('There is no template named ' + templateName + '.');
 	}
+	
+	var effectivePath = function(path) {
+		return basePath + path;
+	};
 	
 	audiovisual = Object.create(template);
 	var read = {
@@ -102,13 +110,13 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 			audiovisual.name = String(value);
 		},
 		'image': function(value) {
-			audiovisual.imagePath = encodeURI(value);
+			audiovisual.imagePath = encodeURI(effectivePath(value));
 		},
 		'sound': function(value) {
 			if ( !(value instanceof Array) ) {
 				value = [value];
 			}
-			audiovisual.soundPaths = value.map(encodeURI);
+			audiovisual.soundPaths = value.map(effectivePath).map(encodeURI);
 		},
 		'sound-order': function(value) {
 			audiovisual.soundOrder = value;
@@ -138,7 +146,7 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 			if ( !(value instanceof Array) ) {
 				value = [value];
 			}
-			audiovisual.videoPaths = value.map(encodeURI);
+			audiovisual.videoPaths = value.map(effectivePath).map(encodeURI);
 		},
 		'video-order': function(value) {
 			audiovisual.videoOrder = value;

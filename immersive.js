@@ -80,17 +80,19 @@ window.addEventListener('load', function() {
 	}
 	
 	function parseConfig(config) {
+		var basePath = config['base-path'];
+		
 		templates = [];
 		for ( var templateName in config.templates ) {
 			var templateConfig = config.templates[templateName];
-			templates[templateName] = Ambience.audiovisual.fromConfig(templateConfig, templates);
+			templates[templateName] = Ambience.audiovisual.fromConfig(templateConfig, templates, basePath);
 		}
 		
 		if ( config.scenes === undefined ) {
 			audiovisuals = [];
 		} else {
 			audiovisuals = config.scenes.map(function(sceneConfig) {
-				return Ambience.audiovisual.fromConfig(sceneConfig, templates);
+				return Ambience.audiovisual.fromConfig(sceneConfig, templates, basePath);
 			});
 		}
 	}

@@ -96,10 +96,10 @@ Ambience.audiovisual.fromConfig = function(config, templateList) {
 			audiovisual.type = value;
 		},
 		'key': function(value) {
-			audiovisual.key = value;
+			audiovisual.key = String(value);
 		},
 		'name': function(value) {
-			audiovisual.name = value;
+			audiovisual.name = String(value);
 		},
 		'image': function(value) {
 			audiovisual.imagePath = encodeURI(value);

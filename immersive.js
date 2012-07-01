@@ -34,6 +34,31 @@ window.addEventListener('load', function() {
 		event.dataTransfer.dropEffect = 'copy';
 	});
 	
+	var cursorTimer;
+	var cursorHideDelay = 1000;
+	var cursorX;
+	
+	var hideCursor = function() {
+		document.body.style.cursor = 'none';
+	};
+	
+	var showCursor = function() {
+		document.body.style.cursor = 'auto';
+	};
+	
+	document.body.addEventListener('mousemove', function(event) {
+		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
+		var mouseHasMoved = event.x !== cursorX || event.y !== cursorY;
+		if ( mouseHasMoved ) {
+			window.clearTimeout(cursorTimer);
+			showCursor();
+			cursorTimer = window.setTimeout(hideCursor, cursorHideDelay);
+		}
+		
+		cursorX = event.x;
+		cursorY = event.y;
+	});
+	
 	var command = '';
 	
 	var keyStrings = {

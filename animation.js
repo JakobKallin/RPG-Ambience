@@ -1,9 +1,8 @@
 function Animation(object, property) {
 	var self = this;
 	
-	// Interval taken from jQuery (13) but rounded up.
-	// Rounding down to only 10 makes setInterval drift.
-	var interval = 20;
+	// Set relatively high compared to jQuery (which has 13), because of drifting.
+	var interval = 50;
 	var startValue;
 	var endValue;
 	

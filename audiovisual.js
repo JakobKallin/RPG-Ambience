@@ -9,6 +9,7 @@ Ambience.audiovisual.scene = {
 	loops: true,
 	backgroundColor: 'black',
 	volume: 1,
+	imageDelay: 0,
 	get hasName() {
 		return this.name !== undefined;
 	},
@@ -162,6 +163,9 @@ Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
 		},
 		'volume': function(value) {
 			audiovisual.volume = value;
+		},
+		'image-delay': function(value) {
+			audiovisual.imageDelay = value * 1000;
 		}
 	};
 	

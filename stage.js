@@ -14,6 +14,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
+	var imageDelayTimer;
+	
 	speaker.addEventListener('ended', playNextSound);
 	videoNode.addEventListener('ended', playNextVideo);
 	
@@ -34,6 +36,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		soundIndex = null;
 		videoIndex = null;
 		
+		window.clearTimeout(imageDelayTimer);
+		
 		isPaused = false;
 		soundHasEnded = false;
 		videoHasEnded = false;
@@ -43,7 +47,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function playAudiovisual(newAudiovisual) {
 		audiovisual = newAudiovisual;
-		playImage();
+		imageDelayTimer = window.setTimeout(playImage, audiovisual.imageDelay);
 		playSound();
 		playBackgroundColor();
 		playFadeIn();

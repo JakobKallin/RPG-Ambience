@@ -20,5 +20,23 @@
 			<span id="effect-text"></span>
 			<audio id="effect-sound"></audio>
 		</div>
+		<!-- Preloader -->
+		<div id="preloader" style="display: none">
+			<img src="examples/jack-face-details.jpg">
+			<img src="examples/shaman-previz.jpg">
+			<img src="examples/ishtar_rooftop.jpg">
+			<img src="examples/sintel-wallpaper-dragon.jpg">
+			<audio src="examples/8-Circling_Dragons.mp3"></audio>
+			<audio src="examples/9-Trailer_Music.mp3"></audio>
+			<audio src="examples/dragon.wav"></audio>
+			<script>
+				for ( var i = 2; i < 4; ++i ) {
+					var audio = document.getElementsByTagName('audio')[i];
+					audio.volume = 0;
+					audio.play();
+					audio.pause();
+				}
+			</script>
+		</div>
 	</body>
 </html>

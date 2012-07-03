@@ -13,7 +13,7 @@ window.addEventListener('load', function() {
 	var effectVideo = document.getElementById('effect-video');
 	var effectStage = Ambience.Stage(effectNode, effectImage, effectSpeaker, effectText, effectVideo);
 	
-	var theater = new Ambience(sceneStage, effectStage);
+	var ambience = new Ambience(sceneStage, effectStage);
 	
 	var menu = document.getElementById('menu');
 	var fileChooser = document.getElementById('file-chooser');
@@ -179,15 +179,15 @@ window.addEventListener('load', function() {
 	
 	function fadeOutOne() {
 		if ( effectStage.hasAudiovisual ) {
-			theater.fadeOutEffect();
+			ambience.fadeOutEffect();
 		} else if ( sceneStage.hasAudiovisual ) {
-			theater.fadeOutScene();
+			ambience.fadeOutScene();
 		}
 	}
 	
 	function playNamedAudiovisual(name) {
 		var audiovisual = namedAudiovisual(name);
-		theater.play(audiovisual);
+		ambience.play(audiovisual);
 	}
 	
 	function enableStages() {
@@ -206,12 +206,12 @@ window.addEventListener('load', function() {
 			backspaceCommand();
 		} else if ( keyString === 'Space' ) {
 			event.preventDefault();
-			theater.togglePlayback();
+			ambience.togglePlayback();
 		} else if ( keyString !== null ) {
 			var audiovisual = keyedAudiovisual(keyString);
 			if ( audiovisual !== null ) {
 				event.preventDefault();
-				theater.play(audiovisual);
+				ambience.play(audiovisual);
 				resetCommand();
 			}
 		}

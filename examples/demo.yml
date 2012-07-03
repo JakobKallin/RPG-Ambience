@@ -40,7 +40,7 @@ scenes:
         key: F9
         type: effect
         image: examples/sintel-wallpaper-dragon.jpg
-        sound: examples/dragon.wav
+        sound: examples/dragon.ogg
 templates:
     intro:
         text: A long time ago…

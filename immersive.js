@@ -120,6 +120,8 @@ window.addEventListener('load', function() {
 				return Ambience.audiovisual.fromConfig(sceneConfig, templates, basePath);
 			});
 		}
+		
+		preloadMedia(audiovisuals);
 	}
 	
 	function hideMenu() {
@@ -223,6 +225,36 @@ window.addEventListener('load', function() {
 			event.preventDefault();
 			var character = String.fromCharCode(keyCode);
 			command += character;
+		}
+	}
+	
+	function preloadMedia(audiovisuals) {
+		var node = document.createElement('div');
+		node.style.display = 'none';
+		document.body.appendChild(node);
+		
+		audiovisuals.map(function(audiovisual) { preloadImage(audiovisual, node); });
+		audiovisuals.map(function(audiovisual) { preloadSound(audiovisual, node); });
+	}
+	
+	function preloadImage(audiovisual, node) {
+		if ( audiovisual.hasImage ) {
+			var img = document.createElement('img');
+			img.src = audiovisual.imagePath;
+			node.appendChild(img);
+		}
+	}
+	
+	function preloadSound(audiovisual, node) {
+		if ( audiovisual.hasSound ) {
+			audiovisual.soundPaths.map(function(path) {
+				var audio = document.createElement('audio');
+				audio.src = path;
+				audio.volume = 0;
+				node.appendChild(audio);
+				audio.play();
+				audio.pause();
+			});
 		}
 	}
 });

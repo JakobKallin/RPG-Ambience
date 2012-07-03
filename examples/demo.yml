@@ -13,13 +13,13 @@ scenes:
     -
         key: F4
         name: dragons
-        sound: examples/8-Circling_Dragons.mp3
+        sound: examples/8-Circling_Dragons.ogg
     -
         key: F5
         sound-order: random
         sound:
-            - examples/8-Circling_Dragons.mp3
-            - examples/9-Trailer_Music.mp3
+            - examples/8-Circling_Dragons.ogg
+            - examples/9-Trailer_Music.ogg
     -
         key: F6
         text-style:

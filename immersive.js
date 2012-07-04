@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
 	var effectSpeaker = document.getElementById('effect-sound');
 	var effectText = document.getElementById('effect-text');
 	var effectVideo = document.getElementById('effect-video');
-	var effectStage = Ambience.Stage(effectNode, effectImage, effectSpeaker, effectText, effectVideo);
+	var effectStage = new Ambience.Stage(effectNode, effectImage, effectSpeaker, effectText, effectVideo);
 	
 	var ambience = new Ambience(sceneStage, effectStage);
 	
@@ -180,9 +180,9 @@ window.addEventListener('load', function() {
 	}
 	
 	function fadeOutOne() {
-		if ( effectStage.hasAudiovisual ) {
+		if ( effectStage.audiovisual ) {
 			ambience.fadeOutEffect();
-		} else if ( sceneStage.hasAudiovisual ) {
+		} else if ( sceneStage.audiovisual ) {
 			ambience.fadeOutScene();
 		}
 	}

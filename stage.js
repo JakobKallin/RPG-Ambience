@@ -114,7 +114,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	function resetText() {
 		sign.textContent = '';
 		
-		if ( hasAudiovisual() && audiovisual.hasTextStyle ) {
+		if ( audiovisual && audiovisual.hasTextStyle ) {
 			for ( var cssProperty in audiovisual.textStyle ) {
 				sign.style[cssProperty] = '';
 			}
@@ -122,7 +122,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function playNextSound() {
-		if ( hasAudiovisual() ) {
+		if ( audiovisual ) {
 			// We need this so that we stop audio-only effects after they have actually played once.
 			var audioHasPlayedBefore = soundIndex !== -1;
 			
@@ -146,7 +146,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function playNextVideo() {
-		if ( hasAudiovisual() ) {
+		if ( audiovisual ) {
 			// We need this so that we stop audio-only effects after they have actually played once.
 			var videoHasPlayedBefore = videoIndex !== -1;
 			
@@ -194,7 +194,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function fadeOutAudiovisual() {
-		if ( hasAudiovisual() ) {
+		if ( audiovisual ) {
 			// This should work even if the stage is currently paused, so we have to unpause it to prevent incorrect state.
 			if ( isPaused ) {
 				isPaused = false;
@@ -221,15 +221,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 	}
 	
-	function hasAudiovisual() {
-		return (
-			audiovisual !== null &&
-			audiovisual !== undefined // It's undefined when the stage has just been created.
-		);
-	}
-	
 	function pause() {
-		if ( hasAudiovisual() && !isPaused ) {
+		if ( audiovisual && !isPaused ) {
 			if ( audiovisual.hasSound && !soundHasEnded ) {
 				speaker.pause();
 			}
@@ -245,7 +238,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function resume() {
-		if ( hasAudiovisual() && isPaused ) {
+		if ( audiovisual && isPaused ) {
 			if ( audiovisual.hasSound && !soundHasEnded ) {
 				speaker.play();
 			}
@@ -273,8 +266,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		stopAudiovisual: reset,
 		fadeOutAudiovisual: fadeOutAudiovisual,
 		togglePlayback: togglePlayback,
-		get hasAudiovisual() {
-			return hasAudiovisual();
+		get audiovisual() {
+			return audiovisual;
 		}
 	};
 };

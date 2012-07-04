@@ -29,16 +29,16 @@ Ambience = function(sceneStage, effectStage) {
 	}
 	
 	function togglePlayback() {
-		if ( hasAudiovisual() ) {
+		if ( audiovisualIsPlaying() ) {
 			sceneStage.togglePlayback();
 			effectStage.togglePlayback();
 		}
 	}
 	
-	function hasAudiovisual() {
-		return (
-			sceneStage.hasAudiovisual ||
-			effectStage.hasAudiovisual
+	function audiovisualIsPlaying() {
+		return Boolean(
+			sceneStage.audiovisual ||
+			effectStage.audiovisual
 		);
 	};
 	

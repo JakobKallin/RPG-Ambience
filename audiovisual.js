@@ -113,6 +113,17 @@ Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
 		'image': function(value) {
 			audiovisual.imagePath = encodeURI(effectivePath(value));
 		},
+		'image-style': function(value) {
+			if ( template.imageStyle ) {
+				audiovisual.imageStyle = Object.create(template.imageStyle);
+			} else {
+				audiovisual.imageStyle = {};
+			}
+			
+			for ( var property in value ) {
+				audiovisual.imageStyle[property] = value[property];
+			}
+		},
 		'sound': function(value) {
 			if ( !(value instanceof Array) ) {
 				value = [value];

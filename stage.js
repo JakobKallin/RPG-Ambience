@@ -27,6 +27,13 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		imageNode.style.backgroundImage = '';
 		node.style.opacity = 0;
 		
+		if ( audiovisual && audiovisual.imageStyle ) {
+			for ( var property in audiovisual.imageStyle ) {
+				var cssProperty = 'background-' + property;
+				imageNode.style[cssProperty] = '';
+			}
+		}
+		
 		resetText();
 		stopSound();
 		stopVideo();

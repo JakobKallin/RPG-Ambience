@@ -14,6 +14,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
+	var image = new Ambience.Image(imageNode);
 	var imageDelayTimer;
 	
 	speaker.addEventListener('ended', playNextSound);
@@ -24,16 +25,9 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	function reset() {
 		node.style.visibility = 'hidden';
 		node.style.backgroundColor = defaultBackground;
-		imageNode.style.backgroundImage = '';
 		node.style.opacity = 0;
 		
-		if ( audiovisual && audiovisual.imageStyle ) {
-			for ( var property in audiovisual.imageStyle ) {
-				var cssProperty = 'background-' + property;
-				imageNode.style[cssProperty] = '';
-			}
-		}
-		
+		image.reset(audiovisual);
 		resetText();
 		stopSound();
 		stopVideo();
@@ -63,15 +57,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function playImage() {
-		if ( audiovisual.hasImage ) {
-			imageNode.style.backgroundImage = 'url("' + audiovisual.imagePath + '")';
-		}
-		
-		for ( var property in audiovisual.imageStyle ) {
-			var cssValue = audiovisual.imageStyle[property];
-			var cssProperty = 'background-' + property;
-			imageNode.style[cssProperty] = cssValue;
-		}
+		image.play(audiovisual);
 	}
 	
 	function playSound() {

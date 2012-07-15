@@ -1,23 +1,20 @@
 Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var audiovisual;
-	var soundIndex;
 	var videoIndex;
 	
 	var isPaused;
-	var soundHasEnded;
 	var videoHasEnded;
 	var isFadingIn;
 	var isFadingOut;
 	
 	var fadeAnimation = new Animation(node.style, 'opacity');
-	var soundFade = new Animation(speaker, 'volume');
 	
 	var defaultBackground = document.body.style.backgroundColor;
 	
 	var image = new Ambience.Image(imageNode);
+	var sound = new Ambience.Sound(speaker);
 	var imageDelayTimer;
 	
-	speaker.addEventListener('ended', playNextSound);
 	videoNode.addEventListener('ended', playNextVideo);
 	
 	reset();
@@ -29,18 +26,16 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		
 		image.reset(audiovisual);
 		resetText();
-		stopSound();
+		sound.reset();
 		stopVideo();
 		stopFadeIn();
 		
 		audiovisual = null;
-		soundIndex = null;
 		videoIndex = null;
 		
 		window.clearTimeout(imageDelayTimer);
 		
 		isPaused = false;
-		soundHasEnded = false;
 		videoHasEnded = false;
 		isFadingIn = false;
 		isFadingOut = false;
@@ -48,25 +43,16 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function playAudiovisual(newAudiovisual) {
 		audiovisual = newAudiovisual;
-		imageDelayTimer = window.setTimeout(playImage, audiovisual.imageDelay);
-		playSound();
-		playBackgroundColor();
 		playFadeIn();
+		imageDelayTimer = window.setTimeout(playImage, audiovisual.imageDelay);
+		playBackgroundColor();
+		sound.play(audiovisual);
 		playText();
 		playVideo();
 	}
 	
 	function playImage() {
 		image.play(audiovisual);
-	}
-	
-	function playSound() {
-		// Locks up scene audio when effect both fades in and has audio for some reason.
-		if ( audiovisual.hasSound ) {
-			// -1 because the index is either incremented or randomized in the playNextSound method.
-			soundIndex = -1;
-			playNextSound();
-		}
 	}
 	
 	function playBackgroundColor() {
@@ -80,12 +66,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			node.style.visibility = 'visible';
 		}
 		
-		isFadingIn = true;
-		fadeAnimation.start(1, audiovisual.fadeInDuration, {ended: onFadeInEnded});
-		
-		if ( audiovisual.hasSound ) {
-			soundFade.start(audiovisual.volume, audiovisual.fadeInDuration);
-		}
+		isFadingIn = true
+		fadeAnimation.start(1, audiovisual.fadeInDuration, {ended: onFadeInEnded});		
 	}
 	
 	function playText() {
@@ -118,31 +100,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 				sign.style[cssProperty] = '';
 			}
 		}
-	}
-	
-	function playNextSound() {
-		if ( audiovisual ) {
-			// We need this so that we stop audio-only effects after they have actually played once.
-			var audioHasPlayedBefore = soundIndex !== -1;
-			
-			if ( audiovisual.soundOrder === 'random' ) {
-				soundIndex = audiovisual.soundPaths.randomIndex();
-			} else {
-				soundIndex = (soundIndex + 1) % audiovisual.soundPaths.length;
-			}
-			
-			var allSoundsHavePlayed = audioHasPlayedBefore && soundIndex === 0;
-			var oneShotAudioOnly = !audiovisual.loops && !audiovisual.isVisual;
-			if ( oneShotAudioOnly && allSoundsHavePlayed ) {
-				reset();
-			} else if ( allSoundsHavePlayed && !audiovisual.loops  ) {
-				soundHasEnded = true;
-			} else {
-				speaker.src = audiovisual.soundPaths[soundIndex];
-				speaker.play();
-			}
-		}
-	}
+	}	
 	
 	function playNextVideo() {
 		if ( audiovisual ) {
@@ -165,17 +123,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 	}
 	
-	function stopSound() {
-		if ( !speaker.ended ) {
-			try {
-				speaker.currentTime = 0;
-			} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
-			speaker.pause();
-		}
-		speaker.removeAttribute('src');
-		speaker.volume = 0; // We will fade this in later.
-	}
-	
 	function stopVideo() {
 		if ( !videoNode.ended ) {
 			try {
@@ -189,7 +136,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function stopFadeIn() {
 		fadeAnimation.stop();
-		soundFade.complete();
 	}
 	
 	function fadeOutAudiovisual() {
@@ -204,13 +150,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			} else {
 				isFadingOut = true;
 				
-				// Must be above the stage fade, because that might complete immediately and set audiovisual to null.
-				if ( audiovisual.hasSound ) {
-					// The current volume compared to the audiovisual's defined volume, if it has been halfway faded in.
-					var volumePercentage = speaker.volume / audiovisual.volume;
-					var soundFadeDuration = audiovisual.fadeOutDuration * volumePercentage;
-					soundFade.start(0, soundFadeDuration);
-				}
+				sound.fadeOut();
 				
 				// The current opacity compared to 1, if the audiovisual has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;
@@ -222,15 +162,12 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function pause() {
 		if ( audiovisual && !isPaused ) {
-			if ( audiovisual.hasSound && !soundHasEnded ) {
-				speaker.pause();
-			}
+			sound.pause();
 			if ( audiovisual.hasVideo && !videoHasEnded ) {
 				videoNode.pause();
 			}
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.pause();
-				soundFade.pause();
 			}
 			isPaused = true;
 		}
@@ -238,15 +175,12 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function resume() {
 		if ( audiovisual && isPaused ) {
-			if ( audiovisual.hasSound && !soundHasEnded ) {
-				speaker.play();
-			}
+			sound.resume();
 			if ( audiovisual.hasVideo && !videoHasEnded ) {
 				videoNode.play();
 			}
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.resume();
-				soundFade.resume();
 			}
 			isPaused = false;
 		}

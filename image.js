@@ -1,23 +1,23 @@
-Ambience.Image = function(imageNode) {
+Ambience.Image = function(node) {
 	function play(audiovisual) {
 		if ( audiovisual.hasImage ) {
-			imageNode.style.backgroundImage = 'url("' + audiovisual.imagePath + '")';
+			node.style.backgroundImage = 'url("' + audiovisual.imagePath + '")';
 		}
 		
 		for ( var property in audiovisual.imageStyle ) {
 			var cssValue = audiovisual.imageStyle[property];
 			var cssProperty = 'background-' + property;
-			imageNode.style[cssProperty] = cssValue;
+			node.style[cssProperty] = cssValue;
 		}
 	}
 	
 	function reset(audiovisual) {
-		imageNode.style.backgroundImage = '';
+		node.style.backgroundImage = '';
 		
 		if ( audiovisual && 'imageStyle' in audiovisual ) {
 			for ( var property in audiovisual.imageStyle ) {
 				var cssProperty = 'background-' + property;
-				imageNode.style[cssProperty] = '';
+				node.style[cssProperty] = '';
 			}
 		}
 	}

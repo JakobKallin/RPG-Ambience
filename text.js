@@ -2,7 +2,15 @@ Ambience.Text = function(node) {
 	var audiovisual;
 	
 	function play(newAudiovisual) {
+		audiovisual = newAudiovisual;
 		
+		if ( audiovisual.hasText ) {
+			node.textContent = audiovisual.text;
+			for ( var cssProperty in audiovisual.textStyle ) {
+				var cssValue = audiovisual.textStyle[cssProperty];
+				node.style[cssProperty] = cssValue;
+			}
+		}
 	}
 	
 	function reset() {
@@ -13,6 +21,8 @@ Ambience.Text = function(node) {
 				node.style[cssProperty] = '';
 			}
 		}
+		
+		audiovisual = null;
 	}
 	
 	return {

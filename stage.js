@@ -48,7 +48,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		imageDelayTimer = window.setTimeout(playImage, audiovisual.imageDelay);
 		playBackgroundColor();
 		sound.play(audiovisual);
-		playText();
+		text.play(audiovisual);
 		playVideo();
 	}
 	
@@ -69,16 +69,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		
 		isFadingIn = true
 		fadeAnimation.start(1, audiovisual.fadeInDuration, {ended: onFadeInEnded});		
-	}
-	
-	function playText() {
-		if ( audiovisual.hasText ) {
-			sign.textContent = audiovisual.text;
-			for ( var cssProperty in audiovisual.textStyle ) {
-				var cssValue = audiovisual.textStyle[cssProperty];
-				sign.style[cssProperty] = cssValue;
-			}
-		}
 	}
 	
 	function playVideo() {

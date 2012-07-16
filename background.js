@@ -3,6 +3,10 @@ Ambience.Background = function(node) {
 	
 	function play(newAudiovisual) {
 		audiovisual = newAudiovisual;
+		
+		if ( audiovisual.hasBackgroundColor ) {
+			node.style.backgroundColor = audiovisual.backgroundColor;
+		}
 	}
 	
 	function reset() {

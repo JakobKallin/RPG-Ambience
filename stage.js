@@ -44,16 +44,10 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		audiovisual = newAudiovisual;
 		playFadeIn();
 		image.play(audiovisual);
-		playBackgroundColor();
+		background.play(audiovisual);
 		sound.play(audiovisual);
 		text.play(audiovisual);
 		playVideo();
-	}
-	
-	function playBackgroundColor() {
-		if ( audiovisual.hasBackgroundColor ) {
-			node.style.backgroundColor = audiovisual.backgroundColor;
-		}
 	}
 	
 	function playFadeIn() {

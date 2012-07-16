@@ -54,6 +54,8 @@ Ambience.Sound = function(node) {
 		fade.complete();
 		node.removeAttribute('src');
 		node.volume = 0; // We will fade this in later. (Is this needed after fade.complete() above?)
+		
+		audiovisual = null;
 	}
 	
 	function playNextSound() {

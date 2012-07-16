@@ -9,8 +9,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	
-	var defaultBackground = document.body.style.backgroundColor;
-	
 	var image = new Ambience.Image(imageNode);
 	var sound = new Ambience.Sound(speaker);
 	var text = new Ambience.Text(sign);

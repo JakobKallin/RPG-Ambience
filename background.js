@@ -1,5 +1,6 @@
 Ambience.Background = function(node) {
 	var audiovisual;
+	var defaultBackground = document.body.style.backgroundColor;
 	
 	function play(newAudiovisual) {
 		audiovisual = newAudiovisual;
@@ -10,6 +11,8 @@ Ambience.Background = function(node) {
 	}
 	
 	function reset() {
+		node.style.backgroundColor = defaultBackground;
+		
 		audiovisual = null;
 	}
 	

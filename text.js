@@ -6,7 +6,13 @@ Ambience.Text = function(node) {
 	}
 	
 	function reset() {
+		node.textContent = '';
 		
+		if ( audiovisual && audiovisual.hasTextStyle ) {
+			for ( var cssProperty in audiovisual.textStyle ) {
+				node.style[cssProperty] = '';
+			}
+		}
 	}
 	
 	return {

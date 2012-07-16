@@ -26,7 +26,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		node.style.opacity = 0;
 		
 		image.reset(audiovisual);
-		resetText();
+		text.reset();
 		sound.reset();
 		stopVideo();
 		stopFadeIn();
@@ -92,16 +92,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	function onFadeInEnded() {
 		isFadingIn = false;
 	}
-	
-	function resetText() {
-		sign.textContent = '';
-		
-		if ( audiovisual && audiovisual.hasTextStyle ) {
-			for ( var cssProperty in audiovisual.textStyle ) {
-				sign.style[cssProperty] = '';
-			}
-		}
-	}	
 	
 	function playNextVideo() {
 		if ( audiovisual ) {

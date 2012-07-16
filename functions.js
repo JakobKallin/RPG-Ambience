@@ -15,3 +15,7 @@ Array.prototype.randomIndex = function() {
 String.prototype.startsWith = function(prefix) {
 	return this.indexOf(prefix) === 0;
 };
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};

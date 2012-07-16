@@ -22,10 +22,10 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function reset() {
 		node.style.visibility = 'hidden';
-		node.style.backgroundColor = defaultBackground;
 		node.style.opacity = 0;
 		
-		image.reset(audiovisual);
+		background.reset();
+		image.reset();
 		text.reset();
 		sound.reset();
 		stopVideo();

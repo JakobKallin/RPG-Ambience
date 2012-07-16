@@ -1,5 +1,9 @@
 Ambience.Image = function(node) {
-	function play(audiovisual) {
+	var audiovisual;
+	
+	function play(newAudiovisual) {
+		audiovisual = newAudiovisual;
+		
 		if ( audiovisual.hasImage ) {
 			node.style.backgroundImage = 'url("' + audiovisual.imagePath + '")';
 		}
@@ -11,7 +15,7 @@ Ambience.Image = function(node) {
 		}
 	}
 	
-	function reset(audiovisual) {
+	function reset() {
 		node.style.backgroundImage = '';
 		
 		if ( audiovisual && 'imageStyle' in audiovisual ) {
@@ -20,6 +24,8 @@ Ambience.Image = function(node) {
 				node.style[cssProperty] = '';
 			}
 		}
+		
+		audiovisual = null;
 	}
 	
 	return {

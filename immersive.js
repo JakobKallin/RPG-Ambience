@@ -37,6 +37,7 @@ window.addEventListener('load', function() {
 	var cursorTimer;
 	var cursorHideDelay = 1000;
 	var cursorX;
+	var cursorY;
 	
 	var hideCursor = function() {
 		document.body.style.cursor = 'none';

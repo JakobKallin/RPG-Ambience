@@ -13,7 +13,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var sound = new Ambience.Sound(speaker);
 	var text = new Ambience.Text(sign);
 	var background = new Ambience.Background(node);
-	var video = new Ambience.Media(videoNode, 'video');
+	var video = new Ambience.Video(videoNode);
 	
 	videoNode.addEventListener('ended', playNextVideo);
 	

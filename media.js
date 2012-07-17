@@ -76,7 +76,7 @@ Ambience.Media = function(node, type, stopAudiovisual) {
 			}
 			
 			var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
-			var oneShot = !audiovisual.loops && !audiovisual[hasOnlyProperty];
+			var oneShot = !audiovisual.loops && audiovisual[hasOnlyProperty];
 			if ( oneShot && allTracksHavePlayed ) {
 				stopAudiovisual();
 			} else if ( allTracksHavePlayed && !audiovisual.loops  ) {

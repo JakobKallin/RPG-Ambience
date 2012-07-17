@@ -43,8 +43,7 @@ Ambience.audiovisual.scene = {
 		return (
 			!this.hasImage &&
 			!this.hasSound &&
-			!this.hasText &&
-			!this.hasBackgroundColor
+			!this.hasText
 		);
 	},
 	get hasSound() {
@@ -54,8 +53,7 @@ Ambience.audiovisual.scene = {
 		return (
 			!this.hasImage &&
 			!this.hasVideo &&
-			!this.hasText &&
-			!this.hasBackgroundColor
+			!this.hasText
 		);
 	},
 	get hasBackgroundColor() {

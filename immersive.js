@@ -209,6 +209,7 @@ window.addEventListener('load', function() {
 		editorInput.addEventListener('keydown', stopPropagation);
 		editorInput.addEventListener('keypress', stopPropagation);
 		editorInput.addEventListener('change', loadEditorAdventure);
+		hideEditor();
 	}
 	
 	var editorIsVisible = false;

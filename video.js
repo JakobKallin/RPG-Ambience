@@ -1,3 +1,3 @@
-Ambience.Video = function(node, stage) {
-	return new Ambience.Media(node, 'video', stage);
+Ambience.Video = function(node, stopAudiovisual) {
+	return new Ambience.Media(node, 'video', stopAudiovisual);
 };

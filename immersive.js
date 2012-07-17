@@ -36,8 +36,8 @@ window.addEventListener('load', function() {
 	
 	var cursorTimer;
 	var cursorHideDelay = 1000;
-	var cursorX;
-	var cursorY;
+	var previousX;
+	var previousY;
 	
 	var hideCursor = function() {
 		document.body.style.cursor = 'none';
@@ -49,15 +49,15 @@ window.addEventListener('load', function() {
 	
 	document.body.addEventListener('mousemove', function(event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
-		var mouseHasMoved = event.x !== cursorX || event.y !== cursorY;
+		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 		if ( mouseHasMoved ) {
 			window.clearTimeout(cursorTimer);
 			showCursor();
 			cursorTimer = window.setTimeout(hideCursor, cursorHideDelay);
 		}
 		
-		cursorX = event.x;
-		cursorY = event.y;
+		previousX = event.screenX;
+		previousY = event.screenY;
 	});
 	
 	var command = '';

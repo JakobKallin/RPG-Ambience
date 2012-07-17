@@ -4,6 +4,7 @@ Ambience.Media = function(node, type) {
 	var fade = new Animation(node, 'volume');
 	var hasEnded;
 	var hasProperty = 'has' + type.capitalize();
+	var hasOnlyProperty = 'hasOnly' + type.capitalize();
 	var orderProperty = type + 'Order';
 	var pathsProperty = type + 'Paths';
 
@@ -12,7 +13,7 @@ Ambience.Media = function(node, type) {
 	function play(newAudiovisual) {
 		audiovisual = newAudiovisual;
 		// Locks up scene audio when effect both fades in and has audio for some reason. (Is this still true?)
-		if ( audiovisual.hasSound ) {
+		if ( audiovisual[hasProperty] ) {
 			fade.start(audiovisual.volume, audiovisual.fadeInDuration);
 			// -1 because the index is either incremented or randomized in the playNextTrack method.
 			trackIndex = -1;
@@ -21,14 +22,14 @@ Ambience.Media = function(node, type) {
 	}
 	
 	function pause() {
-		if ( audiovisual.hasSound && !hasEnded ) {
+		if ( audiovisual[hasProperty] && !hasEnded ) {
 			node.pause();
 			fade.pause();
 		}	
 	}
 	
 	function resume() {
-		if ( audiovisual.hasSound && !hasEnded ) {
+		if ( audiovisual[hasProperty] && !hasEnded ) {
 			node.play();
 			fade.resume();
 		}
@@ -36,7 +37,7 @@ Ambience.Media = function(node, type) {
 	
 	function fadeOut() {		
 		// Must be above the stage fade, because that might complete immediately and set audiovisual to null.
-		if ( audiovisual.hasSound ) {
+		if ( audiovisual[hasProperty] ) {
 			// The current volume compared to the audiovisual's defined volume, if it has been halfway faded in.
 			var volumePercentage = node.volume / audiovisual.volume;
 			var duration = audiovisual.fadeOutDuration * volumePercentage;
@@ -66,20 +67,20 @@ Ambience.Media = function(node, type) {
 			// We need this so that we stop audio-only effects after they have actually played once.
 			var hasPlayedBefore = trackIndex !== -1;
 			
-			if ( audiovisual.soundOrder === 'random' ) {
-				trackIndex = audiovisual.soundPaths.randomIndex();
+			if ( audiovisual[orderProperty] === 'random' ) {
+				trackIndex = audiovisual[pathsProperty].randomIndex();
 			} else {
-				trackIndex = (trackIndex + 1) % audiovisual.soundPaths.length;
+				trackIndex = (trackIndex + 1) % audiovisual[pathsProperty].length;
 			}
 			
-			var allSoundsHavePlayed = hasPlayedBefore && trackIndex === 0;
-			var oneShotAudioOnly = !audiovisual.loops && !audiovisual.isVisual;
-			if ( oneShotAudioOnly && allSoundsHavePlayed ) {
+			var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
+			var oneShot = !audiovisual.loops && !audiovisual[hasOnlyProperty];
+			if ( oneShot && allTracksHavePlayed ) {
 				reset();
-			} else if ( allSoundsHavePlayed && !audiovisual.loops  ) {
+			} else if ( allTracksHavePlayed && !audiovisual.loops  ) {
 				hasEnded = true;
 			} else {
-				node.src = audiovisual.soundPaths[trackIndex];
+				node.src = audiovisual[pathsProperty][trackIndex];
 				node.play();
 			}
 		}

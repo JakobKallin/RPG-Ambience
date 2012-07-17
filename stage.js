@@ -1,9 +1,7 @@
 Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var audiovisual;
-	var videoIndex;
 	
 	var isPaused;
-	var videoHasEnded;
 	var isFadingIn;
 	var isFadingOut;
 	
@@ -15,8 +13,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var background = new Ambience.Background(node);
 	var video = new Ambience.Video(videoNode);
 	
-	videoNode.addEventListener('ended', playNextVideo);
-	
 	reset();
 	
 	function reset() {
@@ -27,14 +23,12 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		image.reset();
 		text.reset();
 		sound.reset();
-		stopVideo();
+		video.reset();
 		stopFadeIn();
 		
 		audiovisual = null;
-		videoIndex = null;
 		
 		isPaused = false;
-		videoHasEnded = false;
 		isFadingIn = false;
 		isFadingOut = false;
 	}
@@ -46,7 +40,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		background.play(audiovisual);
 		sound.play(audiovisual);
 		text.play(audiovisual);
-		playVideo();
+		video.play(audiovisual);
 	}
 	
 	function playFadeIn() {
@@ -58,48 +52,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		fadeAnimation.start(1, audiovisual.fadeInDuration, {ended: onFadeInEnded});		
 	}
 	
-	function playVideo() {
-		if ( audiovisual.hasVideo ) {
-			videoNode.style.visibility = 'visible';
-			videoIndex = -1;
-			playNextVideo();
-		}
-	}
-	
 	function onFadeInEnded() {
 		isFadingIn = false;
-	}
-	
-	function playNextVideo() {
-		if ( audiovisual ) {
-			// We need this so that we stop audio-only effects after they have actually played once.
-			var videoHasPlayedBefore = videoIndex !== -1;
-			
-			if ( audiovisual.videoOrder === 'random' ) {
-				videoIndex = audiovisual.videoPaths.randomIndex();
-			} else {
-				videoIndex = (videoIndex + 1) % audiovisual.videoPaths.length;
-			}
-			
-			var allVideosHavePlayed = videoHasPlayedBefore && videoIndex === 0;
-			if ( allVideosHavePlayed && !audiovisual.loops ) {
-				videoHasEnded = true;
-			} else {
-				videoNode.src = audiovisual.videoPaths[videoIndex];
-				videoNode.play();
-			}
-		}
-	}
-	
-	function stopVideo() {
-		if ( !videoNode.ended ) {
-			try {
-				videoNode.currentTime = 0;
-			} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
-			videoNode.pause();
-		}
-		videoNode.removeAttribute('src');
-		videoNode.style.visibility = 'hidden';
 	}
 	
 	function stopFadeIn() {
@@ -131,9 +85,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	function pause() {
 		if ( audiovisual && !isPaused ) {
 			sound.pause();
-			if ( audiovisual.hasVideo && !videoHasEnded ) {
-				videoNode.pause();
-			}
+			video.pause();
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.pause();
 			}
@@ -144,9 +96,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	function resume() {
 		if ( audiovisual && isPaused ) {
 			sound.resume();
-			if ( audiovisual.hasVideo && !videoHasEnded ) {
-				videoNode.play();
-			}
+			video.resume();
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.resume();
 			}

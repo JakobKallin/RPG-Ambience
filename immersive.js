@@ -17,6 +17,9 @@ window.addEventListener('load', function() {
 	
 	var menu = document.getElementById('menu');
 	var fileChooser = document.getElementById('file-chooser');
+	var editor = document.getElementById('editor');
+	var editorInput = document.getElementById('editor-input');
+	var theater = document.getElementById('theater');
 	
 	fileChooser.addEventListener('change', function() {
 		loadAdventureFile(this.files[0]);
@@ -196,6 +199,32 @@ window.addEventListener('load', function() {
 	function enableStages() {
 		document.addEventListener('keydown', onKeyDown);
 		document.addEventListener('keypress', onKeyPress);
+		
+		var stopPropagation = function(event) { event.stopPropagation(); };
+		editorInput.addEventListener('keydown', stopPropagation);
+		editorInput.addEventListener('keypress', stopPropagation);
+	}
+	
+	var editorIsVisible = false;
+	
+	function showEditor() {
+		editor.style.visibility = 'visible';
+		theater.className = 'compressed';
+		editorIsVisible = true;
+	}
+	
+	function hideEditor() {
+		editor.style.visibility = 'hidden';
+		theater.className = '';
+		editorIsVisible = false;
+	}
+	
+	function toggleEditor() {
+		if ( editorIsVisible ) {
+			hideEditor();
+		} else {
+			showEditor();
+		}
 	}
 	
 	function onKeyDown(event) {
@@ -210,6 +239,9 @@ window.addEventListener('load', function() {
 		} else if ( keyString === 'Space' ) {
 			event.preventDefault();
 			ambience.togglePlayback();
+		} else if ( keyString === 'F12' && event.shiftKey && event.ctrlKey ) {
+			event.preventDefault();
+			toggleEditor();
 		} else if ( keyString !== null ) {
 			var audiovisual = keyedAudiovisual(keyString);
 			if ( audiovisual !== null ) {

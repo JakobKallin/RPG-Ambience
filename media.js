@@ -1,4 +1,4 @@
-Ambience.Media = function(node, type) {
+Ambience.Media = function(node, type, stage) {
 	var audiovisual;
 	var trackIndex;
 	var fade = new Animation(node, 'volume');
@@ -36,7 +36,7 @@ Ambience.Media = function(node, type) {
 		}
 	}
 	
-	function fadeOut() {		
+	function fadeOut() {
 		// Must be above the stage fade, because that might complete immediately and set audiovisual to null.
 		if ( audiovisual[hasProperty] ) {
 			// The current volume compared to the audiovisual's defined volume, if it has been halfway faded in.
@@ -78,7 +78,9 @@ Ambience.Media = function(node, type) {
 			var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
 			var oneShot = !audiovisual.loops && !audiovisual[hasOnlyProperty];
 			if ( oneShot && allTracksHavePlayed ) {
-				reset();
+				// This line modifies the outside world, obtained through the "stage" parameter in the constructor.
+				// If we don't call reset() on "stage", only this media will be reset, corrupting the state.
+				stage.stopAudiovisual();
 			} else if ( allTracksHavePlayed && !audiovisual.loops  ) {
 				hasEnded = true;
 			} else {

@@ -1,4 +1,7 @@
 Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
+	// The media elements need a reference to the stage so that they can stop the entire audiovisual when a media-only audiovisual has finished.
+	var self = {};
+	
 	var audiovisual;
 	
 	var isPaused;
@@ -8,10 +11,10 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	
 	var image = new Ambience.Image(imageNode);
-	var sound = new Ambience.Sound(speaker);
+	var sound = new Ambience.Sound(speaker, self);
 	var text = new Ambience.Text(sign);
 	var background = new Ambience.Background(node);
-	var video = new Ambience.Video(videoNode);
+	var video = new Ambience.Video(videoNode, self);
 	
 	reset();
 	
@@ -112,13 +115,13 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 	}
 	
-	return {
-		playAudiovisual: playAudiovisual,
-		stopAudiovisual: reset,
-		fadeOutAudiovisual: fadeOutAudiovisual,
-		togglePlayback: togglePlayback,
-		get audiovisual() {
-			return audiovisual;
-		}
-	};
+	self.playAudiovisual = playAudiovisual;
+	self.stopAudiovisual = reset;
+	self.fadeOutAudiovisual = fadeOutAudiovisual;
+	self.togglePlayback = togglePlayback;
+	self.__defineGetter__('audiovisual', function() {
+		return audiovisual;
+	});
+	
+	return self;
 };

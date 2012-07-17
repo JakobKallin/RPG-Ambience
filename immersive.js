@@ -90,11 +90,13 @@ window.addEventListener('load', function() {
 			var reader = new FileReader();
 			reader.onload = function() {
 				try {
-					var config = jsyaml.load(this.result);
-					loadAdventure(config);
+					readAdventureFile(this.result);
+					editorInput.value = this.result;
 				} catch (error) {
 					alert('There was an error loading the adventure file:\n' + error.message);
 				}
+				hideMenu();
+				enableStages();
 			};
 			reader.readAsText(file);
 		} catch (error) {
@@ -102,10 +104,13 @@ window.addEventListener('load', function() {
 		}
 	}
 	
+	function readAdventureFile(contents) {
+		var config = jsyaml.load(contents);
+		loadAdventure(config);
+	}
+	
 	function loadAdventure(config) {
 		parseConfig(config);
-		hideMenu();
-		enableStages();
 	}
 	
 	function parseConfig(config) {
@@ -203,6 +208,7 @@ window.addEventListener('load', function() {
 		var stopPropagation = function(event) { event.stopPropagation(); };
 		editorInput.addEventListener('keydown', stopPropagation);
 		editorInput.addEventListener('keypress', stopPropagation);
+		editorInput.addEventListener('change', loadEditorAdventure);
 	}
 	
 	var editorIsVisible = false;
@@ -224,6 +230,14 @@ window.addEventListener('load', function() {
 			hideEditor();
 		} else {
 			showEditor();
+		}
+	}
+	
+	function loadEditorAdventure() {
+		try {
+			readAdventureFile(editorInput.value);
+		} catch (error) {
+			alert('There was an error loading the adventure file:\n' + error.message);
 		}
 	}
 	

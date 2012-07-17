@@ -15,6 +15,7 @@ Ambience.Media = function(node, type) {
 		// Locks up scene audio when effect both fades in and has audio for some reason. (Is this still true?)
 		if ( audiovisual[hasProperty] ) {
 			fade.start(audiovisual.volume, audiovisual.fadeInDuration);
+			node.style.visibility = 'visible'; // This should have no effect for <audio>.
 			// -1 because the index is either incremented or randomized in the playNextTrack method.
 			trackIndex = -1;
 			playNextTrack();
@@ -57,6 +58,7 @@ Ambience.Media = function(node, type) {
 		}
 		fade.complete();
 		node.removeAttribute('src');
+		node.style.visibility = 'hidden';
 		node.volume = 0; // We will fade this in later. (Is this needed after fade.complete() above?)
 		
 		audiovisual = null;

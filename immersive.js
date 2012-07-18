@@ -1,3 +1,5 @@
+Ambience.immersive = {};
+
 window.addEventListener('load', function() {
 	var sceneNode = document.getElementById('scene-stage');
 	var sceneImage = document.getElementById('scene-image');

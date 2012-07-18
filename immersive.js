@@ -24,6 +24,8 @@ window.addEventListener('load', function() {
 	var fileChooser = document.getElementById('file-chooser');
 	var menu = document.getElementById('menu');
 	
+	var preloader = new Ambience.Preloader();
+	
 	var adventure;
 	var adventureCallbacks = {
 		onFileRead: function(contents) {
@@ -33,7 +35,7 @@ window.addEventListener('load', function() {
 			adventure = newAdventure;
 			hideMenu();
 			enableStages();
-			preloadMedia(adventure);
+			preloader.preloadMedia(adventure);
 		},
 		onError: function(error) {
 			alert('There was an error loading the adventure file:\n' + error.message);
@@ -181,38 +183,6 @@ window.addEventListener('load', function() {
 		hideEditor();
 	}
 	
-	var editorIsVisible = false;
-	
-	function showEditor() {
-		editor.style.visibility = 'visible';
-		theater.className = 'compressed';
-		editorIsVisible = true;
-	}
-	
-	function hideEditor() {
-		editor.style.visibility = 'hidden';
-		theater.className = '';
-		editorIsVisible = false;
-	}
-	
-	function toggleEditor() {
-		if ( editorIsVisible ) {
-			hideEditor();
-		} else {
-			showEditor();
-		}
-	}
-	
-	function loadEditorAdventure() {
-		try {
-			var newAdventure = Ambience.Adventure.fromString(editorInput.value);
-			adventure = newAdventure;
-			preloadMedia(adventure);
-		} catch (error) {
-			alert('There was an error loading the adventure file:\n' + error.message);
-		}
-	}
-	
 	function onKeyDown(event) {
 		var keyString = keyStringFromKeyCode(event.which);
 		
@@ -247,45 +217,35 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	var preloader;
-	createPreloader();
+	var editorIsVisible = false;
 	
-	function createPreloader() {
-		preloader = document.createElement('div');
-		preloader.style.display = 'none';
-		document.body.appendChild(preloader)
+	function showEditor() {
+		editor.style.visibility = 'visible';
+		theater.className = 'compressed';
+		editorIsVisible = true;
 	}
 	
-	function clearPreloader() {
-		while ( preloader.firstChild ) {
-			preloader.removeChild(preloader.firstChild);
+	function hideEditor() {
+		editor.style.visibility = 'hidden';
+		theater.className = '';
+		editorIsVisible = false;
+	}
+	
+	function toggleEditor() {
+		if ( editorIsVisible ) {
+			hideEditor();
+		} else {
+			showEditor();
 		}
 	}
 	
-	function preloadMedia(adventure) {
-		clearPreloader();
-		adventure.audiovisuals.map(function(audiovisual) { preloadImage(audiovisual); });
-		adventure.audiovisuals.map(function(audiovisual) { preloadSound(audiovisual); });
-	}
-	
-	function preloadImage(audiovisual) {
-		if ( audiovisual.hasImage ) {
-			var img = document.createElement('img');
-			img.src = audiovisual.imagePath;
-			preloader.appendChild(img);
-		}
-	}
-	
-	function preloadSound(audiovisual) {
-		if ( audiovisual.hasSound ) {
-			audiovisual.soundPaths.map(function(path) {
-				var audio = document.createElement('audio');
-				audio.src = path;
-				audio.volume = 0;
-				preloader.appendChild(audio);
-				audio.play();
-				audio.pause();
-			});
+	function loadEditorAdventure() {
+		try {
+			var newAdventure = Ambience.Adventure.fromString(editorInput.value);
+			adventure = newAdventure;
+			preloader.preloadMedia(adventure);
+		} catch (error) {
+			alert('There was an error loading the adventure file:\n' + error.message);
 		}
 	}
 });

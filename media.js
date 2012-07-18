@@ -1,5 +1,5 @@
-Ambience.Media = function(node, type, stopAudiovisual) {
-	var audiovisual;
+Ambience.Media = function(node, type, stopScene) {
+	var scene;
 	var trackIndex;
 	var fade = new Animation(node, 'volume');
 	var hasEnded;
@@ -10,11 +10,11 @@ Ambience.Media = function(node, type, stopAudiovisual) {
 
 	node.addEventListener('ended', playNextTrack);
 	
-	function play(newAudiovisual) {
-		audiovisual = newAudiovisual;
+	function play(newScene) {
+		scene = newScene;
 		// Locks up scene audio when effect both fades in and has audio for some reason. (Is this still true?)
-		if ( audiovisual[hasProperty] ) {
-			fade.start(audiovisual.volume, audiovisual.fadeInDuration);
+		if ( scene[hasProperty] ) {
+			fade.start(scene.volume, scene.fadeInDuration);
 			node.style.visibility = 'visible'; // This should have no effect for <audio>.
 			// -1 because the index is either incremented or randomized in the playNextTrack method.
 			trackIndex = -1;
@@ -23,25 +23,25 @@ Ambience.Media = function(node, type, stopAudiovisual) {
 	}
 	
 	function pause() {
-		if ( audiovisual[hasProperty] && !hasEnded ) {
+		if ( scene[hasProperty] && !hasEnded ) {
 			node.pause();
 			fade.pause();
 		}	
 	}
 	
 	function resume() {
-		if ( audiovisual[hasProperty] && !hasEnded ) {
+		if ( scene[hasProperty] && !hasEnded ) {
 			node.play();
 			fade.resume();
 		}
 	}
 	
 	function fadeOut() {
-		// Must be above the stage fade, because that might complete immediately and set audiovisual to null.
-		if ( audiovisual[hasProperty] ) {
-			// The current volume compared to the audiovisual's defined volume, if it has been halfway faded in.
-			var volumePercentage = node.volume / audiovisual.volume;
-			var duration = audiovisual.fadeOutDuration * volumePercentage;
+		// Must be above the stage fade, because that might complete immediately and set scene to null.
+		if ( scene[hasProperty] ) {
+			// The current volume compared to the scene's defined volume, if it has been halfway faded in.
+			var volumePercentage = node.volume / scene.volume;
+			var duration = scene.fadeOutDuration * volumePercentage;
 			fade.start(0, duration);
 		}
 	}
@@ -61,28 +61,28 @@ Ambience.Media = function(node, type, stopAudiovisual) {
 		node.style.visibility = 'hidden';
 		node.volume = 0; // We will fade this in later. (Is this needed after fade.complete() above?)
 		
-		audiovisual = null;
+		scene = null;
 	}
 	
 	function playNextTrack() {
-		if ( audiovisual ) {
+		if ( scene ) {
 			// We need this so that we stop audio-only effects after they have actually played once.
 			var hasPlayedBefore = trackIndex !== -1;
 			
-			if ( audiovisual[orderProperty] === 'random' ) {
-				trackIndex = audiovisual[pathsProperty].randomIndex();
+			if ( scene[orderProperty] === 'random' ) {
+				trackIndex = scene[pathsProperty].randomIndex();
 			} else {
-				trackIndex = (trackIndex + 1) % audiovisual[pathsProperty].length;
+				trackIndex = (trackIndex + 1) % scene[pathsProperty].length;
 			}
 			
 			var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
-			var oneShot = !audiovisual.loops && audiovisual[hasOnlyProperty];
+			var oneShot = !scene.loops && scene[hasOnlyProperty];
 			if ( oneShot && allTracksHavePlayed ) {
-				stopAudiovisual();
-			} else if ( allTracksHavePlayed && !audiovisual.loops  ) {
+				stopScene();
+			} else if ( allTracksHavePlayed && !scene.loops  ) {
 				hasEnded = true;
 			} else {
-				node.src = audiovisual[pathsProperty][trackIndex];
+				node.src = scene[pathsProperty][trackIndex];
 				node.play();
 			}
 		}

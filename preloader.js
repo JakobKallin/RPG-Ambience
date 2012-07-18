@@ -11,21 +11,21 @@ Ambience.Preloader = function() {
 	
 	function preloadMedia(adventure) {
 		clear();
-		adventure.audiovisuals.map(function(audiovisual) { preloadImage(audiovisual); });
-		adventure.audiovisuals.map(function(audiovisual) { preloadSound(audiovisual); });
+		adventure.scenes.map(function(scene) { preloadImage(scene); });
+		adventure.scenes.map(function(scene) { preloadSound(scene); });
 	}
 	
-	function preloadImage(audiovisual) {
-		if ( audiovisual.hasImage ) {
+	function preloadImage(scene) {
+		if ( scene.hasImage ) {
 			var img = document.createElement('img');
-			img.src = audiovisual.imagePath;
+			img.src = scene.imagePath;
 			node.appendChild(img);
 		}
 	}
 	
-	function preloadSound(audiovisual) {
-		if ( audiovisual.hasSound ) {
-			audiovisual.soundPaths.map(function(path) {
+	function preloadSound(scene) {
+		if ( scene.hasSound ) {
+			scene.soundPaths.map(function(path) {
 				var audio = document.createElement('audio');
 				audio.src = path;
 				audio.volume = 0;

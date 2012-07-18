@@ -1,6 +1,6 @@
 Ambience.Adventure = function() {
 	return {
-		audiovisuals: [],
+		scenes: [],
 		templates: []
 	};
 };
@@ -34,12 +34,12 @@ Ambience.Adventure.fromConfig = function(config) {
 	
 	for ( var templateName in config.templates ) {
 		var templateConfig = config.templates[templateName];
-		adventure.templates[templateName] = Ambience.audiovisual.fromConfig(templateConfig, adventure.templates, basePath);
+		adventure.templates[templateName] = Ambience.scene.fromConfig(templateConfig, adventure.templates, basePath);
 	}
 	
 	if ( config.scenes !== undefined ) {
-		adventure.audiovisuals = config.scenes.map(function(sceneConfig) {
-			return Ambience.audiovisual.fromConfig(sceneConfig, adventure.templates, basePath);
+		adventure.scenes = config.scenes.map(function(sceneConfig) {
+			return Ambience.scene.fromConfig(sceneConfig, adventure.templates, basePath);
 		});
 	}
 	

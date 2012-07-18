@@ -113,7 +113,7 @@ window.addEventListener('load', function() {
 		if ( command.length === 0 ) {
 			fadeOutOne();
 		} else {
-			playNamedAudiovisual(command);
+			playNamedScene(command);
 		}
 	}
 	
@@ -137,12 +137,12 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	function namedAudiovisual(name) {
+	function namedScene(name) {
 		if ( name.length > 0 ) {
-			return adventure.audiovisuals.first(function(audiovisual) {
+			return adventure.scenes.first(function(scene) {
 				return (
-					audiovisual.hasName &&
-					audiovisual.name.toUpperCase().startsWith(name.toUpperCase())
+					scene.hasName &&
+					scene.name.toUpperCase().startsWith(name.toUpperCase())
 				);
 			});
 		} else {
@@ -150,26 +150,26 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	function keyedAudiovisual(keyString) {
-		return adventure.audiovisuals.first(function(audiovisual) {
+	function keyedScene(keyString) {
+		return adventure.scenes.first(function(scene) {
 			return (
-				audiovisual.hasKey &&
-				audiovisual.key.toUpperCase() === keyString.toUpperCase()
+				scene.hasKey &&
+				scene.key.toUpperCase() === keyString.toUpperCase()
 			);
 		});
 	}
 	
 	function fadeOutOne() {
-		if ( effectStage.audiovisual ) {
+		if ( effectStage.scene ) {
 			ambience.fadeOutEffect();
-		} else if ( sceneStage.audiovisual ) {
+		} else if ( sceneStage.scene ) {
 			ambience.fadeOutScene();
 		}
 	}
 	
-	function playNamedAudiovisual(name) {
-		var audiovisual = namedAudiovisual(name);
-		ambience.play(audiovisual);
+	function playNamedScene(name) {
+		var scene = namedScene(name);
+		ambience.play(scene);
 	}
 	
 	function enableStages() {
@@ -199,10 +199,10 @@ window.addEventListener('load', function() {
 			event.preventDefault();
 			toggleEditor();
 		} else if ( keyString !== null ) {
-			var audiovisual = keyedAudiovisual(keyString);
-			if ( audiovisual !== null ) {
+			var scene = keyedScene(keyString);
+			if ( scene !== null ) {
 				event.preventDefault();
-				ambience.play(audiovisual);
+				ambience.play(scene);
 				resetCommand();
 			}
 		}

@@ -1,6 +1,6 @@
-Ambience.audiovisual = {};
+Ambience.scene = {};
 
-Ambience.audiovisual.scene = {
+Ambience.scene.scene = {
 	type: 'scene',
 	fadeDuration: 0,
 	fadesIn: true,
@@ -81,12 +81,12 @@ Ambience.audiovisual.scene = {
 	}
 };
 
-Ambience.audiovisual.effect = Object.create(Ambience.audiovisual.scene);
-Ambience.audiovisual.effect.type = 'effect';
-Ambience.audiovisual.effect.loops = false;
+Ambience.scene.effect = Object.create(Ambience.scene.scene);
+Ambience.scene.effect.type = 'effect';
+Ambience.scene.effect.loops = false;
 
-Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
-	var audiovisual;
+Ambience.scene.fromConfig = function(config, templateList, basePath) {
+	var scene;
 	var template;
 	var templateName = config.template;
 	
@@ -96,9 +96,9 @@ Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
 	
 	if ( templateName === undefined ) {
 		if ( config.type === 'effect' ) {
-			template = Ambience.audiovisual.effect;
+			template = Ambience.scene.effect;
 		} else {
-			template = Ambience.audiovisual.scene;
+			template = Ambience.scene.scene;
 		}
 	} else if ( templateName in templateList ) {
 		template = templateList[templateName];
@@ -110,93 +110,93 @@ Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
 		return basePath + path;
 	};
 	
-	audiovisual = Object.create(template);
+	scene = Object.create(template);
 	var read = {
 		'type': function(value) {
 			if ( value !== 'effect' ) {
 				value = 'scene';
 			}
-			audiovisual.type = value;
+			scene.type = value;
 		},
 		'key': function(value) {
-			audiovisual.key = String(value);
+			scene.key = String(value);
 		},
 		'name': function(value) {
-			audiovisual.name = String(value);
+			scene.name = String(value);
 		},
 		'image': function(value) {
-			audiovisual.imagePath = encodeURI(effectivePath(value));
+			scene.imagePath = encodeURI(effectivePath(value));
 		},
 		'image-style': function(value) {
 			if ( template.imageStyle ) {
-				audiovisual.imageStyle = Object.create(template.imageStyle);
+				scene.imageStyle = Object.create(template.imageStyle);
 			} else {
-				audiovisual.imageStyle = {};
+				scene.imageStyle = {};
 			}
 			
 			for ( var property in value ) {
-				audiovisual.imageStyle[property] = value[property];
+				scene.imageStyle[property] = value[property];
 			}
 		},
 		'sound': function(value) {
 			if ( !(value instanceof Array) ) {
 				value = [value];
 			}
-			audiovisual.soundPaths = value.map(effectivePath).map(encodeURI);
+			scene.soundPaths = value.map(effectivePath).map(encodeURI);
 		},
 		'sound-order': function(value) {
-			audiovisual.soundOrder = value;
+			scene.soundOrder = value;
 		},
 		'loop': function(value) {
 			// The difference between "loop" and "loops" is intentional.
-			audiovisual.loops = value;
+			scene.loops = value;
 		},
 		'background': function(value) {
-			audiovisual.backgroundColor = value;
+			scene.backgroundColor = value;
 		},
 		'text': function(value) {
-			audiovisual.text = value;
+			scene.text = value;
 		},
 		'text-style': function(value) {
 			if ( template.hasTextStyle ) {
-				audiovisual.textStyle = Object.create(template.textStyle);
+				scene.textStyle = Object.create(template.textStyle);
 			} else {
-				audiovisual.textStyle = {};
+				scene.textStyle = {};
 			}
 			
 			for ( var property in value ) {
-				audiovisual.textStyle[property] = value[property];
+				scene.textStyle[property] = value[property];
 			}
 		},
 		'video': function(value) {
 			if ( !(value instanceof Array) ) {
 				value = [value];
 			}
-			audiovisual.videoPaths = value.map(effectivePath).map(encodeURI);
+			scene.videoPaths = value.map(effectivePath).map(encodeURI);
 		},
 		'video-order': function(value) {
-			audiovisual.videoOrder = value;
+			scene.videoOrder = value;
 		},
 		'fade': function(value) {
-			audiovisual.fadeDuration = value * 1000;
+			scene.fadeDuration = value * 1000;
 		},
 		'fade-in': function(value) {
-			audiovisual.fadesIn = value;
+			scene.fadesIn = value;
 		},
 		'fade-out': function(value) {
-			audiovisual.fadesOut = value;
+			scene.fadesOut = value;
 		},
 		'volume': function(value) {
-			audiovisual.volume = value;
+			scene.volume = value;
 		},
 		'image-delay': function(value) {
-			audiovisual.imageDelay = value * 1000;
+			scene.imageDelay = value * 1000;
 		}
 	};
 	
-	// Because names and keys are used to select audiovisuals, we don't want to inherit them from templates. They are simply set to undefined, and might be redefined in the loop below.
-	audiovisual.name = undefined;
-	audiovisual.key = undefined;
+	// Because names and keys are used to select scenes, we don't want to inherit them from templates. They are simply set to undefined, and might be redefined in the loop below.
+	scene.name = undefined;
+	scene.key = undefined;
 	
 	for ( var property in read ) {
 		var value = config[property];
@@ -207,5 +207,5 @@ Ambience.audiovisual.fromConfig = function(config, templateList, basePath) {
 		}
 	}
 	
-	return audiovisual;
+	return scene;
 }

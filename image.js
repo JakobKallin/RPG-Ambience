@@ -1,15 +1,15 @@
 Ambience.Image = function(node) {
-	var audiovisual;
+	var scene;
 	
-	function play(newAudiovisual) {
-		audiovisual = newAudiovisual;
+	function play(newScene) {
+		scene = newScene;
 		
-		if ( audiovisual.hasImage ) {
-			node.style.backgroundImage = 'url("' + audiovisual.imagePath + '")';
+		if ( scene.hasImage ) {
+			node.style.backgroundImage = 'url("' + scene.imagePath + '")';
 		}
 		
-		for ( var property in audiovisual.imageStyle ) {
-			var cssValue = audiovisual.imageStyle[property];
+		for ( var property in scene.imageStyle ) {
+			var cssValue = scene.imageStyle[property];
 			var cssProperty = 'background-' + property;
 			node.style[cssProperty] = cssValue;
 		}
@@ -18,14 +18,14 @@ Ambience.Image = function(node) {
 	function reset() {
 		node.style.backgroundImage = '';
 		
-		if ( audiovisual && 'imageStyle' in audiovisual ) {
-			for ( var property in audiovisual.imageStyle ) {
+		if ( scene && 'imageStyle' in scene ) {
+			for ( var property in scene.imageStyle ) {
 				var cssProperty = 'background-' + property;
 				node.style[cssProperty] = '';
 			}
 		}
 		
-		audiovisual = null;
+		scene = null;
 	}
 	
 	return {

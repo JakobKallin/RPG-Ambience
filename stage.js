@@ -1,5 +1,5 @@
 Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
-	var audiovisual;
+	var scene;
 	
 	var isPaused;
 	var isFadingIn;
@@ -26,30 +26,30 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		video.reset();
 		stopFadeIn();
 		
-		audiovisual = null;
+		scene = null;
 		
 		isPaused = false;
 		isFadingIn = false;
 		isFadingOut = false;
 	}
 	
-	function playAudiovisual(newAudiovisual) {
-		audiovisual = newAudiovisual;
+	function playScene(newScene) {
+		scene = newScene;
 		playFadeIn();
-		image.play(audiovisual);
-		background.play(audiovisual);
-		sound.play(audiovisual);
-		text.play(audiovisual);
-		video.play(audiovisual);
+		image.play(scene);
+		background.play(scene);
+		sound.play(scene);
+		text.play(scene);
+		video.play(scene);
 	}
 	
 	function playFadeIn() {
-		if ( audiovisual.isVisual ) {
+		if ( scene.isVisual ) {
 			node.style.visibility = 'visible';
 		}
 		
 		isFadingIn = true
-		fadeAnimation.start(1, audiovisual.fadeInDuration, {ended: onFadeInEnded});		
+		fadeAnimation.start(1, scene.fadeInDuration, {ended: onFadeInEnded});		
 	}
 	
 	function onFadeInEnded() {
@@ -60,8 +60,8 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		fadeAnimation.stop();
 	}
 	
-	function fadeOutAudiovisual() {
-		if ( audiovisual ) {
+	function fadeOutScene() {
+		if ( scene ) {
 			// This should work even if the stage is currently paused, so we have to unpause it to prevent incorrect state.
 			if ( isPaused ) {
 				isPaused = false;
@@ -74,16 +74,16 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 				
 				sound.fadeOut();
 				
-				// The current opacity compared to 1, if the audiovisual has been halfway faded in.
+				// The current opacity compared to 1, if the scene has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;
-				var fadeDuration = audiovisual.fadeOutDuration * opacityPercentage;
+				var fadeDuration = scene.fadeOutDuration * opacityPercentage;
 				fadeAnimation.start(0, fadeDuration, {completed: reset});
 			}
 		}
 	}
 	
 	function pause() {
-		if ( audiovisual && !isPaused ) {
+		if ( scene && !isPaused ) {
 			sound.pause();
 			video.pause();
 			if ( isFadingIn || isFadingOut ) {
@@ -94,7 +94,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	function resume() {
-		if ( audiovisual && isPaused ) {
+		if ( scene && isPaused ) {
 			sound.resume();
 			video.resume();
 			if ( isFadingIn || isFadingOut ) {
@@ -113,12 +113,12 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	}
 	
 	return {
-		playAudiovisual: playAudiovisual,
-		stopAudiovisual: reset,
-		fadeOutAudiovisual: fadeOutAudiovisual,
+		playScene: playScene,
+		stopScene: reset,
+		fadeOutScene: fadeOutScene,
 		togglePlayback: togglePlayback,
-		get audiovisual() {
-			return audiovisual;
+		get scene() {
+			return scene;
 		}
 	};
 };

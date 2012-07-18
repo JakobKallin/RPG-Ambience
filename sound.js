@@ -1,3 +1,3 @@
-Ambience.Sound = function(node, stopAudiovisual) {
-	return new Ambience.Media(node, 'sound', stopAudiovisual);
+Ambience.Sound = function(node, stopScene) {
+	return new Ambience.Media(node, 'sound', stopScene);
 };

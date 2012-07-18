@@ -1,13 +1,13 @@
 Ambience.Text = function(node) {
-	var audiovisual;
+	var scene;
 	
-	function play(newAudiovisual) {
-		audiovisual = newAudiovisual;
+	function play(newScene) {
+		scene = newScene;
 		
-		if ( audiovisual.hasText ) {
-			node.textContent = audiovisual.text;
-			for ( var cssProperty in audiovisual.textStyle ) {
-				var cssValue = audiovisual.textStyle[cssProperty];
+		if ( scene.hasText ) {
+			node.textContent = scene.text;
+			for ( var cssProperty in scene.textStyle ) {
+				var cssValue = scene.textStyle[cssProperty];
 				node.style[cssProperty] = cssValue;
 			}
 		}
@@ -16,13 +16,13 @@ Ambience.Text = function(node) {
 	function reset() {
 		node.textContent = '';
 		
-		if ( audiovisual && audiovisual.hasTextStyle ) {
-			for ( var cssProperty in audiovisual.textStyle ) {
+		if ( scene && scene.hasTextStyle ) {
+			for ( var cssProperty in scene.textStyle ) {
 				node.style[cssProperty] = '';
 			}
 		}
 		
-		audiovisual = null;
+		scene = null;
 	}
 	
 	return {

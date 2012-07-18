@@ -92,11 +92,11 @@ window.addEventListener('load', function() {
 				try {
 					readAdventureFile(this.result);
 					editorInput.value = this.result;
+					hideMenu();
+					enableStages();
 				} catch (error) {
 					alert('There was an error loading the adventure file:\n' + error.message);
 				}
-				hideMenu();
-				enableStages();
 			};
 			reader.readAsText(file);
 		} catch (error) {

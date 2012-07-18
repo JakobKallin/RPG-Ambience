@@ -25,7 +25,7 @@ window.addEventListener('load', function() {
 	var menu = document.getElementById('menu');
 	
 	var adventure;
-	var loadCallbacks = {
+	var adventureCallbacks = {
 		onFileRead: function(contents) {
 			editorInput.value = contents;
 		},
@@ -33,6 +33,7 @@ window.addEventListener('load', function() {
 			adventure = newAdventure;
 			hideMenu();
 			enableStages();
+			preloadMedia(adventure);
 		},
 		onError: function(error) {
 			alert('There was an error loading the adventure file:\n' + error.message);
@@ -42,7 +43,7 @@ window.addEventListener('load', function() {
 	menu.addEventListener('drop', function(event) {
 		event.stopPropagation();
 		event.preventDefault();
-		Ambience.Adventure.loadFromFile(event.dataTransfer.files[0], loadCallbacks);
+		Ambience.Adventure.loadFromFile(event.dataTransfer.files[0], adventureCallbacks);
 	});
 	
 	menu.addEventListener('dragover', function(event) {
@@ -52,7 +53,7 @@ window.addEventListener('load', function() {
 	});
 	
 	fileChooser.addEventListener('change', function() {
-		Ambience.Adventure.loadFromFile(this.files[0], loadCallbacks);
+		Ambience.Adventure.loadFromFile(this.files[0], adventureCallbacks);
 	});
 	
 	function hideMenu() {
@@ -206,6 +207,7 @@ window.addEventListener('load', function() {
 		try {
 			var newAdventure = Ambience.Adventure.fromString(editorInput.value);
 			adventure = newAdventure;
+			preloadMedia(adventure);
 		} catch (error) {
 			alert('There was an error loading the adventure file:\n' + error.message);
 		}
@@ -245,30 +247,42 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	function preloadMedia(adventure) {
-		var node = document.createElement('div');
-		node.style.display = 'none';
-		document.body.appendChild(node);
-		
-		adventure.audiovisuals.map(function(audiovisual) { preloadImage(audiovisual, node); });
-		adventure.audiovisuals.map(function(audiovisual) { preloadSound(audiovisual, node); });
+	var preloader;
+	createPreloader();
+	
+	function createPreloader() {
+		preloader = document.createElement('div');
+		preloader.style.display = 'none';
+		document.body.appendChild(preloader)
 	}
 	
-	function preloadImage(audiovisual, node) {
-		if ( audiovisual.hasImage ) {
-			var img = document.createElement('img');
-			img.src = audiovisual.imagePath;
-			node.appendChild(img);
+	function clearPreloader() {
+		while ( preloader.firstChild ) {
+			preloader.removeChild(preloader.firstChild);
 		}
 	}
 	
-	function preloadSound(audiovisual, node) {
+	function preloadMedia(adventure) {
+		clearPreloader();
+		adventure.audiovisuals.map(function(audiovisual) { preloadImage(audiovisual); });
+		adventure.audiovisuals.map(function(audiovisual) { preloadSound(audiovisual); });
+	}
+	
+	function preloadImage(audiovisual) {
+		if ( audiovisual.hasImage ) {
+			var img = document.createElement('img');
+			img.src = audiovisual.imagePath;
+			preloader.appendChild(img);
+		}
+	}
+	
+	function preloadSound(audiovisual) {
 		if ( audiovisual.hasSound ) {
 			audiovisual.soundPaths.map(function(path) {
 				var audio = document.createElement('audio');
 				audio.src = path;
 				audio.volume = 0;
-				node.appendChild(audio);
+				preloader.appendChild(audio);
 				audio.play();
 				audio.pause();
 			});

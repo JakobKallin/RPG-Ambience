@@ -44,5 +44,4 @@ Ambience.Adventure.fromConfig = function(config) {
 	}
 	
 	return adventure;
-	//preloadMedia(audiovisuals);
 };

@@ -17,20 +17,32 @@ window.addEventListener('load', function() {
 	
 	var ambience = new Ambience(sceneStage, effectStage);
 	
-	var menu = document.getElementById('menu');
-	var fileChooser = document.getElementById('file-chooser');
 	var editor = document.getElementById('editor');
 	var editorInput = document.getElementById('editor-input');
 	var theater = document.getElementById('theater');
 	
-	fileChooser.addEventListener('change', function() {
-		loadAdventureFile(this.files[0]);
-	});
+	var fileChooser = document.getElementById('file-chooser');
+	var menu = document.getElementById('menu');
+	
+	var audiovisuals;
+	var loadCallbacks = {
+		onFileRead: function(contents) {
+			editorInput.value = contents;
+		},
+		onAdventureLoaded: function(adventure) {
+			audiovisuals = adventure.audiovisuals;
+			hideMenu();
+			enableStages();
+		},
+		onError: function(error) {
+			alert('There was an error loading the adventure file:\n' + error.message);
+		}
+	};
 	
 	menu.addEventListener('drop', function(event) {
 		event.stopPropagation();
 		event.preventDefault();
-		loadAdventureFile(event.dataTransfer.files[0]);
+		Ambience.Adventure.loadFromFile(event.dataTransfer.files[0], loadCallbacks);
 	});
 	
 	menu.addEventListener('dragover', function(event) {
@@ -38,6 +50,15 @@ window.addEventListener('load', function() {
 		event.preventDefault();
 		event.dataTransfer.dropEffect = 'copy';
 	});
+	
+	fileChooser.addEventListener('change', function() {
+		Ambience.Adventure.loadFromFile(this.files[0], loadCallbacks);
+	});
+	
+	function hideMenu() {
+		// Menu is removed entirely so that keyboard focus cannot remain on invisible submit button.
+		menu.parentNode.removeChild(menu);
+	}
 	
 	var cursorTimer;
 	var cursorHideDelay = 1000;
@@ -84,61 +105,6 @@ window.addEventListener('load', function() {
 		122: 'F11',
 		123: 'F12'
 	};
-	
-	var audiovisuals;
-	
-	function loadAdventureFile(file) {
-		try {
-			var reader = new FileReader();
-			reader.onload = function() {
-				try {
-					readAdventureFile(this.result);
-					editorInput.value = this.result;
-					hideMenu();
-					enableStages();
-				} catch (error) {
-					alert('There was an error loading the adventure file:\n' + error.message);
-				}
-			};
-			reader.readAsText(file);
-		} catch (error) {
-			alert(error.message);
-		}
-	}
-	
-	function readAdventureFile(contents) {
-		var config = jsyaml.load(contents);
-		loadAdventure(config);
-	}
-	
-	function loadAdventure(config) {
-		parseConfig(config);
-	}
-	
-	function parseConfig(config) {
-		var basePath = config['base-path'];
-		
-		templates = [];
-		for ( var templateName in config.templates ) {
-			var templateConfig = config.templates[templateName];
-			templates[templateName] = Ambience.audiovisual.fromConfig(templateConfig, templates, basePath);
-		}
-		
-		if ( config.scenes === undefined ) {
-			audiovisuals = [];
-		} else {
-			audiovisuals = config.scenes.map(function(sceneConfig) {
-				return Ambience.audiovisual.fromConfig(sceneConfig, templates, basePath);
-			});
-		}
-		
-		preloadMedia(audiovisuals);
-	}
-	
-	function hideMenu() {
-		// Menu is removed entirely so that keyboard focus cannot remain on invisible submit button.
-		menu.parentNode.removeChild(menu);
-	}
 	
 	function executeCommand(command) {
 		if ( command.length === 0 ) {
@@ -238,7 +204,8 @@ window.addEventListener('load', function() {
 	
 	function loadEditorAdventure() {
 		try {
-			readAdventureFile(editorInput.value);
+			var adventure = Ambience.Adventure.fromString(editorInput.value);
+			audiovisuals = adventure.audiovisuals;
 		} catch (error) {
 			alert('There was an error loading the adventure file:\n' + error.message);
 		}

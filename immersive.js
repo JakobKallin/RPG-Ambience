@@ -24,13 +24,13 @@ window.addEventListener('load', function() {
 	var fileChooser = document.getElementById('file-chooser');
 	var menu = document.getElementById('menu');
 	
-	var audiovisuals;
+	var adventure;
 	var loadCallbacks = {
 		onFileRead: function(contents) {
 			editorInput.value = contents;
 		},
-		onAdventureLoaded: function(adventure) {
-			audiovisuals = adventure.audiovisuals;
+		onAdventureLoaded: function(newAdventure) {
+			adventure = newAdventure;
 			hideMenu();
 			enableStages();
 		},
@@ -136,7 +136,7 @@ window.addEventListener('load', function() {
 	
 	function namedAudiovisual(name) {
 		if ( name.length > 0 ) {
-			return audiovisuals.first(function(audiovisual) {
+			return adventure.audiovisuals.first(function(audiovisual) {
 				return (
 					audiovisual.hasName &&
 					audiovisual.name.toUpperCase().startsWith(name.toUpperCase())
@@ -148,7 +148,7 @@ window.addEventListener('load', function() {
 	}
 	
 	function keyedAudiovisual(keyString) {
-		return audiovisuals.first(function(audiovisual) {
+		return adventure.audiovisuals.first(function(audiovisual) {
 			return (
 				audiovisual.hasKey &&
 				audiovisual.key.toUpperCase() === keyString.toUpperCase()
@@ -204,8 +204,8 @@ window.addEventListener('load', function() {
 	
 	function loadEditorAdventure() {
 		try {
-			var adventure = Ambience.Adventure.fromString(editorInput.value);
-			audiovisuals = adventure.audiovisuals;
+			var newAdventure = Ambience.Adventure.fromString(editorInput.value);
+			adventure = newAdventure;
 		} catch (error) {
 			alert('There was an error loading the adventure file:\n' + error.message);
 		}
@@ -245,13 +245,13 @@ window.addEventListener('load', function() {
 		}
 	}
 	
-	function preloadMedia(audiovisuals) {
+	function preloadMedia(adventure) {
 		var node = document.createElement('div');
 		node.style.display = 'none';
 		document.body.appendChild(node);
 		
-		audiovisuals.map(function(audiovisual) { preloadImage(audiovisual, node); });
-		audiovisuals.map(function(audiovisual) { preloadSound(audiovisual, node); });
+		adventure.audiovisuals.map(function(audiovisual) { preloadImage(audiovisual, node); });
+		adventure.audiovisuals.map(function(audiovisual) { preloadSound(audiovisual, node); });
 	}
 	
 	function preloadImage(audiovisual, node) {

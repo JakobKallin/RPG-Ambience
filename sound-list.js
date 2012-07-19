@@ -30,13 +30,22 @@ Ambience.SoundList = function(stopScene) {
 		} else if ( scene.loops || !allTracksHavePlayed ) {
 			var trackPath = scene.soundPaths[trackIndex];
 			var sound = new Ambience.Sound(trackPath, scene.volume);
-			sound.play(fadeDuration, {onTimeUpdate: onTimeUpdate});
+			sound.play(
+				fadeDuration,
+				{
+					onTimeUpdate: onTimeUpdate,
+					onEnded: function() {
+						onTrackEnded(sound);
+					}
+				}
+			);
 			sounds.push(sound);
 		}
 	}
 	
 	function stop() {
 		sounds.map(function(sound) { sound.abort(); });
+		sounds = [];
 		scene = null;
 	}
 	
@@ -47,6 +56,12 @@ Ambience.SoundList = function(stopScene) {
 			this.removeEventListener('timeupdate', onTimeUpdate);
 			crossfade();
 		}
+	}
+	
+	// We should remove tracks from the list once they are done, so they don't take up space.
+	function onTrackEnded(sound) {
+		var index = sounds.indexOf(sound);
+		sounds.splice(index, 1);
 	}
 	
 	function crossfade() {

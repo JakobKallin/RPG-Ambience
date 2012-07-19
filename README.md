@@ -4,9 +4,9 @@
 
 # RPG Ambience
 
-RPG Ambience enables you to play audio and show visuals in fullscreen during tabletop RPG sessions, using your monitor as the stage. The audio and visuals are grouped into **scenes**, which you define in an **adventure file**. You control the scenes using your keyboard, which lets you start, stop, and pause them at any time during the session.
+RPG Ambience enables you to play audio and show visuals in fullscreen during tabletop RPG sessions, using your monitor as the stage. The audio and visuals are grouped into **scenes**, which you define in an **adventure file**. You control the scenes using your keyboard, which lets you start and stop them at any time during the session.
 
-## Starting, stopping, and pausing scenes
+## Starting and stopping scenes
 
 Playback of scenes can be controlled in the following ways:
 
@@ -14,7 +14,6 @@ Playback of scenes can be controlled in the following ways:
     - **By key:** If the scene has a `key` defined, pressing this key starts the scene.
     - **By name:** If the scene has a `name` defined, typing this name and pressing `Enter` starts the scene. It is enough to type the start of the name.
 - **Stopping a scene:** Pressing `Enter` stops the currently playing scene.
-- **Pausing a scene:** Pressing `Space` pauses the currently playing scene. Pressing `Space` again resumes it.
 
 ## Structure of an adventure file
 
@@ -83,7 +82,7 @@ To try this example, [open the demo][demo] and press `F3`.
 ### Key
 The `key` property defines a key that can be pressed to start the scene.
 
-For more information about controlling scene playback, see [Starting, stopping, and pausing scenes](#starting-stopping-and-pausing-scenes).
+For more information about controlling scene playback, see [Starting and stopping scenes](#starting-and-stopping-scenes).
 
 #### Example
 ```yaml
@@ -96,7 +95,7 @@ To try this example, [open the demo][demo] and press `F3`.
 ### Name
 The `name` property defines a name that can be typed to start the scene.
 
-For more information about controlling scene playback, see [Starting, stopping, and pausing scenes](#starting-stopping-and-pausing-scenes).
+For more information about controlling scene playback, see [Starting and stopping scenes](#starting-and-stopping-scenes).
 
 #### Example
 ```yaml

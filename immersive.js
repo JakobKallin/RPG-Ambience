@@ -3,17 +3,15 @@ Ambience.immersive = {};
 window.addEventListener('load', function() {
 	var sceneNode = document.getElementById('scene-stage');
 	var sceneImage = document.getElementById('scene-image');
-	var sceneSpeaker = document.getElementById('scene-sound');
 	var sceneText = document.getElementById('scene-text');
 	var sceneVideo = document.getElementById('scene-video');
-	var sceneStage = new Ambience.Stage(sceneNode, sceneImage, sceneSpeaker, sceneText, sceneVideo);
+	var sceneStage = new Ambience.Stage(sceneNode, sceneImage, sceneText, sceneVideo);
 	
 	var effectNode = document.getElementById('effect-stage');
 	var effectImage = document.getElementById('effect-image');
-	var effectSpeaker = document.getElementById('effect-sound');
 	var effectText = document.getElementById('effect-text');
 	var effectVideo = document.getElementById('effect-video');
-	var effectStage = new Ambience.Stage(effectNode, effectImage, effectSpeaker, effectText, effectVideo);
+	var effectStage = new Ambience.Stage(effectNode, effectImage, effectText, effectVideo);
 	
 	var ambience = new Ambience(sceneStage, effectStage);
 	

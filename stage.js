@@ -1,4 +1,4 @@
-Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
+Ambience.Stage = function(node, imageNode, sign, videoNode) {
 	var scene;
 	
 	var isFadingIn;
@@ -7,7 +7,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	
 	var image = new Ambience.Image(imageNode);
-	var soundList = new Ambience.SoundList(speaker, reset);
+	var soundList = new Ambience.SoundList(reset);
 	var text = new Ambience.Text(sign);
 	var background = new Ambience.Background(node);
 	var video = new Ambience.Video(videoNode, reset);

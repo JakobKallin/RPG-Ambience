@@ -1,4 +1,4 @@
-Ambience.SoundList = function(node, stopScene) {
+Ambience.SoundList = function(stopScene) {
 	var scene;
 	var trackIndex;
 	var sounds = [];

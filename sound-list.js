@@ -23,8 +23,11 @@ Ambience.SoundList = function(stopScene) {
 		}
 		
 		var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
+		var oneShot = !scene.loops && scene.hasOnlySound;
 		
-		if ( scene.loops || !allTracksHavePlayed ) {
+		if ( oneShot && allTracksHavePlayed ) {
+			stopScene();
+		} else if ( scene.loops || !allTracksHavePlayed ) {
 			var trackPath = scene.soundPaths[trackIndex];
 			var sound = new Ambience.Sound(trackPath, scene.volume);
 			sound.play(fadeDuration, {onTimeUpdate: onTimeUpdate});

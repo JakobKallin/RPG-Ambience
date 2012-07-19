@@ -8,7 +8,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	
 	var image = new Ambience.Image(imageNode);
-	var sound = new Ambience.Sound(speaker, reset);
+	var soundList = new Ambience.SoundList(speaker, reset);
 	var text = new Ambience.Text(sign);
 	var background = new Ambience.Background(node);
 	var video = new Ambience.Video(videoNode, reset);
@@ -22,7 +22,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		background.reset();
 		image.reset();
 		text.reset();
-		sound.reset();
+		soundList.stop();
 		video.reset();
 		stopFadeIn();
 		
@@ -38,7 +38,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		playFadeIn();
 		image.play(scene);
 		background.play(scene);
-		sound.play(scene);
+		soundList.play(scene);
 		text.play(scene);
 		video.play(scene);
 	}
@@ -72,7 +72,7 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 			} else {
 				isFadingOut = true;
 				
-				sound.fadeOut();
+				soundList.stop();
 				
 				// The current opacity compared to 1, if the scene has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;
@@ -84,7 +84,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function pause() {
 		if ( scene && !isPaused ) {
-			sound.pause();
 			video.pause();
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.pause();
@@ -95,7 +94,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function resume() {
 		if ( scene && isPaused ) {
-			sound.resume();
 			video.resume();
 			if ( isFadingIn || isFadingOut ) {
 				fadeAnimation.resume();

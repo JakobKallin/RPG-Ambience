@@ -27,7 +27,7 @@ Ambience.scene.scene = {
 		// backgroundColor should be in this, but it makes sound-only effects block the scene. Will be fixed.
 		return (
 			this.imagePath !== undefined ||
-			this.videoPaths !== undefined ||
+			this.videoPath !== undefined ||
 			this.text !== undefined
 		);
 	},
@@ -38,7 +38,7 @@ Ambience.scene.scene = {
 		return this.imagePath !== undefined;
 	},
 	get hasVideo() {
-		return this.videoPaths !== undefined;
+		return this.videoPath !== undefined;
 	},
 	get hasOnlyVideo() {
 		return (
@@ -173,13 +173,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			}
 		},
 		'video': function(value) {
-			if ( !(value instanceof Array) ) {
-				value = [value];
-			}
-			scene.videoPaths = value.map(effectivePath).map(encodeURI);
-		},
-		'video-order': function(value) {
-			scene.videoOrder = value;
+			scene.videoPath = encodeURI(effectivePath(value));
 		},
 		'fade': function(value) {
 			scene.fadeDuration = value * 1000;

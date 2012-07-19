@@ -22,7 +22,7 @@ Ambience.Stage = function(node, imageNode, sign, videoNode) {
 		image.reset();
 		text.reset();
 		soundList.stop();
-		video.reset();
+		video.abort();
 		stopFadeIn();
 		
 		scene = null;
@@ -66,6 +66,7 @@ Ambience.Stage = function(node, imageNode, sign, videoNode) {
 				isFadingOut = true;
 				
 				soundList.stop();
+				video.stop();
 				
 				// The current opacity compared to 1, if the scene has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;

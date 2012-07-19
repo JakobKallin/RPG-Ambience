@@ -51,10 +51,13 @@ Ambience.SoundList = function(stopScene) {
 	
 	// Below, "this" refers to the <audio> element playing a sound.
 	function onTimeUpdate() {
-		var timeLeft = this.duration - this.currentTime;
-		if ( timeLeft <= scene.crossfadeDuration ) {
-			this.removeEventListener('timeupdate', onTimeUpdate);
-			crossfade();
+		// This event seems to sometimes fire after the scene has been removed, so we need to check for a scene to avoid null pointers.
+		if ( scene ) {
+			var timeLeft = this.duration - this.currentTime;
+			if ( timeLeft <= scene.crossfadeDuration ) {
+				this.removeEventListener('timeupdate', onTimeUpdate);
+				crossfade();
+			}
 		}
 	}
 	

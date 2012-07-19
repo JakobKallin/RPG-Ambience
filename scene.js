@@ -5,6 +5,7 @@ Ambience.scene.scene = {
 	fadeDuration: 0,
 	fadesIn: true,
 	fadesOut: true,
+	crossfadeDuration: 0,
 	soundOrder: 'linear',
 	loops: true,
 	backgroundColor: 'black',
@@ -78,6 +79,9 @@ Ambience.scene.scene = {
 		} else {
 			return 0;
 		}
+	},
+	get crossfadeDurationMillis() {
+		return this.crossfadeDuration * 1000;
 	}
 };
 
@@ -191,6 +195,9 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 		},
 		'image-delay': function(value) {
 			scene.imageDelay = value * 1000;
+		},
+		'crossfade': function(value) {
+			scene.crossfadeDuration = value;
 		}
 	};
 	

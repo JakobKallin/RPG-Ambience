@@ -13,16 +13,23 @@ Ambience.SoundList = function(stopScene) {
 	}
 	
 	function playNextTrack(fadeDuration) {
+		// We need this so that we stop audio-only effects after they have actually played once.
+		var hasPlayedBefore = trackIndex !== -1;
+		
 		if ( scene.soundOrder === 'random' ) {
 			trackIndex = scene.soundPaths.randomIndex();
 		} else {
 			trackIndex = (trackIndex + 1) % scene.soundPaths.length;
 		}
 		
-		var trackPath = scene.soundPaths[trackIndex];
-		var sound = new Ambience.Sound(trackPath, scene.volume);
-		sound.play(fadeDuration, {onTimeUpdate: onTimeUpdate});
-		sounds.push(sound);
+		var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
+		
+		if ( scene.loops || !allTracksHavePlayed ) {
+			var trackPath = scene.soundPaths[trackIndex];
+			var sound = new Ambience.Sound(trackPath, scene.volume);
+			sound.play(fadeDuration, {onTimeUpdate: onTimeUpdate});
+			sounds.push(sound);
+		}
 	}
 	
 	function stop() {

@@ -6,8 +6,10 @@ Ambience.SoundList = function(node, stopScene) {
 	
 	function play(newScene) {
 		scene = newScene;
-		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
-		playNextTrack(0);
+		if ( scene.hasSound ) {
+			trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
+			playNextTrack(0);
+		}
 	}
 	
 	function playNextTrack(fadeDuration) {
@@ -25,6 +27,7 @@ Ambience.SoundList = function(node, stopScene) {
 	
 	function stop() {
 		sounds.map(function(sound) { sound.abort(); });
+		scene = null;
 	}
 	
 	// Below, "this" refers to the <audio> element playing a sound.

@@ -1,12 +1,13 @@
 Ambience.Sound = function(path, maxVolume) {
 	var node = document.createElement('audio');
 	node.src = path;
-	node.volume = maxVolume;
+	node.volume = 0;
 	
 	var fade = new Animation(node, 'volume');
 	
-	function play(fadeDuration, onEnded) {
-		node.addEventListener('ended', onEnded);
+	function play(fadeDuration, callbacks) {
+		node.addEventListener('ended', callbacks.onEnded);
+		node.addEventListener('timeupdate', callbacks.onTimeUpdate);
 		fade.start(maxVolume, fadeDuration);
 		node.play();
 	}

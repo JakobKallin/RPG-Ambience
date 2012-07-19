@@ -1,7 +1,6 @@
 Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	var scene;
 	
-	var isPaused;
 	var isFadingIn;
 	var isFadingOut;
 	
@@ -28,7 +27,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		
 		scene = null;
 		
-		isPaused = false;
 		isFadingIn = false;
 		isFadingOut = false;
 	}
@@ -62,11 +60,6 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 	
 	function fadeOutScene() {
 		if ( scene ) {
-			// This should work even if the stage is currently paused, so we have to unpause it to prevent incorrect state.
-			if ( isPaused ) {
-				isPaused = false;
-			}
-			
 			if ( isFadingOut ) {
 				reset();
 			} else {
@@ -82,39 +75,10 @@ Ambience.Stage = function(node, imageNode, speaker, sign, videoNode) {
 		}
 	}
 	
-	function pause() {
-		if ( scene && !isPaused ) {
-			video.pause();
-			if ( isFadingIn || isFadingOut ) {
-				fadeAnimation.pause();
-			}
-			isPaused = true;
-		}
-	}
-	
-	function resume() {
-		if ( scene && isPaused ) {
-			video.resume();
-			if ( isFadingIn || isFadingOut ) {
-				fadeAnimation.resume();
-			}
-			isPaused = false;
-		}
-	}
-	
-	function togglePlayback() {
-		if ( isPaused ) {
-			resume();
-		} else {
-			pause();
-		}
-	}
-	
 	return {
 		playScene: playScene,
 		stopScene: reset,
 		fadeOutScene: fadeOutScene,
-		togglePlayback: togglePlayback,
 		get scene() {
 			return scene;
 		}

@@ -19,7 +19,6 @@ function Animation(object, property) {
 	var value; // Separate state variable to avoid automatic type conversions.
 	var timer;
 	var hasStarted = false;
-	var isPaused = false;
 	var tickIndex;
 	var lastTickIndex;
 	
@@ -85,7 +84,6 @@ function Animation(object, property) {
 			}
 			
 			hasStarted = false;
-			isPaused = false;
 			
 			if ( onEnded !== undefined ) {
 				onEnded();
@@ -103,22 +101,4 @@ function Animation(object, property) {
 			}
 		}
 	}
-	
-	this.pause = function() {
-		if ( hasStarted && !isPaused ) {
-			window.clearInterval(timer);
-			
-			var elapsed = (tickIndex + 1) * interval;
-			var newDuration = duration - elapsed;
-			duration = newDuration;
-			isPaused = true;
-		}
-	};
-	
-	this.resume = function() {
-		if ( hasStarted && isPaused ) {
-			isPaused = false;
-			timer = window.setInterval(tick, interval);
-		}
-	};
 }

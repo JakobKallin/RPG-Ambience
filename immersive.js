@@ -192,9 +192,6 @@ window.addEventListener('load', function() {
 		} else if ( keyString === 'Backspace' ) {
 			event.preventDefault(); // Prevent Back button.
 			backspaceCommand();
-		} else if ( keyString === 'Space' ) {
-			event.preventDefault();
-			ambience.togglePlayback();
 		} else if ( keyString === 'F12' && event.shiftKey && event.ctrlKey ) {
 			event.preventDefault();
 			toggleEditor();

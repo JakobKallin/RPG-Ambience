@@ -28,13 +28,6 @@ Ambience = function(sceneStage, effectStage) {
 		effectStage.stopScene();
 	}
 	
-	function togglePlayback() {
-		if ( sceneIsPlaying() ) {
-			sceneStage.togglePlayback();
-			effectStage.togglePlayback();
-		}
-	}
-	
 	function sceneIsPlaying() {
 		return Boolean(
 			sceneStage.scene ||
@@ -57,7 +50,6 @@ Ambience = function(sceneStage, effectStage) {
 		playEffect: playEffect,
 		stopEffect: stopEffect,
 		fadeOutEffect: fadeOutEffect,
-		fadeOutScene: fadeOutScene,
-		togglePlayback: togglePlayback
+		fadeOutScene: fadeOutScene
 	};
 };

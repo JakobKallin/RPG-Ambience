@@ -22,20 +22,6 @@ Ambience.Media = function(node, type, stopScene) {
 		}
 	}
 	
-	function pause() {
-		if ( scene[hasProperty] && !hasEnded ) {
-			node.pause();
-			fade.pause();
-		}	
-	}
-	
-	function resume() {
-		if ( scene[hasProperty] && !hasEnded ) {
-			node.play();
-			fade.resume();
-		}
-	}
-	
 	function fadeOut() {
 		// Must be above the stage fade, because that might complete immediately and set scene to null.
 		if ( scene[hasProperty] ) {
@@ -90,8 +76,6 @@ Ambience.Media = function(node, type, stopScene) {
 	
 	return {
 		play: play,
-		pause: pause,
-		resume: resume,
 		fadeOut: fadeOut,
 		reset: reset,
 		get hasEnded() {

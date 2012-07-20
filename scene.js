@@ -5,7 +5,8 @@ Ambience.scene.scene = {
 	fadeDuration: 0,
 	fadesIn: true,
 	fadesOut: true,
-	crossfadeDuration: 0,
+	crossoverDuration: 0,
+	crossfades: false,
 	soundOrder: 'linear',
 	loops: true,
 	backgroundColor: 'black',
@@ -80,8 +81,8 @@ Ambience.scene.scene = {
 			return 0;
 		}
 	},
-	get crossfadeDurationMillis() {
-		return this.crossfadeDuration * 1000;
+	get crossoverDurationMillis() {
+		return this.crossoverDuration * 1000;
 	}
 };
 
@@ -190,8 +191,12 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 		'image-delay': function(value) {
 			scene.imageDelay = value * 1000;
 		},
+		'crossover': function(value) {
+			scene.crossoverDuration = value;
+		},
+		// The difference between "crossfade" and "crossfades" is intentional.
 		'crossfade': function(value) {
-			scene.crossfadeDuration = value;
+			scene.crossfades = value;
 		}
 	};
 	

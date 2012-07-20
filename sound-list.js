@@ -54,9 +54,9 @@ Ambience.SoundList = function(stopScene) {
 		// This event seems to sometimes fire after the scene has been removed, so we need to check for a scene to avoid null pointers.
 		if ( scene ) {
 			var timeLeft = this.duration - this.currentTime;
-			if ( timeLeft <= scene.crossfadeDuration ) {
+			if ( timeLeft <= scene.crossoverDuration ) {
 				this.removeEventListener('timeupdate', onTimeUpdate);
-				crossfade();
+				crossover();
 			}
 		}
 	}
@@ -67,9 +67,16 @@ Ambience.SoundList = function(stopScene) {
 		sounds.splice(index, 1);
 	}
 	
-	function crossfade() {
-		sounds.map(function(sound) { sound.stop(scene.crossfadeDurationMillis); });
-		playNextTrack(scene.crossfadeDurationMillis);
+	function crossover() {
+		if ( scene.crossfades ) {
+			sounds.map(function(sound) { sound.stop(scene.crossoverDurationMillis); });
+			playNextTrack(scene.crossoverDurationMillis);
+		} else {
+			// New track starts early but does not fade in.
+			// Likewise, current track does not fade out but simply ends normally (with onTrackEnded eventually removing it).
+			playNextTrack(0);
+		}
+		
 	}
 	
 	return {

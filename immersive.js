@@ -2,16 +2,14 @@ Ambience.immersive = {};
 
 window.addEventListener('load', function() {
 	var sceneNode = document.getElementById('scene-stage');
-	var sceneImage = document.getElementById('scene-image');
 	var sceneText = document.getElementById('scene-text');
 	var sceneVideo = document.getElementById('scene-video');
-	var sceneStage = new Ambience.Stage(sceneNode, sceneImage, sceneText, sceneVideo);
+	var sceneStage = new Ambience.Stage(sceneNode, sceneText, sceneVideo);
 	
 	var effectNode = document.getElementById('effect-stage');
-	var effectImage = document.getElementById('effect-image');
 	var effectText = document.getElementById('effect-text');
 	var effectVideo = document.getElementById('effect-video');
-	var effectStage = new Ambience.Stage(effectNode, effectImage, effectText, effectVideo);
+	var effectStage = new Ambience.Stage(effectNode, effectText, effectVideo);
 	
 	var ambience = new Ambience(sceneStage, effectStage);
 	

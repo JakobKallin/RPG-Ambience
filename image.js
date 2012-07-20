@@ -1,35 +1,37 @@
-Ambience.Image = function(node) {
+Ambience.Image = function(container) {
 	var scene;
+	var node;
 	
 	function play(newScene) {
 		scene = newScene;
+		
+		node = document.createElement('div');
+		node.className = 'image';
+		container.insertBefore(node, container.firstChild);
 		
 		if ( scene.hasImage ) {
 			node.style.backgroundImage = 'url("' + scene.imagePath + '")';
 		}
 		
+		
 		for ( var property in scene.imageStyle ) {
 			var cssValue = scene.imageStyle[property];
+			// Needs to be camelcase to work in Firefox and possibly other browsers.
 			var cssProperty = 'background-' + property;
 			node.style[cssProperty] = cssValue;
 		}
 	}
 	
-	function reset() {
-		node.style.backgroundImage = '';
-		
-		if ( scene && 'imageStyle' in scene ) {
-			for ( var property in scene.imageStyle ) {
-				var cssProperty = 'background-' + property;
-				node.style[cssProperty] = '';
-			}
+	function stop() {
+		if ( node ) {
+			container.removeChild(node);
+			node = null;
+			scene = null;
 		}
-		
-		scene = null;
 	}
 	
 	return {
 		play: play,
-		reset: reset
+		stop: stop
 	};
 };

@@ -2,12 +2,10 @@ Ambience.immersive = {};
 
 window.addEventListener('load', function() {
 	var sceneNode = document.getElementById('scene-stage');
-	var sceneText = document.getElementById('scene-text');
-	var sceneStage = new Ambience.Stage(sceneNode, sceneText);
+	var sceneStage = new Ambience.Stage(sceneNode);
 	
 	var effectNode = document.getElementById('effect-stage');
-	var effectText = document.getElementById('effect-text');
-	var effectStage = new Ambience.Stage(effectNode, effectText);
+	var effectStage = new Ambience.Stage(effectNode);
 	
 	var ambience = new Ambience(sceneStage, effectStage);
 	

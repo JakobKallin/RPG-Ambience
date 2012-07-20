@@ -1,25 +1,32 @@
-Ambience.Text = function(node) {
+Ambience.Text = function(container) {
 	var scene;
+	var outerNode; // This one is needed to have left-aligned text in the center, without filling the entire width.
+	var innerNode;
 	
 	function play(newScene) {
 		scene = newScene;
 		
 		if ( scene.hasText ) {
-			node.textContent = scene.text;
+			outerNode = document.createElement('div');
+			outerNode.className = 'text';
+			innerNode = document.createElement('div');
+			outerNode.appendChild(innerNode);
+			
+			innerNode.textContent = scene.text;
 			for ( var cssProperty in scene.textStyle ) {
 				var cssValue = scene.textStyle[cssProperty];
-				node.style[cssProperty] = cssValue;
+				innerNode.style[cssProperty] = cssValue;
 			}
+			
+			container.appendChild(outerNode);
 		}
 	}
 	
-	function reset() {
-		node.textContent = '';
-		
-		if ( scene && scene.hasTextStyle ) {
-			for ( var cssProperty in scene.textStyle ) {
-				node.style[cssProperty] = '';
-			}
+	function stop() {
+		if ( scene.hasText ) {
+			container.removeChild(outerNode);
+			outerNode = null;
+			innerNode = null;
 		}
 		
 		scene = null;
@@ -27,6 +34,6 @@ Ambience.Text = function(node) {
 	
 	return {
 		play: play,
-		reset: reset
+		stop: stop
 	};
 };

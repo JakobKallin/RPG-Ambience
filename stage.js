@@ -1,4 +1,4 @@
-Ambience.Stage = function(node, sign) {
+Ambience.Stage = function(node) {
 	var scene;
 	
 	var isFadingIn;
@@ -8,7 +8,7 @@ Ambience.Stage = function(node, sign) {
 	
 	var image = new Ambience.Image(node);
 	var soundList = new Ambience.SoundList(reset);
-	var text = new Ambience.Text(sign);
+	var text = new Ambience.Text(node);
 	var background = new Ambience.Background(node);
 	var video = new Ambience.Video(node);
 	
@@ -20,7 +20,7 @@ Ambience.Stage = function(node, sign) {
 		
 		background.reset();
 		if (scene) { image.stop(); }
-		text.reset();
+		if (scene) { text.stop(); }
 		soundList.stop();
 		if (scene) { video.abort(); }
 		stopFadeIn();

@@ -19,7 +19,7 @@ Ambience.Stage = function(node, sign) {
 		node.style.opacity = 0;
 		
 		background.reset();
-		image.stop();
+		if (scene) { image.stop(); }
 		text.reset();
 		soundList.stop();
 		if (scene) { video.abort(); }

@@ -23,11 +23,13 @@ Ambience.Image = function(container) {
 	}
 	
 	function stop() {
-		if ( node ) {
+		if ( scene.hasImage ) {
 			container.removeChild(node);
 			node = null;
 			scene = null;
 		}
+		
+		scene = null;
 	}
 	
 	return {

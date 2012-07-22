@@ -1,22 +1,16 @@
-Ambience.immersive = {};
-
-window.addEventListener('load', function() {
-	var sceneNode = document.getElementById('scene-stage');
-	var sceneStage = new Ambience.Stage(sceneNode);
+Ambience.immersive = function() {
+	var sceneStage;
+	var effectStage;
+	var ambience;
 	
-	var effectNode = document.getElementById('effect-stage');
-	var effectStage = new Ambience.Stage(effectNode);
+	var editor;
+	var editorInput;
+	var theater;
 	
-	var ambience = new Ambience(sceneStage, effectStage);
+	var fileChooser;
+	var menu;
 	
-	var editor = document.getElementById('editor');
-	var editorInput = document.getElementById('editor-input');
-	var theater = document.getElementById('theater');
-	
-	var fileChooser = document.getElementById('file-chooser');
-	var menu = document.getElementById('menu');
-	
-	var preloader = new Ambience.Preloader();
+	var preloader;
 	
 	var adventure;
 	var adventureCallbacks = {
@@ -34,21 +28,36 @@ window.addEventListener('load', function() {
 		}
 	};
 	
-	menu.addEventListener('drop', function(event) {
-		event.stopPropagation();
-		event.preventDefault();
-		Ambience.Adventure.loadFromFile(event.dataTransfer.files[0], adventureCallbacks);
-	});
-	
-	menu.addEventListener('dragover', function(event) {
-		event.stopPropagation();
-		event.preventDefault();
-		event.dataTransfer.dropEffect = 'copy';
-	});
-	
-	fileChooser.addEventListener('change', function() {
-		Ambience.Adventure.loadFromFile(this.files[0], adventureCallbacks);
-	});
+	function start() {
+		sceneStage = new Ambience.Stage(document.getElementById('scene-stage'));
+		effectStage = new Ambience.Stage(document.getElementById('effect-stage'));
+		ambience = new Ambience(sceneStage, effectStage);
+		
+		editor = document.getElementById('editor');
+		editorInput = document.getElementById('editor-input');
+		theater = document.getElementById('theater');
+		
+		fileChooser = document.getElementById('file-chooser');
+		menu = document.getElementById('menu');
+		
+		preloader = new Ambience.Preloader();
+		
+		menu.addEventListener('drop', function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+			Ambience.Adventure.loadFromFile(event.dataTransfer.files[0], adventureCallbacks);
+		});
+		
+		menu.addEventListener('dragover', function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+			event.dataTransfer.dropEffect = 'copy';
+		});
+		
+		fileChooser.addEventListener('change', function() {
+			Ambience.Adventure.loadFromFile(this.files[0], adventureCallbacks);
+		});
+	}
 	
 	function hideMenu() {
 		// Menu is removed entirely so that keyboard focus cannot remain on invisible submit button.
@@ -68,7 +77,7 @@ window.addEventListener('load', function() {
 		document.body.style.cursor = 'auto';
 	};
 	
-	document.body.addEventListener('mousemove', function(event) {
+	function onMouseMove(event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
 		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 		if ( mouseHasMoved ) {
@@ -78,8 +87,8 @@ window.addEventListener('load', function() {
 		}
 		
 		previousX = event.screenX;
-		previousY = event.screenY;
-	});
+		previousY = event.screenY;		
+	}
 	
 	var command = '';
 	
@@ -237,4 +246,10 @@ window.addEventListener('load', function() {
 			alert('There was an error loading the adventure file:\n' + error.message);
 		}
 	}
-});
+	
+	return {
+		start: function() {
+			window.addEventListener('load', start);
+		}
+	};
+}();

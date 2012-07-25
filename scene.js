@@ -1,7 +1,7 @@
 Ambience.scene = {};
 
-Ambience.scene.scene = {
-	type: 'scene',
+Ambience.scene.base = {
+	layer: 'background',
 	fadeDuration: 0,
 	fadesIn: true,
 	fadesOut: true,
@@ -21,11 +21,8 @@ Ambience.scene.scene = {
 	get isScene() {
 		return this.type === 'scene';
 	},
-	get isEffect() {
-		return this.type === 'effect';
-	},
 	get isVisual() {
-		// backgroundColor should be in this, but it makes sound-only effects block the scene. Will be fixed.
+		// backgroundColor should be in this, but it makes sound-only effects block the scene. Should be fixed.
 		return (
 			this.imagePath !== undefined ||
 			this.videoPath !== undefined ||
@@ -86,10 +83,6 @@ Ambience.scene.scene = {
 	}
 };
 
-Ambience.scene.effect = Object.create(Ambience.scene.scene);
-Ambience.scene.effect.type = 'effect';
-Ambience.scene.effect.loops = false;
-
 Ambience.scene.fromConfig = function(config, templateList, basePath) {
 	var scene;
 	var template;
@@ -100,11 +93,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 	}
 	
 	if ( templateName === undefined ) {
-		if ( config.type === 'effect' ) {
-			template = Ambience.scene.effect;
-		} else {
-			template = Ambience.scene.scene;
-		}
+		template = Ambience.scene.base;
 	} else if ( templateName in templateList ) {
 		template = templateList[templateName];
 	} else {
@@ -117,11 +106,11 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 	
 	scene = Object.create(template);
 	var read = {
-		'type': function(value) {
-			if ( value !== 'effect' ) {
-				value = 'scene';
+		'layer': function(value) {
+			if ( value !== 'foreground' ) {
+				value = 'background';
 			}
-			scene.type = value;
+			scene.layer = value;
 		},
 		'key': function(value) {
 			scene.key = String(value);

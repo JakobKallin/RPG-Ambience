@@ -41,7 +41,7 @@ scenes:
         video: examples/sintel-360p.webm
     -
         key: F10
-        type: effect
+        template: effect
         image: examples/sintel-wallpaper-dragon.jpg
         sound: examples/dragon.wav
 templates:
@@ -50,3 +50,6 @@ templates:
         text-style:
             font-family: Georgia
             font-size: 40px
+    effect:
+        loop: no
+        layer: foreground

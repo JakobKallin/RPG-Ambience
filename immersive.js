@@ -1,13 +1,13 @@
 Ambience.immersive = {};
 
 window.addEventListener('load', function() {
-	var sceneNode = document.getElementById('scene-stage');
-	var sceneStage = new Ambience.Stage(sceneNode);
+	var backgroundNode = document.getElementById('background');
+	var background = new Ambience.Stage(backgroundNode);
 	
-	var effectNode = document.getElementById('effect-stage');
-	var effectStage = new Ambience.Stage(effectNode);
+	var foregroundNode = document.getElementById('foreground');
+	var foreground = new Ambience.Stage(foregroundNode);
 	
-	var ambience = new Ambience(sceneStage, effectStage);
+	var ambience = new Ambience(background, foreground);
 	
 	var editor = document.getElementById('editor');
 	var editorInput = document.getElementById('editor-input');
@@ -152,10 +152,10 @@ window.addEventListener('load', function() {
 	}
 	
 	function fadeOutOne() {
-		if ( effectStage.scene ) {
-			ambience.fadeOutEffect();
-		} else if ( sceneStage.scene ) {
-			ambience.fadeOutScene();
+		if ( foreground.scene ) {
+			ambience.fadeOutForeground();
+		} else if ( background.scene ) {
+			ambience.fadeOutBackground();
 		}
 	}
 	

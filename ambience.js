@@ -1,55 +1,55 @@
-Ambience = function(sceneStage, effectStage) {
+Ambience = function(background, foreground) {
 	function play(scene) {
 		if ( scene ) {
-			if ( scene.isScene ) {
-				playScene(scene);
+			if ( scene.layer === 'background' ) {
+				playBackground(scene);
 			} else {
-				playEffect(scene);
+				playForeground(scene);
 			}
 		}
 	}
 	
-	function playScene(scene) {
-		stopScene(scene);
-		sceneStage.playScene(scene);
+	function playBackground(scene) {
+		stopBackground(scene);
+		background.playScene(scene);
 	}
 	
-	function stopScene() {
-		sceneStage.stopScene();
-		stopEffect();
+	function stopBackground() {
+		background.stopScene();
+		stopForeground();
 	}
 	
-	function playEffect(effect) {
-		stopEffect();
-		effectStage.playScene(effect);
+	function playForeground(scene) {
+		stopForeground();
+		foreground.playScene(scene);
 	}
 	
-	function stopEffect() {
-		effectStage.stopScene();
+	function stopForeground() {
+		foreground.stopScene();
 	}
 	
 	function sceneIsPlaying() {
 		return Boolean(
-			sceneStage.scene ||
-			effectStage.scene
+			background.scene ||
+			foreground.scene
 		);
 	};
 	
-	function fadeOutEffect() {
-		effectStage.fadeOutScene();
+	function fadeOutForeground() {
+		foreground.fadeOutScene();
 	}
 	
-	function fadeOutScene() {
-		sceneStage.fadeOutScene();
+	function fadeOutBackground() {
+		background.fadeOutScene();
 	}
 	
 	return {
 		play: play,
-		playScene: playScene,
-		stopScene: stopScene,
-		playEffect: playEffect,
-		stopEffect: stopEffect,
-		fadeOutEffect: fadeOutEffect,
-		fadeOutScene: fadeOutScene
+		playBackground: playBackground,
+		stopBackground: stopBackground,
+		playForeground: playForeground,
+		stopForeground: stopForeground,
+		fadeOutForeground: fadeOutForeground,
+		fadeOutBackground: fadeOutBackground
 	};
 };

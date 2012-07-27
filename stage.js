@@ -57,7 +57,7 @@ Ambience.Stage = function(node) {
 		}
 		
 		isFadingIn = true
-		fadeAnimation.start(1, scene.fadeInDuration, {ended: onFadeInEnded});		
+		fadeAnimation.start(1, scene.fadeInDuration, {onEnded: onFadeInEnded});		
 	}
 	
 	function onFadeInEnded() {
@@ -81,7 +81,7 @@ Ambience.Stage = function(node) {
 				// The current opacity compared to 1, if the scene has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;
 				var fadeDuration = scene.fadeOutDuration * opacityPercentage;
-				fadeAnimation.start(0, fadeDuration, {completed: stop});
+				fadeAnimation.start(0, fadeDuration, {onCompleted: stop});
 			}
 		}
 	}

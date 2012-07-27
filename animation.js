@@ -52,8 +52,8 @@ function Animation(object, property) {
 		
 		endValue = newEndValue;
 		duration = newDuration;
-		onCompleted = callbacks.completed;
-		onEnded = callbacks.ended;
+		onCompleted = callbacks.onCompleted;
+		onEnded = callbacks.onEnded;
 		
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;

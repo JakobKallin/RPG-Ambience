@@ -12,9 +12,6 @@ Ambience.scene.base = {
 	backgroundColor: 'black',
 	volume: 1,
 	imageDelay: 0,
-	get hasKey() {
-		return this.key !== undefined;
-	},
 	get isScene() {
 		return this.type === 'scene';
 	},

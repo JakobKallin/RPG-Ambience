@@ -145,7 +145,7 @@ window.addEventListener('load', function() {
 	function keyedScene(keyString) {
 		return adventure.scenes.first(function(scene) {
 			return (
-				scene.hasKey &&
+				scene.key &&
 				scene.key.toUpperCase() === keyString.toUpperCase()
 			);
 		});

@@ -6,7 +6,7 @@ Ambience.SoundList = function(stopScene) {
 	
 	function play(newScene) {
 		scene = newScene;
-		if ( scene.hasSound ) {
+		if ( scene.sounds ) {
 			trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
 			playNextTrack(0);
 		}
@@ -17,9 +17,9 @@ Ambience.SoundList = function(stopScene) {
 		var hasPlayedBefore = trackIndex !== -1;
 		
 		if ( scene.soundOrder === 'random' ) {
-			trackIndex = scene.soundPaths.randomIndex();
+			trackIndex = scene.sounds.randomIndex();
 		} else {
-			trackIndex = (trackIndex + 1) % scene.soundPaths.length;
+			trackIndex = (trackIndex + 1) % scene.sounds.length;
 		}
 		
 		var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
@@ -28,7 +28,7 @@ Ambience.SoundList = function(stopScene) {
 		if ( oneShot && allTracksHavePlayed ) {
 			stopScene();
 		} else if ( scene.loops || !allTracksHavePlayed ) {
-			var trackPath = scene.soundPaths[trackIndex];
+			var trackPath = scene.sounds[trackIndex];
 			var sound = new Ambience.Sound(trackPath, scene.volume);
 			sound.play(
 				fadeDuration,

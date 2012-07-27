@@ -24,8 +24,8 @@ Ambience.Preloader = function() {
 	}
 	
 	function preloadSound(scene) {
-		if ( scene.hasSound ) {
-			scene.soundPaths.map(function(path) {
+		if ( scene.sounds ) {
+			scene.sounds.map(function(path) {
 				var audio = document.createElement('audio');
 				audio.src = path;
 				audio.volume = 0;

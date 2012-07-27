@@ -26,21 +26,15 @@ Ambience.scene.base = {
 			this.text !== undefined
 		);
 	},
-	get isAudial() {
-		return this.soundPaths !== undefined;
-	},
 	get hasVideo() {
 		return this.videoPath !== undefined;
 	},
 	get hasOnlyVideo() {
 		return (
 			!this.image &&
-			!this.hasSound &&
+			!this.sounds &&
 			!this.hasText
 		);
-	},
-	get hasSound() {
-		return this.soundPaths !== undefined;
 	},
 	get hasOnlySound() {
 		return (
@@ -130,7 +124,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			if ( !(value instanceof Array) ) {
 				value = [value];
 			}
-			scene.soundPaths = value.map(effectivePath).map(encodeURI);
+			scene.sounds = value.map(effectivePath).map(encodeURI);
 		},
 		'sound-order': function(value) {
 			scene.soundOrder = value;

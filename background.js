@@ -10,7 +10,7 @@ Ambience.Background = function(node) {
 		}
 	}
 	
-	function reset() {
+	function stop() {
 		node.style.backgroundColor = defaultBackground;
 		
 		scene = null;
@@ -18,6 +18,6 @@ Ambience.Background = function(node) {
 	
 	return {
 		play: play,
-		reset: reset
+		stop: stop
 	};
 };

@@ -43,9 +43,6 @@ Ambience.scene.base = {
 			!this.hasText
 		);
 	},
-	get hasBackgroundColor() {
-		return this.backgroundColor !== undefined;
-	},
 	get hasText() {
 		return this.text !== undefined;
 	},

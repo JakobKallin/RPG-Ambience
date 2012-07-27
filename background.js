@@ -5,7 +5,7 @@ Ambience.Background = function(node) {
 	function play(newScene) {
 		scene = newScene;
 		
-		if ( scene.hasBackgroundColor ) {
+		if ( scene.backgroundColor ) {
 			node.style.backgroundColor = scene.backgroundColor;
 		}
 	}

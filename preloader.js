@@ -16,9 +16,9 @@ Ambience.Preloader = function() {
 	}
 	
 	function preloadImage(scene) {
-		if ( scene.hasImage ) {
+		if ( scene.image ) {
 			var img = document.createElement('img');
-			img.src = scene.imagePath;
+			img.src = scene.image;
 			node.appendChild(img);
 		}
 	}

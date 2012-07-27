@@ -21,7 +21,7 @@ Ambience.scene.base = {
 	get isVisual() {
 		// backgroundColor should be in this, but it makes sound-only effects block the scene. Should be fixed.
 		return (
-			this.imagePath !== undefined ||
+			this.image ||
 			this.videoPath !== undefined ||
 			this.text !== undefined
 		);
@@ -29,15 +29,12 @@ Ambience.scene.base = {
 	get isAudial() {
 		return this.soundPaths !== undefined;
 	},
-	get hasImage() {
-		return this.imagePath !== undefined;
-	},
 	get hasVideo() {
 		return this.videoPath !== undefined;
 	},
 	get hasOnlyVideo() {
 		return (
-			!this.hasImage &&
+			!this.image &&
 			!this.hasSound &&
 			!this.hasText
 		);
@@ -47,7 +44,7 @@ Ambience.scene.base = {
 	},
 	get hasOnlySound() {
 		return (
-			!this.hasImage &&
+			!this.image &&
 			!this.hasVideo &&
 			!this.hasText
 		);
@@ -116,7 +113,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			scene.name = String(value);
 		},
 		'image': function(value) {
-			scene.imagePath = encodeURI(effectivePath(value));
+			scene.image = encodeURI(effectivePath(value));
 		},
 		'image-style': function(value) {
 			if ( template.imageStyle ) {

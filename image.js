@@ -5,12 +5,12 @@ Ambience.Image = function(container) {
 	function play(newScene) {
 		scene = newScene;
 		
-		if ( scene.hasImage ) {
+		if ( scene.image ) {
 			node = document.createElement('div');
 			node.className = 'image';
 			container.insertBefore(node, container.firstChild);
 		
-			node.style.backgroundImage = 'url("' + scene.imagePath + '")';
+			node.style.backgroundImage = 'url("' + scene.image + '")';
 		
 		
 			for ( var property in scene.imageStyle ) {
@@ -23,7 +23,7 @@ Ambience.Image = function(container) {
 	}
 	
 	function stop() {
-		if ( scene.hasImage ) {
+		if ( scene.image ) {
 			container.removeChild(node);
 			node = null;
 		}

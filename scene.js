@@ -36,9 +36,6 @@ Ambience.scene.base = {
 			!this.text
 		);
 	},
-	get hasTextStyle() {
-		return this.textStyle !== undefined;
-	},
 	get fadeInDuration() {
 		if ( this.fadesIn ) {
 			return this.fadeDuration;
@@ -127,7 +124,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			scene.text = value;
 		},
 		'text-style': function(value) {
-			if ( template.hasTextStyle ) {
+			if ( template.textStyle ) {
 				scene.textStyle = Object.create(template.textStyle);
 			} else {
 				scene.textStyle = {};

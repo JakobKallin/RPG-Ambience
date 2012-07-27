@@ -6,7 +6,7 @@ Ambience.Text = function(container) {
 	function play(newScene) {
 		scene = newScene;
 		
-		if ( scene.hasText ) {
+		if ( scene.text ) {
 			outerNode = document.createElement('div');
 			outerNode.className = 'text';
 			innerNode = document.createElement('div');
@@ -23,7 +23,7 @@ Ambience.Text = function(container) {
 	}
 	
 	function stop() {
-		if ( scene.hasText ) {
+		if ( scene.text ) {
 			container.removeChild(outerNode);
 			outerNode = null;
 			innerNode = null;

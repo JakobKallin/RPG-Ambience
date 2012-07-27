@@ -33,11 +33,8 @@ Ambience.scene.base = {
 		return (
 			!this.image &&
 			!this.hasVideo &&
-			!this.hasText
+			!this.text
 		);
-	},
-	get hasText() {
-		return this.text !== undefined;
 	},
 	get hasTextStyle() {
 		return this.textStyle !== undefined;

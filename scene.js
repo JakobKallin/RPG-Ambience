@@ -29,13 +29,6 @@ Ambience.scene.base = {
 	get hasVideo() {
 		return this.videoPath !== undefined;
 	},
-	get hasOnlyVideo() {
-		return (
-			!this.image &&
-			!this.sounds &&
-			!this.hasText
-		);
-	},
 	get hasOnlySound() {
 		return (
 			!this.image &&

@@ -133,7 +133,7 @@ window.addEventListener('load', function() {
 		if ( name.length > 0 ) {
 			return adventure.scenes.first(function(scene) {
 				return (
-					scene.hasName &&
+					scene.name &&
 					scene.name.toUpperCase().startsWith(name.toUpperCase())
 				);
 			});

@@ -85,7 +85,7 @@ function Animation(object, property) {
 			
 			hasStarted = false;
 			
-			if ( onEnded !== undefined ) {
+			if ( onEnded ) {
 				onEnded();
 			}
 		}
@@ -96,7 +96,7 @@ function Animation(object, property) {
 			self.stop();
 			object[property] = endValue; // If there are rounding errors.
 			
-			if ( onCompleted !== undefined ) {
+			if ( onCompleted ) {
 				onCompleted();
 			}
 		}

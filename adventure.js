@@ -37,7 +37,7 @@ Ambience.Adventure.fromConfig = function(config) {
 		adventure.templates[templateName] = Ambience.scene.fromConfig(templateConfig, adventure.templates, basePath);
 	}
 	
-	if ( config.scenes !== undefined ) {
+	if ( config.scenes ) {
 		adventure.scenes = config.scenes.map(function(sceneConfig) {
 			return Ambience.scene.fromConfig(sceneConfig, adventure.templates, basePath);
 		});

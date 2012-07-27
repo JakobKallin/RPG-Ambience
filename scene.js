@@ -17,7 +17,7 @@ Ambience.scene.base = {
 		return (
 			this.image ||
 			this.video ||
-			this.text !== undefined
+			this.text
 		);
 	},
 	get hasOnlySound() {
@@ -55,7 +55,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 		basePath = '';
 	}
 	
-	if ( templateName === undefined ) {
+	if ( !templateName ) {
 		template = Ambience.scene.base;
 	} else if ( templateName in templateList ) {
 		template = templateList[templateName];

@@ -6,9 +6,9 @@ Ambience.Video = function(container) {
 	function play(newScene) {
 		scene = newScene;
 		
-		if ( scene.hasVideo ) {
+		if ( scene.video ) {
 			node = document.createElement('video');
-			node.src = scene.videoPath;
+			node.src = scene.video;
 			node.volume = 0;
 			node.className = 'video';
 			
@@ -21,7 +21,7 @@ Ambience.Video = function(container) {
 	}
 	
 	function stop() {
-		if ( scene.hasVideo ) {
+		if ( scene.video ) {
 			// The current volume compared to the scene's defined volume, if it has been halfway faded in.
 			var volumePercentage = node.volume / scene.volume;
 			var duration = scene.fadeDuration * volumePercentage
@@ -30,7 +30,7 @@ Ambience.Video = function(container) {
 	}
 	
 	function abort() {
-		if ( scene.hasVideo ) {
+		if ( scene.video ) {
 			fade.complete();
 			if ( !node.ended ) {
 				node.pause();

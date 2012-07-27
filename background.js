@@ -1,10 +1,7 @@
 Ambience.Background = function(node) {
-	var scene;
 	var defaultBackground = document.body.style.backgroundColor;
 	
-	function play(newScene) {
-		scene = newScene;
-		
+	function play(scene) {
 		if ( scene.backgroundColor ) {
 			node.style.backgroundColor = scene.backgroundColor;
 		}
@@ -12,8 +9,6 @@ Ambience.Background = function(node) {
 	
 	function stop() {
 		node.style.backgroundColor = defaultBackground;
-		
-		scene = null;
 	}
 	
 	return {

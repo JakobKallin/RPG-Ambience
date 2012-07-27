@@ -1,34 +1,24 @@
 Ambience.Image = function(container) {
-	var scene;
 	var node;
 	
-	function play(newScene) {
-		scene = newScene;
+	function play(scene) {
+		node = document.createElement('div');
+		node.className = 'image';
+		container.insertBefore(node, container.firstChild);
+	
+		node.style.backgroundImage = 'url("' + scene.image + '")';
 		
-		if ( scene.image ) {
-			node = document.createElement('div');
-			node.className = 'image';
-			container.insertBefore(node, container.firstChild);
-		
-			node.style.backgroundImage = 'url("' + scene.image + '")';
-		
-		
-			for ( var property in scene.imageStyle ) {
-				var cssValue = scene.imageStyle[property];
-				// Needs to be camelcase to work in Firefox and possibly other browsers.
-				var cssProperty = 'background-' + property;
-				node.style[cssProperty] = cssValue;
-			}
+		for ( var property in scene.imageStyle ) {
+			var cssValue = scene.imageStyle[property];
+			// Needs to be camelcase to work in Firefox and possibly other browsers.
+			var cssProperty = 'background-' + property;
+			node.style[cssProperty] = cssValue;
 		}
 	}
 	
 	function stop() {
-		if ( scene.image ) {
-			container.removeChild(node);
-			node = null;
-		}
-		
-		scene = null;
+		container.removeChild(node);
+		node = null;
 	}
 	
 	return {

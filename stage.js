@@ -6,11 +6,13 @@ Ambience.Stage = function(node) {
 	
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	
-	var image = new Ambience.Image(node);
-	var soundList = new Ambience.SoundList(stop);
-	var text = new Ambience.Text(node);
-	var background = new Ambience.Background(node);
-	var video = new Ambience.Video(node);
+	var parts = {
+		'background': new Ambience.Background(node),
+		'image': new Ambience.Image(node),
+		'sounds': new Ambience.SoundList(stop),
+		'text': new Ambience.Text(node),
+		'video': new Ambience.Video(node)
+	};
 	
 	stop();
 	
@@ -18,27 +20,35 @@ Ambience.Stage = function(node) {
 		node.style.visibility = 'hidden';
 		node.style.opacity = 0;
 		
+		for ( var part in parts ) {
+			if ( scene && scene[part] ) {
+				parts[part].stop();
+			}
+		}
+		/*
 		background.stop();
 		if (scene) { image.stop(); }
 		if (scene) { text.stop(); }
 		soundList.stop();
 		if (scene) { video.abort(); }
+		*/
 		stopFadeIn();
-		
-		scene = null;
-		
 		isFadingIn = false;
 		isFadingOut = false;
+		
+		scene = null;
 	}
 	
 	function playScene(newScene) {
 		scene = newScene;
+		
 		playFadeIn();
-		image.play(scene);
-		background.play(scene);
-		soundList.play(scene);
-		text.play(scene);
-		video.play(scene);
+		
+		for ( var part in parts ) {
+			if ( scene && scene[part] ) {
+				parts[part].play(scene);
+			}
+		}
 	}
 	
 	function playFadeIn() {
@@ -65,8 +75,8 @@ Ambience.Stage = function(node) {
 			} else {
 				isFadingOut = true;
 				
-				soundList.stop();
-				video.stop();
+				if ( scene.sounds ) { parts.sounds.stop(); }
+				if ( scene.video ) { parts.video.stop(); }
 				
 				// The current opacity compared to 1, if the scene has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;

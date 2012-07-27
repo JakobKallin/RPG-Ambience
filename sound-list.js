@@ -6,10 +6,9 @@ Ambience.SoundList = function(stopScene) {
 	
 	function play(newScene) {
 		scene = newScene;
-		if ( scene.sounds ) {
-			trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
-			playNextTrack(0);
-		}
+
+		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
+		playNextTrack(0);
 	}
 	
 	function playNextTrack(fadeDuration) {

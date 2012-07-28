@@ -14,6 +14,10 @@ Ambience.Sound = function(path, maxVolume, container) {
 	}
 	
 	function stop(fadeDuration) {
+		if ( fadeDuration === undefined ) {
+			fadeDuration = 0;
+		}
+		
 		// The current volume compared to the scene's defined volume, if it has been halfway faded in.
 		var volumePercentage = node.volume / maxVolume;
 		var duration = fadeDuration * volumePercentage
@@ -28,7 +32,7 @@ Ambience.Sound = function(path, maxVolume, container) {
 			} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
 			node.pause();
 		}
-		container.appendChild(node);
+		container.removeChild(node);
 	}
 	
 	return {

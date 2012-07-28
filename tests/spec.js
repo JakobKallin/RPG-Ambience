@@ -98,4 +98,31 @@ describe('Ambience', function() {
 			expect(audioNodes[0].volume).toBe(1);
 		});
 	});
+	
+	it('interrupts an audio fade halfway through', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.fadeDuration = 2000;
+			scene.sounds = ['test-music.ogg'];
+			ambience.playBackground(scene);
+		});
+		
+		waits(1000);
+		
+		runs(function() {
+			ambience.fadeOutBackground();
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			expect(audioNodes[0].volume).toBeLessThan(0.5);
+		});
+		
+		waits(1000);
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(0);
+		});
+	});
 });

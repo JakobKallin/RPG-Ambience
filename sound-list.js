@@ -43,7 +43,7 @@ Ambience.SoundList = function(container, stopScene) {
 	}
 	
 	function stop() {
-		sounds.map(function(sound) { sound.abort(); });
+		sounds.map(function(sound) { sound.stop(scene.fadeDuration); });
 		sounds = [];
 		scene = null;
 	}

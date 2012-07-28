@@ -184,4 +184,21 @@ describe('Ambience', function() {
 			expect(ambience.sceneIsPlaying).toBe(false);
 		});
 	});
+	
+	it('removes audio element when audio ends', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.image = 'test-image.jpg';
+			scene.sounds = ['test-sound.wav'];
+			scene.loops = false;
+			
+			ambience.playBackground(scene);
+		});
+		
+		waits(3000);
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(0);
+		});
+	});
 });

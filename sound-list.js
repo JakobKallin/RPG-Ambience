@@ -66,6 +66,7 @@ Ambience.SoundList = function(container, stopScene) {
 	
 	// We should remove tracks from the list once they are done, so they don't take up space.
 	function onTrackEnded(sound) {
+		sound.stop(); // This is important because it removes the <audio> element.
 		var index = sounds.indexOf(sound);
 		sounds.splice(index, 1);
 	}

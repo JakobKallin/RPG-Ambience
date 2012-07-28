@@ -9,7 +9,7 @@ Ambience.Stage = function(node) {
 	var parts = {
 		'background': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
-		'sounds': new Ambience.SoundList(stop),
+		'sounds': new Ambience.SoundList(node, stop),
 		'text': new Ambience.Text(node),
 		'video': new Ambience.Video(node)
 	};

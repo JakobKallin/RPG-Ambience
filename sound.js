@@ -1,4 +1,4 @@
-Ambience.Sound = function(path, maxVolume) {
+Ambience.Sound = function(path, maxVolume, container) {
 	var node = document.createElement('audio');
 	node.src = path;
 	node.volume = 0;
@@ -9,6 +9,7 @@ Ambience.Sound = function(path, maxVolume) {
 		node.addEventListener('ended', callbacks.onEnded);
 		node.addEventListener('timeupdate', callbacks.onTimeUpdate);
 		fade.start(maxVolume, fadeDuration);
+		container.appendChild(node);
 		node.play();
 	}
 	
@@ -27,6 +28,7 @@ Ambience.Sound = function(path, maxVolume) {
 			} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
 			node.pause();
 		}
+		container.appendChild(node);
 	}
 	
 	return {

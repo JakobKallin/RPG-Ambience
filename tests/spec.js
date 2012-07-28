@@ -49,6 +49,32 @@ describe('Ambience', function() {
 		});
 	});
 	
+	it('interrupts a fade halfway through', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.fadeDuration = 2000;
+			ambience.playBackground(scene);
+		});
+		
+		waits(1000);
+		
+		runs(function() {
+			ambience.fadeOutBackground();
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.5);
+		});
+		
+		waits(1000);
+		
+		runs(function() {
+			expect(Number(backgroundNode.style.opacity)).toBe(0);
+		});
+	});
+	
 	it('fades audio volume', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);

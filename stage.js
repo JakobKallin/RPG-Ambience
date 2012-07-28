@@ -7,7 +7,7 @@ Ambience.Stage = function(node) {
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	
 	var parts = {
-		'background': new Ambience.Background(node),
+		'backgroundColor': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
 		'sounds': new Ambience.SoundList(stop),
 		'text': new Ambience.Text(node),

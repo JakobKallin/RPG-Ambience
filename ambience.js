@@ -28,13 +28,6 @@ Ambience = function(background, foreground) {
 		foreground.stopScene();
 	}
 	
-	function sceneIsPlaying() {
-		return Boolean(
-			background.scene ||
-			foreground.scene
-		);
-	};
-	
 	function fadeOutForeground() {
 		foreground.fadeOutScene();
 	}
@@ -50,6 +43,12 @@ Ambience = function(background, foreground) {
 		playForeground: playForeground,
 		stopForeground: stopForeground,
 		fadeOutForeground: fadeOutForeground,
-		fadeOutBackground: fadeOutBackground
+		fadeOutBackground: fadeOutBackground,
+		get sceneIsPlaying() {
+				return Boolean(
+				background.scene ||
+				foreground.scene
+			);
+		}
 	};
 };

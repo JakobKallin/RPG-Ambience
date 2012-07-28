@@ -162,4 +162,26 @@ describe('Ambience', function() {
 			expect(backgroundNode.querySelectorAll('.video').length).toBe(0);
 		});
 	});
+	
+	it('stops non-looping audio-only scenes when audio ends', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.sounds = ['test-sound.wav'];
+			scene.loops = false;
+			
+			ambience.playBackground(scene);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			expect(ambience.sceneIsPlaying).toBe(true);
+		});
+		
+		waits(3000);
+		
+		runs(function() {
+			expect(ambience.sceneIsPlaying).toBe(false);
+		});
+	});
 });

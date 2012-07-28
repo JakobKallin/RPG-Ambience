@@ -32,7 +32,12 @@ function Animation(object, property) {
 			value = Math.max(value, endValue);
 		}
 		
-		object[property] = value;
+		if ( isNaN(value) ) {
+			// Prevent horrible volume bug for <audio> elements.
+			throw new Error('There was an error in the animation.');
+		} else {
+			object[property] = value;
+		}
 		
 		if ( tickIndex === lastTickIndex ) {
 			self.complete();
@@ -94,7 +99,13 @@ function Animation(object, property) {
 	this.complete = function() {
 		if ( hasStarted ) {
 			self.stop();
-			object[property] = endValue; // If there are rounding errors.
+			
+			if ( isNaN(value) ) {
+				// Prevent horrible volume bug for <audio> elements.
+				throw new Error('There was an error in the animation.');
+			} else {
+				object[property] = endValue; // If there are rounding errors.
+			}
 			
 			if ( onCompleted ) {
 				onCompleted();

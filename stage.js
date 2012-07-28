@@ -8,7 +8,7 @@ Ambience.Stage = function(node) {
 	var stopTimer;
 	
 	var parts = {
-		'background': new Ambience.Background(node),
+		'backgroundColor': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
 		'sounds': new Ambience.SoundList(node, stopScene),
 		'text': new Ambience.Text(node),

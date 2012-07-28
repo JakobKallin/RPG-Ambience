@@ -12,13 +12,14 @@ describe('Ambience', function() {
 		backgroundNode = document.createElement('div');
 		document.body.appendChild(backgroundNode);
 		background = new Ambience.Stage(backgroundNode);
-		audioNodes = backgroundNode.getElementsByTagName('audio');
 		
 		foregroundNode = document.createElement('div');
 		document.body.appendChild(foregroundNode);
 		foreground = new Ambience.Stage(foregroundNode);
 		
 		ambience = new Ambience(background, foreground);
+		
+		audioNodes = backgroundNode.getElementsByTagName('audio');
 	});
 	
 	afterEach(function() {
@@ -123,6 +124,42 @@ describe('Ambience', function() {
 		
 		runs(function() {
 			expect(audioNodes.length).toBe(0);
+		});
+	});
+	
+	it('stops all stages after fading out', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.fadeDuration = 1000;
+			scene.backgroundColor = 'red';
+			scene.image = 'test-image.jpg';
+			scene.sounds = ['test-music.ogg'];
+			scene.text = 'Test';
+			scene.video = 'test-video.webm';
+			
+			ambience.playBackground(scene);
+			
+			expect(backgroundNode.style.backgroundColor).toBe('red');
+			expect(backgroundNode.querySelectorAll('.image').length).toBe(1);
+			expect(audioNodes.length).toBe(1);
+			expect(backgroundNode.querySelectorAll('.text').length).toBe(1);
+			expect(backgroundNode.querySelectorAll('.video').length).toBe(1);
+		});
+		
+		waits(1500);
+		
+		runs(function() {
+			ambience.fadeOutBackground();
+		});
+		
+		waits(1500);
+		
+		runs(function() {
+			expect(backgroundNode.style.backgroundColor).toBe(Ambience.scene.base.backgroundColor);
+			expect(backgroundNode.querySelectorAll('.image').length).toBe(0);
+			expect(audioNodes.length).toBe(0);
+			expect(backgroundNode.querySelectorAll('.text').length).toBe(0);
+			expect(backgroundNode.querySelectorAll('.video').length).toBe(0);
 		});
 	});
 });

@@ -18,14 +18,14 @@ Ambience.Video = function(container) {
 		node.play();
 	}
 	
-	function stop() {
+	function fadeOut() {
 		// The current volume compared to the scene's defined volume, if it has been halfway faded in.
 		var volumePercentage = node.volume / scene.volume;
 		var duration = scene.fadeDuration * volumePercentage
-		fade.start(0, duration, {onCompleted: abort});
+		fade.start(0, duration);
 	}
 	
-	function abort() {
+	function stop() {
 		fade.complete();
 		if ( !node.ended ) {
 			node.pause();
@@ -37,7 +37,7 @@ Ambience.Video = function(container) {
 	
 	return {
 		play: play,
-		stop: stop,
-		abort: abort
+		fadeOut: fadeOut,
+		stop: stop
 	};
 };

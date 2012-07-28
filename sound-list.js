@@ -42,8 +42,12 @@ Ambience.SoundList = function(container, stopScene) {
 		}
 	}
 	
+	function fadeOut() {
+		sounds.map(function(sound) { sound.fadeOut(scene.fadeDuration); });
+	}
+	
 	function stop() {
-		sounds.map(function(sound) { sound.stop(scene.fadeDuration); });
+		sounds.map(function(sound) { sound.stop(); });
 		sounds = [];
 		scene = null;
 	}
@@ -80,6 +84,7 @@ Ambience.SoundList = function(container, stopScene) {
 	
 	return {
 		play: play,
+		fadeOut: fadeOut,
 		stop: stop
 	};
 };

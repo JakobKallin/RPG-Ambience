@@ -13,18 +13,18 @@ Ambience.Sound = function(path, maxVolume, container) {
 		node.play();
 	}
 	
-	function stop(fadeDuration) {
-		if ( fadeDuration === undefined ) {
-			fadeDuration = 0;
+	function fadeOut(duration) {
+		if ( duration === undefined ) {
+			duration = 0;
 		}
 		
 		// The current volume compared to the scene's defined volume, if it has been halfway faded in.
 		var volumePercentage = node.volume / maxVolume;
-		var duration = fadeDuration * volumePercentage
-		fade.start(0, duration, {onCompleted: abort});
+		var actualDuration = duration * volumePercentage
+		fade.start(0, actualDuration);
 	}
 	
-	function abort() {
+	function stop() {
 		fade.complete();
 		if ( !node.ended ) {
 			try {
@@ -37,7 +37,7 @@ Ambience.Sound = function(path, maxVolume, container) {
 	
 	return {
 		play: play,
-		stop: stop,
-		abort: abort
+		fadeOut: fadeOut,
+		stop: stop
 	};
 };

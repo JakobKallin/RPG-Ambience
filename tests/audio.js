@@ -111,4 +111,25 @@ describe('Ambience audio', function() {
 			expect(audioNodes.length).toBe(0);
 		});
 	});
+	
+	it('crosses over', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.crossoverDuration = 2;
+			scene.sounds = ['test-music-5s.ogg', 'test-music-5s.ogg'];
+			ambience.playBackground(scene);
+		});
+		
+		waits(4000);
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(2);
+		});
+		
+		waits(2000);
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(1);
+		});
+	});
 });

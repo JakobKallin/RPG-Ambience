@@ -132,4 +132,40 @@ describe('Ambience audio', function() {
 			expect(audioNodes.length).toBe(1);
 		});
 	});
+	
+	// The test below requires some work to implement. It prevents too long crossover durations from endlessly creating new audio as soon as a track starts.
+	/*
+	       7.5  10   12.5
+	_ _ _ _ _ _ _
+	        _ _ _ _ _ _
+	              _ _ _ _ _ _ _
+	*/
+	/*
+	it('crosses over at most half of audio length', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.crossoverDuration = 6;
+			scene.sounds = ['test-music-10s.ogg', 'test-music-5s.ogg', 'test-music-10s.ogg'];
+			ambience.playBackground(scene);
+		});
+		
+		waits(8500); // 8.5
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(2);
+		});
+		
+		waits(2500); // 11.0
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(2);
+		});
+		
+		waits(2500); // 13.5
+		
+		runs(function() {
+			expect(audioNodes.length).toBe(1);
+		});
+	});
+	*/
 });

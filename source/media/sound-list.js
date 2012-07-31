@@ -73,7 +73,7 @@ Ambience.SoundList = function(container, stopScene) {
 	
 	function crossover() {
 		if ( scene.crossfades ) {
-			sounds.map(function(sound) { sound.stop(scene.crossoverDurationMillis); });
+			sounds.map(function(sound) { sound.fadeOut(scene.crossoverDurationMillis); });
 			playNextTrack(scene.crossoverDurationMillis);
 		} else {
 			// New track starts early but does not fade in.

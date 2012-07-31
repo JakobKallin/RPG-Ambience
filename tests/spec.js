@@ -82,7 +82,7 @@ describe('Ambience layer', function() {
 			scene.fadeDuration = 1000;
 			scene.backgroundColor = 'red';
 			scene.image = 'test-image.jpg';
-			scene.sounds = ['test-music.ogg'];
+			scene.sounds = ['test-audio.ogg'];
 			scene.text = 'Test';
 			scene.video = 'test-video.webm';
 			

@@ -26,7 +26,7 @@ describe('Ambience audio', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.fadeDuration = 2000;
-			scene.sounds = ['test-music.ogg'];
+			scene.sounds = ['test-audio.ogg'];
 			ambience.playBackground(scene);
 		});
 		
@@ -50,7 +50,7 @@ describe('Ambience audio', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.fadeDuration = 2000;
-			scene.sounds = ['test-music.ogg'];
+			scene.sounds = ['test-audio.ogg'];
 			ambience.playBackground(scene);
 		});
 		
@@ -76,7 +76,7 @@ describe('Ambience audio', function() {
 	it('stops non-looping audio-only scenes when audio ends', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
-			scene.sounds = ['test-sound.wav'];
+			scene.sounds = ['test-audio-2s.ogg'];
 			scene.loops = false;
 			
 			ambience.playBackground(scene);
@@ -99,7 +99,7 @@ describe('Ambience audio', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.image = 'test-image.jpg';
-			scene.sounds = ['test-sound.wav'];
+			scene.sounds = ['test-audio-2s.ogg'];
 			scene.loops = false;
 			
 			ambience.playBackground(scene);
@@ -116,7 +116,7 @@ describe('Ambience audio', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.crossoverDuration = 2;
-			scene.sounds = ['test-music-5s.ogg', 'test-music-5s.ogg'];
+			scene.sounds = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
 			ambience.playBackground(scene);
 		});
 		
@@ -145,7 +145,7 @@ describe('Ambience audio', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.crossoverDuration = 6;
-			scene.sounds = ['test-music-10s.ogg', 'test-music-5s.ogg', 'test-music-10s.ogg'];
+			scene.sounds = ['test-audio-10s.ogg', 'test-audio-5s.ogg', 'test-audio-10s.ogg'];
 			ambience.playBackground(scene);
 		});
 		
@@ -168,4 +168,24 @@ describe('Ambience audio', function() {
 		});
 	});
 	*/
+	
+	it('crossfades', function() {
+		runs(function() {
+			var scene = Object.create(Ambience.scene.base);
+			scene.crossoverDuration = 2;
+			scene.crossfades = true;
+			scene.sounds = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
+			ambience.playBackground(scene);
+		});
+		
+		waits(4000); // Tracks should have the same volume at this point.
+		
+		runs(function() {
+			expect(audioNodes[0].volume).toBeGreaterThan(0.25);
+			expect(audioNodes[0].volume).toBeLessThan(0.75);
+			
+			expect(audioNodes[1].volume).toBeGreaterThan(0.25);
+			expect(audioNodes[1].volume).toBeLessThan(0.75);
+		});
+	});
 });

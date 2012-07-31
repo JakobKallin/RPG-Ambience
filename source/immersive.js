@@ -16,7 +16,7 @@ window.addEventListener('load', function() {
 	var fileChooser = document.getElementById('file-chooser');
 	var menu = document.getElementById('menu');
 	
-	var preloader = new Ambience.Preloader();
+	var preloader = new Preloader();
 	
 	var adventure;
 	var adventureCallbacks = {

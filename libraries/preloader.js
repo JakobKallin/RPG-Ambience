@@ -1,4 +1,4 @@
-Ambience.Preloader = function() {
+var Preloader = function() {
 	var node = document.createElement('div');
 	node.style.display = 'none';
 	document.body.appendChild(node);

@@ -11,11 +11,11 @@ describe('Ambience layer', function() {
 	beforeEach(function() {
 		backgroundNode = document.createElement('div');
 		document.body.appendChild(backgroundNode);
-		background = new Ambience.Stage(backgroundNode);
+		background = new Ambience.Layer(backgroundNode);
 		
 		foregroundNode = document.createElement('div');
 		document.body.appendChild(foregroundNode);
-		foreground = new Ambience.Stage(foregroundNode);
+		foreground = new Ambience.Layer(foregroundNode);
 		
 		ambience = new Ambience(background, foreground);
 		
@@ -76,7 +76,7 @@ describe('Ambience layer', function() {
 		});
 	});
 	
-	it('stops all stages after fading out', function() {
+	it('stops all layers after fading out', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.fadeDuration = 1000;

@@ -8,10 +8,10 @@ describe('Ambience audio', function() {
 	beforeEach(function() {
 		backgroundNode = document.createElement('div');
 		document.body.appendChild(backgroundNode);
-		background = new Ambience.Stage(backgroundNode);
+		background = new Ambience.Layer(backgroundNode);
 		
 		var foregroundNode = document.createElement('div');
-		var foreground = new Ambience.Stage(foregroundNode);
+		var foreground = new Ambience.Layer(foregroundNode);
 		
 		ambience = new Ambience(background, foreground);
 		

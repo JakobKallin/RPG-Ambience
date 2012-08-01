@@ -2,10 +2,10 @@ Ambience.immersive = {};
 
 window.addEventListener('load', function() {
 	var backgroundNode = document.getElementById('background');
-	var background = new Ambience.Stage(backgroundNode);
+	var background = new Ambience.Layer(backgroundNode);
 	
 	var foregroundNode = document.getElementById('foreground');
-	var foreground = new Ambience.Stage(foregroundNode);
+	var foreground = new Ambience.Layer(foregroundNode);
 	
 	var ambience = new Ambience(background, foreground);
 	
@@ -26,7 +26,7 @@ window.addEventListener('load', function() {
 		onAdventureLoaded: function(newAdventure) {
 			adventure = newAdventure;
 			hideMenu();
-			enableStages();
+			enableLayers();
 			preloader.preloadMedia(adventure);
 		},
 		onError: function(error) {
@@ -164,7 +164,7 @@ window.addEventListener('load', function() {
 		ambience.play(scene);
 	}
 	
-	function enableStages() {
+	function enableLayers() {
 		document.addEventListener('keydown', onKeyDown);
 		document.addEventListener('keypress', onKeyPress);
 		

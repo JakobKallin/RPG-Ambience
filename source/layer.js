@@ -1,4 +1,4 @@
-Ambience.Stage = function(node) {
+Ambience.Layer = function(node) {
 	var scene;
 	
 	var isFadingIn;

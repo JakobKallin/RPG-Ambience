@@ -18,7 +18,7 @@ html, body{
 	visibility: hidden;
 }
 
-.stage {
+.layer {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -29,7 +29,7 @@ html, body{
 	cursor: inherit;
 }
 
-.stage .image {
+.layer .image {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -41,7 +41,7 @@ html, body{
 	height: 100%;
 }
 
-.stage .video {
+.layer .video {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -50,13 +50,13 @@ html, body{
 	height: 100%;
 }
 
-.stage .text {
+.layer .text {
 	display: table;
 	height: 100%;
 	margin: 0 auto;
 }
 
-.stage .text div {
+.layer .text div {
 	display: table-cell;
 	vertical-align: middle;
 	text-align: center;

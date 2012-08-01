@@ -1,27 +1,25 @@
+
 <!doctype html>
 <html>
 	<head>
 		<title>Ambience</title>
 		
-		<script src="functions.js"></script>
-		<script src="js-yaml.js"></script>
-		<script src="animation.js"></script>
-		<script src="ambience.js"></script>
-		<script src="preloader.js"></script>
-		<script src="adventure.js"></script>
-		<script src="image.js"></script>
-		<script src="sound-list.js"></script>
-		<script src="sound.js"></script>
-		<script src="background.js"></script>
-		<script src="media.js"></script>
-		<script src="video.js"></script>
-		<script src="stage.js"></script>
-		<script src="text.js"></script>
-		<script src="scene.js"></script>
-		<script src="immersive.js"></script>
-		<script>
-			Ambience.immersive.start();
-		</script>
+		<script src="libraries/functions.js"></script>
+		<script src="libraries/js-yaml.js"></script>
+		<script src="libraries/animation.js"></script>
+		<script src="libraries/preloader.js"></script>
+		
+		<script src="source/ambience.js"></script>
+		<script src="source/adventure.js"></script>
+		<script src="source/media/image.js"></script>
+		<script src="source/media/sound-list.js"></script>
+		<script src="source/media/sound.js"></script>
+		<script src="source/media/background.js"></script>
+		<script src="source/media/video.js"></script>
+		<script src="source/media/text.js"></script>
+		<script src="source/layer.js"></script>
+		<script src="source/scene.js"></script>
+		<script src="source/immersive.js"></script>
 		
 		<link rel="stylesheet" type="text/css" href="ambience.css">
 	</head>
@@ -36,9 +34,9 @@
 			<textarea id="editor-input"></textarea>
 		</div>
 		<div id="theater">
-			<div id="scene-stage" class="stage">
+			<div id="background" class="layer">
 			</div>
-			<div id="effect-stage" class="stage">
+			<div id="foreground" class="layer">
 			</div>
 		</div>
 	</body>

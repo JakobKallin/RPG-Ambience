@@ -32,7 +32,12 @@ function Animation(object, property) {
 			value = Math.max(value, endValue);
 		}
 		
-		object[property] = value;
+		if ( isNaN(value) ) {
+			// Prevent horrible volume bug for <audio> elements.
+			throw new Error('There was an error in the animation.');
+		} else {
+			object[property] = value;
+		}
 		
 		if ( tickIndex === lastTickIndex ) {
 			self.complete();
@@ -52,8 +57,8 @@ function Animation(object, property) {
 		
 		endValue = newEndValue;
 		duration = newDuration;
-		onCompleted = callbacks.completed;
-		onEnded = callbacks.ended;
+		onCompleted = callbacks.onCompleted;
+		onEnded = callbacks.onEnded;
 		
 		value = startValue = Number(object[property]);
 		difference = endValue - startValue;
@@ -85,7 +90,7 @@ function Animation(object, property) {
 			
 			hasStarted = false;
 			
-			if ( onEnded !== undefined ) {
+			if ( onEnded ) {
 				onEnded();
 			}
 		}
@@ -94,9 +99,15 @@ function Animation(object, property) {
 	this.complete = function() {
 		if ( hasStarted ) {
 			self.stop();
-			object[property] = endValue; // If there are rounding errors.
 			
-			if ( onCompleted !== undefined ) {
+			if ( isNaN(value) ) {
+				// Prevent horrible volume bug for <audio> elements.
+				throw new Error('There was an error in the animation.');
+			} else {
+				object[property] = endValue; // If there are rounding errors.
+			}
+			
+			if ( onCompleted ) {
 				onCompleted();
 			}
 		}

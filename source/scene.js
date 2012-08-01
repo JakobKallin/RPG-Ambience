@@ -1,7 +1,7 @@
 Ambience.scene = {};
 
-Ambience.scene.scene = {
-	type: 'scene',
+Ambience.scene.base = {
+	layer: 'background',
 	fadeDuration: 0,
 	fadesIn: true,
 	fadesOut: true,
@@ -12,60 +12,20 @@ Ambience.scene.scene = {
 	backgroundColor: 'black',
 	volume: 1,
 	imageDelay: 0,
-	get hasName() {
-		return this.name !== undefined;
-	},
-	get hasKey() {
-		return this.key !== undefined;
-	},
-	get isScene() {
-		return this.type === 'scene';
-	},
-	get isEffect() {
-		return this.type === 'effect';
-	},
 	get isVisual() {
-		// backgroundColor should be in this, but it makes sound-only effects block the scene. Will be fixed.
+		// backgroundColor should be in this, but it makes sound-only effects block the scene. Should be fixed.
 		return (
-			this.imagePath !== undefined ||
-			this.videoPath !== undefined ||
-			this.text !== undefined
+			this.image ||
+			this.video ||
+			this.text
 		);
-	},
-	get isAudial() {
-		return this.soundPaths !== undefined;
-	},
-	get hasImage() {
-		return this.imagePath !== undefined;
-	},
-	get hasVideo() {
-		return this.videoPath !== undefined;
-	},
-	get hasOnlyVideo() {
-		return (
-			!this.hasImage &&
-			!this.hasSound &&
-			!this.hasText
-		);
-	},
-	get hasSound() {
-		return this.soundPaths !== undefined;
 	},
 	get hasOnlySound() {
 		return (
-			!this.hasImage &&
-			!this.hasVideo &&
-			!this.hasText
+			!this.image &&
+			!this.video &&
+			!this.text
 		);
-	},
-	get hasBackgroundColor() {
-		return this.backgroundColor !== undefined;
-	},
-	get hasText() {
-		return this.text !== undefined;
-	},
-	get hasTextStyle() {
-		return this.textStyle !== undefined;
 	},
 	get fadeInDuration() {
 		if ( this.fadesIn ) {
@@ -86,10 +46,6 @@ Ambience.scene.scene = {
 	}
 };
 
-Ambience.scene.effect = Object.create(Ambience.scene.scene);
-Ambience.scene.effect.type = 'effect';
-Ambience.scene.effect.loops = false;
-
 Ambience.scene.fromConfig = function(config, templateList, basePath) {
 	var scene;
 	var template;
@@ -99,12 +55,8 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 		basePath = '';
 	}
 	
-	if ( templateName === undefined ) {
-		if ( config.type === 'effect' ) {
-			template = Ambience.scene.effect;
-		} else {
-			template = Ambience.scene.scene;
-		}
+	if ( !templateName ) {
+		template = Ambience.scene.base;
 	} else if ( templateName in templateList ) {
 		template = templateList[templateName];
 	} else {
@@ -117,11 +69,11 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 	
 	scene = Object.create(template);
 	var read = {
-		'type': function(value) {
-			if ( value !== 'effect' ) {
-				value = 'scene';
+		'layer': function(value) {
+			if ( value !== 'foreground' ) {
+				value = 'background';
 			}
-			scene.type = value;
+			scene.layer = value;
 		},
 		'key': function(value) {
 			scene.key = String(value);
@@ -130,7 +82,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			scene.name = String(value);
 		},
 		'image': function(value) {
-			scene.imagePath = encodeURI(effectivePath(value));
+			scene.image = encodeURI(effectivePath(value));
 		},
 		'image-style': function(value) {
 			if ( template.imageStyle ) {
@@ -147,7 +99,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			if ( !(value instanceof Array) ) {
 				value = [value];
 			}
-			scene.soundPaths = value.map(effectivePath).map(encodeURI);
+			scene.sounds = value.map(effectivePath).map(encodeURI);
 		},
 		'sound-order': function(value) {
 			scene.soundOrder = value;
@@ -163,7 +115,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			scene.text = value;
 		},
 		'text-style': function(value) {
-			if ( template.hasTextStyle ) {
+			if ( template.textStyle ) {
 				scene.textStyle = Object.create(template.textStyle);
 			} else {
 				scene.textStyle = {};
@@ -174,7 +126,7 @@ Ambience.scene.fromConfig = function(config, templateList, basePath) {
 			}
 		},
 		'video': function(value) {
-			scene.videoPath = encodeURI(effectivePath(value));
+			scene.video = encodeURI(effectivePath(value));
 		},
 		'fade': function(value) {
 			scene.fadeDuration = value * 1000;

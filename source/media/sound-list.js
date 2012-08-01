@@ -1,4 +1,4 @@
-Ambience.SoundList = function(stopScene) {
+Ambience.SoundList = function(container, stopScene) {
 	var scene;
 	var trackIndex;
 	var sounds = [];
@@ -6,10 +6,9 @@ Ambience.SoundList = function(stopScene) {
 	
 	function play(newScene) {
 		scene = newScene;
-		if ( scene.hasSound ) {
-			trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
-			playNextTrack(0);
-		}
+
+		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
+		playNextTrack(scene.fadeDuration);
 	}
 	
 	function playNextTrack(fadeDuration) {
@@ -17,9 +16,9 @@ Ambience.SoundList = function(stopScene) {
 		var hasPlayedBefore = trackIndex !== -1;
 		
 		if ( scene.soundOrder === 'random' ) {
-			trackIndex = scene.soundPaths.randomIndex();
+			trackIndex = scene.sounds.randomIndex();
 		} else {
-			trackIndex = (trackIndex + 1) % scene.soundPaths.length;
+			trackIndex = (trackIndex + 1) % scene.sounds.length;
 		}
 		
 		var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
@@ -28,8 +27,8 @@ Ambience.SoundList = function(stopScene) {
 		if ( oneShot && allTracksHavePlayed ) {
 			stopScene();
 		} else if ( scene.loops || !allTracksHavePlayed ) {
-			var trackPath = scene.soundPaths[trackIndex];
-			var sound = new Ambience.Sound(trackPath, scene.volume);
+			var trackPath = scene.sounds[trackIndex];
+			var sound = new Ambience.Sound(trackPath, scene.volume, container);
 			sound.play(
 				fadeDuration,
 				{
@@ -43,8 +42,12 @@ Ambience.SoundList = function(stopScene) {
 		}
 	}
 	
+	function fadeOut() {
+		sounds.map(function(sound) { sound.fadeOut(scene.fadeDuration); });
+	}
+	
 	function stop() {
-		sounds.map(function(sound) { sound.abort(); });
+		sounds.map(function(sound) { sound.stop(); });
 		sounds = [];
 		scene = null;
 	}
@@ -63,13 +66,14 @@ Ambience.SoundList = function(stopScene) {
 	
 	// We should remove tracks from the list once they are done, so they don't take up space.
 	function onTrackEnded(sound) {
+		sound.stop(); // This is important because it removes the <audio> element.
 		var index = sounds.indexOf(sound);
 		sounds.splice(index, 1);
 	}
 	
 	function crossover() {
 		if ( scene.crossfades ) {
-			sounds.map(function(sound) { sound.stop(scene.crossoverDurationMillis); });
+			sounds.map(function(sound) { sound.fadeOut(scene.crossoverDurationMillis); });
 			playNextTrack(scene.crossoverDurationMillis);
 		} else {
 			// New track starts early but does not fade in.
@@ -81,6 +85,7 @@ Ambience.SoundList = function(stopScene) {
 	
 	return {
 		play: play,
+		fadeOut: fadeOut,
 		stop: stop
 	};
 };

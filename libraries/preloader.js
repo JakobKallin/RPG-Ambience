@@ -1,4 +1,4 @@
-Ambience.Preloader = function() {
+var Preloader = function() {
 	var node = document.createElement('div');
 	node.style.display = 'none';
 	document.body.appendChild(node);
@@ -16,16 +16,16 @@ Ambience.Preloader = function() {
 	}
 	
 	function preloadImage(scene) {
-		if ( scene.hasImage ) {
+		if ( scene.image ) {
 			var img = document.createElement('img');
-			img.src = scene.imagePath;
+			img.src = scene.image;
 			node.appendChild(img);
 		}
 	}
 	
 	function preloadSound(scene) {
-		if ( scene.hasSound ) {
-			scene.soundPaths.map(function(path) {
+		if ( scene.sounds ) {
+			scene.sounds.map(function(path) {
 				var audio = document.createElement('audio');
 				audio.src = path;
 				audio.volume = 0;

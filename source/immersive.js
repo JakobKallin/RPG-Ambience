@@ -1,16 +1,22 @@
-Ambience.immersive = function() {
-	var sceneStage;
-	var effectStage;
-	var ambience;
+Ambience.immersive = {};
+
+window.addEventListener('load', function() {
+	var backgroundNode = document.getElementById('background');
+	var background = new Ambience.Layer(backgroundNode);
 	
-	var editor;
-	var editorInput;
-	var theater;
+	var foregroundNode = document.getElementById('foreground');
+	var foreground = new Ambience.Layer(foregroundNode);
 	
-	var fileChooser;
-	var menu;
+	var ambience = new Ambience(background, foreground);
 	
-	var preloader;
+	var editor = document.getElementById('editor');
+	var editorInput = document.getElementById('editor-input');
+	var theater = document.getElementById('theater');
+	
+	var fileChooser = document.getElementById('file-chooser');
+	var menu = document.getElementById('menu');
+	
+	var preloader = new Preloader();
 	
 	var adventure;
 	var adventureCallbacks = {
@@ -20,7 +26,7 @@ Ambience.immersive = function() {
 		onAdventureLoaded: function(newAdventure) {
 			adventure = newAdventure;
 			hideMenu();
-			enableStages();
+			enableLayers();
 			preloader.preloadMedia(adventure);
 		},
 		onError: function(error) {
@@ -142,7 +148,7 @@ Ambience.immersive = function() {
 		if ( name.length > 0 ) {
 			return adventure.scenes.first(function(scene) {
 				return (
-					scene.hasName &&
+					scene.name &&
 					scene.name.toUpperCase().startsWith(name.toUpperCase())
 				);
 			});
@@ -154,17 +160,17 @@ Ambience.immersive = function() {
 	function keyedScene(keyString) {
 		return adventure.scenes.first(function(scene) {
 			return (
-				scene.hasKey &&
+				scene.key &&
 				scene.key.toUpperCase() === keyString.toUpperCase()
 			);
 		});
 	}
 	
 	function fadeOutOne() {
-		if ( effectStage.scene ) {
-			ambience.fadeOutEffect();
-		} else if ( sceneStage.scene ) {
-			ambience.fadeOutScene();
+		if ( foreground.scene ) {
+			ambience.fadeOutForeground();
+		} else if ( background.scene ) {
+			ambience.fadeOutBackground();
 		}
 	}
 	
@@ -173,7 +179,7 @@ Ambience.immersive = function() {
 		ambience.play(scene);
 	}
 	
-	function enableStages() {
+	function enableLayers() {
 		document.addEventListener('keydown', onKeyDown);
 		document.addEventListener('keypress', onKeyPress);
 		

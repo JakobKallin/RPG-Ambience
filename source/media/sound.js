@@ -3,6 +3,7 @@ Ambience.Sound = function(path, maxVolume, container) {
 	node.src = path;
 	node.volume = 0;
 	
+	var hasStopped = false;
 	var fade = new Animation(node, 'volume');
 	
 	function play(fadeDuration, callbacks) {
@@ -25,14 +26,19 @@ Ambience.Sound = function(path, maxVolume, container) {
 	}
 	
 	function stop() {
-		fade.complete();
-		if ( !node.ended ) {
-			try {
-				node.currentTime = 0;
-			} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
-			node.pause();
+		// Make sure that the sound is playing before stopping it, because the sound may already have been stopped after a one-shot audio-only scene.
+		if ( !hasStopped ) {
+			hasStopped = true;
+			
+			fade.complete();
+			if ( !node.ended ) {
+				try {
+					node.currentTime = 0;
+				} catch(e) {} // We do this because there is a small stutter at the start when playing the same file twice in a row.
+				node.pause();
+			}
+			container.removeChild(node);
 		}
-		container.removeChild(node);
 	}
 	
 	return {

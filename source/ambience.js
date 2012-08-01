@@ -10,22 +10,19 @@ Ambience = function(background, foreground) {
 	}
 	
 	function playBackground(scene) {
-		stopBackground(scene);
 		background.playScene(scene);
 	}
 	
-	function stopBackground() {
-		background.stopScene();
-		stopForeground();
+	function stopBackground(nextScene) {
+		background.stopScene(nextScene);
 	}
 	
 	function playForeground(scene) {
-		stopForeground();
 		foreground.playScene(scene);
 	}
 	
-	function stopForeground() {
-		foreground.stopScene();
+	function stopForeground(nextScene) {
+		foreground.stopScene(nextScene);
 	}
 	
 	function fadeOutForeground() {
@@ -38,9 +35,7 @@ Ambience = function(background, foreground) {
 	
 	return {
 		play: play,
-		playBackground: playBackground,
 		stopBackground: stopBackground,
-		playForeground: playForeground,
 		stopForeground: stopForeground,
 		fadeOutForeground: fadeOutForeground,
 		fadeOutBackground: fadeOutBackground,

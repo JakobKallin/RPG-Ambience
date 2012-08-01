@@ -31,7 +31,7 @@ describe('Ambience layer', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.fadeDuration = 2000;
-			ambience.playBackground(scene);
+			ambience.play(scene);
 		});
 		
 		waits(1000);
@@ -54,7 +54,7 @@ describe('Ambience layer', function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);
 			scene.fadeDuration = 2000;
-			ambience.playBackground(scene);
+			ambience.play(scene);
 		});
 		
 		waits(1000);
@@ -86,7 +86,7 @@ describe('Ambience layer', function() {
 			scene.text = 'Test';
 			scene.video = 'test-video.webm';
 			
-			ambience.playBackground(scene);
+			ambience.play(scene);
 			
 			expect(backgroundNode.style.backgroundColor).toBe('red');
 			expect(backgroundNode.querySelectorAll('.image').length).toBe(1);

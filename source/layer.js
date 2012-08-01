@@ -37,7 +37,19 @@ Ambience.Layer = function(node) {
 		scene = null;
 	}
 	
+	function stopRedefinedMedia(newScene) {
+		for ( var mediaType in mediaPlayers ) {
+			if ( scene[mediaType] && newScene[mediaType] ) {
+				mediaPlayers[mediaType].stop();
+			}
+		}
+	}
+	
 	function playScene(newScene) {
+		if ( scene && newScene.isMixin ) {
+			stopRedefinedMedia(newScene);
+		}
+		
 		scene = newScene;
 		
 		playFadeIn();

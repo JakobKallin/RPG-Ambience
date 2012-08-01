@@ -11,10 +11,12 @@
 			var viewModel = {
 				scenes: [
 					{
-						name: "city"
+						name: 'city',
+						image: 'ishtar_rooftop.jpg'
 					},
 					{
-						name: "portrait"
+						name: 'portrait',
+						image: 'jack-face-details.jpg'
 					}
 				]
 			};
@@ -25,12 +27,14 @@
 		</script>
 		
 		<style>
+			img { width: 10em; }
 		</style>
 	</head>
 	<body>
 		<div class="content" data-bind-foreach="scenes">
 			<fieldset>
-				<input type="text" data-bind-value="name">
+				<legend>Name: <input data-bind-value="name"></legend>
+				<img data-bind-attr-src="image">
 			</fieldset>
 		</div>
 	</body>

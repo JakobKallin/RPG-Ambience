@@ -27,7 +27,11 @@
 		</script>
 		
 		<style>
-			img { width: 10em; }
+			img {
+				float: left;
+				width: 10em;
+				margin-right: 1em;
+			}
 		</style>
 	</head>
 	<body>
@@ -35,6 +39,19 @@
 			<fieldset>
 				<legend>Name: <input data-bind-value="name"></legend>
 				<img data-bind-attr-src="image">
+				<details>
+					<summary>Image</summary>
+					<label>Path: <input type="text" data-bind-value="image"></label>
+				</details>
+				<details>
+					<summary>Sound</summary>
+				</details>
+				<details>
+					<summary>Text</summary>
+				</details>
+				<details>
+					<summary>Other</summary>
+				</details>
 			</fieldset>
 		</div>
 	</body>

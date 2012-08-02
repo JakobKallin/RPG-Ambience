@@ -161,10 +161,12 @@
 		<div class="content">
 			<div class="scenes" data-bind-foreach="scenes">
 				<fieldset>
-					<legend><span data-bind-text="name"></span></legend>
+					<legend>
+						<button data-bind-click="$root.moveSceneUp" title="Move this scene up">▲</button>
+						<button data-bind-click="$root.moveSceneDown" title="Move this scene down">▼</button>
+						<span data-bind-text="name"></span>
+					</legend>
 					<div class="preview">
-						<button data-bind-click="$root.moveSceneUp">▲</button>
-						<button data-bind-click="$root.moveSceneDown">▼</button>
 						<a href="#"><img data-bind-attr-src="image"></a>
 						<button>Play</button>
 					</div>

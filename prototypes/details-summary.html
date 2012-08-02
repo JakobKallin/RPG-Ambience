@@ -12,11 +12,15 @@
 				scenes: [
 					{
 						name: 'city',
-						image: 'ishtar_rooftop.jpg'
+						image: 'ishtar_rooftop.jpg',
+						sound: null,
+						text: null
 					},
 					{
 						name: 'portrait',
-						image: 'jack-face-details.jpg'
+						image: 'jack-face-details.jpg',
+						sound: null,
+						text: null
 					}
 				]
 			};
@@ -56,12 +60,18 @@
 					</details>
 					<details>
 						<summary>Sound</summary>
+						<label>Path: <input type="text" data-bind-value="sound"></label>
 					</details>
 					<details>
 						<summary>Text</summary>
+						<label><textarea data-bind-value="text"></textarea></label>
 					</details>
 					<details>
 						<summary>Other</summary>
+						<ul>
+							<li><label>Loop <input type="checkbox"></label></li>
+							<li><label>Fade <input type="number"></label></li>
+						</ul>
 					</details>
 				</div>
 			</fieldset>

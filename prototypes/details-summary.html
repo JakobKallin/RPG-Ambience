@@ -53,12 +53,13 @@
 	<body>
 		<div class="content" data-bind-foreach="scenes">
 			<fieldset>
-				<legend>Name: <input data-bind-value="name"></legend>
+				<legend data-bind-text="name"></legend>
 				<div class="preview">
 					<a href="#"><img data-bind-attr-src="image"></a>
 					<button>Play</button>
 				</div>
 				<div class="options">
+					<label>Name: <input type="text" size="10" data-bind-value="name"></label> <label>Key: <input type="text" size="1"></label>
 					<details>
 						<summary>Image</summary>
 						<label>File: <input type="text" data-bind-value="image"></label>

@@ -52,6 +52,12 @@
 	</head>
 	<body>
 		<div class="content" data-bind-foreach="scenes">
+			<datalist id="fonts">
+				<option value="Calibri">
+				<option value="Cambria">
+				<option value="Constantia">
+				<option value="Georgia">
+			</datalist>
 			<fieldset>
 				<legend data-bind-text="name"></legend>
 				<div class="preview">
@@ -70,7 +76,12 @@
 					</details>
 					<details>
 						<summary>Text</summary>
-						<label><textarea data-bind-value="text"></textarea></label>
+						<ul>
+							<li><label><textarea data-bind-value="text"></textarea></label></li>
+							<li><label>Font: <input type="text" list="fonts"></label></li>
+							<li><label>Size: <input type="number"></label></li>
+							<li><label>Color: <input type="color"></label></li>
+						</ul>
 					</details>
 					<details>
 						<summary>Other</summary>

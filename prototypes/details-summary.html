@@ -112,8 +112,16 @@
 					</details>
 					<details>
 						<summary>Sound <span class="note" data-bind-text="sound"></span></summary>
-						<label>File</label>
-						<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
+						<ul>
+							<li>
+								<label>File</label>
+								<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
+							</li>
+							<li>
+								<label>Loop</label>
+								<input type="checkbox">
+							</li>
+						</ul>
 					</details>
 					<details>
 						<summary>Text <span class="note" data-bind-text="text"></span></summary>
@@ -139,10 +147,6 @@
 					<details>
 						<summary>Other</summary>
 						<ul>
-							<li>
-								<label>Loop</label>
-								<input type="checkbox">
-							</li>
 							<li>
 								<label>Fade in/out</label>
 								<input type="number">

@@ -8,6 +8,7 @@
 		<script src="jquery.js"></script>
 		<script src="jquery-ui.js"></script>
 		<script src="knockout.js"></script>
+		<script src="knockout-sortable.js"></script>
 		<script src="knockbat.js"></script>
 		<script>
 			var viewModel = {
@@ -32,14 +33,10 @@
 					scene[property] = ko.observable(scene[property]);
 				}
 			});
+			viewModel.scenes = ko.observableArray(viewModel.scenes);
 			
 			window.addEventListener('load', function() {
 				ko.applyBindings(viewModel);
-				$('div.content').sortable({
-					axis: 'y',
-					cursor: 'move',
-					handle: 'legend .move'
-				});
 			});
 		</script>
 		
@@ -84,13 +81,13 @@
 		</style>
 	</head>
 	<body>
-		<div class="content" data-bind-foreach="scenes">
-			<datalist id="fonts">
-				<option value="Calibri">
-				<option value="Cambria">
-				<option value="Constantia">
-				<option value="Georgia">
-			</datalist>
+		<datalist id="fonts">
+			<option value="Calibri">
+			<option value="Cambria">
+			<option value="Constantia">
+			<option value="Georgia">
+		</datalist>
+		<div class="content" data-bind="sortable: { data: scenes, options: { axis: 'y', cursor: 'move', handle: 'legend .move' } }">
 			<fieldset>
 				<legend><span class="move">↕</span> <span data-bind-text="name"></span></legend>
 				<div class="preview">

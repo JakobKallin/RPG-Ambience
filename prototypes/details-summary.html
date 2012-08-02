@@ -41,6 +41,10 @@
 				width: 100%;
 			}
 			
+			div.preview button {
+				width: 100%;
+			}
+			
 			div.options {
 				float: left;
 			}
@@ -51,7 +55,8 @@
 			<fieldset>
 				<legend>Name: <input data-bind-value="name"></legend>
 				<div class="preview">
-					<img data-bind-attr-src="image">
+					<a href="#"><img data-bind-attr-src="image"></a>
+					<button>Play</button>
 				</div>
 				<div class="options">
 					<details>

@@ -5,14 +5,13 @@
 		
 		<title>Details/Summary</title>
 		
-		<script src="jquery.js"></script>
-		<script src="jquery-ui.js"></script>
 		<script src="knockout.js"></script>
-		<script src="knockout-sortable.js"></script>
 		<script src="knockbat.js"></script>
 		<script>
-			var viewModel = {
-				scenes: [
+			var viewModel = new function() {
+				var self = this;
+				
+				self.scenes = [
 					{
 						name: 'city',
 						image: 'ishtar_rooftop.jpg',
@@ -24,9 +23,34 @@
 						image: 'jack-face-details.jpg',
 						sound: null,
 						text: null
+					},
+					{
+						name: 'shaman',
+						image: 'shaman-previz.jpg',
+						sound: null,
+						text: null
 					}
-				]
-			};
+				];
+				
+				self.moveScene = function(scene, newIndex) {
+					var index = self.scenes.indexOf(scene);
+					self.scenes.splice(index, 1);
+					self.scenes.splice(newIndex, 0, scene);
+				}
+				
+				self.moveSceneUp = function(scene) {
+					var index = self.scenes.indexOf(scene);
+					var newIndex = Math.max(index - 1, 0);
+					self.moveScene(scene, newIndex);
+				}
+				
+				self.moveSceneDown = function(scene) {
+					var index = self.scenes.indexOf(scene);
+					var lastIndex = self.scenes().length - 1;
+					var newIndex = Math.min(index + 1, lastIndex);
+					self.moveScene(scene, newIndex);
+				}
+			}();
 			
 			viewModel.scenes.map(function(scene) {
 				for ( var property in scene ) {
@@ -74,10 +98,6 @@
 			label:after {
 				content: ":";
 			}
-			
-			.move {
-				cursor: move;
-			}
 		</style>
 	</head>
 	<body>
@@ -87,10 +107,12 @@
 			<option value="Constantia">
 			<option value="Georgia">
 		</datalist>
-		<div class="content" data-bind="sortable: { data: scenes, options: { axis: 'y', cursor: 'move', handle: 'legend .move' } }">
+		<div class="content" data-bind-foreach="scenes">
 			<fieldset>
-				<legend><span class="move">↕</span> <span data-bind-text="name"></span></legend>
+				<legend><span data-bind-text="name"></span></legend>
 				<div class="preview">
+					<button data-bind-click="$root.moveSceneUp">▲</button>
+					<button data-bind-click="$root.moveSceneDown">▼</button>
 					<a href="#"><img data-bind-attr-src="image"></a>
 					<button>Play</button>
 				</div>

@@ -6,18 +6,18 @@ body {
 	text-shadow: 0 0 1em hsl(190, 100%, 50%);
 }
 
-body, button, select, input {
+body, button, select, input, textarea {
 	font-family: Corbel, sans-serif;
 }
 
-input, select {
+input, select, textarea {
 	background-color: black;
 	color: white;
 	border: 1px solid hsl(190, 100%, 25%);
 	font-size: 1em;
 }
 
-input {
+input, textarea {
 	padding: 0.125em 0.25em;
 }
 

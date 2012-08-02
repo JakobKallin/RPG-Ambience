@@ -94,3 +94,7 @@ button.remove {
 	width: 100%;
 	font-size: 2em;
 }
+
+input[type=number] {
+	width: 3em;
+}

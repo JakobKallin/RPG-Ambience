@@ -59,6 +59,11 @@
 						text: null
 					});
 				};
+				
+				self.removeScene = function(scene) {
+					var index = self.scenes.indexOf(scene);
+					self.scenes.splice(index, 1);
+				};
 			}();
 			
 			viewModel.scenes.map(function(scene) {
@@ -109,6 +114,7 @@
 			}
 			
 			fieldset {
+				position: relative;
 				margin: 1em;
 			}
 			
@@ -120,6 +126,12 @@
 			.add-scene button {
 				width: 100%;
 				font-size: 2em;
+			}
+			
+			button.remove {
+				position: absolute;
+				top: 1em;
+				right: 1em;
 			}
 		</style>
 	</head>
@@ -220,6 +232,7 @@
 								</li>
 							</ul>
 						</details>
+						<button data-bind-click="$root.removeScene" class="remove">Remove Scene</button>
 					</div>
 				</fieldset>
 			</div>

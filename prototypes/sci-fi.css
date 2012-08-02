@@ -1,0 +1,23 @@
+body {
+	background-color: black;
+	background-image: url('scanline.png');
+	background-color: hsl(0, 0%, 10%);
+	color: hsl(190, 100%, 50%);
+	text-shadow: 0 0 1em hsl(190, 100%, 50%);
+}
+
+body, button, select, input {
+	font-family: Corbel, sans-serif;
+}
+
+input, select {
+	background-color: black;
+	color: white;
+	border: 1px solid hsl(190, 100%, 25%);
+	font-size: 1em;
+	padding: 0.125em 0.25em;
+}
+
+.scenes li {
+	border-color: hsl(190, 100%, 25%);
+}

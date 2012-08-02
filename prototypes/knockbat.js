@@ -13,10 +13,11 @@ window.addEventListener('load', function() {
 		'options',
 		'selectedOptions',
 		'submit',
-		'template',,
+		'template',
 		'text',
 		'uniqueName',
 		'value',
+		'valueUpdate',
 		'visible',
 		'with'
 	];

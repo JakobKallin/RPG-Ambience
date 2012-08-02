@@ -84,7 +84,7 @@ label:after {
 	padding: 1em;
 }
 
-button {
+button, summary, input[type=checkbox] {
 	cursor: pointer;
 }
 

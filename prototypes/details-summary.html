@@ -36,20 +36,29 @@
 					var index = self.scenes.indexOf(scene);
 					self.scenes.splice(index, 1);
 					self.scenes.splice(newIndex, 0, scene);
-				}
+				};
 				
 				self.moveSceneUp = function(scene) {
 					var index = self.scenes.indexOf(scene);
 					var newIndex = Math.max(index - 1, 0);
 					self.moveScene(scene, newIndex);
-				}
+				};
 				
 				self.moveSceneDown = function(scene) {
 					var index = self.scenes.indexOf(scene);
 					var lastIndex = self.scenes().length - 1;
 					var newIndex = Math.min(index + 1, lastIndex);
 					self.moveScene(scene, newIndex);
-				}
+				};
+				
+				self.addScene = function() {
+					self.scenes.push({
+						name: null,
+						image: null,
+						sound: null,
+						text: null
+					});
+				};
 			}();
 			
 			viewModel.scenes.map(function(scene) {
@@ -98,6 +107,20 @@
 			label:after {
 				content: ":";
 			}
+			
+			fieldset {
+				margin: 1em;
+			}
+			
+			.add-scene fieldset {
+				border-style: dashed;
+				border-color: hsl(0, 0%, 75%);
+			}
+			
+			.add-scene button {
+				width: 100%;
+				font-size: 2em;
+			}
 		</style>
 	</head>
 	<body>
@@ -107,97 +130,104 @@
 			<option value="Constantia">
 			<option value="Georgia">
 		</datalist>
-		<div class="content" data-bind-foreach="scenes">
-			<fieldset>
-				<legend><span data-bind-text="name"></span></legend>
-				<div class="preview">
-					<button data-bind-click="$root.moveSceneUp">▲</button>
-					<button data-bind-click="$root.moveSceneDown">▼</button>
-					<a href="#"><img data-bind-attr-src="image"></a>
-					<button>Play</button>
-				</div>
-				<div class="options">
-					<label>Name</label>
-					<input type="text" size="10" data-bind-value="name" data-bind-valueUpdate="'afterkeydown'">
-					<span class="hint">Type this name and press Enter to play scene</span>
-					<br>
-					<label>Key</label>
-					<input type="text" size="1">
-					<span class="hint">Press this key to play scene</span>
-					<details>
-						<summary>Image <span class="note" data-bind-text="image"></span></summary>
-						<label>File</label>
-						<input type="text" data-bind-value="image" data-bind-valueUpdate="'afterkeydown'">
-					</details>
-					<details>
-						<summary>Sound <span class="note" data-bind-text="sound"></span></summary>
-						<ul>
-							<li>
-								<label>File</label>
-								<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
-							</li>
-							<li>
-								<label>Loop</label>
-								<input type="checkbox">
-							</li>
-							<li>
-								<label>Crossover</label>
-								<input type="number">
-								<span class="note">seconds</span>
-							</li>
-							<li>
-								<label>Crossfade</label>
-								<input type="checkbox">
-							</li>
-							<li>
-								<label>Volume</label>
-								<input type="number" min="0" max="1" step="0.1">
-							</li>
-						</ul>
-					</details>
-					<details>
-						<summary>Text <span class="note" data-bind-text="text"></span></summary>
-						<ul>
-							<li>
-								<textarea data-bind-value="text" data-bind-valueUpdate="'afterkeydown'"></textarea>
-							</li>
-							<li>
-								<label>Font</label>
-								<input type="text" list="fonts">
-								<select>
-									<option>Normal</option>
-									<option>Bold</option>
-									<option>Italic</option>
-									<option>Bold Italic</option>
-								</select>
-							</li>
-							<li>
-								<label>Size</label>
-								<input type="number">
-								<span class="note">pixels</span>
-							</li>
-							<li>
-								<label>Color</label>
-								<input type="color">
-							</li>
-						</ul>
-					</details>
-					<details>
-						<summary>Other</summary>
-						<ul>
-							<li>
-								<label>Background color</label>
-								<input type="color">
-							</li>
-							<li>
-								<label>Fade in/out</label>
-								<input type="number">
-								<span class="note">seconds</span>
-							</li>
-						</ul>
-					</details>
-				</div>
-			</fieldset>
+		<div class="content">
+			<div class="scenes" data-bind-foreach="scenes">
+				<fieldset>
+					<legend><span data-bind-text="name"></span></legend>
+					<div class="preview">
+						<button data-bind-click="$root.moveSceneUp">▲</button>
+						<button data-bind-click="$root.moveSceneDown">▼</button>
+						<a href="#"><img data-bind-attr-src="image"></a>
+						<button>Play</button>
+					</div>
+					<div class="options">
+						<label>Name</label>
+						<input type="text" size="10" data-bind-value="name" data-bind-valueUpdate="'afterkeydown'">
+						<span class="hint">Type this name and press Enter to play scene</span>
+						<br>
+						<label>Key</label>
+						<input type="text" size="1">
+						<span class="hint">Press this key to play scene</span>
+						<details>
+							<summary>Image <span class="note" data-bind-text="image"></span></summary>
+							<label>File</label>
+							<input type="text" data-bind-value="image" data-bind-valueUpdate="'afterkeydown'">
+						</details>
+						<details>
+							<summary>Sound <span class="note" data-bind-text="sound"></span></summary>
+							<ul>
+								<li>
+									<label>File</label>
+									<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
+								</li>
+								<li>
+									<label>Loop</label>
+									<input type="checkbox">
+								</li>
+								<li>
+									<label>Crossover</label>
+									<input type="number">
+									<span class="note">seconds</span>
+								</li>
+								<li>
+									<label>Crossfade</label>
+									<input type="checkbox">
+								</li>
+								<li>
+									<label>Volume</label>
+									<input type="number" min="0" max="1" step="0.1">
+								</li>
+							</ul>
+						</details>
+						<details>
+							<summary>Text <span class="note" data-bind-text="text"></span></summary>
+							<ul>
+								<li>
+									<textarea data-bind-value="text" data-bind-valueUpdate="'afterkeydown'"></textarea>
+								</li>
+								<li>
+									<label>Font</label>
+									<input type="text" list="fonts">
+									<select>
+										<option>Normal</option>
+										<option>Bold</option>
+										<option>Italic</option>
+										<option>Bold Italic</option>
+									</select>
+								</li>
+								<li>
+									<label>Size</label>
+									<input type="number">
+									<span class="note">pixels</span>
+								</li>
+								<li>
+									<label>Color</label>
+									<input type="color">
+								</li>
+							</ul>
+						</details>
+						<details>
+							<summary>Other</summary>
+							<ul>
+								<li>
+									<label>Background color</label>
+									<input type="color">
+								</li>
+								<li>
+									<label>Fade in/out</label>
+									<input type="number">
+									<span class="note">seconds</span>
+								</li>
+							</ul>
+						</details>
+					</div>
+				</fieldset>
+			</div>
+			<div class="add-scene">
+				<fieldset>
+					<button data-bind-click="$root.addScene">Add Scene</button>
+				</fieldset>
+			</div>
 		</div>
 	</body>
 </html>

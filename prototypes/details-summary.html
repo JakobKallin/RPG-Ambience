@@ -5,6 +5,8 @@
 		
 		<title>Details/Summary</title>
 		
+		<script src="jquery.js"></script>
+		<script src="jquery-ui.js"></script>
 		<script src="knockout.js"></script>
 		<script src="knockbat.js"></script>
 		<script>
@@ -33,6 +35,7 @@
 			
 			window.addEventListener('load', function() {
 				ko.applyBindings(viewModel);
+				$('div.content').sortable();
 			});
 		</script>
 		

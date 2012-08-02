@@ -35,7 +35,11 @@
 			
 			window.addEventListener('load', function() {
 				ko.applyBindings(viewModel);
-				$('div.content').sortable();
+				$('div.content').sortable({
+					axis: 'y',
+					cursor: 'move',
+					handle: 'legend .move'
+				});
 			});
 		</script>
 		
@@ -73,6 +77,10 @@
 			label:after {
 				content: ":";
 			}
+			
+			.move {
+				cursor: move;
+			}
 		</style>
 	</head>
 	<body>
@@ -84,7 +92,7 @@
 				<option value="Georgia">
 			</datalist>
 			<fieldset>
-				<legend data-bind-text="name"></legend>
+				<legend><span class="move">↕</span> <span data-bind-text="name"></span></legend>
 				<div class="preview">
 					<a href="#"><img data-bind-attr-src="image"></a>
 					<button>Play</button>

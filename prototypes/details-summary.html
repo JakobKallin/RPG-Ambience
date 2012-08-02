@@ -41,14 +41,26 @@
 				self.moveSceneUp = function(scene) {
 					var index = self.scenes.indexOf(scene);
 					var newIndex = Math.max(index - 1, 0);
-					self.moveScene(scene, newIndex);
+					
+					// If the position has actually changed, move down the scene above.
+					if ( newIndex !== index ) {
+						var removed = self.scenes()[newIndex];
+						self.scenes.splice(newIndex, 1);
+						self.scenes.splice(index, 0, removed);
+					}
 				};
 				
 				self.moveSceneDown = function(scene) {
 					var index = self.scenes.indexOf(scene);
 					var lastIndex = self.scenes().length - 1;
 					var newIndex = Math.min(index + 1, lastIndex);
-					self.moveScene(scene, newIndex);
+					
+					// If the position has actually changed, move up the scene below.
+					if ( newIndex !== index ) {
+						var removed = self.scenes()[newIndex];
+						self.scenes.splice(newIndex, 1);
+						self.scenes.splice(index, 0, removed);
+					}
 				};
 				
 				self.addScene = function() {

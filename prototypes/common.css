@@ -22,18 +22,22 @@ div.move button {
 	font-size: 0.75em;
 }
 
-div.preview {
+.preview {
 	float: left;
 	width: 10em;
+	height: 5.625em; /* Widescreen ratio */
 	margin-right: 1em;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 
-div.preview img {
+.preview img {
 	display: block;
 	width: 100%;
 }
 
-div.preview button {
+.preview button {
 	width: 100%;
 }
 

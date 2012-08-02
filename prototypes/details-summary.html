@@ -16,19 +16,22 @@
 						name: 'city',
 						image: 'ishtar_rooftop.jpg',
 						sound: 'music.mp3',
-						text: null
+						text: null,
+						color: '#000000'
 					},
 					{
 						name: 'portrait',
 						image: 'jack-face-details.jpg',
 						sound: null,
-						text: null
+						text: null,
+						color: '#ffffff'
 					},
 					{
 						name: 'shaman',
 						image: 'shaman-previz.jpg',
 						sound: null,
-						text: null
+						text: null,
+						color: '#000000'
 					}
 				];
 				
@@ -84,6 +87,9 @@
 				for ( var property in scene ) {
 					scene[property] = ko.observable(scene[property]);
 				}
+				scene.imageCss = ko.computed(function() {
+					return "url('" + this.image() + "')";
+				}, scene);
 			};
 			
 			viewModel.scenes.map(wrapScene);
@@ -111,8 +117,12 @@
 						<button data-bind-click="$root.moveSceneUp" title="Move this scene up">▲</button>
 						<button data-bind-click="$root.moveSceneDown" title="Move this scene down">▼</button>
 					</div>
-					<div class="preview">
-						<a href="#"><img data-bind-attr-src="image"></a>
+					<div class="preview" data-bind="
+						style: {
+							backgroundColor: color,
+							backgroundImage: imageCss
+						}
+					">
 					</div>
 					<div class="options">
 						<label>Name</label>
@@ -136,8 +146,8 @@
 									</th>
 									<td>
 										<select>
-											<option>Cover</option>
-											<option>Contain</option>
+											<option>cover</option>
+											<option>contain</option>
 										</select>
 									</td>
 								</tr>
@@ -216,7 +226,7 @@
 							<table>
 								<tr>
 									<th><label>Background color</label></th>
-									<td><input type="color"></td>
+									<td><input type="color" data-bind-value="color"></td>
 								</tr>
 								<tr>
 									<th><label>Fade in/out</label></th>

@@ -104,13 +104,12 @@
 			<option value="Georgia">
 		</datalist>
 		<div class="content">
-			<div class="scenes" data-bind-foreach="scenes">
-				<fieldset>
-					<legend>
+			<ul class="scenes" data-bind-foreach="scenes">
+				<li>
+					<div class="move">
 						<button data-bind-click="$root.moveSceneUp" title="Move this scene up">▲</button>
 						<button data-bind-click="$root.moveSceneDown" title="Move this scene down">▼</button>
-						<span data-bind-text="name"></span>
-					</legend>
+					</div>
 					<div class="preview">
 						<a href="#"><img data-bind-attr-src="image"></a>
 					</div>
@@ -120,85 +119,125 @@
 						<label>Key</label>
 						<input type="text" size="1">
 						<details>
-							<summary>Image <span class="note" data-bind-text="image"></span></summary>
-							<label>File</label>
-							<input type="text" data-bind-value="image" data-bind-valueUpdate="'afterkeydown'">
+							<summary>Image&ensp;<span class="note" data-bind-text="image"></span></summary>
+							<table>
+								<tr>
+									<th>
+										<label>File</label>
+									</th>
+									<td>
+										<input type="text" data-bind-value="image" data-bind-valueUpdate="'afterkeydown'">
+									</td>
+								</tr>
+								<tr>
+									<th>
+										<label>Size</label>
+									</th>
+									<td>
+										<select>
+											<option>Cover</option>
+											<option>Contain</option>
+										</select>
+									</td>
+								</tr>
+							</table>
 						</details>
 						<details>
-							<summary>Sound <span class="note" data-bind-text="sound"></span></summary>
-							<ul>
-								<li>
-									<label>File</label>
-									<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
-								</li>
-								<li>
-									<label>Loop</label>
-									<input type="checkbox">
-								</li>
-								<li>
-									<label>Crossover</label>
-									<input type="number">
-									<span class="note">seconds</span>
-								</li>
-								<li>
-									<label>Crossfade</label>
-									<input type="checkbox">
-								</li>
-								<li>
-									<label>Volume</label>
-									<input type="number" min="0" max="1" step="0.1">
-								</li>
-							</ul>
+							<summary>Sound&ensp;<span class="note" data-bind-text="sound"></span></summary>
+							<table>
+								<tr>
+									<th>
+										<label>File</label>
+									</th>
+									<td>
+										<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
+									</td>
+								</tr>
+								<tr>
+									<th>
+										<label>Loop</label>
+									</th>
+									<td>
+										<input type="checkbox">
+									</td>
+								</tr>
+								<tr>
+									<th>
+										<label>Crossover</label>
+									</th>
+									<td>
+										<input type="number">
+										<span class="note">seconds</span>
+									</td>
+								</tr>
+								<tr>
+									<th><label>Crossfade</label></th>
+									<td><input type="checkbox"></td>
+								</tr>
+								<tr>
+									<th><label>Volume</label></th>
+									<td><input type="number" min="0" max="1" step="0.1"></td>
+								</tr>
+							</table>
 						</details>
 						<details>
-							<summary>Text <span class="note" data-bind-text="text"></span></summary>
-							<ul>
-								<li>
-									<textarea data-bind-value="text" data-bind-valueUpdate="'afterkeydown'"></textarea>
-								</li>
-								<li>
-									<label>Font</label>
-									<input type="text" list="fonts">
-									<select>
-										<option>Normal</option>
-										<option>Bold</option>
-										<option>Italic</option>
-										<option>Bold Italic</option>
-									</select>
-								</li>
-								<li>
-									<label>Size</label>
-									<input type="number">
-									<span class="note">pixels</span>
-								</li>
-								<li>
-									<label>Color</label>
-									<input type="color">
-								</li>
-							</ul>
+							<summary>Text&ensp;<span class="note" data-bind-text="text"></span></summary>
+							<table>
+								<tr>
+									<th>Text</th>
+									<td>
+										<textarea data-bind-value="text" data-bind-valueUpdate="'afterkeydown'"></textarea>
+									</td>
+								</tr>
+								<tr>
+									<th>
+										<label>Font</label>
+									</th>
+									<td>
+										<input type="text" list="fonts">
+										<select>
+											<option>Normal</option>
+											<option>Bold</option>
+											<option>Italic</option>
+											<option>Bold Italic</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th><label>Size</label></th>
+									<td>
+										<input type="number">
+										<span class="note">pixels</span>
+									</td>
+								</tr>
+								<tr>
+									<th><label>Color</label></th>
+									<td><input type="color"></td>
+								</tr>
+							</table>
 						</details>
 						<details>
 							<summary>Other</summary>
-							<ul>
-								<li>
-									<label>Background color</label>
-									<input type="color">
-								</li>
-								<li>
-									<label>Fade in/out</label>
-									<input type="number">
-									<span class="note">seconds</span>
-								</li>
-							</ul>
+							<table>
+								<tr>
+									<th><label>Background color</label></th>
+									<td><input type="color"></td>
+								</tr>
+								<tr>
+									<th><label>Fade in/out</label></th>
+									<td>
+										<input type="number">
+										<span class="note">seconds</span>
+									</td>
+								</tr>
+							</table>
 						</details>
 						<button data-bind-click="$root.removeScene" class="remove">Remove Scene</button>
 					</div>
-				</fieldset>
-			</div>
+				</li>
+			</ul>
 			<div class="add-scene">
-				<fieldset>
-					<button data-bind-click="$root.addScene">Add Scene</button>
-				</fieldset>
+				<button data-bind-click="$root.addScene">Add Scene</button>
 			</div>
 		</div>
 	</body>

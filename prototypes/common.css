@@ -1,3 +1,27 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: Georgia;
+	line-height: 1.5;
+}
+
+div.content {
+	padding: 1em;
+}
+
+div.move {
+	float: left;
+	width: 1em;
+	margin-right: 0.5em;
+}
+
+div.move button {
+	font-size: 0.75em;
+}
+
 div.preview {
 	float: left;
 	width: 10em;
@@ -5,6 +29,7 @@ div.preview {
 }
 
 div.preview img {
+	display: block;
 	width: 100%;
 }
 
@@ -12,43 +37,60 @@ div.preview button {
 	width: 100%;
 }
 
-div.options {
+.options {
 	float: left;
 }
 
-.note, .hint {
+.options table {
+	border-collapse: collapse;
+}
+
+.options td, .options th {
+	padding: 0.125em;
+}
+
+.options th {
+	font-weight: normal;
+	text-align: right;
+}
+
+details table {
+	margin-left: 2em;
+}
+
+details table {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.note {
 	opacity: 0.5;
-}
-
-.hint {
-	visibility: hidden;
-}
-
-input:focus + .hint, input:hover + .hint {
-	visibility: visible;
 }
 
 label:after {
 	content: ":";
 }
 
-fieldset {
+.scenes > li {
 	position: relative;
+	display: block;
+	overflow: auto;
+	border: 1px solid hsl(0, 0%, 50%);
 	margin: 1em;
+	padding: 1em;
 }
 
-.add-scene fieldset {
-	border-style: dashed;
-	border-color: hsl(0, 0%, 75%);
+button.remove {
+	position: absolute;
+	top: 0.5em;
+	right: 0.5em;
+}
+
+.add-scene div {
+	border: 1px dashed hsl(0, 0%, 75%);
 }
 
 .add-scene button {
 	width: 100%;
 	font-size: 2em;
-}
-
-button.remove {
-	position: absolute;
-	top: 1em;
-	right: 1em;
 }

@@ -155,19 +155,13 @@
 									</td>
 								</tr>
 								<tr>
-									<th>
-										<label>Loop</label>
-									</th>
-									<td>
-										<input type="checkbox">
-									</td>
+									<th><label>Loop</label></th>
+									<td><input type="checkbox" checked></td>
 								</tr>
 								<tr>
-									<th>
-										<label>Crossover</label>
-									</th>
+									<th><label>Crossover</label></th>
 									<td>
-										<input type="number">
+										<input type="number" min="0" value="0">
 										<span class="note">seconds</span>
 									</td>
 								</tr>
@@ -177,7 +171,7 @@
 								</tr>
 								<tr>
 									<th><label>Volume</label></th>
-									<td><input type="number" min="0" max="1" step="0.1"></td>
+									<td><input type="number" min="0" max="1" step="0.1" value="1"></td>
 								</tr>
 							</table>
 						</details>
@@ -207,7 +201,7 @@
 								<tr>
 									<th><label>Size</label></th>
 									<td>
-										<input type="number">
+										<input type="number" min="1" value="50">
 										<span class="note">pixels</span>
 									</td>
 								</tr>
@@ -227,7 +221,7 @@
 								<tr>
 									<th><label>Fade in/out</label></th>
 									<td>
-										<input type="number">
+										<input type="number" min="0" value="0">
 										<span class="note">seconds</span>
 									</td>
 								</tr>

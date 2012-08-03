@@ -12,21 +12,21 @@
 				
 				self.scenes = [
 					{
-						name: 'city',
+						name: 'City',
 						image: 'ishtar_rooftop.jpg',
 						sound: 'music.mp3',
 						text: null,
 						color: '#000000'
 					},
 					{
-						name: 'portrait',
+						name: 'Portrait',
 						image: 'jack-face-details.jpg',
 						sound: null,
 						text: null,
 						color: '#ffffff'
 					},
 					{
-						name: 'shaman',
+						name: 'Shaman',
 						image: 'shaman-previz.jpg',
 						sound: null,
 						text: null,
@@ -195,7 +195,10 @@
 				</div>
 			</div>
 			<ul class="list-view" data-bind="foreach: scenes">
-				<li class="list-item" data-bind="text: name"></li>
+				<li class="list-item">
+					<img data-bind="attr: { src: image }">
+					<span data-bind="text: name"></span>
+				</li>
 			</ul>
 		</div>
 	</body>

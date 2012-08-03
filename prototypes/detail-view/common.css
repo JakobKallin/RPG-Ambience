@@ -12,6 +12,10 @@ label:after {
 	content: ":";
 }
 
+label[for] {
+	cursor: pointer;
+}
+
 button, summary, input[type=checkbox] {
 	cursor: pointer;
 }

@@ -35,6 +35,7 @@ div.content {
 }
 
 .list-item {
+	position: relative;
 	display: block;
 	border: 1px solid black;
 	margin-bottom: 1em;
@@ -68,6 +69,14 @@ div.content {
 .add-item button{
 	width: 100%;
 	font-size: 2em;
+	padding: 0.25em;
+}
+
+button.remove {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	font-size: 1em;
 	padding: 0.25em;
 }
 

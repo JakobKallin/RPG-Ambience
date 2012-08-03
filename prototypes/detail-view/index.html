@@ -60,6 +60,10 @@
 				scene.isSelected = ko.computed(function() {
 					return this === viewModel.current();
 				}, scene);
+				scene.remove = function() {
+					var index = viewModel.scenes.indexOf(scene);
+					viewModel.scenes.splice(index, 1);
+				};
 				
 				return scene;
 			};
@@ -92,6 +96,7 @@
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
 						<img data-bind="attr: { src: image }">
 						<span data-bind="text: name"></span>
+						<button class="remove" data-bind="click: remove">Remove</button>
 					</li>
 				</ul>
 				<div class="add-item">

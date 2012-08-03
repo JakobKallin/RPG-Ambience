@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<title>Details/Summary</title>
+		
+		<script src="knockout.js"></script>
+		<script>
+			var viewModel = new function() {
+				var self = this;
+				
+				self.scenes = [
+					{
+						name: 'city',
+						image: 'ishtar_rooftop.jpg',
+						sound: 'music.mp3',
+						text: null,
+						color: '#000000'
+					},
+					{
+						name: 'portrait',
+						image: 'jack-face-details.jpg',
+						sound: null,
+						text: null,
+						color: '#ffffff'
+					},
+					{
+						name: 'shaman',
+						image: 'shaman-previz.jpg',
+						sound: null,
+						text: null,
+						color: '#000000'
+					}
+				];
+				
+				self.current = ko.observable({
+					name: 'city',
+					image: 'ishtar_rooftop.jpg',
+					sound: 'music.mp3',
+					text: null,
+					color: '#000000'
+				});
+			}();
+			
+			var wrapScene = function(scene) {
+				for ( var property in scene ) {
+					scene[property] = ko.observable(scene[property]);
+				}
+				scene.imageCss = ko.computed(function() {
+					return "url('" + this.image() + "')";
+				}, scene);
+			};
+			
+			viewModel.scenes.map(wrapScene);
+			viewModel.scenes = ko.observableArray(viewModel.scenes);
+			
+			window.addEventListener('load', function() {
+				ko.applyBindings(viewModel);
+			});
+		</script>
+		
+		<link rel="stylesheet" href="common.css">
+		<link rel="stylesheet" href="sci-fi.css">
+	</head>
+	<body>
+		<datalist id="fonts">
+			<option value="Calibri">
+			<option value="Cambria">
+			<option value="Constantia">
+			<option value="Georgia">
+		</datalist>
+		<div class="content">
+			<div class="detail-view" data-bind="with: scenes()[0]">
+				<div class="preview" data-bind="
+					style: {
+						backgroundColor: color,
+						backgroundImage: imageCss
+					}
+				">
+				</div>
+				<div class="options">
+					<label>Name</label>
+					<input type="text" size="10" data-bind-value="name" data-bind-valueUpdate="'afterkeydown'">
+					<label>Key</label>
+					<input type="text" size="1">
+					<details>
+						<summary>Image&ensp;<span class="note" data-bind-text="image"></span></summary>
+						<table>
+							<tr>
+								<th>
+									<label>File</label>
+								</th>
+								<td>
+									<input type="text" data-bind-value="image" data-bind-valueUpdate="'afterkeydown'">
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<label>Size</label>
+								</th>
+								<td>
+									<select>
+										<option>cover</option>
+										<option>contain</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</details>
+					<details>
+						<summary>Sound&ensp;<span class="note" data-bind-text="sound"></span></summary>
+						<table>
+							<tr>
+								<th>
+									<label>File</label>
+								</th>
+								<td>
+									<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
+								</td>
+							</tr>
+							<tr>
+								<th><label>Loop</label></th>
+								<td><input type="checkbox" checked></td>
+							</tr>
+							<tr>
+								<th><label>Crossover</label></th>
+								<td>
+									<input type="number" min="0" value="0">
+									<span class="note">seconds</span>
+								</td>
+							</tr>
+							<tr>
+								<th><label>Crossfade</label></th>
+								<td><input type="checkbox"></td>
+							</tr>
+							<tr>
+								<th><label>Volume</label></th>
+								<td><input type="number" min="0" max="1" step="0.1" value="1"></td>
+							</tr>
+						</table>
+					</details>
+					<details>
+						<summary>Text&ensp;<span class="note" data-bind-text="text"></span></summary>
+						<table>
+							<tr>
+								<th>Text</th>
+								<td>
+									<textarea data-bind-value="text" data-bind-valueUpdate="'afterkeydown'"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<label>Font</label>
+								</th>
+								<td>
+									<input type="text" list="fonts">
+									<select>
+										<option>Normal</option>
+										<option>Bold</option>
+										<option>Italic</option>
+										<option>Bold Italic</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th><label>Size</label></th>
+								<td>
+									<input type="number" min="1" value="50">
+									<span class="note">pixels</span>
+								</td>
+							</tr>
+							<tr>
+								<th><label>Color</label></th>
+								<td><input type="color"></td>
+							</tr>
+						</table>
+					</details>
+					<details>
+						<summary>Other</summary>
+						<table>
+							<tr>
+								<th><label>Background color</label></th>
+								<td><input type="color" data-bind-value="color"></td>
+							</tr>
+							<tr>
+								<th><label>Fade in/out</label></th>
+								<td>
+									<input type="number" min="0" value="0">
+									<span class="note">seconds</span>
+								</td>
+							</tr>
+						</table>
+					</details>
+				</div>
+			</div>
+			<ul class="list-view" data-bind="foreach: scenes">
+				<li class="list-item" data-bind="text: name"></li>
+			</ul>
+		</div>
+	</body>
+</html>

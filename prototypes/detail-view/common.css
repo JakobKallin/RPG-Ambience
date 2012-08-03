@@ -1,0 +1,81 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: Georgia;
+	line-height: 1.5;
+}
+
+div.content {
+	padding: 2em;
+}
+
+.detail-view {
+	float: left;
+	width: 25em;
+	border: 1px solid black;
+	margin-right: 1em;
+	padding: 1em;
+}
+
+.list-view {
+	float: left;
+	width: 25em;
+}
+
+.list-item {
+	display: block;
+	border: 1px solid black;
+	margin-bottom: 1em;
+	padding: 1em;
+}
+
+.preview {
+	width: 25em;
+	height: 14.0625em; /* Widescreen ratio */
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	margin-bottom: 1em;
+}
+
+.preview img {
+	display: block;
+	width: 100%;
+}
+
+.options table {
+	border-collapse: collapse;
+	margin-left: 1em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	border-left: 1px solid black;
+}
+
+.options td, .options th {
+	padding: 0.125em;
+}
+
+.options th {
+	font-weight: normal;
+	text-align: right;
+	padding-left: 1em;
+}
+
+.note {
+	opacity: 0.5;
+}
+
+label:after {
+	content: ":";
+}
+
+button, summary, input[type=checkbox] {
+	cursor: pointer;
+}
+
+input[type=number] {
+	width: 3em;
+}

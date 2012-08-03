@@ -28,11 +28,39 @@ div.content {
 	padding: 2em;
 }
 
+.list-view {
+	float: left;
+	width: 25em;
+	margin-right: 1em;
+}
+
+.list-item, .add-item {
+	display: block;
+	border: 1px solid black;
+	margin-bottom: 1em;
+	padding: 1em;
+}
+
+.list-item img {
+	width: 5em;
+	vertical-align: middle;
+}
+
+.list-item:hover, .list-item.selected {
+	cursor: pointer;
+	background-color: hsl(0, 0%, 90%);
+}
+
+.add-item button{
+	width: 100%;
+	font-size: 2em;
+	padding: 0.25em;
+}
+
 .detail-view {
 	float: left;
 	width: 25em;
 	border: 1px solid black;
-	margin-right: 1em;
 	padding: 1em;
 }
 
@@ -66,26 +94,4 @@ div.content {
 	font-weight: normal;
 	text-align: right;
 	padding-left: 1em;
-}
-
-.list-view {
-	float: left;
-	width: 25em;
-}
-
-.list-item {
-	display: block;
-	border: 1px solid black;
-	margin-bottom: 1em;
-	padding: 1em;
-}
-
-.list-item img {
-	width: 5em;
-	vertical-align: middle;
-}
-
-.list-item:hover {
-	cursor: pointer;
-	background-color: hsl(0, 0%, 90%);
 }

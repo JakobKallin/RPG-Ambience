@@ -39,13 +39,30 @@
 				self.select = function() {
 					self.current(this);
 				};
+				
+				self.add = function() {
+					self.scenes.push(wrapScene({
+						name: ko.observable('Untitled scene'),
+						image: ko.observable(''),
+						sound: ko.observable(''),
+						text: ko.observable(''),
+						color: ko.observable('#000000')
+					}));
+				}
 			}();
 			
-			viewModel.scenes().map(function(scene) {
+			var wrapScene = function(scene) {
 				scene.imageCss = ko.computed(function() {
 					return 'url("' + this.image() + '")';
 				}, scene);
-			});
+				scene.isSelected = ko.computed(function() {
+					return this === viewModel.current();
+				}, scene);
+				
+				return scene;
+			};
+			
+			viewModel.scenes().map(wrapScene);
 			
 			window.addEventListener('load', function() {
 				viewModel.current(viewModel.scenes()[0]);
@@ -64,6 +81,17 @@
 			<option value="Georgia">
 		</datalist>
 		<div class="content">
+			<div class="list-view">
+				<ul data-bind="foreach: scenes">
+					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
+						<img data-bind="attr: { src: image }">
+						<span data-bind="text: name"></span>
+					</li>
+				</ul>
+				<div class="add-item">
+					<button data-bind="click: $root.add">Add Scene</button>
+				</div>
+			</div>
 			<div class="detail-view" data-bind="with: current">
 				<div class="preview" data-bind="
 					style: {
@@ -187,12 +215,6 @@
 					</details>
 				</div>
 			</div>
-			<ul class="list-view" data-bind="foreach: scenes">
-				<li class="list-item" data-bind="click: $root.select">
-					<img data-bind="attr: { src: image }">
-					<span data-bind="text: name"></span>
-				</li>
-			</ul>
 		</div>
 	</body>
 </html>

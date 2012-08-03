@@ -10,7 +10,7 @@ body, button, select, input, textarea {
 	font-family: Corbel, sans-serif;
 }
 
-* {
+div, li {
 	border-color: hsl(190, 100%, 25%) !important;
 }
 
@@ -33,6 +33,6 @@ input, textarea {
 	opacity: 0.65;
 }
 
-.list-item:hover {
+.list-item:hover, .list-item.selected {
 	background-color: hsl(190, 50%, 10%);
 }

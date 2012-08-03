@@ -28,8 +28,9 @@ input[type=number] {
 	opacity: 0.5;
 }
 
-div.content {
+.content {
 	padding: 2em;
+	overflow: auto;
 }
 
 .list-view {

@@ -5,6 +5,8 @@
 		
 		<title>Detail-View/List-View</title>
 		
+		<script src="jquery.js"></script>
+		<script src="jquery-ui.js"></script>
 		<script src="knockout.js"></script>
 		<script>
 			var viewModel = new function() {
@@ -67,6 +69,10 @@
 			window.addEventListener('load', function() {
 				viewModel.current(viewModel.scenes()[0]);
 				ko.applyBindings(viewModel);
+				
+				$('.list-view ul').sortable({
+					axis: 'y'
+				});
 			});
 		</script>
 		

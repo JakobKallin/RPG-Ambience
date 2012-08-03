@@ -34,11 +34,14 @@ div.content {
 	margin-right: 1em;
 }
 
-.list-item, .add-item {
+.list-item {
 	display: block;
 	border: 1px solid black;
 	margin-bottom: 1em;
 	padding: 1em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .list-item img {
@@ -49,6 +52,13 @@ div.content {
 .list-item:hover, .list-item.selected {
 	cursor: pointer;
 	background-color: hsl(0, 0%, 90%);
+}
+
+.add-item {
+	display: block;
+	border: 1px solid black;
+	margin-bottom: 1em;
+	padding: 1em;
 }
 
 .add-item button{

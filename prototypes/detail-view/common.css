@@ -84,3 +84,8 @@ div.content {
 	width: 5em;
 	vertical-align: middle;
 }
+
+.list-item:hover {
+	cursor: pointer;
+	background-color: hsl(0, 0%, 90%);
+}

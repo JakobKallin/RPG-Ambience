@@ -3,59 +3,52 @@
 	<head>
 		<meta charset="utf-8">
 		
-		<title>Details/Summary</title>
+		<title>Detail-View/List-View</title>
 		
 		<script src="knockout.js"></script>
 		<script>
 			var viewModel = new function() {
 				var self = this;
 				
-				self.scenes = [
+				self.scenes = ko.observableArray([
 					{
-						name: 'City',
-						image: 'ishtar_rooftop.jpg',
-						sound: 'music.mp3',
-						text: null,
-						color: '#000000'
+						name: ko.observable('City'),
+						image: ko.observable('ishtar_rooftop.jpg'),
+						sound: ko.observable('music.mp3'),
+						text: ko.observable(null),
+						color: ko.observable('#000000')
 					},
 					{
-						name: 'Portrait',
-						image: 'jack-face-details.jpg',
-						sound: null,
-						text: null,
-						color: '#ffffff'
+						name: ko.observable('Portrait'),
+						image: ko.observable('jack-face-details.jpg'),
+						sound: ko.observable(null),
+						text: ko.observable(null),
+						color: ko.observable('#ffffff')
 					},
 					{
-						name: 'Shaman',
-						image: 'shaman-previz.jpg',
-						sound: null,
-						text: null,
-						color: '#000000'
+						name: ko.observable('Shaman'),
+						image: ko.observable('shaman-previz.jpg'),
+						sound: ko.observable(null),
+						text: ko.observable(null),
+						color: ko.observable('#000000')
 					}
-				];
+				]);
 				
-				self.current = ko.observable({
-					name: 'city',
-					image: 'ishtar_rooftop.jpg',
-					sound: 'music.mp3',
-					text: null,
-					color: '#000000'
-				});
+				self.current = ko.observable();
+				
+				self.select = function() {
+					self.current(this);
+				};
 			}();
 			
-			var wrapScene = function(scene) {
-				for ( var property in scene ) {
-					scene[property] = ko.observable(scene[property]);
-				}
+			viewModel.scenes().map(function(scene) {
 				scene.imageCss = ko.computed(function() {
-					return "url('" + this.image() + "')";
+					return 'url("' + this.image() + '")';
 				}, scene);
-			};
-			
-			viewModel.scenes.map(wrapScene);
-			viewModel.scenes = ko.observableArray(viewModel.scenes);
+			});
 			
 			window.addEventListener('load', function() {
+				viewModel.current(viewModel.scenes()[0]);
 				ko.applyBindings(viewModel);
 			});
 		</script>
@@ -71,7 +64,7 @@
 			<option value="Georgia">
 		</datalist>
 		<div class="content">
-			<div class="detail-view" data-bind="with: scenes()[0]">
+			<div class="detail-view" data-bind="with: current">
 				<div class="preview" data-bind="
 					style: {
 						backgroundColor: color,
@@ -81,18 +74,18 @@
 				</div>
 				<div class="options">
 					<label>Name</label>
-					<input type="text" size="10" data-bind-value="name" data-bind-valueUpdate="'afterkeydown'">
+					<input type="text" size="10" data-bind="value: name, valueUpdate: 'afterkeydown'">
 					<label>Key</label>
 					<input type="text" size="1">
 					<details>
-						<summary>Image&ensp;<span class="note" data-bind-text="image"></span></summary>
+						<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
 						<table>
 							<tr>
 								<th>
 									<label>File</label>
 								</th>
 								<td>
-									<input type="text" data-bind-value="image" data-bind-valueUpdate="'afterkeydown'">
+									<input type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
 								</td>
 							</tr>
 							<tr>
@@ -109,14 +102,14 @@
 						</table>
 					</details>
 					<details>
-						<summary>Sound&ensp;<span class="note" data-bind-text="sound"></span></summary>
+						<summary>Sound&ensp;<span class="note" data-bind="text: sound"></span></summary>
 						<table>
 							<tr>
 								<th>
 									<label>File</label>
 								</th>
 								<td>
-									<input type="text" data-bind-value="sound" data-bind-valueUpdate="'afterkeydown'">
+									<input type="text" data-bind="value: sound, valueUpdate: 'afterkeydown'">
 								</td>
 							</tr>
 							<tr>
@@ -141,12 +134,12 @@
 						</table>
 					</details>
 					<details>
-						<summary>Text&ensp;<span class="note" data-bind-text="text"></span></summary>
+						<summary>Text&ensp;<span class="note" data-bind="text: text"></span></summary>
 						<table>
 							<tr>
 								<th>Text</th>
 								<td>
-									<textarea data-bind-value="text" data-bind-valueUpdate="'afterkeydown'"></textarea>
+									<textarea data-bind="value: text, valueUpdate: 'afterkeydown'"></textarea>
 								</td>
 							</tr>
 							<tr>
@@ -181,7 +174,7 @@
 						<table>
 							<tr>
 								<th><label>Background color</label></th>
-								<td><input type="color" data-bind-value="color"></td>
+								<td><input type="color" data-bind="value: color"></td>
 							</tr>
 							<tr>
 								<th><label>Fade in/out</label></th>
@@ -195,7 +188,7 @@
 				</div>
 			</div>
 			<ul class="list-view" data-bind="foreach: scenes">
-				<li class="list-item">
+				<li class="list-item" data-bind="click: $root.select">
 					<img data-bind="attr: { src: image }">
 					<span data-bind="text: name"></span>
 				</li>

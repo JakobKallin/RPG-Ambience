@@ -102,8 +102,10 @@
 						newScene[property] = ko.observable(this[property]());
 					};
 					wrapScene(newScene);
-					self.scenes.push(newScene);
-					self.select(self.last());
+					
+					var index = self.scenes.indexOf(self.current()) + 1;
+					self.scenes.splice(index, 0, newScene);
+					self.select(newScene);
 				};
 			}();
 			

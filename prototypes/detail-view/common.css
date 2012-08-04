@@ -77,19 +77,26 @@ input[type=number] {
 	padding: 0.25em;
 }
 
-button.remove {
-	position: absolute;
-	top: 1em;
-	right: 1em;
-	font-size: 1em;
-	padding: 0.25em;
-}
-
 .detail-view {
 	float: left;
 	width: 25em;
 	border: 1px solid black;
 	padding: 1em;
+}
+
+.action-list {
+	overflow: auto;
+	margin-bottom: 1em;
+}
+
+.action {
+	display: block;
+}
+
+button.remove {
+	float: right;
+	font-size: 1em;
+	padding: 0.25em;
 }
 
 .preview {

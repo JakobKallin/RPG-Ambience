@@ -38,8 +38,8 @@
 				
 				self.current = ko.observable();
 				
-				self.select = function() {
-					self.current(this);
+				self.select = function(scene) {
+					self.current(scene);
 				};
 				
 				self.add = function() {
@@ -50,7 +50,41 @@
 						text: ko.observable(''),
 						color: ko.observable('#000000')
 					}));
-				}
+				};
+				
+				self.previous = function() {
+					var index = self.scenes.indexOf(self.current());
+					if ( index > 0 ) {
+						return self.scenes()[index - 1];
+					} else {
+						return null;
+					}
+				};
+				
+				self.next = function() {
+					var index = self.scenes.indexOf(self.current());
+					if ( index < self.scenes().length - 1 ) {
+						return self.scenes()[index + 1];
+					} else {
+						return null;
+					}
+				};
+				
+				self.removeSelected = function() {
+					var previous = self.previous();
+					var next = self.next();
+					
+					if ( self.previous() ) {
+						self.select(previous);
+					} else if ( next ) {
+						self.select(next);
+					} else {
+						self.select(null);
+					}
+					
+					var index = viewModel.scenes.indexOf(this);
+					self.scenes.splice(index, 1);
+				};
 			}();
 			
 			var wrapScene = function(scene) {
@@ -60,10 +94,6 @@
 				scene.isSelected = ko.computed(function() {
 					return this === viewModel.current();
 				}, scene);
-				scene.remove = function() {
-					var index = viewModel.scenes.indexOf(scene);
-					viewModel.scenes.splice(index, 1);
-				};
 				
 				return scene;
 			};
@@ -96,7 +126,6 @@
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
 						<img data-bind="attr: { src: image }">
 						<span data-bind="text: name"></span>
-						<button class="remove" data-bind="click: remove">Remove</button>
 					</li>
 				</ul>
 				<div class="add-item">
@@ -104,6 +133,9 @@
 				</div>
 			</div>
 			<div class="detail-view" data-bind="with: current">
+				<ul class="action-list">
+					<button class="action remove" data-bind="click: $root.removeSelected">Remove</button>
+				</ul>
 				<div class="preview" data-bind="
 					style: {
 						backgroundColor: color,

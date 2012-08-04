@@ -122,6 +122,12 @@ button.action {
 	margin-bottom: 1em;
 }
 
+.detail-view summary {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 .options table {
 	border-collapse: collapse;
 	margin-left: 1em;

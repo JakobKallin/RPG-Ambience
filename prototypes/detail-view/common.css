@@ -105,10 +105,14 @@ input[type=number] {
 
 .action {
 	display: block;
+	float: left;
 }
 
-button.remove {
+.action.remove {
 	float: right;
+}
+
+button.action {
 	font-size: 1em;
 	padding: 0.25em;
 }

@@ -95,6 +95,16 @@
 					var index = viewModel.scenes.indexOf(this);
 					self.scenes.splice(index, 1);
 				};
+				
+				self.copySelected = function() {
+					var newScene = {};
+					for ( var property in this ) {
+						newScene[property] = ko.observable(this[property]());
+					};
+					wrapScene(newScene);
+					self.scenes.push(newScene);
+					self.select(self.last());
+				};
 			}();
 			
 			var wrapScene = function(scene) {
@@ -149,6 +159,7 @@
 			</div>
 			<div class="detail-view" data-bind="with: current">
 				<ul class="action-list">
+					<button class="action copy" data-bind="click: $root.copySelected">Copy</button>
 					<button class="action remove" data-bind="click: $root.removeSelected">Remove</button>
 				</ul>
 				<div class="preview" data-bind="

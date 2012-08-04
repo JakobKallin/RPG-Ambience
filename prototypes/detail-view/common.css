@@ -77,6 +77,18 @@ input[type=number] {
 	margin-right: 0.5em;
 }
 
+.list-item .key {
+	opacity: 0.5;
+}
+
+.list-item .key:before {
+	content: "(";
+}
+
+.list-item .key:after {
+	content: ")";
+}
+
 .add-item {
 	display: block;
 	border: 1px solid black;

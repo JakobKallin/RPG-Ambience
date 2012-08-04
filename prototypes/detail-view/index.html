@@ -50,6 +50,7 @@
 						text: ko.observable(''),
 						color: ko.observable('#000000')
 					}));
+					self.select(self.last());
 				};
 				
 				self.previous = function() {
@@ -65,6 +66,15 @@
 					var index = self.scenes.indexOf(self.current());
 					if ( index < self.scenes().length - 1 ) {
 						return self.scenes()[index + 1];
+					} else {
+						return null;
+					}
+				};
+				
+				self.last = function() {
+					var index = self.scenes().length - 1;
+					if ( index !== -1 ) {
+						return self.scenes()[index];
 					} else {
 						return null;
 					}

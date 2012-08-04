@@ -18,21 +18,24 @@
 						image: ko.observable('ishtar_rooftop.jpg'),
 						sound: ko.observable('music.mp3'),
 						text: ko.observable(null),
-						color: ko.observable('#000000')
+						color: ko.observable('#000000'),
+						size: ko.observable('cover')
 					},
 					{
 						name: ko.observable('Portrait'),
 						image: ko.observable('jack-face-details.jpg'),
 						sound: ko.observable(null),
 						text: ko.observable(null),
-						color: ko.observable('#ffffff')
+						color: ko.observable('#ffffff'),
+						size: ko.observable('contain')
 					},
 					{
 						name: ko.observable('Shaman'),
 						image: ko.observable('shaman-previz.jpg'),
 						sound: ko.observable(null),
 						text: ko.observable(null),
-						color: ko.observable('#000000')
+						color: ko.observable('#000000'),
+						size: ko.observable('cover')
 					}
 				]);
 				
@@ -48,7 +51,8 @@
 						image: ko.observable(''),
 						sound: ko.observable(''),
 						text: ko.observable(''),
-						color: ko.observable('#000000')
+						color: ko.observable('#000000'),
+						size: ko.observable('contain')
 					}));
 					self.select(self.last());
 				};
@@ -149,7 +153,8 @@
 						<div class="preview" data-bind="
 							style: {
 								backgroundColor: color,
-								backgroundImage: imageCss
+								backgroundImage: imageCss,
+								backgroundSize: size
 							}
 						"></div>
 						<span data-bind="text: name"></span>
@@ -167,7 +172,8 @@
 				<div class="preview" data-bind="
 					style: {
 						backgroundColor: color,
-						backgroundImage: imageCss
+						backgroundImage: imageCss,
+						backgroundSize: size
 					}
 				">
 				</div>
@@ -189,12 +195,12 @@
 							</tr>
 							<tr>
 								<th>
-									<label for="size">Size</label>
+									<label for="image-size">Size</label>
 								</th>
 								<td>
-									<select id="size">
-										<option>cover</option>
-										<option>contain</option>
+									<select id="image-size" data-bind="value: size">
+										<option value="cover">cover</option>
+										<option value="contain">contain</option>
 									</select>
 								</td>
 							</tr>
@@ -247,18 +253,22 @@
 								</th>
 								<td>
 									<input id="font" type="text" list="fonts">
-									<select>
+								</td>
+							</tr>
+							<tr>
+								<th><label for="style">Style</label></th>
+								<td>
+									<select id="style">
 										<option>Normal</option>
 										<option>Bold</option>
 										<option>Italic</option>
 										<option>Bold Italic</option>
 									</select>
-								</td>
-							</tr>
+								<//td>
 							<tr>
-								<th><label for="size">Size</label></th>
+								<th><label for="font-size">Size</label></th>
 								<td>
-									<input id="size" type="number" min="1" value="50">
+									<input id="font-size" type="number" min="1" value="50">
 									<span class="note">pixels</span>
 								</td>
 							</tr>

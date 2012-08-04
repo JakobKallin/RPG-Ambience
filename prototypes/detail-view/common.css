@@ -36,7 +36,6 @@ input[type=number] {
 .preview {
 	background-position: center center;
 	background-repeat: no-repeat;
-	background-size: contain;
 }
 
 .preview img {
@@ -46,7 +45,7 @@ input[type=number] {
 
 .list-view {
 	float: left;
-	width: 25em;
+	width: 20em;
 	margin-right: 1em;
 }
 

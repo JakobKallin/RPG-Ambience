@@ -33,6 +33,17 @@ input[type=number] {
 	overflow: auto;
 }
 
+.preview {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.preview img {
+	display: block;
+	width: 100%;
+}
+
 .list-view {
 	float: left;
 	width: 25em;
@@ -50,11 +61,6 @@ input[type=number] {
 	text-overflow: ellipsis;
 }
 
-.list-item img {
-	width: 5em;
-	vertical-align: middle;
-}
-
 .list-item:hover, .list-item.selected {
 	cursor: pointer;
 	background-color: hsl(0, 0%, 90%);
@@ -62,6 +68,14 @@ input[type=number] {
 
 .list-item.ui-sortable-helper {
 	cursor: move;
+}
+
+.list-item .preview {
+	display: inline-block;
+	vertical-align: middle;
+	width: 5em;
+	height: 2.8125em; /* Widescreen ratio */
+	margin-right: 0.5em;
 }
 
 .add-item {
@@ -99,18 +113,10 @@ button.remove {
 	padding: 0.25em;
 }
 
-.preview {
+.detail-view .preview {
 	width: 25em;
 	height: 14.0625em; /* Widescreen ratio */
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: contain;
 	margin-bottom: 1em;
-}
-
-.preview img {
-	display: block;
-	width: 100%;
 }
 
 .options table {

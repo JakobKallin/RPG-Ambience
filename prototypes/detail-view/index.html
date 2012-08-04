@@ -134,7 +134,12 @@
 			<div class="list-view">
 				<ul data-bind="foreach: scenes">
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
-						<img data-bind="attr: { src: image }">
+						<div class="preview" data-bind="
+							style: {
+								backgroundColor: color,
+								backgroundImage: imageCss
+							}
+						"></div>
 						<span data-bind="text: name"></span>
 					</li>
 				</ul>

@@ -48,7 +48,7 @@ body {
 	height: 100%;
 }
 
-.list-item, .add-item, .selected-item {
+.list-item, .selected-item {
 	border-width: 1;
 	border-style: solid;
 	border-color: black;
@@ -125,7 +125,7 @@ body {
 	display: block;
 	border-width: 1px;
 	margin-bottom: 1em;
-	padding: 1em;
+	padding: 0 1em;
 }
 
 .add-item button{

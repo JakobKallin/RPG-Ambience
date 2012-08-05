@@ -9,8 +9,8 @@
 	font-family: Corbel, sans-serif;
 }
 
-.editor div, .editor li {
-	border-color: hsl(190, 100%, 25%) !important;
+.list-item, .add-item, .selected-item {
+	border-color: hsl(190, 100%, 25%);
 }
 
 input, select, textarea {

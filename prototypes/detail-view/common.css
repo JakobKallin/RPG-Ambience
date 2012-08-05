@@ -36,10 +36,6 @@ body {
 	height: 100%;
 }
 
-.editor {
-	padding: 2em;
-}
-
 .theater {
 	width: 50%;
 }
@@ -52,7 +48,14 @@ body {
 	height: 100%;
 }
 
+.list-item, .add-item, .selected-item {
+	border-width: 1;
+	border-style: solid;
+	border-color: black;
+}
+
 .editor {
+	padding: 2em;
 	font-family: Georgia;
 	line-height: 1.5;
 }
@@ -81,7 +84,7 @@ body {
 .list-item {
 	position: relative;
 	display: block;
-	border: 1px solid black;
+	border-width: 1px;
 	margin-bottom: 1em;
 	padding: 1em;
 	overflow: hidden;
@@ -120,7 +123,7 @@ body {
 
 .add-item {
 	display: block;
-	border: 1px solid black;
+	border-width: 1px;
 	margin-bottom: 1em;
 	padding: 1em;
 }
@@ -139,7 +142,7 @@ body {
 }
 
 .selected-item {
-	border: 1px solid black;
+	border-width: 1px;
 	padding: 1em;
 }
 
@@ -163,8 +166,8 @@ button.action {
 }
 
 .detail-view .preview {
-	width: 25em;
-	height: 14.0625em; /* Widescreen ratio */
+	width: 15em;
+	padding-top: 8.439em; /* Widescreen ratio */
 	margin-bottom: 1em;
 	margin-left: auto;
 	margin-right: auto;
@@ -181,7 +184,7 @@ button.action {
 	margin-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
-	border-left: 1px solid black;
+	border-width: 1px;
 }
 
 .options td, .options th {

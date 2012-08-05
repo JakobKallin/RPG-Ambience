@@ -25,26 +25,14 @@ html {
 }
 
 body {
-	display: table;
-	border-collapse: collapse;
 	width: 100%;
 	height: 100%;
 }
 
 .editor, .theater {
-	display: table-cell;
-	height: 100%;
-}
-
-.theater {
+	position: absolute;
+	top: 0;
 	width: 50%;
-}
-
-.editor-inner {
-	display: table;
-	table-layout: fixed;
-	border-collapse: collapse;
-	width: 100%;
 	height: 100%;
 }
 
@@ -55,9 +43,10 @@ body {
 }
 
 .editor {
-	padding: 2em;
+	left: 0;
 	font-family: Georgia;
 	line-height: 1.5;
+	overflow: auto;
 }
 
 .note {
@@ -75,9 +64,10 @@ body {
 }
 
 .list-view {
-	display: table-cell;
+	float: left;
 	width: 40%;
-	vertical-align: top;
+	box-sizing: border-box;
+	padding: 2em;
 	padding-right: 0.5em;
 }
 
@@ -135,9 +125,10 @@ body {
 }
 
 .detail-view {
-	display: table-cell;
+	float: right;
 	width: 60%;
-	vertical-align: top;
+	box-sizing: border-box;
+	padding: 2em;
 	padding-left: 0.5em;
 }
 
@@ -198,5 +189,6 @@ button.action {
 }
 
 .theater {
+	right: 0;
 	background-color: black;
 }

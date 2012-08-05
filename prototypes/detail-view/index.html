@@ -160,158 +160,156 @@
 			<option value="Constantia">
 			<option value="Georgia">
 		</datalist>
-		<div class="content">
-			<div class="list-view">
-				<ul data-bind="foreach: scenes">
-					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
-						<div class="preview" data-bind="
-							style: {
-								backgroundColor: color,
-								backgroundImage: imageCss,
-								backgroundSize: size
-							}
-						"></div>
-						<span data-bind="text: name"></span>
-					</li>
-				</ul>
-				<div class="add-item">
-					<button data-bind="click: $root.add">Add Scene</button>
-				</div>
+		<div class="list-view">
+			<ul data-bind="foreach: scenes">
+				<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
+					<div class="preview" data-bind="
+						style: {
+							backgroundColor: color,
+							backgroundImage: imageCss,
+							backgroundSize: size
+						}
+					"></div>
+					<span data-bind="text: name"></span>
+				</li>
+			</ul>
+			<div class="add-item">
+				<button data-bind="click: $root.add">Add Scene</button>
 			</div>
-			<!-- ko with: current -->
-			<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile }">
-				<ul class="action-list">
-					<button class="action copy" data-bind="click: $root.copySelected">Copy</button>
-					<button class="action remove" data-bind="click: $root.removeSelected">Remove</button>
-				</ul>
-				<div class="preview" data-bind="
-					style: {
-						backgroundColor: color,
-						backgroundImage: imageCss,
-						backgroundSize: size
-					}
-				">
-				</div>
-				<div class="options">
-					<label for="name">Name</label>
-					<input id="name" type="text" size="10" data-bind="value: name, valueUpdate: 'afterkeydown'">
-					<label for="key">Key</label>
-					<input id="key" type="text" size="1">
-					<details>
-						<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
-						<table>
-							<tr>
-								<th>
-									<label for="image-file">File</label>
-								</th>
-								<td>
-									<input id="image-file" type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
-								</td>
-							</tr>
-							<tr>
-								<th>
-									<label for="image-size">Size</label>
-								</th>
-								<td>
-									<select id="image-size" data-bind="value: size">
-										<option value="cover">cover</option>
-										<option value="contain">contain</option>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</details>
-					<details>
-						<summary>Sound&ensp;<span class="note" data-bind="text: sound"></span></summary>
-						<table>
-							<tr>
-								<th>
-									<label for="sound-file">File</label>
-								</th>
-								<td>
-									<input id="sound-file" type="text" data-bind="value: sound, valueUpdate: 'afterkeydown'">
-								</td>
-							</tr>
-							<tr>
-								<th><label for="loop">Loop</label></th>
-								<td><input id="loop" type="checkbox" checked></td>
-							</tr>
-							<tr>
-								<th><label for="crossover">Crossover</label></th>
-								<td>
-									<input id="crossover" type="number" min="0" value="0">
-									<span class="note">seconds</span>
-								</td>
-							</tr>
-							<tr>
-								<th><label for="crossfade">Crossfade</label></th>
-								<td><input id="crossfade" type="checkbox"></td>
-							</tr>
-							<tr>
-								<th><label for="volume">Volume</label></th>
-								<td><input id="volume" type="number" min="0" max="1" step="0.1" value="1"></td>
-							</tr>
-						</table>
-					</details>
-					<details>
-						<summary>Text&ensp;<span class="note" data-bind="text: text"></span></summary>
-						<table>
-							<tr>
-								<th><label for="text">Text</label></th>
-								<td>
-									<textarea id="text" data-bind="value: text, valueUpdate: 'afterkeydown'"></textarea>
-								</td>
-							</tr>
-							<tr>
-								<th>
-									<label for="font">Font</label>
-								</th>
-								<td>
-									<input id="font" type="text" list="fonts">
-								</td>
-							</tr>
-							<tr>
-								<th><label for="style">Style</label></th>
-								<td>
-									<select id="style">
-										<option>Normal</option>
-										<option>Bold</option>
-										<option>Italic</option>
-										<option>Bold Italic</option>
-									</select>
-								<//td>
-							<tr>
-								<th><label for="font-size">Size</label></th>
-								<td>
-									<input id="font-size" type="number" min="1" value="50">
-									<span class="note">pixels</span>
-								</td>
-							</tr>
-							<tr>
-								<th><label for="color">Color</label></th>
-								<td><input id="color" type="color"></td>
-							</tr>
-						</table>
-					</details>
-					<details>
-						<summary>Other</summary>
-						<table>
-							<tr>
-								<th><label for="background">Background color</label></th>
-								<td><input id="background" type="color" data-bind="value: color"></td>
-							</tr>
-							<tr>
-								<th><label for="fade">Fade in/out</label></th>
-								<td>
-									<input id="fade" type="number" min="0" value="0">
-									<span class="note">seconds</span>
-								</td>
-							</tr>
-						</table>
-					</details>
-				</div>
-			</div>
-			<!-- /ko -->
 		</div>
+		<!-- ko with: current -->
+		<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile }">
+			<ul class="action-list">
+				<button class="action copy" data-bind="click: $root.copySelected">Copy</button>
+				<button class="action remove" data-bind="click: $root.removeSelected">Remove</button>
+			</ul>
+			<div class="preview" data-bind="
+				style: {
+					backgroundColor: color,
+					backgroundImage: imageCss,
+					backgroundSize: size
+				}
+			">
+			</div>
+			<div class="options">
+				<label for="name">Name</label>
+				<input id="name" type="text" size="10" data-bind="value: name, valueUpdate: 'afterkeydown'">
+				<label for="key">Key</label>
+				<input id="key" type="text" size="1">
+				<details>
+					<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
+					<table>
+						<tr>
+							<th>
+								<label for="image-file">File</label>
+							</th>
+							<td>
+								<input id="image-file" type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="image-size">Size</label>
+							</th>
+							<td>
+								<select id="image-size" data-bind="value: size">
+									<option value="cover">cover</option>
+									<option value="contain">contain</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</details>
+				<details>
+					<summary>Sound&ensp;<span class="note" data-bind="text: sound"></span></summary>
+					<table>
+						<tr>
+							<th>
+								<label for="sound-file">File</label>
+							</th>
+							<td>
+								<input id="sound-file" type="text" data-bind="value: sound, valueUpdate: 'afterkeydown'">
+							</td>
+						</tr>
+						<tr>
+							<th><label for="loop">Loop</label></th>
+							<td><input id="loop" type="checkbox" checked></td>
+						</tr>
+						<tr>
+							<th><label for="crossover">Crossover</label></th>
+							<td>
+								<input id="crossover" type="number" min="0" value="0">
+								<span class="note">seconds</span>
+							</td>
+						</tr>
+						<tr>
+							<th><label for="crossfade">Crossfade</label></th>
+							<td><input id="crossfade" type="checkbox"></td>
+						</tr>
+						<tr>
+							<th><label for="volume">Volume</label></th>
+							<td><input id="volume" type="number" min="0" max="1" step="0.1" value="1"></td>
+						</tr>
+					</table>
+				</details>
+				<details>
+					<summary>Text&ensp;<span class="note" data-bind="text: text"></span></summary>
+					<table>
+						<tr>
+							<th><label for="text">Text</label></th>
+							<td>
+								<textarea id="text" data-bind="value: text, valueUpdate: 'afterkeydown'"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="font">Font</label>
+							</th>
+							<td>
+								<input id="font" type="text" list="fonts">
+							</td>
+						</tr>
+						<tr>
+							<th><label for="style">Style</label></th>
+							<td>
+								<select id="style">
+									<option>Normal</option>
+									<option>Bold</option>
+									<option>Italic</option>
+									<option>Bold Italic</option>
+								</select>
+							<//td>
+						<tr>
+							<th><label for="font-size">Size</label></th>
+							<td>
+								<input id="font-size" type="number" min="1" value="50">
+								<span class="note">pixels</span>
+							</td>
+						</tr>
+						<tr>
+							<th><label for="color">Color</label></th>
+							<td><input id="color" type="color"></td>
+						</tr>
+					</table>
+				</details>
+				<details>
+					<summary>Other</summary>
+					<table>
+						<tr>
+							<th><label for="background">Background color</label></th>
+							<td><input id="background" type="color" data-bind="value: color"></td>
+						</tr>
+						<tr>
+							<th><label for="fade">Fade in/out</label></th>
+							<td>
+								<input id="fade" type="number" min="0" value="0">
+								<span class="note">seconds</span>
+							</td>
+						</tr>
+					</table>
+				</details>
+			</div>
+		</div>
+		<!-- /ko -->
 	</body>
 </html>

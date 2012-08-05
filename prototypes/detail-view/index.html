@@ -7,6 +7,7 @@
 		
 		<script src="jquery.js"></script>
 		<script src="jquery-ui.js"></script>
+		<script src="jquery.details.js"></script>
 		<script src="knockout.js"></script>
 		<script>
 			var viewModel = new function() {
@@ -46,6 +47,7 @@
 				
 				self.select = function(scene) {
 					self.current(scene);
+					$('details').details();
 				};
 				
 				self.add = function() {
@@ -145,8 +147,8 @@
 			viewModel.scenes().map(wrapScene);
 			
 			window.addEventListener('load', function() {
-				viewModel.current(viewModel.scenes()[0]);
 				ko.applyBindings(viewModel);
+				viewModel.select(viewModel.scenes()[0]);
 				
 				$('.list-view ul').sortable({
 					axis: 'y'

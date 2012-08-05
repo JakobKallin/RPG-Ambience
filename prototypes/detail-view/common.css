@@ -3,6 +3,22 @@
 	padding: 0;
 }
 
+details, summary {
+	display: block;
+}
+
+details.open table {
+	display: table;
+}
+
+summary[tabindex]:before {
+	content: "▶ ";
+}
+
+details.open summary[tabindex]:before {
+	content: "▼ ";
+}
+
 label:after {
 	content: ":";
 }

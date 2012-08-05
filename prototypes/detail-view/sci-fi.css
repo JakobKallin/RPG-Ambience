@@ -1,16 +1,15 @@
-body {
-	background-color: black;
+.editor {
 	background-image: url('scanline.png');
 	background-color: hsl(0, 0%, 10%);
 	color: hsl(190, 100%, 50%);
 	text-shadow: 0 0 1em hsl(190, 100%, 50%);
 }
 
-body, button, select, input, textarea {
+.editor, button, select, input, textarea {
 	font-family: Corbel, sans-serif;
 }
 
-div, li {
+.editor div, .editor li {
 	border-color: hsl(190, 100%, 25%) !important;
 }
 

@@ -6,6 +6,8 @@
 body {
 	font-family: Georgia;
 	line-height: 1.5;
+	padding: 2em;
+	overflow: auto;
 }
 
 label:after {
@@ -26,11 +28,6 @@ input[type=number] {
 
 .note {
 	opacity: 0.5;
-}
-
-.content {
-	padding: 2em;
-	overflow: auto;
 }
 
 .preview {

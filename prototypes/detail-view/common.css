@@ -67,6 +67,7 @@ body {
 	float: left;
 	width: 40%;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	padding: 2em;
 	padding-right: 0.5em;
 }
@@ -127,6 +128,7 @@ body {
 	float: right;
 	width: 60%;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	padding: 2em;
 	padding-left: 0.5em;
 }

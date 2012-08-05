@@ -3,7 +3,32 @@
 	padding: 0;
 }
 
+html {
+	width: 100%;
+	height: 100%;
+}
+
 body {
+	display: table;
+	border-collapse: collapse;
+	width: 100%;
+	height: 100%;
+}
+
+.editor, .theater {
+	display: table-cell;
+	height: 100%;
+}
+
+.editor {
+	width: 75%;
+}
+
+.theater {
+	width: 25%;
+}
+
+.editor {
 	font-family: Georgia;
 	line-height: 1.5;
 	padding: 2em;
@@ -153,4 +178,8 @@ button.action {
 	font-weight: normal;
 	text-align: right;
 	padding-left: 1em;
+}
+
+.theater {
+	background-color: black;
 }

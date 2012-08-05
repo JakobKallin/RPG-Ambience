@@ -129,6 +129,12 @@
 					}
 					reader.readAsDataURL(file);
 				};
+				
+				self.handleDrag = function(scene, event) {
+					event.preventDefault();
+					event.stopPropagation();
+					event.dataTransfer.dropEffect = 'copy';
+				};
 			}();
 			
 			
@@ -188,7 +194,7 @@
 				</div>
 			</div>
 			<!-- ko with: current -->
-			<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile }">
+			<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile, dragover: $root.handleDrag }">
 				<div class="selected-item">
 					<ul class="action-list">
 						<button class="action copy" data-bind="click: $root.copySelected">Copy</button>

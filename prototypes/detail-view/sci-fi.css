@@ -9,7 +9,7 @@
 	font-family: Corbel, sans-serif;
 }
 
-.list-item, .add-item, .selected-item {
+.list-item, .selected-item, .options table {
 	border-color: hsl(190, 100%, 25%);
 }
 
@@ -22,10 +22,6 @@ input, select, textarea {
 
 input, textarea {
 	padding: 0.125em 0.25em;
-}
-
-.options table {
-	border-color: hsl(190, 100%, 25%);
 }
 
 .note {

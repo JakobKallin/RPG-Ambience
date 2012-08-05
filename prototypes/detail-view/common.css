@@ -36,7 +36,7 @@ body {
 	height: 100%;
 }
 
-.list-item, .selected-item {
+.list-item, .selected-item, .options table {
 	border-width: 1;
 	border-style: solid;
 	border-color: black;
@@ -174,7 +174,8 @@ button.action {
 	margin-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
-	border-width: 1px;
+	border-width: 0;
+	border-left-width: 1px;
 }
 
 .options td, .options th {

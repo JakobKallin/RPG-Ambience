@@ -115,7 +115,21 @@
 					self.scenes.splice(index, 0, newScene);
 					self.select(newScene);
 				};
+				
+				self.handleDroppedFile = function(scene, event) {
+					event.preventDefault();
+					event.stopPropagation();
+					
+					var file = event.originalEvent.dataTransfer.files[0];
+					var reader = new FileReader();
+					reader.onload = function(event) {
+						scene.image(event.target.result);
+					}
+					reader.readAsDataURL(file);
+				};
 			}();
+			
+			
 			
 			var wrapScene = function(scene) {
 				scene.imageCss = ko.computed(function() {
@@ -171,7 +185,8 @@
 					<button data-bind="click: $root.add">Add Scene</button>
 				</div>
 			</div>
-			<div class="detail-view" data-bind="with: current">
+			<!-- ko with: current -->
+			<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile }">
 				<ul class="action-list">
 					<button class="action copy" data-bind="click: $root.copySelected">Copy</button>
 					<button class="action remove" data-bind="click: $root.removeSelected">Remove</button>
@@ -303,6 +318,7 @@
 					</details>
 				</div>
 			</div>
+			<!-- /ko -->
 		</div>
 	</body>
 </html>

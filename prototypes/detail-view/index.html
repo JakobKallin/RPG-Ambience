@@ -9,6 +9,7 @@
 		<script src="jquery-ui.js"></script>
 		<script src="jquery.details.js"></script>
 		<script src="knockout.js"></script>
+		<script src="splitter.js"></script>
 		<script>
 			var viewModel = new function() {
 				var self = this;
@@ -159,6 +160,8 @@
 				$('.list-view ul').sortable({
 					axis: 'y'
 				});
+				
+				new Splitter(document.body, 0.7);
 			});
 		</script>
 		
@@ -166,13 +169,13 @@
 		<link rel="stylesheet" href="sci-fi.css">
 	</head>
 	<body>
-		<datalist id="fonts">
-			<option value="Calibri">
-			<option value="Cambria">
-			<option value="Constantia">
-			<option value="Georgia">
-		</datalist>
 		<div class="editor">
+			<datalist id="fonts">
+				<option value="Calibri">
+				<option value="Cambria">
+				<option value="Constantia">
+				<option value="Georgia">
+			</datalist>
 			<div class="list-view">
 				<ul data-bind="foreach: scenes">
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">

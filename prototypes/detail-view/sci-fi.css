@@ -9,7 +9,11 @@
 	font-family: Corbel, sans-serif;
 }
 
-.list-item, .selected-item, .options table {
+.splitter {
+	background-color: black;
+}
+
+.splitter, .list-item, .selected-item, .options table {
 	border-color: hsl(190, 100%, 25%);
 }
 

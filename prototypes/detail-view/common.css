@@ -52,10 +52,23 @@ body {
 	height: 100%;
 }
 
-.list-item, .selected-item, .options table {
-	border-width: 1;
-	border-style: solid;
-	border-color: black;
+.editor {
+	width: 70%;
+}
+
+.theater {
+	width: 30%;
+}
+
+.splitter {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0.25em;
+	height: 100%;
+	border: 1px solid black;
+	border-top-width: 0;
+	border-bottom-width: 0;
 }
 
 .editor {
@@ -91,7 +104,7 @@ body {
 .list-item {
 	position: relative;
 	display: block;
-	border-width: 1px;
+	border: 1px solid black;
 	margin-bottom: 1em;
 	overflow: hidden;
 	white-space: nowrap;
@@ -129,7 +142,7 @@ body {
 
 .add-item {
 	display: block;
-	border-width: 1px;
+	border: 1px solid black;
 	margin-bottom: 1em;
 	padding: 0 1em;
 }
@@ -150,7 +163,7 @@ body {
 }
 
 .selected-item {
-	border-width: 1px;
+	border: 1px solid black;
 	padding: 1em;
 }
 
@@ -191,8 +204,7 @@ button.action {
 	margin-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
-	border-width: 0;
-	border-left-width: 1px;
+	border-left: 1px solid black;
 }
 
 .options td, .options th {

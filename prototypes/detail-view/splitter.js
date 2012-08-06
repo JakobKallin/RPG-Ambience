@@ -58,6 +58,9 @@ var Splitter = function(container, initialLeftWidth) {
 	}
 	
 	return {
-		update: update
+		update: update,
+		get leftWidth() {
+			return latestLeftWidth;
+		}
 	};
 };

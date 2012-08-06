@@ -16,7 +16,7 @@
 			var viewModel = new function() {
 				var self = this;
 				
-				self.editorWidth = ko.observable(0.6);
+				self.editorWidth = 0.6;
 				
 				self.scenes = ko.observableArray([
 					{
@@ -143,8 +143,21 @@
 				};
 				
 				self.hideEditor = function() {
+					self.editorWidth = splitter.leftWidth;
 					splitter.update(0);
-				}
+				};
+				
+				self.showEditor = function() {
+					splitter.update(self.editorWidth);
+				};
+				
+				self.toggleEditor = function() {
+					if ( splitter.leftWidth === 0 ) {
+						self.showEditor();
+					} else {
+						self.hideEditor();
+					}
+				};
 			}();
 			
 			var wrapScene = function(scene) {
@@ -161,7 +174,7 @@
 			viewModel.scenes().map(wrapScene);
 			
 			window.addEventListener('load', function() {
-				splitter = new Splitter(document.body, viewModel.editorWidth());
+				splitter = new Splitter(document.body, viewModel.editorWidth);
 				ko.applyBindings(viewModel);
 				viewModel.select(viewModel.scenes()[0]);
 				
@@ -351,6 +364,7 @@
 				backgroundSize: size
 			}
 		">
+			<button class="toggle" data-bind="click: $root.toggleEditor">Toggle Editor</button>
 		</div>
 		<!-- /ko -->
 	</body>

@@ -224,3 +224,9 @@ body {
 	right: 0;
 	background-color: black;
 }
+
+.toggle {
+	position: absolute;
+	top: 1em;
+	left: 1em;
+}

@@ -11,6 +11,8 @@
 		<script src="knockout.js"></script>
 		<script src="splitter.js"></script>
 		<script>
+			var splitter;
+			
 			var viewModel = new function() {
 				var self = this;
 				
@@ -49,6 +51,7 @@
 				self.select = function(scene) {
 					self.current(scene);
 					$('details').details();
+					splitter.update();
 				};
 				
 				self.add = function() {
@@ -154,6 +157,7 @@
 			viewModel.scenes().map(wrapScene);
 			
 			window.addEventListener('load', function() {
+				splitter = new Splitter(document.body, 0.7);
 				ko.applyBindings(viewModel);
 				viewModel.select(viewModel.scenes()[0]);
 				
@@ -161,7 +165,6 @@
 					axis: 'y'
 				});
 				
-				new Splitter(document.body, 0.7);
 			});
 		</script>
 		

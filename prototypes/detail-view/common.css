@@ -31,6 +31,11 @@ button, summary, input[type=checkbox] {
 	cursor: pointer;
 }
 
+button {
+	font-size: 1em;
+	padding: 0.25em;
+}
+
 input[type=number] {
 	width: 3em;
 }
@@ -79,6 +84,11 @@ body {
 	overflow: auto;
 }
 
+.editor-action-list {
+	padding: 1em 2em 0 2em;
+	text-align: right;
+}
+
 .note {
 	opacity: 0.5;
 }
@@ -98,8 +108,7 @@ body {
 	width: 40%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	padding: 2em;
-	padding-right: 0.5em;
+	padding: 1em 0.5em 2em 2em;
 }
 
 .list-item {
@@ -158,8 +167,7 @@ body {
 	width: 60%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	padding: 2em;
-	padding-left: 0.5em;
+	padding: 1em 2em 2em 0.5em;
 }
 
 .selected-item {
@@ -179,11 +187,6 @@ body {
 
 .action.remove {
 	float: right;
-}
-
-button.action {
-	font-size: 1em;
-	padding: 0.25em;
 }
 
 .detail-view .preview {

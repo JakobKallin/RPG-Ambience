@@ -16,6 +16,8 @@
 			var viewModel = new function() {
 				var self = this;
 				
+				self.editorWidth = ko.observable(0.6);
+				
 				self.scenes = ko.observableArray([
 					{
 						name: ko.observable('City'),
@@ -139,9 +141,11 @@
 					event.stopPropagation();
 					event.dataTransfer.dropEffect = 'copy';
 				};
+				
+				self.hideEditor = function() {
+					splitter.update(0);
+				}
 			}();
-			
-			
 			
 			var wrapScene = function(scene) {
 				scene.imageCss = ko.computed(function() {
@@ -157,7 +161,7 @@
 			viewModel.scenes().map(wrapScene);
 			
 			window.addEventListener('load', function() {
-				splitter = new Splitter(document.body, 0.7);
+				splitter = new Splitter(document.body, viewModel.editorWidth());
 				ko.applyBindings(viewModel);
 				viewModel.select(viewModel.scenes()[0]);
 				
@@ -179,6 +183,9 @@
 				<option value="Constantia">
 				<option value="Georgia">
 			</datalist>
+			<div class="editor-action-list">
+				<button data-bind="click: $root.hideEditor">Hide Editor</button>
+			</div>
 			<div class="list-view">
 				<ul data-bind="foreach: scenes">
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">

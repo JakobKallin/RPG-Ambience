@@ -26,7 +26,7 @@ var Splitter = function(container, initialLeftWidth) {
 	}
 	
 	function update(newLeftWidth) {
-		if ( !newLeftWidth ) {
+		if ( newLeftWidth === undefined ) {
 			newLeftWidth = latestLeftWidth;
 		}
 		

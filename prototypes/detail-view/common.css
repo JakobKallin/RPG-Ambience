@@ -69,6 +69,7 @@ body {
 	border: 1px solid black;
 	border-top-width: 0;
 	border-bottom-width: 0;
+	cursor: w-resize;
 }
 
 .editor {

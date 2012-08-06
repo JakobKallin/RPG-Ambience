@@ -40,11 +40,13 @@ var Splitter = function(container, initialLeftWidth) {
 	function onMouseDown(event) {
 		event.preventDefault();
 		isPressed = true;
+		document.body.style.cursor = 'w-resize';
 	}
 	
 	function onMouseUp(event) {
 		event.preventDefault();
 		isPressed = false;
+		document.body.style.cursor = 'auto';
 	}
 	
 	function onMouseMove(event) {

@@ -15,7 +15,6 @@ Ambience.Scene.base = {
 	volume: 1,
 	imageDelay: 0,
 	get isVisual() {
-		// backgroundColor should be in this, but it makes sound-only effects block the scene. Should be fixed.
 		return (
 			this.image ||
 			this.video ||

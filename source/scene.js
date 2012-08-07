@@ -21,11 +21,7 @@ Ambience.Scene.base = {
 		);
 	},
 	get hasOnlySound() {
-		return (
-			!this.image &&
-			!this.video &&
-			!this.text
-		);
+		return this.sounds && !this.isVisual;
 	},
 	get fadeInDuration() {
 		if ( this.fadesIn ) {

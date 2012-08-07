@@ -13,7 +13,6 @@ Ambience.Scene.base = {
 	loops: true,
 	backgroundColor: 'black',
 	volume: 1,
-	imageDelay: 0,
 	get isVisual() {
 		return (
 			this.image ||

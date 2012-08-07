@@ -1,4 +1,5 @@
 var splitter;
+var ambience;
 			
 var viewModel = new function() {
 	var self = this;
@@ -169,4 +170,8 @@ window.addEventListener('load', function() {
 		axis: 'y'
 	});
 	
+	ambience = new Ambience(
+		new Ambience.Layer(document.getElementById('background')),
+		new Ambience.Layer(document.getElementById('foreground'))
+	);
 });

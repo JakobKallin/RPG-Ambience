@@ -183,8 +183,8 @@
 							<summary>Other</summary>
 							<table>
 								<tr>
-									<th><label for="background">Background color</label></th>
-									<td><input id="background" type="color" data-bind="value: color"></td>
+									<th><label for="background-color">Background</label></th>
+									<td><input id="background-colo" type="color" data-bind="value: color"></td>
 								</tr>
 								<tr>
 									<th><label for="fade">Fade in/out</label></th>
@@ -201,13 +201,7 @@
 			<!-- /ko -->
 		</div>
 		<!-- ko with: current -->
-		<div id="theater" class="theater preview" data-bind="
-			style: {
-				backgroundColor: color,
-				backgroundImage: imageCss,
-				backgroundSize: size
-			}
-		">
+		<div id="theater" class="theater preview">
 			<button class="toggle" data-bind="click: $root.toggleEditor">Toggle Editor</button>
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>

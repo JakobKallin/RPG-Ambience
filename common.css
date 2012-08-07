@@ -235,3 +235,50 @@ body {
 	top: 1em;
 	left: 1em;
 }
+
+.theater .layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+	opacity: 0;
+	cursor: inherit;
+}
+
+.theater .layer .image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.theater .layer .video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.theater .layer .text {
+	display: table;
+	height: 100%;
+	margin: 0 auto;
+}
+
+.theater .layer .text div {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	color: white;
+	white-space: pre;
+	text-rendering: optimizeLegibility;
+}

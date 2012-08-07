@@ -68,7 +68,7 @@ Ambience.Layer = function(node) {
 			node.style.visibility = 'visible';
 		}
 		
-		isFadingIn = true
+		isFadingIn = true;
 		fadeAnimation.start(1, scene.fadeInDuration, {onEnded: onFadeInEnded});		
 	}
 	

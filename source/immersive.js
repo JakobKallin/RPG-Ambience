@@ -16,7 +16,8 @@ var viewModel = new function() {
 			sound: ko.observable(''),
 			text: ko.observable(''),
 			color: ko.observable('#000000'),
-			size: ko.observable('contain')
+			size: ko.observable('contain'),
+			fadeDuration: ko.observable(0)
 		});
 	};
 	
@@ -29,6 +30,7 @@ var viewModel = new function() {
 		flatScene.text = scene.text();
 		flatScene.backgroundColor = scene.color();
 		flatScene.imageStyle = { size: scene.size() };
+		flatScene.fadeDuration = scene.fadeDuration() * 1000;
 		
 		ambience.play(flatScene);
 	};

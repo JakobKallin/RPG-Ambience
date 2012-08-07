@@ -24,7 +24,7 @@ describe('Ambience audio', function() {
 	
 	it('fades audio volume', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.fadeDuration = 2000;
 			scene.sounds = ['test-audio.ogg'];
 			ambience.play(scene);
@@ -48,7 +48,7 @@ describe('Ambience audio', function() {
 	
 	it('interrupts an audio fade halfway through', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.fadeDuration = 2000;
 			scene.sounds = ['test-audio.ogg'];
 			ambience.play(scene);
@@ -75,7 +75,7 @@ describe('Ambience audio', function() {
 	
 	it('stops non-looping audio-only scenes when audio ends', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.sounds = ['test-audio-2s.ogg'];
 			scene.loops = false;
 			
@@ -97,7 +97,7 @@ describe('Ambience audio', function() {
 	
 	it('removes audio element when audio ends', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.image = 'test-image.jpg';
 			scene.sounds = ['test-audio-2s.ogg'];
 			scene.loops = false;
@@ -114,7 +114,7 @@ describe('Ambience audio', function() {
 	
 	it('crosses over', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.crossoverDuration = 2;
 			scene.sounds = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
 			ambience.play(scene);
@@ -143,7 +143,7 @@ describe('Ambience audio', function() {
 	/*
 	it('crosses over at most half of audio length', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.crossoverDuration = 6;
 			scene.sounds = ['test-audio-10s.ogg', 'test-audio-5s.ogg', 'test-audio-10s.ogg'];
 			ambience.play(scene);
@@ -171,7 +171,7 @@ describe('Ambience audio', function() {
 	
 	it('crossfades', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.crossoverDuration = 2;
 			scene.crossfades = true;
 			scene.sounds = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];

@@ -28,11 +28,11 @@ describe('Ambience layer', function() {
 	});
 	
 	it('stops any old scene when playing a new scene', function() {
-		var scene = Object.create(Ambience.scene.base);
+		var scene = new Ambience.Scene();
 		scene.image = 'test-image.jpg';
 		ambience.play(scene);
 		
-		var newScene = Object.create(Ambience.scene.base);
+		var newScene = new Ambience.Scene();
 		scene.image = 'test-image.jpg';
 		ambience.play(scene);
 		
@@ -41,7 +41,7 @@ describe('Ambience layer', function() {
 	
 	it("fades an entire layer's opacity", function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.fadeDuration = 2000;
 			ambience.play(scene);
 		});
@@ -64,7 +64,7 @@ describe('Ambience layer', function() {
 	
 	it('interrupts a fade halfway through', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.fadeDuration = 2000;
 			ambience.play(scene);
 		});
@@ -90,7 +90,7 @@ describe('Ambience layer', function() {
 	
 	it('stops all layers after fading out', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.fadeDuration = 1000;
 			scene.backgroundColor = 'red';
 			scene.image = 'test-image.jpg';
@@ -116,7 +116,7 @@ describe('Ambience layer', function() {
 		waits(1500);
 		
 		runs(function() {
-			expect(backgroundNode.style.backgroundColor).toBe(Ambience.scene.base.backgroundColor);
+			expect(backgroundNode.style.backgroundColor).toBe(Ambience.Scene.base.backgroundColor);
 			expect(backgroundNode.querySelectorAll('.image').length).toBe(0);
 			expect(audioNodes.length).toBe(0);
 			expect(backgroundNode.querySelectorAll('.text').length).toBe(0);

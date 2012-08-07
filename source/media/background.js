@@ -1,5 +1,5 @@
 Ambience.Background = function(node) {
-	var defaultBackground = Ambience.scene.base.backgroundColor;
+	var defaultBackground = Ambience.Scene.base.backgroundColor;
 	
 	function play(scene) {
 		if ( scene.backgroundColor ) {

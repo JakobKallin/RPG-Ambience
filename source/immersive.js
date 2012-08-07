@@ -23,11 +23,11 @@ var viewModel = new function() {
 	};
 	
 	self.playScene = function(scene) {
-		var flatScene = Object.create(Ambience.scene.base);
+		var flatScene = new Ambience.Scene();
 		flatScene.name = scene.name();
 		flatScene.key = scene.key();
-		flatScene.image = scene.image();
-		flatScene.sounds = [scene.sound()];
+		flatScene.image = encodeURI(scene.image());
+		flatScene.sounds = [encodeURI(scene.sound())];
 		flatScene.text = scene.text();
 		flatScene.backgroundColor = scene.color();
 		flatScene.imageStyle = { size: scene.size() };

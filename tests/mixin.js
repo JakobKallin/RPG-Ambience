@@ -20,11 +20,11 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('replaces defined properties', function() {
-		var scene = Object.create(Ambience.scene.base);
+		var scene = new Ambience.Scene();
 		scene.text = 'Test';
 		ambience.play(scene);
 		
-		var mixin = Object.create(Ambience.scene.base);
+		var mixin = new Ambience.Scene();
 		mixin.isMixin = true;
 		mixin.text = 'Mixin';
 		ambience.play(mixin);
@@ -33,11 +33,11 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('retains undefined properties', function() {
-		var scene = Object.create(Ambience.scene.base);
+		var scene = new Ambience.Scene();
 		scene.text = 'Test';
 		ambience.play(scene);
 		
-		var mixin = Object.create(Ambience.scene.base);
+		var mixin = new Ambience.Scene();
 		mixin.isMixin = true;
 		mixin.image = 'test-image.jpg';
 		ambience.play(mixin);
@@ -48,11 +48,11 @@ describe('Ambience mixin', function() {
 	
 	it('ignores fading when another scene is playing', function() {
 		runs(function() {
-			var scene = Object.create(Ambience.scene.base);
+			var scene = new Ambience.Scene();
 			scene.text = 'Test';
 			ambience.play(scene);
 			
-			var mixin = Object.create(Ambience.scene.base);
+			var mixin = new Ambience.Scene();
 			mixin.isMixin = true;
 			mixin.text = 'Mixin';
 			mixin.fadeDuration = 2000;
@@ -68,7 +68,7 @@ describe('Ambience mixin', function() {
 	
 	it('respects fading when another scene is not playing', function() {
 		runs(function() {
-			var mixin = Object.create(Ambience.scene.base);
+			var mixin = new Ambience.Scene();
 			mixin.isMixin = true;
 			mixin.text = 'Mixin';
 			mixin.fadeDuration = 2000;

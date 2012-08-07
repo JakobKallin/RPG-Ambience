@@ -1,261 +1,172 @@
-Ambience.immersive = {};
-
-window.addEventListener('load', function() {
-	var backgroundNode = document.getElementById('background');
-	var background = new Ambience.Layer(backgroundNode);
+var splitter;
+			
+var viewModel = new function() {
+	var self = this;
 	
-	var foregroundNode = document.getElementById('foreground');
-	var foreground = new Ambience.Layer(foregroundNode);
+	self.editorWidth = 0.6;
 	
-	var ambience = new Ambience(background, foreground);
-	
-	var editor = document.getElementById('editor');
-	var editorInput = document.getElementById('editor-input');
-	var theater = document.getElementById('theater');
-	
-	var fileChooser = document.getElementById('file-chooser');
-	var menu = document.getElementById('menu');
-	
-	var preloader = new Preloader();
-	
-	var adventure;
-	var adventureCallbacks = {
-		onFileRead: function(contents) {
-			editorInput.value = contents;
+	self.scenes = ko.observableArray([
+		{
+			name: ko.observable('City'),
+			image: ko.observable('examples/ishtar_rooftop.jpg'),
+			sound: ko.observable('music.mp3'),
+			text: ko.observable(null),
+			color: ko.observable('#000000'),
+			size: ko.observable('cover'),
+			key: ko.observable('F1')
 		},
-		onAdventureLoaded: function(newAdventure) {
-			adventure = newAdventure;
-			hideMenu();
-			enableLayers();
-			preloader.preloadMedia(adventure);
+		{
+			name: ko.observable('Portrait'),
+			image: ko.observable('examples/jack-face-details.jpg'),
+			sound: ko.observable(null),
+			text: ko.observable(null),
+			color: ko.observable('#ffffff'),
+			size: ko.observable('contain'),
+			key: ko.observable('F2')
 		},
-		onError: function(error) {
-			alert('There was an error loading the adventure file:\n' + error.message);
+		{
+			name: ko.observable('Shaman'),
+			image: ko.observable('examples/shaman-previz.jpg'),
+			sound: ko.observable(null),
+			text: ko.observable(null),
+			color: ko.observable('#000000'),
+			size: ko.observable('cover'),
+			key: ko.observable('F3')
 		}
+	]);
+	
+	self.current = ko.observable();
+	
+	self.select = function(scene) {
+		self.current(scene);
+		$('details').details();
+		splitter.update();
 	};
 	
-	function start() {
-		sceneStage = new Ambience.Stage(document.getElementById('scene-stage'));
-		effectStage = new Ambience.Stage(document.getElementById('effect-stage'));
-		ambience = new Ambience(sceneStage, effectStage);
-		
-		editor = document.getElementById('editor');
-		editorInput = document.getElementById('editor-input');
-		theater = document.getElementById('theater');
-		
-		fileChooser = document.getElementById('file-chooser');
-		menu = document.getElementById('menu');
-		
-		preloader = new Ambience.Preloader();
-		
-		menu.addEventListener('drop', function(event) {
-			event.stopPropagation();
-			event.preventDefault();
-			Ambience.Adventure.loadFromFile(event.dataTransfer.files[0], adventureCallbacks);
-		});
-		
-		menu.addEventListener('dragover', function(event) {
-			event.stopPropagation();
-			event.preventDefault();
-			event.dataTransfer.dropEffect = 'copy';
-		});
-		
-		fileChooser.addEventListener('change', function() {
-			Ambience.Adventure.loadFromFile(this.files[0], adventureCallbacks);
-		});
-	}
-	
-	function hideMenu() {
-		// Menu is removed entirely so that keyboard focus cannot remain on invisible submit button.
-		menu.parentNode.removeChild(menu);
-	}
-	
-	var cursorTimer;
-	var cursorHideDelay = 1000;
-	var previousX;
-	var previousY;
-	
-	var hideCursor = function() {
-		document.body.style.cursor = 'none';
+	self.add = function() {
+		self.scenes.push(wrapScene({
+			name: ko.observable('Untitled scene'),
+			image: ko.observable(''),
+			sound: ko.observable(''),
+			text: ko.observable(''),
+			color: ko.observable('#000000'),
+			size: ko.observable('contain'),
+			key: ko.observable(null)
+		}));
+		self.select(self.last());
 	};
 	
-	var showCursor = function() {
-		document.body.style.cursor = 'auto';
-	};
-	
-	function onMouseMove(event) {
-		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
-		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
-		if ( mouseHasMoved ) {
-			window.clearTimeout(cursorTimer);
-			showCursor();
-			cursorTimer = window.setTimeout(hideCursor, cursorHideDelay);
-		}
-		
-		previousX = event.screenX;
-		previousY = event.screenY;		
-	}
-	
-	var command = '';
-	
-	var keyStrings = {
-		8: 'Backspace',
-		13: 'Enter',
-		32: 'Space',
-		112: 'F1',
-		113: 'F2',
-		114: 'F3',
-		115: 'F4',
-		116: 'F5',
-		117: 'F6',
-		118: 'F7',
-		119: 'F8',
-		120: 'F9',
-		121: 'F10',
-		122: 'F11',
-		123: 'F12'
-	};
-	
-	function executeCommand(command) {
-		if ( command.length === 0 ) {
-			fadeOutOne();
-		} else {
-			playNamedScene(command);
-		}
-	}
-	
-	function resetCommand() {
-		command = '';
-	}
-	
-	function backspaceCommand() {
-		if ( command.length > 0 ) {
-			command = command.substring(0, command.length - 1);
-		}
-	}
-	
-	function keyStringFromKeyCode(keyCode) {
-		if ( keyCode in keyStrings ) {
-			return keyStrings[keyCode];
-		} else if ( String.fromCharCode(keyCode) !== '' ) {
-			return String.fromCharCode(keyCode);
+	self.previous = function() {
+		var index = self.scenes.indexOf(self.current());
+		if ( index > 0 ) {
+			return self.scenes()[index - 1];
 		} else {
 			return null;
 		}
-	}
+	};
 	
-	function namedScene(name) {
-		if ( name.length > 0 ) {
-			return adventure.scenes.first(function(scene) {
-				return (
-					scene.name &&
-					scene.name.toUpperCase().startsWith(name.toUpperCase())
-				);
-			});
+	self.next = function() {
+		var index = self.scenes.indexOf(self.current());
+		if ( index < self.scenes().length - 1 ) {
+			return self.scenes()[index + 1];
 		} else {
 			return null;
 		}
-	}
+	};
 	
-	function keyedScene(keyString) {
-		return adventure.scenes.first(function(scene) {
-			return (
-				scene.key &&
-				scene.key.toUpperCase() === keyString.toUpperCase()
-			);
-		});
-	}
-	
-	function fadeOutOne() {
-		if ( foreground.scene ) {
-			ambience.fadeOutForeground();
-		} else if ( background.scene ) {
-			ambience.fadeOutBackground();
-		}
-	}
-	
-	function playNamedScene(name) {
-		var scene = namedScene(name);
-		ambience.play(scene);
-	}
-	
-	function enableLayers() {
-		document.addEventListener('keydown', onKeyDown);
-		document.addEventListener('keypress', onKeyPress);
-		
-		var stopPropagation = function(event) { event.stopPropagation(); };
-		editorInput.addEventListener('keydown', stopPropagation);
-		editorInput.addEventListener('keypress', stopPropagation);
-		editorInput.addEventListener('change', loadEditorAdventure);
-		hideEditor();
-	}
-	
-	function onKeyDown(event) {
-		var keyString = keyStringFromKeyCode(event.which);
-		
-		if ( keyString === 'Enter' ) {
-			executeCommand(command);
-			resetCommand();
-		} else if ( keyString === 'Backspace' ) {
-			event.preventDefault(); // Prevent Back button.
-			backspaceCommand();
-		} else if ( keyString === 'F12' && event.shiftKey && event.ctrlKey ) {
-			event.preventDefault();
-			toggleEditor();
-		} else if ( keyString !== null ) {
-			var scene = keyedScene(keyString);
-			if ( scene !== null ) {
-				event.preventDefault();
-				ambience.play(scene);
-				resetCommand();
-			}
-		}
-	}
-	
-	function onKeyPress(event) {
-		var keyCode = event.which;
-		if ( keyCode !== 0 && keyStringFromKeyCode(keyCode) !== 'Enter' ) {
-			event.preventDefault();
-			var character = String.fromCharCode(keyCode);
-			command += character;
-		}
-	}
-	
-	var editorIsVisible = false;
-	
-	function showEditor() {
-		editor.style.visibility = 'visible';
-		theater.className = 'compressed';
-		editorIsVisible = true;
-	}
-	
-	function hideEditor() {
-		editor.style.visibility = 'hidden';
-		theater.className = '';
-		editorIsVisible = false;
-	}
-	
-	function toggleEditor() {
-		if ( editorIsVisible ) {
-			hideEditor();
+	self.last = function() {
+		var index = self.scenes().length - 1;
+		if ( index !== -1 ) {
+			return self.scenes()[index];
 		} else {
-			showEditor();
+			return null;
 		}
-	}
+	};
 	
-	function loadEditorAdventure() {
-		try {
-			var newAdventure = Ambience.Adventure.fromString(editorInput.value);
-			adventure = newAdventure;
-			preloader.preloadMedia(adventure);
-		} catch (error) {
-			alert('There was an error loading the adventure file:\n' + error.message);
+	self.removeSelected = function() {
+		var previous = self.previous();
+		var next = self.next();
+		
+		if ( self.previous() ) {
+			self.select(previous);
+		} else if ( next ) {
+			self.select(next);
+		} else {
+			self.select(null);
 		}
-	}
+		
+		var index = viewModel.scenes.indexOf(this);
+		self.scenes.splice(index, 1);
+	};
 	
-	return {
-		start: function() {
-			window.addEventListener('load', start);
+	self.copySelected = function() {
+		var newScene = {};
+		for ( var property in this ) {
+			newScene[property] = ko.observable(this[property]());
+		};
+		wrapScene(newScene);
+		
+		var index = self.scenes.indexOf(self.current()) + 1;
+		self.scenes.splice(index, 0, newScene);
+		self.select(newScene);
+	};
+	
+	self.handleDroppedFile = function(scene, event) {
+		event.preventDefault();
+		event.stopPropagation();
+		
+		var file = event.originalEvent.dataTransfer.files[0];
+		var reader = new FileReader();
+		reader.onload = function(event) {
+			scene.image(event.target.result);
+		}
+		reader.readAsDataURL(file);
+	};
+	
+	self.handleDrag = function(scene, event) {
+		event.preventDefault();
+		event.stopPropagation();
+		event.dataTransfer.dropEffect = 'copy';
+	};
+	
+	self.hideEditor = function() {
+		self.editorWidth = splitter.leftWidth;
+		splitter.update(0);
+	};
+	
+	self.showEditor = function() {
+		splitter.update(self.editorWidth);
+	};
+	
+	self.toggleEditor = function() {
+		if ( splitter.leftWidth === 0 ) {
+			self.showEditor();
+		} else {
+			self.hideEditor();
 		}
 	};
 }();
+
+var wrapScene = function(scene) {
+	scene.imageCss = ko.computed(function() {
+		return 'url("' + this.image() + '")';
+	}, scene);
+	scene.isSelected = ko.computed(function() {
+		return this === viewModel.current();
+	}, scene);
+	
+	return scene;
+};
+
+viewModel.scenes().map(wrapScene);
+
+window.addEventListener('load', function() {
+	splitter = new Splitter(document.body, viewModel.editorWidth);
+	ko.applyBindings(viewModel);
+	viewModel.select(viewModel.scenes()[0]);
+	
+	$('.list-view ul').sortable({
+		axis: 'y'
+	});
+	
+});

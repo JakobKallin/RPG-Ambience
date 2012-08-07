@@ -27,13 +27,20 @@ label[for] {
 	cursor: pointer;
 }
 
+button, input, select, textarea {
+	font-size: 1em;
+}
+
 button, summary, input[type=checkbox] {
 	cursor: pointer;
 }
 
 button {
-	font-size: 1em;
 	padding: 0.25em;
+}
+
+input, textarea {
+	padding: 0.125em 0.25em;
 }
 
 input[type=number] {
@@ -79,7 +86,6 @@ body {
 
 .editor {
 	left: 0;
-	font-family: Georgia;
 	line-height: 1.5;
 	overflow: auto;
 }
@@ -123,7 +129,6 @@ body {
 
 .list-item:hover, .list-item.selected {
 	cursor: pointer;
-	background-color: hsl(0, 0%, 90%);
 }
 
 .list-item.ui-sortable-helper {

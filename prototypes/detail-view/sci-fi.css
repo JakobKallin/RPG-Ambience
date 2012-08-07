@@ -21,11 +21,6 @@ input, select, textarea {
 	background-color: black;
 	color: white;
 	border: 1px solid hsl(190, 100%, 25%);
-	font-size: 1em;
-}
-
-input, textarea {
-	padding: 0.125em 0.25em;
 }
 
 .note {

@@ -1,0 +1,16 @@
+.editor {
+	background-color: black;
+	color: hsl(0, 0%, 90%);
+}
+
+.editor, button, select, input, textarea {
+	font-family: Georgia, serif;
+}
+
+.list-item:hover, .list-item.selected {
+	background-color: hsl(0, 0%, 15%);
+}
+
+.splitter, .list-item, .selected-item, .options table {
+	border-color: hsl(0, 0%, 25%);
+}

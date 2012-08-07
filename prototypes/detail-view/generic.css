@@ -14,3 +14,9 @@
 .splitter, .list-item, .selected-item, .options table {
 	border-color: hsl(0, 0%, 25%);
 }
+
+input, select, textarea {
+	background-color: black;
+	color: hsl(0, 0%, 90%);
+	border: 1px solid hsl(0, 0%, 25%);
+}

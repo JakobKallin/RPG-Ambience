@@ -67,6 +67,7 @@
 			<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile, dragover: $root.handleDrag }">
 				<div class="selected-item">
 					<ul class="action-list">
+						<button class="action play" data-bind="click: $root.playSelected">Play</button>
 						<button class="action copy" data-bind="click: $root.copySelected">Copy</button>
 						<button class="action remove" data-bind="click: $root.removeSelected">Remove</button>
 					</ul>
@@ -200,12 +201,10 @@
 			</div>
 			<!-- /ko -->
 		</div>
-		<!-- ko with: current -->
 		<div id="theater" class="theater preview">
 			<button class="toggle" data-bind="click: $root.toggleEditor">Toggle Editor</button>
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
-		<!-- /ko -->
 	</body>
 </html>

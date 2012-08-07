@@ -6,35 +6,32 @@ var viewModel = new function() {
 	
 	self.editorWidth = 0.6;
 	
-	self.scenes = ko.observableArray([
-		{
-			name: ko.observable('City'),
-			image: ko.observable('examples/ishtar_rooftop.jpg'),
-			sound: ko.observable('music.mp3'),
-			text: ko.observable(null),
+	self.scenes = ko.observableArray();
+	
+	self.createScene = function() {
+		return wrapScene({
+			name: ko.observable('Untitled scene'),
+			key: ko.observable('F1'),
+			image: ko.observable(''),
+			sound: ko.observable(''),
+			text: ko.observable(''),
 			color: ko.observable('#000000'),
-			size: ko.observable('cover'),
-			key: ko.observable('F1')
-		},
-		{
-			name: ko.observable('Portrait'),
-			image: ko.observable('examples/jack-face-details.jpg'),
-			sound: ko.observable(null),
-			text: ko.observable(null),
-			color: ko.observable('#ffffff'),
-			size: ko.observable('contain'),
-			key: ko.observable('F2')
-		},
-		{
-			name: ko.observable('Shaman'),
-			image: ko.observable('examples/shaman-previz.jpg'),
-			sound: ko.observable(null),
-			text: ko.observable(null),
-			color: ko.observable('#000000'),
-			size: ko.observable('cover'),
-			key: ko.observable('F3')
-		}
-	]);
+			size: ko.observable('contain')
+		});
+	};
+	
+	self.playScene = function(scene) {
+		var flatScene = Object.create(Ambience.scene.base);
+		flatScene.name = scene.name();
+		flatScene.key = scene.key();
+		flatScene.image = scene.image();
+		flatScene.sounds = [scene.sound()];
+		flatScene.text = scene.text();
+		flatScene.backgroundColor = scene.color();
+		flatScene.imageStyle = { size: scene.size() };
+		
+		ambience.play(flatScene);
+	};
 	
 	self.current = ko.observable();
 	
@@ -45,15 +42,7 @@ var viewModel = new function() {
 	};
 	
 	self.add = function() {
-		self.scenes.push(wrapScene({
-			name: ko.observable('Untitled scene'),
-			image: ko.observable(''),
-			sound: ko.observable(''),
-			text: ko.observable(''),
-			color: ko.observable('#000000'),
-			size: ko.observable('contain'),
-			key: ko.observable(null)
-		}));
+		self.scenes.push(self.createScene());
 		self.select(self.last());
 	};
 	
@@ -98,6 +87,10 @@ var viewModel = new function() {
 		
 		var index = viewModel.scenes.indexOf(this);
 		self.scenes.splice(index, 1);
+	};
+	
+	self.playSelected = function() {
+		self.playScene(self.current());
 	};
 	
 	self.copySelected = function() {

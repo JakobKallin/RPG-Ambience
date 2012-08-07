@@ -27,6 +27,18 @@ describe('Ambience layer', function() {
 		document.body.removeChild(foregroundNode);
 	});
 	
+	it('stops any old scene when playing a new scene', function() {
+		var scene = Object.create(Ambience.scene.base);
+		scene.image = 'test-image.jpg';
+		ambience.play(scene);
+		
+		var newScene = Object.create(Ambience.scene.base);
+		scene.image = 'test-image.jpg';
+		ambience.play(scene);
+		
+		expect(backgroundNode.querySelectorAll('.image').length).toBe(1);
+	});
+	
 	it("fades an entire layer's opacity", function() {
 		runs(function() {
 			var scene = Object.create(Ambience.scene.base);

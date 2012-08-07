@@ -86,7 +86,7 @@ var viewModel = new function() {
 		} else if ( next ) {
 			self.select(next);
 		} else {
-			self.select(null);
+			self.add();
 		}
 		
 		var index = viewModel.scenes.indexOf(this);
@@ -161,7 +161,7 @@ viewModel.scenes().map(wrapScene);
 window.addEventListener('load', function() {
 	splitter = new Splitter(document.body, viewModel.editorWidth);
 	ko.applyBindings(viewModel);
-	viewModel.select(viewModel.scenes()[0]);
+	viewModel.add();
 	
 	$('.list-view ul').sortable({
 		axis: 'y'

@@ -120,7 +120,6 @@ body {
 .list-item {
 	position: relative;
 	display: block;
-	border: 1px solid black;
 	margin-bottom: 1em;
 	overflow: hidden;
 	white-space: nowrap;
@@ -176,7 +175,6 @@ body {
 }
 
 .selected-item {
-	border: 1px solid black;
 	padding: 1em;
 }
 
@@ -212,7 +210,6 @@ body {
 	margin-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
-	border-left: 1px solid black;
 }
 
 .options td, .options th {

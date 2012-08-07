@@ -11,8 +11,16 @@
 	background-color: hsl(0, 0%, 15%);
 }
 
-.splitter, .list-item, .selected-item, .options table {
+.splitter {
 	border-color: hsl(0, 0%, 25%);
+}
+
+.list-item, .selected-item, .detail-view .preview {
+	border: 1px solid hsl(0, 0%, 25%);
+}
+
+.options table {
+	border-left: 1px solid hsl(0, 0%, 25%);
 }
 
 input, select, textarea {

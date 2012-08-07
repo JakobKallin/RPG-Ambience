@@ -48,6 +48,8 @@ Ambience.Layer = function(node) {
 	function playScene(newScene) {
 		if ( scene && newScene.isMixin ) {
 			stopRedefinedMedia(newScene);
+		} else if ( scene && !newScene.isMixin ) {
+			stopScene();
 		}
 		
 		scene = newScene;

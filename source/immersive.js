@@ -1,10 +1,10 @@
 var splitter;
 var ambience;
 			
-var viewModel = new function() {
+var ViewModel = function(editorWidth) {
 	var self = this;
 	
-	self.editorWidth = 0.6;
+	self.editorWidth = editorWidth;
 	self.editorIsVisible = ko.observable(true);
 	self.editorIsHidden = ko.computed(function() {
 		return !self.editorIsVisible();
@@ -13,7 +13,7 @@ var viewModel = new function() {
 	self.scenes = ko.observableArray();
 	
 	self.createScene = function() {
-		return wrapScene({
+		return self.wrapScene({
 			name: ko.observable('Untitled scene'),
 			key: ko.observable('F1'),
 			image: ko.observable(''),
@@ -24,6 +24,17 @@ var viewModel = new function() {
 			fadeDuration: ko.observable(0),
 			loop: ko.observable(true)
 		});
+	};
+	
+	self.wrapScene = function(scene) {
+		scene.imageCss = ko.computed(function() {
+			return 'url("' + this.image() + '")';
+		}, scene);
+		scene.isSelected = ko.computed(function() {
+			return this === self.current();
+		}, scene);
+		
+		return scene;
 	};
 	
 	self.playScene = function(scene) {
@@ -141,32 +152,49 @@ var viewModel = new function() {
 		splitter.update(self.editorWidth);
 		self.editorIsVisible(true);
 	};
-}();
-
-var wrapScene = function(scene) {
-	scene.imageCss = ko.computed(function() {
-		return 'url("' + this.image() + '")';
-	}, scene);
-	scene.isSelected = ko.computed(function() {
-		return this === viewModel.current();
-	}, scene);
 	
-	return scene;
+	var theater = document.getElementById('theater');
+	var cursorTimer;
+	var cursorHideDelay = 1000;
+	var previousX;
+	var previousY;
+	
+	self.scheduleHiddenCursor = function() {
+		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
+		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
+		if ( mouseHasMoved ) {
+			window.clearTimeout(cursorTimer);
+			self.showCursor();
+			cursorTimer = window.setTimeout(self.hideCursor, cursorHideDelay);
+		}
+
+		previousX = event.screenX;
+		previousY = event.screenY;
+	};
+	
+	self.hideCursor = function() {
+		theater.style.cursor = 'none';
+	};
+
+	self.showCursor = function() {
+		theater.style.cursor = 'auto';
+	};
 };
 
-viewModel.scenes().map(wrapScene);
-
 window.addEventListener('load', function() {
-	splitter = new Splitter(document.body, viewModel.editorWidth);
+	splitter = new Splitter(document.body, 0.6);
+	
+	ambience = new Ambience(
+		new Ambience.Layer(document.getElementById('background')),
+		new Ambience.Layer(document.getElementById('foreground'))
+	);
+	
+	var viewModel = new ViewModel();
+	viewModel.scenes().map(viewModel.wrapScene);
 	ko.applyBindings(viewModel);
 	viewModel.add();
 	
 	$('.list-view ul').sortable({
 		axis: 'y'
 	});
-	
-	ambience = new Ambience(
-		new Ambience.Layer(document.getElementById('background')),
-		new Ambience.Layer(document.getElementById('foreground'))
-	);
 });

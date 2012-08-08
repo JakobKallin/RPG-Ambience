@@ -1,6 +1,6 @@
 .editor {
-	background-color: black;
-	color: hsl(0, 0%, 90%);
+	background-color: hsl(0, 0%, 5%);
+	color: hsl(0, 0%, 75%);
 }
 
 .editor, button, select, input, textarea {
@@ -9,10 +9,6 @@
 
 .list-item:hover, .list-item.selected {
 	background-color: hsl(0, 0%, 15%);
-}
-
-.splitter {
-	border-color: hsl(0, 0%, 25%);
 }
 
 .list-item, .selected-item, .detail-view .preview {
@@ -27,4 +23,8 @@ input, select, textarea {
 	background-color: black;
 	color: hsl(0, 0%, 90%);
 	border: 1px solid hsl(0, 0%, 25%);
+}
+
+.splitter {
+	border-color: hsl(0, 0%, 25%);
 }

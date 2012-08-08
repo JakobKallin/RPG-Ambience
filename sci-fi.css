@@ -11,10 +11,15 @@
 
 .splitter {
 	background-color: black;
+	border-color: hsl(190, 100%, 25%);
 }
 
-.splitter, .list-item, .selected-item, .options table {
-	border-color: hsl(190, 100%, 25%);
+.list-item, .selected-item {
+	border: 1px solid hsl(190, 100%, 25%);
+}
+
+.options table {
+	border-left: 1px solid hsl(190, 100%, 25%);
 }
 
 input, select, textarea {

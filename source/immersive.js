@@ -171,7 +171,7 @@ var ViewModel = function(editorWidth) {
 		theaterButtons[i].addEventListener('mouseover', showInterface);
 	}
 	
-	self.scheduleHiddenInterface = function(a, b) {
+	self.scheduleHiddenInterface = function(viewModel, event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
 		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 		if ( mouseHasMoved ) {

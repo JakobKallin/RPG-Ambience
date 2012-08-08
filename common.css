@@ -90,11 +90,6 @@ body {
 	overflow: auto;
 }
 
-.editor-action-list {
-	padding: 1em 2em 0 2em;
-	text-align: right;
-}
-
 .note {
 	opacity: 0.5;
 }
@@ -178,17 +173,18 @@ body {
 	padding: 1em;
 }
 
-.action-list {
+.selected-item .action-list {
 	overflow: auto;
 	margin-bottom: 1em;
 }
 
-.action {
+.action-list button {
 	display: block;
 	float: left;
+	margin-right: 0.5em;
 }
 
-.action.remove {
+.selected-item .action-list .remove {
 	float: right;
 }
 
@@ -227,7 +223,7 @@ body {
 	background-color: black;
 }
 
-.toggle {
+.theater .action-list {
 	position: absolute;
 	top: 1em;
 	left: 1em;

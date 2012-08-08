@@ -5,6 +5,10 @@ var viewModel = new function() {
 	var self = this;
 	
 	self.editorWidth = 0.6;
+	self.editorIsVisible = ko.observable(true);
+	self.editorIsHidden = ko.computed(function() {
+		return !self.editorIsVisible();
+	});
 	
 	self.scenes = ko.observableArray();
 	
@@ -129,19 +133,13 @@ var viewModel = new function() {
 	
 	self.hideEditor = function() {
 		self.editorWidth = splitter.leftWidth;
+		self.editorIsVisible(false);
 		splitter.update(0);
 	};
 	
 	self.showEditor = function() {
 		splitter.update(self.editorWidth);
-	};
-	
-	self.toggleEditor = function() {
-		if ( splitter.leftWidth === 0 ) {
-			self.showEditor();
-		} else {
-			self.hideEditor();
-		}
+		self.editorIsVisible(true);
 	};
 }();
 

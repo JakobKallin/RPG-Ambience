@@ -44,7 +44,6 @@ var Splitter = function(container, initialLeftWidth) {
 	}
 	
 	function onMouseUp(event) {
-		event.preventDefault();
 		isPressed = false;
 		document.body.style.cursor = 'auto';
 	}

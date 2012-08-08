@@ -1,6 +1,7 @@
 var splitter;
 var ambience;
-			
+var viewModel;
+		
 var ViewModel = function(editorWidth) {
 	var self = this;
 	
@@ -9,6 +10,7 @@ var ViewModel = function(editorWidth) {
 	self.editorIsHidden = ko.computed(function() {
 		return !self.editorIsVisible();
 	});
+	self.interfaceIsVisible = ko.observable(true);
 	
 	self.scenes = ko.observableArray();
 	
@@ -159,26 +161,46 @@ var ViewModel = function(editorWidth) {
 	var previousX;
 	var previousY;
 	
-	self.scheduleHiddenCursor = function() {
+	var theaterButtons = theater.getElementsByTagName('button');
+	var showInterface = function(event) {
+		event.stopPropagation();
+		self.showInterface();
+	};
+	for ( var i = 0; i < theaterButtons.length; i += 1 ) {
+		theaterButtons[i].addEventListener('mousemove', showInterface);
+		theaterButtons[i].addEventListener('mouseover', showInterface);
+	}
+	
+	self.scheduleHiddenInterface = function(a, b) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
 		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 		if ( mouseHasMoved ) {
-			window.clearTimeout(cursorTimer);
-			self.showCursor();
-			cursorTimer = window.setTimeout(self.hideCursor, cursorHideDelay);
+			self.showInterface();
+			cursorTimer = window.setTimeout(self.hideInterface, cursorHideDelay);
 		}
 
 		previousX = event.screenX;
 		previousY = event.screenY;
 	};
 	
-	self.hideCursor = function() {
+	self.hideInterface = function() {
 		theater.style.cursor = 'none';
+		self.interfaceIsVisible(false);
 	};
 
-	self.showCursor = function() {
+	self.showInterface = function() {
+		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
+		self.interfaceIsVisible(true);
 	};
+	
+	self.showButtonIsVisible = ko.computed(function() {
+		return self.editorIsHidden() && self.interfaceIsVisible();
+	});
+	
+	self.hideButtonIsVisible = ko.computed(function() {
+		return self.editorIsVisible() && self.interfaceIsVisible();
+	});
 };
 
 window.addEventListener('load', function() {
@@ -189,7 +211,7 @@ window.addEventListener('load', function() {
 		new Ambience.Layer(document.getElementById('foreground'))
 	);
 	
-	var viewModel = new ViewModel();
+	viewModel = new ViewModel();
 	viewModel.scenes().map(viewModel.wrapScene);
 	ko.applyBindings(viewModel);
 	viewModel.add();

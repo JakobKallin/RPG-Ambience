@@ -197,12 +197,12 @@
 			</div>
 			<!-- /ko -->
 		</div>
-		<div id="theater" class="theater preview" data-bind="event: { mousemove: $root.scheduleHiddenCursor }">
+		<div id="theater" class="theater preview" data-bind="event: { mousemove: $root.scheduleHiddenInterface, mouseout: $root.showInterface }">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 			<ul class="action-list">
-				<button class="show" data-bind="click: $root.showEditor, visible: $root.editorIsHidden">Show Editor</button>
-				<button class="hide" data-bind="click: $root.hideEditor, visible: $root.editorIsVisible">Hide Editor</button>
+				<button class="show" data-bind="click: $root.showEditor, visible: $root.showButtonIsVisible">Show Editor</button>
+				<button class="hide" data-bind="click: $root.hideEditor, visible: $root.hideButtonIsVisible">Hide Editor</button>
 			</ul>
 		</div>
 	</body>

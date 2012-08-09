@@ -26,6 +26,8 @@ var ViewModel = function(editorWidth) {
 		loop: true,
 		fontSize: 5,
 		fontFamily: null,
+		bold: false,
+		italic: false,
 		get imageCss() {
 			return 'url("' + this.image + '")';
 		},
@@ -34,6 +36,20 @@ var ViewModel = function(editorWidth) {
 		},
 		get previewFontSize() {
 			return (this.fontSize / 100) * 15 + 'em';
+		},
+		get fontStyle() {
+			if ( this.italic ) {
+				return 'italic';
+			} else {
+				return 'normal';
+			}
+		},
+		get fontWeight() {
+			if ( this.bold ) {
+				return 'bold';
+			} else {
+				return 'normal';
+			}
 		}
 	};
 	
@@ -56,8 +72,10 @@ var ViewModel = function(editorWidth) {
 		flatScene.text = scene.text;
 		flatScene.textStyle = {
 			fontSize: scene.fontSize + 'vw',
-			fontFamily: scene.fontFamily
-		}
+			fontFamily: scene.fontFamily,
+			fontStyle: scene.fontStyle,
+			fontWeight: scene.fontWeight
+		};
 		flatScene.backgroundColor = scene.color;
 		flatScene.imageStyle = { size: scene.size };
 		flatScene.fadeDuration = scene.fadeDuration * 1000;

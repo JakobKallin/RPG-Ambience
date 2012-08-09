@@ -82,7 +82,9 @@
 									text: text,
 									style: {
 										fontSize: previewFontSize,
-										fontFamily: fontFamily
+										fontFamily: fontFamily,
+										fontStyle: fontStyle,
+										fontWeight: fontWeight
 									}
 								"></div>
 						</div>
@@ -166,15 +168,11 @@
 									</td>
 								</tr>
 								<tr>
-									<th><label for="style">Style</label></th>
+									<th></th>
 									<td>
-										<select id="style">
-											<option>Normal</option>
-											<option>Bold</option>
-											<option>Italic</option>
-											<option>Bold Italic</option>
-										</select>
-									<//td>
+										<label for="bold">Bold</label> <input id="bold" type="checkbox" data-bind="checked: bold">
+										<label for="italic">Italic</label> <input id="italic" type="checkbox" data-bind="checked: italic">
+									</td>
 								<tr>
 									<th><label for="font-size">Size</label></th>
 									<td>

@@ -14,42 +14,45 @@ var ViewModel = function(editorWidth) {
 	
 	self.scenes = ko.observableArray();
 	
+	var baseScene = {
+		name: 'Untitled scene',
+		key: 'F1',
+		image: '',
+		sound: '',
+		text: '',
+		color: '#000000',
+		size: 'contain',
+		fadeDuration: 0,
+		loop: true,
+		get imageCss() {
+			return 'url("' + this.image + '")';
+		},
+		get isSelected() {
+			return this === self.current();
+		}
+	};
+	
 	self.createScene = function() {
-		return self.wrapScene({
-			name: ko.observable('Untitled scene'),
-			key: ko.observable('F1'),
-			image: ko.observable(''),
-			sound: ko.observable(''),
-			text: ko.observable(''),
-			color: ko.observable('#000000'),
-			size: ko.observable('contain'),
-			fadeDuration: ko.observable(0),
-			loop: ko.observable(true)
-		});
+		var scene = Object.create(baseScene);
+		self.wrapScene(scene);
+		return scene;
 	};
 	
 	self.wrapScene = function(scene) {
-		scene.imageCss = ko.computed(function() {
-			return 'url("' + this.image() + '")';
-		}, scene);
-		scene.isSelected = ko.computed(function() {
-			return this === self.current();
-		}, scene);
-		
-		return scene;
+		knockwrap.wrapObject(scene);
 	};
 	
 	self.playScene = function(scene) {
 		var flatScene = new Ambience.Scene();
-		flatScene.name = scene.name();
-		flatScene.key = scene.key();
-		flatScene.image = encodeURI(scene.image());
-		flatScene.sounds = [encodeURI(scene.sound())];
-		flatScene.text = scene.text();
-		flatScene.backgroundColor = scene.color();
-		flatScene.imageStyle = { size: scene.size() };
-		flatScene.fadeDuration = scene.fadeDuration() * 1000;
-		flatScene.loops = scene.loop();
+		flatScene.name = scene.name;
+		flatScene.key = scene.key;
+		flatScene.image = encodeURI(scene.image);
+		flatScene.sounds = [encodeURI(scene.sound)];
+		flatScene.text = scene.text;
+		flatScene.backgroundColor = scene.color;
+		flatScene.imageStyle = { size: scene.size };
+		flatScene.fadeDuration = scene.fadeDuration * 1000;
+		flatScene.loops = scene.loop;
 		
 		ambience.play(flatScene);
 	};
@@ -115,11 +118,10 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.copySelected = function() {
-		var newScene = {};
+		var newScene = self.createScene();
 		for ( var property in this ) {
-			newScene[property] = ko.observable(this[property]());
+			newScene[property] = this[property];
 		};
-		wrapScene(newScene);
 		
 		var index = self.scenes.indexOf(self.current()) + 1;
 		self.scenes.splice(index, 0, newScene);
@@ -133,7 +135,7 @@ var ViewModel = function(editorWidth) {
 		var file = event.originalEvent.dataTransfer.files[0];
 		var reader = new FileReader();
 		reader.onload = function(event) {
-			scene.image(event.target.result);
+			scene.image = event.target.result;
 		}
 		reader.readAsDataURL(file);
 	};
@@ -212,7 +214,6 @@ window.addEventListener('load', function() {
 	);
 	
 	viewModel = new ViewModel();
-	viewModel.scenes().map(viewModel.wrapScene);
 	ko.applyBindings(viewModel);
 	viewModel.add();
 	

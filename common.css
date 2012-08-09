@@ -195,6 +195,7 @@ body {
 	display: table;
 	height: 100%;
 	margin: 0 auto;
+	font-family: serif;
 }
 
 .detail-view .text.inner {
@@ -281,6 +282,7 @@ body {
 	display: table;
 	height: 100%;
 	margin: 0 auto;
+	font-family: serif;
 }
 
 .theater .layer .text div {

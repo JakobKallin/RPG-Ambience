@@ -186,15 +186,34 @@ body {
 
 .detail-view .preview {
 	width: 15em;
-	padding-top: 8.439em; /* Widescreen ratio */
+	height: 8.439em; /* Widescreen ratio */
 	margin-bottom: 1em;
-	margin-right: auto;
+	overflow: hidden;
+}
+
+.detail-view .text.outer {
+	display: table;
+	height: 100%;
+	margin: 0 auto;
+}
+
+.detail-view .text.inner {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	color: white;
+	white-space: pre;
+	text-rendering: optimizeLegibility;
 }
 
 .detail-view summary {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.detail-view summary br {
+	display: none;
 }
 
 .options table {
@@ -217,6 +236,7 @@ body {
 .theater {
 	right: 0;
 	background-color: black;
+	overflow: hidden;
 }
 
 .theater .action-list {

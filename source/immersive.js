@@ -24,11 +24,15 @@ var ViewModel = function(editorWidth) {
 		size: 'contain',
 		fadeDuration: 0,
 		loop: true,
+		fontSize: 5,
 		get imageCss() {
 			return 'url("' + this.image + '")';
 		},
 		get isSelected() {
 			return this === self.current();
+		},
+		get previewFontSize() {
+			return (this.fontSize / 100) * 15 + 'em';
 		}
 	};
 	
@@ -49,6 +53,7 @@ var ViewModel = function(editorWidth) {
 		flatScene.image = encodeURI(scene.image);
 		flatScene.sounds = [encodeURI(scene.sound)];
 		flatScene.text = scene.text;
+		flatScene.textStyle = { fontSize: scene.fontSize + 'vw' }
 		flatScene.backgroundColor = scene.color;
 		flatScene.imageStyle = { size: scene.size };
 		flatScene.fadeDuration = scene.fadeDuration * 1000;

@@ -75,6 +75,9 @@
 							backgroundSize: size
 						}
 					">
+						<div class="text outer">
+							<div class="text inner" data-bind="text: text, style: { fontSize: previewFontSize }"></div>
+						</div>
 					</div>
 					<div class="options">
 						<label for="name">Name</label>
@@ -167,8 +170,8 @@
 								<tr>
 									<th><label for="font-size">Size</label></th>
 									<td>
-										<input id="font-size" type="number" min="1" value="50">
-										<span class="note">pixels</span>
+										<input id="font-size" type="number" min="0" max="100" step="1" data-bind="value: fontSize">
+										<span class="note">percent of screen width</span>
 									</td>
 								</tr>
 								<tr>

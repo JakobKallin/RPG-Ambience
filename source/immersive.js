@@ -25,6 +25,7 @@ var ViewModel = function(editorWidth) {
 		fadeDuration: 0,
 		loop: true,
 		fontSize: 5,
+		fontFamily: null,
 		get imageCss() {
 			return 'url("' + this.image + '")';
 		},
@@ -53,7 +54,10 @@ var ViewModel = function(editorWidth) {
 		flatScene.image = encodeURI(scene.image);
 		flatScene.sounds = [encodeURI(scene.sound)];
 		flatScene.text = scene.text;
-		flatScene.textStyle = { fontSize: scene.fontSize + 'vw' }
+		flatScene.textStyle = {
+			fontSize: scene.fontSize + 'vw',
+			fontFamily: scene.fontFamily
+		}
 		flatScene.backgroundColor = scene.color;
 		flatScene.imageStyle = { size: scene.size };
 		flatScene.fadeDuration = scene.fadeDuration * 1000;

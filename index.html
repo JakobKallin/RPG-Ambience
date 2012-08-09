@@ -76,7 +76,15 @@
 						}
 					">
 						<div class="text outer">
-							<div class="text inner" data-bind="text: text, style: { fontSize: previewFontSize }"></div>
+							<div
+								class="text inner"
+								data-bind="
+									text: text,
+									style: {
+										fontSize: previewFontSize,
+										fontFamily: fontFamily
+									}
+								"></div>
 						</div>
 					</div>
 					<div class="options">
@@ -154,7 +162,7 @@
 										<label for="font">Font</label>
 									</th>
 									<td>
-										<input id="font" type="text" list="fonts">
+										<input id="font" type="text" list="fonts" data-bind="value: fontFamily, valueUpdate: 'afterkeydown'">
 									</td>
 								</tr>
 								<tr>

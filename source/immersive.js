@@ -119,6 +119,7 @@ var ViewModel = function(editorWidth) {
 	
 	self.copySelected = function() {
 		var newScene = self.createScene();
+		// This for loop does not work in Opera.
 		for ( var property in this ) {
 			newScene[property] = this[property];
 		};

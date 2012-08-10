@@ -231,6 +231,28 @@ var ViewModel = function(editorWidth) {
 	self.hideButtonIsVisible = ko.computed(function() {
 		return self.editorIsVisible() && self.interfaceIsVisible();
 	});
+	
+	var specialKeyFound = false;
+	self.bindSpecialKey = function(scene, event) {
+		var keyName = Key.name(event.keyCode);
+		if ( keyName ) {
+			event.preventDefault();
+			scene.key = keyName;
+			specialKeyFound = true;
+		} else {
+			return true;
+		}
+	};
+	
+	self.bindTextKey = function(scene, event) {
+		if ( !specialKeyFound ) {
+			var keyText = String.fromCharCode(event.which);
+			if ( keyText ) {
+				scene.key = keyText.toUpperCase();
+			}
+		}
+		specialKeyFound = false; // We could do this in keyUp as well.
+	};
 };
 
 window.addEventListener('load', function() {

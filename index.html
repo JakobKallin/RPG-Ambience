@@ -20,6 +20,7 @@
 		<script src="libraries/js-yaml.js"></script>
 		<script src="libraries/animation.js"></script>
 		<script src="libraries/preloader.js"></script>
+		<script src="libraries/key.js"></script>
 		
 		<script src="source/ambience.js"></script>
 		<script src="source/media/image.js"></script>
@@ -93,7 +94,14 @@
 						<label for="name">Name</label>
 						<input id="name" type="text" size="10" data-bind="value: name, valueUpdate: 'afterkeydown'">
 						<label for="key">Key</label>
-						<input id="key" type="text" size="1" data-bind="value: key, valueUpdate: 'afterkeydown'">
+						<input
+							id="key"
+							type="text"
+							size="1"
+							data-bind="
+								value: key,
+								valueUpdate: 'afterkeydown',
+								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey }">
 						<details>
 							<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
 							<table>

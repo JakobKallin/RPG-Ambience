@@ -13,8 +13,10 @@ Object.getPropertyDescriptor = function(target, property) {
 
 knockwrap = function() {
 	function wrapObject(target) {
-		for ( var property in target ) {
-			wrapProperty(target, property);
+		if ( target instanceof Object ) {
+			for ( var property in target ) {
+				wrapProperty(target, property);
+			}
 		}
 	}
 	
@@ -41,8 +43,6 @@ knockwrap = function() {
 			get: getter,
 			set: setter
 		});
-		
-		return observable;
 	}
 	
 	function wrapGetter(target, property) {

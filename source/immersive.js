@@ -18,7 +18,7 @@ var ViewModel = function(editorWidth) {
 		name: 'Untitled scene',
 		key: 'F1',
 		image: '',
-		sound: '',
+		sounds: [],
 		text: '',
 		color: '#000000',
 		size: 'contain',
@@ -68,7 +68,7 @@ var ViewModel = function(editorWidth) {
 		flatScene.name = scene.name;
 		flatScene.key = scene.key;
 		flatScene.image = encodeURI(scene.image);
-		flatScene.sounds = [encodeURI(scene.sound)];
+		flatScene.sounds = scene.sounds.map(encodeURI);
 		flatScene.text = scene.text;
 		flatScene.textStyle = {
 			fontSize: scene.fontSize + 'vw',

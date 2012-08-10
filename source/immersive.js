@@ -232,13 +232,21 @@ var ViewModel = function(editorWidth) {
 		return self.editorIsVisible() && self.interfaceIsVisible();
 	});
 	
+	var commandKeys = {
+		'Enter': function() {},
+		'Backspace': function() {},
+		'Escape': function() {}
+	};
+	
 	var specialKeyFound = false;
 	self.bindSpecialKey = function(scene, event) {
 		var keyName = Key.name(event.keyCode);
 		if ( keyName ) {
-			event.preventDefault();
-			scene.key = keyName;
 			specialKeyFound = true;
+			var keyHasCommand = keyName in commandKeys;
+			if ( !keyHasCommand ) {
+				scene.key = keyName;
+			}
 		} else {
 			return true;
 		}
@@ -251,7 +259,10 @@ var ViewModel = function(editorWidth) {
 				scene.key = keyText.toUpperCase();
 			}
 		}
-		specialKeyFound = false; // We could do this in keyUp as well.
+	};
+	
+	self.stopKeyBinding = function(scene, event) {
+		specialKeyFound = false;
 	};
 };
 

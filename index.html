@@ -101,7 +101,7 @@
 							data-bind="
 								value: key,
 								valueUpdate: 'afterkeydown',
-								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey }">
+								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey, keyup: $root.stopKeyBinding }">
 						<details>
 							<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
 							<table>

@@ -266,8 +266,4 @@ window.addEventListener('load', function() {
 	viewModel = new ViewModel();
 	ko.applyBindings(viewModel);
 	viewModel.add();
-	
-	$('.list-view ul').sortable({
-		axis: 'y'
-	});
 });

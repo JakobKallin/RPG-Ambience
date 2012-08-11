@@ -32,7 +32,7 @@ var ViewModel = function(editorWidth) {
 		shuffle: false,
 		volume: 1,
 		text: '',
-		color: '#000000',
+		backgroundColor: '#000000',
 		size: 'contain',
 		fadeDuration: 0,
 		fontSize: 5,
@@ -105,7 +105,7 @@ var ViewModel = function(editorWidth) {
 			fontStyle: scene.fontStyle,
 			fontWeight: scene.fontWeight
 		};
-		flatScene.backgroundColor = scene.color;
+		flatScene.backgroundColor = scene.backgroundColor;
 		flatScene.imageStyle = { size: scene.size };
 		flatScene.fadeDuration = scene.fadeDuration * 1000;
 		flatScene.loops = scene.loop;

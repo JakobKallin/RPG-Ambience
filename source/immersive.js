@@ -19,12 +19,13 @@ var ViewModel = function(editorWidth) {
 		key: 'F1',
 		image: '',
 		sounds: [],
+		loop: true,
+		shuffle: false,
 		volume: 1,
 		text: '',
 		color: '#000000',
 		size: 'contain',
 		fadeDuration: 0,
-		loop: true,
 		fontSize: 5,
 		fontFamily: '',
 		bold: false,
@@ -79,6 +80,13 @@ var ViewModel = function(editorWidth) {
 		flatScene.sounds = scene.sounds.map(function(sound) {
 			return encodeURI(sound.path);
 		});
+		
+		if ( scene.shuffle ) {
+			flatScene.soundOrder = 'random';
+		} else {
+			flatScene.soundOrder = 'linear';
+		}
+		
 		flatScene.volume = scene.volume;
 		flatScene.text = scene.text;
 		flatScene.textStyle = {

@@ -52,7 +52,11 @@ var ViewModel = function(editorWidth) {
 			}
 		},
 		get soundString() {
-			return this.sounds.join(', ');
+			var soundPaths = this.sounds.map(function(sound) {
+				return sound.path;
+			});
+			
+			return soundPaths.join(', ');
 		}
 	};
 	
@@ -71,7 +75,9 @@ var ViewModel = function(editorWidth) {
 		flatScene.name = scene.name;
 		flatScene.key = scene.key;
 		flatScene.image = encodeURI(scene.image);
-		flatScene.sounds = scene.sounds.map(encodeURI);
+		flatScene.sounds = scene.sounds.map(function(sound) {
+			return encodeURI(sound.path);
+		});
 		flatScene.text = scene.text;
 		flatScene.textStyle = {
 			fontSize: scene.fontSize + 'vw',

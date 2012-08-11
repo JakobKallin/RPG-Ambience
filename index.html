@@ -106,14 +106,18 @@
 									</td>
 								</tr>
 								<tr>
-									<th>
-										<label for="image-size">Size</label>
-									</th>
+									<th></th>
 									<td>
-										<select id="image-size" data-bind="value: size">
-											<option value="cover">cover</option>
-											<option value="contain">contain</option>
-										</select>
+										<ul>
+											<li>
+												<input id="size-contain" type="radio" value="contain" data-bind="checked: size">
+												<label for="size-contain">Fit</label>
+											</li>
+											<li>
+												<input id="size-cover" type="radio" value="cover" data-bind="checked: size">
+												<label for="size-cover">Fill</label>
+											</li>
+										</ul>
 									</td>
 								</tr>
 							</table>

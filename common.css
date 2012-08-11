@@ -3,6 +3,11 @@
 	padding: 0;
 }
 
+li {
+	display: block;
+	list-style-type: none;
+}
+
 details, summary {
 	display: block;
 }
@@ -17,10 +22,6 @@ summary[tabindex]:before {
 
 details.open summary[tabindex]:before {
 	content: "▼ ";
-}
-
-label:after {
-	content: ":";
 }
 
 label[for] {
@@ -240,6 +241,10 @@ body {
 	padding-left: 1em;
 }
 
+.options th label:after {
+	content: ":";
+}
+
 .options td {
 	width: 100%;
 }
@@ -248,6 +253,12 @@ body {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	width: 100%;
+}
+
+.options li {
+	display: block;
+	float: left;
+	margin-right: 1.5em;
 }
 
 .theater {

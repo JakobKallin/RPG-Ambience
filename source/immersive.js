@@ -167,6 +167,10 @@ var ViewModel = function(editorWidth) {
 		self.select(newScene);
 	};
 	
+	self.addSound = function() {
+		this.sounds.push({ path: '' });
+	};
+	
 	self.handleDroppedFile = function(scene, event) {
 		event.preventDefault();
 		event.stopPropagation();

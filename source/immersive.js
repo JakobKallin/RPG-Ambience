@@ -50,6 +50,9 @@ var ViewModel = function(editorWidth) {
 			} else {
 				return 'normal';
 			}
+		},
+		get soundString() {
+			return this.sounds.join(', ');
 		}
 	};
 	

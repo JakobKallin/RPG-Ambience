@@ -140,13 +140,17 @@
 								<tr>
 									<th><label for="crossover">Crossover</label></th>
 									<td>
-										<input id="crossover" type="number" min="0" value="0">
-										<span class="note">seconds</span>
+										<ul>
+											<li>
+												<input id="crossover" type="number" min="0" value="0">
+												<span class="note">seconds</span>
+											</li>
+											<li>
+												<input id="crossfade" type="checkbox">
+												<label for="crossfade">Crossfade</label>
+											</li>
+										</ul>
 									</td>
-								</tr>
-								<tr>
-									<th><label for="crossfade">Crossfade</label></th>
-									<td><input id="crossfade" type="checkbox"></td>
 								</tr>
 								<tr>
 									<th><label for="volume">Volume</label></th>
@@ -177,11 +181,11 @@
 										<ul>
 											<li>
 												<input id="bold" type="checkbox" data-bind="checked: bold">
-												<label for="bold">Bold</label>
+												<label for="bold"><b>Bold</b></label>
 											</li>
 											<li>
 												<input id="italic" type="checkbox" data-bind="checked: italic">
-												<label for="italic">Italic</label>
+												<label for="italic"><i>Italic</i></label>
 											</li>
 									</td>
 								<tr>

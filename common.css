@@ -257,7 +257,12 @@ body {
 	width: 100%;
 }
 
-.options li {
+.item-list .item {
+	display: block;
+	margin-bottom: 0.5em;
+}
+
+.modifier-list .modifier {
 	display: block;
 	float: left;
 	margin-right: 1em;

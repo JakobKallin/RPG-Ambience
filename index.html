@@ -115,12 +115,12 @@
 								<tr>
 									<th></th>
 									<td>
-										<ul>
-											<li>
+										<ul class="modifier-list">
+											<li class="modifier">
 												<input id="size-contain" type="radio" value="contain" data-bind="checked: size">
 												<label for="size-contain">Fit</label>
 											</li>
-											<li>
+											<li class="modifier">
 												<input id="size-cover" type="radio" value="cover" data-bind="checked: size">
 												<label for="size-cover">Fill</label>
 											</li>
@@ -137,8 +137,8 @@
 										<label>Files</label>
 									</th>
 									<td>
-										<ul data-bind="foreach: sounds">
-											<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'"><br>
+										<ul data-bind="foreach: sounds" class="item-list">
+											<li class="item"><input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'"></li>
 										</ul>
 										<button data-bind="click: $root.addSound">Add Sound</button>
 									</td>
@@ -150,12 +150,12 @@
 								<tr>
 									<th><label for="crossover">Crossover</label></th>
 									<td>
-										<ul>
-											<li>
+										<ul class="modifier-list">
+											<li class="modifier">
 												<input id="crossover" type="number" min="0" value="0">
 												<span class="note">seconds</span>
 											</li>
-											<li>
+											<li class="modifier">
 												<input id="crossfade" type="checkbox">
 												<label for="crossfade">Crossfade</label>
 											</li>
@@ -204,12 +204,12 @@
 								<tr>
 									<th></th>
 									<td>
-										<ul>
-											<li>
+										<ul class="modifier-list">
+											<li class="modifier">
 												<input id="bold" type="checkbox" data-bind="checked: bold">
 												<label for="bold"><b>Bold</b></label>
 											</li>
-											<li>
+											<li class="modifier">
 												<input id="italic" type="checkbox" data-bind="checked: italic">
 												<label for="italic"><i>Italic</i></label>
 											</li>

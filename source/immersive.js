@@ -35,6 +35,8 @@ var ViewModel = function(editorWidth) {
 		backgroundColor: '#000000',
 		size: 'contain',
 		fadeDuration: 0,
+		crossoverSeconds: 0,
+		crossfade: false,
 		fontSize: 5,
 		fontFamily: '',
 		fontColor: '#ffffff',
@@ -110,6 +112,8 @@ var ViewModel = function(editorWidth) {
 		flatScene.backgroundColor = scene.backgroundColor;
 		flatScene.imageStyle = { size: scene.size };
 		flatScene.fadeDuration = scene.fadeDuration * 1000;
+		flatScene.crossoverDuration = scene.crossoverSeconds;
+		flatScene.crossfades = scene.crossfade;
 		flatScene.loops = scene.loop;
 		
 		ambience.play(flatScene);

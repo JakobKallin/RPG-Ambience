@@ -25,7 +25,7 @@ var ViewModel = function(editorWidth) {
 		fadeDuration: 0,
 		loop: true,
 		fontSize: 5,
-		fontFamily: null,
+		fontFamily: '',
 		bold: false,
 		italic: false,
 		get imageCss() {

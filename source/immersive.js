@@ -18,7 +18,6 @@ var ViewModel = function(editorWidth) {
 		name: 'Untitled scene',
 		key: 'F1',
 		image: '',
-		sounds: [],
 		loop: true,
 		shuffle: false,
 		volume: 1,
@@ -64,6 +63,7 @@ var ViewModel = function(editorWidth) {
 	
 	self.createScene = function() {
 		var scene = Object.create(baseScene);
+		scene.sounds = []; // Defined here because each scene needs its own list, not that of its prototype.
 		self.wrapScene(scene);
 		return scene;
 	};
@@ -167,7 +167,10 @@ var ViewModel = function(editorWidth) {
 		var newScene = self.createScene();
 		// This for loop does not work in Opera.
 		for ( var property in this ) {
-			newScene[property] = this[property];
+			var propertyIsGetter = Boolean(Object.getPropertyDescriptor(this, property));
+			if ( !propertyIsGetter ) {
+				newScene[property] = this[property];
+			}
 		};
 		
 		var index = self.scenes.indexOf(self.current()) + 1;

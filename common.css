@@ -259,8 +259,19 @@ body {
 }
 
 .item-list .item {
-	display: block;
+	display: table;
+	width: 100%;
 	margin-bottom: 0.5em;
+}
+
+.item-list .item .content {
+	display: table-cell;
+	width: 100%;
+}
+
+.item-list .item .controls {
+	display: table-cell;
+	padding-left: 0.5em;
 }
 
 .modifier-list .modifier {

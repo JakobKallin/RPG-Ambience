@@ -167,8 +167,21 @@ var ViewModel = function(editorWidth) {
 		self.select(newScene);
 	};
 	
+	function SoundViewModel(scene) {
+		this.path = '';
+		this.remove = function() {
+			var index = scene.sounds.indexOf(this);
+			scene.sounds.splice(index, 1);
+		};
+	};
+	
 	self.addSound = function() {
-		this.sounds.push({ path: '' });
+		var sound = new SoundViewModel(this);
+		this.sounds.push(sound);
+	};
+	
+	self.removeSound = function(e) {
+		var a = 5;
 	};
 	
 	self.handleDroppedFile = function(scene, event) {

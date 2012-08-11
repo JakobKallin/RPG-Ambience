@@ -138,7 +138,14 @@
 									</th>
 									<td>
 										<ul data-bind="foreach: sounds" class="item-list">
-											<li class="item"><input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'"></li>
+											<li class="item">
+												<div class="content">
+													<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
+												</div>
+												<div class="controls">
+													<button data-bind="click: remove">Remove</button>
+												</div>
+											</li>
 										</ul>
 										<button data-bind="click: $root.addSound">Add File</button>
 									</td>

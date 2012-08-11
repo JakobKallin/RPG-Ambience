@@ -173,7 +173,13 @@ var ViewModel = function(editorWidth) {
 			}
 		};
 		
-		var index = self.scenes.indexOf(self.current()) + 1;
+		this.sounds.map(function(sound) {
+			var newSound = new SoundViewModel(newScene);
+			newSound.path = sound.path;
+			newScene.sounds.push(newSound);
+		});
+		
+		var index = self.scenes.indexOf(self.current()) + 1
 		self.scenes.splice(index, 0, newScene);
 		self.select(newScene);
 	};

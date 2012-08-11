@@ -207,7 +207,12 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
+.detail-view details {
+	padding-left: 1em;
+}
+
 .detail-view summary {
+	margin-left: -1em;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -219,7 +224,8 @@ body {
 
 .options table {
 	border-collapse: collapse;
-	margin-left: 1em;
+	width: 100%;
+	padding-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
@@ -232,6 +238,16 @@ body {
 	font-weight: normal;
 	text-align: right;
 	padding-left: 1em;
+}
+
+.options td {
+	width: 100%;
+}
+
+.options input[type=text], .options textarea {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 100%;
 }
 
 .theater {

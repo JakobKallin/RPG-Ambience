@@ -239,6 +239,7 @@ body {
 	font-weight: normal;
 	text-align: right;
 	padding-left: 1em;
+	vertical-align: top;
 }
 
 .options th label:after {

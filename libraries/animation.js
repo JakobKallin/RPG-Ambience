@@ -32,8 +32,9 @@ function Animation(object, property) {
 			value = Math.max(value, endValue);
 		}
 		
+		// Prevent horrible volume bug for <audio> elements.
+		value = Number(value);
 		if ( isNaN(value) ) {
-			// Prevent horrible volume bug for <audio> elements.
 			throw new Error('There was an error in the animation.');
 		} else {
 			object[property] = value;
@@ -100,8 +101,9 @@ function Animation(object, property) {
 		if ( hasStarted ) {
 			self.stop();
 			
-			if ( isNaN(value) ) {
-				// Prevent horrible volume bug for <audio> elements.
+			// Prevent horrible volume bug for <audio> elements.
+			endValue = Number(endValue);
+			if ( isNaN(endValue) ) {
 				throw new Error('There was an error in the animation.');
 			} else {
 				object[property] = endValue; // If there are rounding errors.

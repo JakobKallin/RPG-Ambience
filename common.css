@@ -208,18 +208,18 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-.detail-view details {
+.options .category {
 	padding-left: 1em;
 }
 
-.detail-view summary {
+.options .category .header {
 	margin-left: -1em;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
-.detail-view summary br {
+.options .category .header br {
 	display: none;
 }
 
@@ -305,7 +305,7 @@ body {
 	height: 100%;
 }
 
-.theater .layer .text {
+.theater .layer .text.outer {
 	position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
 	display: table;
 	height: 100%;
@@ -313,7 +313,7 @@ body {
 	font-family: serif;
 }
 
-.theater .layer .text div {
+.theater .layer .text.inner {
 	display: table-cell;
 	vertical-align: middle;
 	text-align: center;

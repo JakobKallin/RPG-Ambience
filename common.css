@@ -92,7 +92,7 @@ body {
 .message {
 	margin: 2em;
 	margin-bottom: -1em;
-	padding: 1em;
+	padding: 0.5em;
 	text-align: center;
 	overflow: auto;
 }

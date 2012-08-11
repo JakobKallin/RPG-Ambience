@@ -249,7 +249,9 @@ body {
 	width: 100%;
 }
 
-.options input[type=text], .options textarea {
+.options input[type=text],
+.options textarea,
+.options input[type=range] {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	width: 100%;

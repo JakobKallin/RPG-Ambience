@@ -279,6 +279,7 @@ body {
 }
 
 .theater .layer .text {
+	position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
 	display: table;
 	height: 100%;
 	margin: 0 auto;

@@ -18,6 +18,10 @@ var ViewModel = function(editorWidth) {
 		self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
 	}
 	
+	self.clearMessage = function() {
+		self.message(null);
+	};
+	
 	self.scenes = ko.observableArray();
 	
 	var baseScene = {

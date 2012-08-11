@@ -41,7 +41,10 @@
 				<option value="Georgia">
 			</datalist>
 			<!-- ko if: message -->
-				<div class="message" data-bind="html: message"></div>
+				<div class="message">
+					<span class="text" data-bind="html: message"></span>
+					<button data-bind="click: $root.clearMessage">Dismiss</button>
+				</div>
 			<!-- /ko -->
 			<div class="list-view">
 				<ul data-bind="foreach: scenes">

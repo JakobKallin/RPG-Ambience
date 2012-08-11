@@ -94,6 +94,15 @@ body {
 	margin-bottom: -1em;
 	padding: 1em;
 	text-align: center;
+	overflow: auto;
+}
+
+.message button {
+	float: right;
+}
+
+.message .text, .message button {
+	vertical-align: middle;
 }
 
 .preview {

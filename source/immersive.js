@@ -19,6 +19,7 @@ var ViewModel = function(editorWidth) {
 		key: 'F1',
 		image: '',
 		sounds: [],
+		volume: 1,
 		text: '',
 		color: '#000000',
 		size: 'contain',
@@ -78,6 +79,7 @@ var ViewModel = function(editorWidth) {
 		flatScene.sounds = scene.sounds.map(function(sound) {
 			return encodeURI(sound.path);
 		});
+		flatScene.volume = scene.volume;
 		flatScene.text = scene.text;
 		flatScene.textStyle = {
 			fontSize: scene.fontSize + 'vw',

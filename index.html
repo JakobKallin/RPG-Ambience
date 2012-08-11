@@ -40,6 +40,9 @@
 				<option value="Constantia">
 				<option value="Georgia">
 			</datalist>
+			<!-- ko if: message -->
+				<div class="message" data-bind="html: message"></div>
+			<!-- /ko -->
 			<div class="list-view">
 				<ul data-bind="foreach: scenes">
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">

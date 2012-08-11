@@ -11,6 +11,12 @@ var ViewModel = function(editorWidth) {
 		return !self.editorIsVisible();
 	});
 	self.interfaceIsVisible = ko.observable(true);
+	self.message = ko.observable(null);
+	self.appIsRunLocally = window.location.protocol === 'file:';
+	
+	if ( !self.appIsRunLocally ) {
+		self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
+	}
 	
 	self.scenes = ko.observableArray();
 	

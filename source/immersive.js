@@ -37,6 +37,7 @@ var ViewModel = function(editorWidth) {
 		fadeDuration: 0,
 		fontSize: 5,
 		fontFamily: '',
+		fontColor: '#ffffff',
 		bold: false,
 		italic: false,
 		get imageCss() {
@@ -103,7 +104,8 @@ var ViewModel = function(editorWidth) {
 			fontSize: scene.fontSize + 'vw',
 			fontFamily: scene.fontFamily,
 			fontStyle: scene.fontStyle,
-			fontWeight: scene.fontWeight
+			fontWeight: scene.fontWeight,
+			color: scene.fontColor
 		};
 		flatScene.backgroundColor = scene.backgroundColor;
 		flatScene.imageStyle = { size: scene.size };

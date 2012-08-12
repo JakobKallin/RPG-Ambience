@@ -123,6 +123,10 @@ var ViewModel = function(editorWidth) {
 		ambience.play(flatScene);
 	};
 	
+	self.stopTopmost = function() {
+		ambience.stopTopmost();
+	};
+	
 	self.current = ko.observable();
 	
 	self.select = function(scene) {
@@ -335,11 +339,15 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.playNamedScene = function() {
-		var scene = self.namedScene(self.sceneName());
-		if ( scene ) {
-			self.playScene(scene);
+		if ( self.sceneName().length === 0 ) {
+			self.stopTopmost();
+		} else {
+			var scene = self.namedScene(self.sceneName());
+			if ( scene ) {
+				self.playScene(scene);
+			}
+			self.sceneName('');
 		}
-		self.sceneName('');
 	};
 	
 	self.namedScene = function(name) {

@@ -363,6 +363,12 @@ var ViewModel = function(editorWidth) {
 		}
 	};
 	
+	self.backspaceSceneName = function() {
+		if ( self.sceneName().length > 0 ) {
+			self.sceneName(self.sceneName().substring(0, self.sceneName().length - 1));
+		}
+	};
+	
 	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION'];
 	var focusIsOnForm = function(event) {
 		return formTagNames.indexOf(event.target.tagName) !== -1;
@@ -370,7 +376,7 @@ var ViewModel = function(editorWidth) {
 	
 	var commands = {
 		'Enter': self.playNamedScene,
-		'Backspace': function() {},
+		'Backspace': self.backspaceSceneName,
 		'Escape': function() {}
 	};
 };

@@ -329,6 +329,16 @@ var ViewModel = function(editorWidth) {
 	self.stopKeyBinding = function(scene, event) {
 		specialKeyFound = false;
 	};
+	
+	self.command = ko.observable('');
+	self.onKeyPress = function(event) {
+		var charCode = event.charCode;
+		if ( charCode !== 0 ) {
+			event.preventDefault();
+			var character = String.fromCharCode(charCode);
+			self.command(self.command() + character);
+		}
+	};
 };
 
 window.addEventListener('load', function() {
@@ -340,6 +350,7 @@ window.addEventListener('load', function() {
 	);
 	
 	viewModel = new ViewModel();
+	document.addEventListener('keypress', viewModel.onKeyPress);
 	ko.applyBindings(viewModel);
 	viewModel.add();
 });

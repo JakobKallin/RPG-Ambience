@@ -331,9 +331,11 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.command = ko.observable('');
+	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION'];
 	self.onKeyPress = function(event) {
 		var charCode = event.charCode;
-		if ( charCode !== 0 ) {
+		var focusIsOnForm = formTagNames.indexOf(event.target.tagName) !== -1;
+		if ( charCode !== 0 && !focusIsOnForm ) {
 			event.preventDefault();
 			var character = String.fromCharCode(charCode);
 			self.command(self.command() + character);

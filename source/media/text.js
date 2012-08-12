@@ -4,8 +4,9 @@ Ambience.Text = function(container) {
 	
 	function play(scene) {
 		outerNode = document.createElement('div');
-		outerNode.className = 'text';
+		outerNode.className = 'text outer';
 		innerNode = document.createElement('div');
+		innerNode.className = 'text inner';
 		outerNode.appendChild(innerNode);
 		
 		innerNode.textContent = scene.text;

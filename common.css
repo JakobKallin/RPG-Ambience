@@ -3,6 +3,11 @@
 	padding: 0;
 }
 
+li {
+	display: block;
+	list-style-type: none;
+}
+
 details, summary {
 	display: block;
 }
@@ -17,10 +22,6 @@ summary[tabindex]:before {
 
 details.open summary[tabindex]:before {
 	content: "▼ ";
-}
-
-label:after {
-	content: ":";
 }
 
 label[for] {
@@ -86,6 +87,22 @@ body {
 
 .note {
 	opacity: 0.5;
+}
+
+.message {
+	margin: 2em;
+	margin-bottom: -1em;
+	padding: 0.5em;
+	text-align: center;
+	overflow: auto;
+}
+
+.message button {
+	float: right;
+}
+
+.message .text, .message button {
+	vertical-align: middle;
 }
 
 .preview {
@@ -207,19 +224,25 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-.detail-view summary {
+.options .category {
+	padding-left: 1em;
+}
+
+.options .category .header {
+	margin-left: -1em;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
-.detail-view summary br {
+.options .category .header br {
 	display: none;
 }
 
 .options table {
 	border-collapse: collapse;
-	margin-left: 1em;
+	width: 100%;
+	padding-left: 1em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
@@ -232,6 +255,45 @@ body {
 	font-weight: normal;
 	text-align: right;
 	padding-left: 1em;
+	vertical-align: top;
+}
+
+.options th label:after {
+	content: ":";
+}
+
+.options td {
+	width: 100%;
+}
+
+.options input[type=text],
+.options textarea,
+.options input[type=range] {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 100%;
+}
+
+.item-list .item {
+	display: table;
+	width: 100%;
+	margin-bottom: 0.5em;
+}
+
+.item-list .item .content {
+	display: table-cell;
+	width: 100%;
+}
+
+.item-list .item .controls {
+	display: table-cell;
+	padding-left: 0.5em;
+}
+
+.modifier-list .modifier {
+	display: block;
+	float: left;
+	margin-right: 1em;
 }
 
 .theater {
@@ -278,14 +340,15 @@ body {
 	height: 100%;
 }
 
-.theater .layer .text {
+.theater .layer .text.outer {
+	position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
 	display: table;
 	height: 100%;
 	margin: 0 auto;
 	font-family: serif;
 }
 
-.theater .layer .text div {
+.theater .layer .text.inner {
 	display: table-cell;
 	vertical-align: middle;
 	text-align: center;

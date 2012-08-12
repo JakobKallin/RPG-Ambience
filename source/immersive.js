@@ -11,21 +11,37 @@ var ViewModel = function(editorWidth) {
 		return !self.editorIsVisible();
 	});
 	self.interfaceIsVisible = ko.observable(true);
+	self.message = ko.observable(null);
+	self.appIsRunLocally = window.location.protocol === 'file:';
+	
+	if ( !self.appIsRunLocally ) {
+		self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
+	}
+	
+	self.clearMessage = function() {
+		self.message(null);
+	};
 	
 	self.scenes = ko.observableArray();
 	
 	var baseScene = {
 		name: 'Untitled scene',
 		key: 'F1',
+		layer: 'background',
+		mixin: false,
 		image: '',
-		sound: '',
+		loop: true,
+		shuffle: false,
+		volume: 1,
 		text: '',
-		color: '#000000',
+		backgroundColor: '#000000',
 		size: 'contain',
 		fadeDuration: 0,
-		loop: true,
+		crossoverSeconds: 0,
+		crossfade: false,
 		fontSize: 5,
-		fontFamily: null,
+		fontFamily: '',
+		fontColor: '#ffffff',
 		bold: false,
 		italic: false,
 		get imageCss() {
@@ -50,11 +66,19 @@ var ViewModel = function(editorWidth) {
 			} else {
 				return 'normal';
 			}
+		},
+		get soundString() {
+			var soundPaths = this.sounds.map(function(sound) {
+				return sound.path;
+			});
+			
+			return soundPaths.join(', ');
 		}
 	};
 	
 	self.createScene = function() {
 		var scene = Object.create(baseScene);
+		scene.sounds = []; // Defined here because each scene needs its own list, not that of its prototype.
 		self.wrapScene(scene);
 		return scene;
 	};
@@ -68,18 +92,33 @@ var ViewModel = function(editorWidth) {
 		flatScene.name = scene.name;
 		flatScene.key = scene.key;
 		flatScene.image = encodeURI(scene.image);
-		flatScene.sounds = [encodeURI(scene.sound)];
+		flatScene.sounds = scene.sounds.map(function(sound) {
+			return encodeURI(sound.path);
+		});
+		
+		if ( scene.shuffle ) {
+			flatScene.soundOrder = 'random';
+		} else {
+			flatScene.soundOrder = 'linear';
+		}
+		
+		flatScene.volume = scene.volume;
 		flatScene.text = scene.text;
 		flatScene.textStyle = {
 			fontSize: scene.fontSize + 'vw',
 			fontFamily: scene.fontFamily,
 			fontStyle: scene.fontStyle,
-			fontWeight: scene.fontWeight
+			fontWeight: scene.fontWeight,
+			color: scene.fontColor
 		};
-		flatScene.backgroundColor = scene.color;
+		flatScene.backgroundColor = scene.backgroundColor;
 		flatScene.imageStyle = { size: scene.size };
 		flatScene.fadeDuration = scene.fadeDuration * 1000;
+		flatScene.crossoverDuration = scene.crossoverSeconds;
+		flatScene.crossfades = scene.crossfade;
 		flatScene.loops = scene.loop;
+		flatScene.layer = scene.layer;
+		flatScene.isMixin = scene.mixin;
 		
 		ambience.play(flatScene);
 	};
@@ -148,12 +187,38 @@ var ViewModel = function(editorWidth) {
 		var newScene = self.createScene();
 		// This for loop does not work in Opera.
 		for ( var property in this ) {
-			newScene[property] = this[property];
+			var propertyIsGetter = Boolean(Object.getPropertyDescriptor(this, property));
+			if ( !propertyIsGetter ) {
+				newScene[property] = this[property];
+			}
 		};
 		
-		var index = self.scenes.indexOf(self.current()) + 1;
+		this.sounds.map(function(sound) {
+			var newSound = new SoundViewModel(newScene);
+			newSound.path = sound.path;
+			newScene.sounds.push(newSound);
+		});
+		
+		var index = self.scenes.indexOf(self.current()) + 1
 		self.scenes.splice(index, 0, newScene);
 		self.select(newScene);
+	};
+	
+	function SoundViewModel(scene) {
+		this.path = '';
+		this.remove = function() {
+			var index = scene.sounds.indexOf(this);
+			scene.sounds.splice(index, 1);
+		};
+	};
+	
+	self.addSound = function() {
+		var sound = new SoundViewModel(this);
+		this.sounds.push(sound);
+	};
+	
+	self.removeSound = function(e) {
+		var a = 5;
 	};
 	
 	self.handleDroppedFile = function(scene, event) {
@@ -277,8 +342,4 @@ window.addEventListener('load', function() {
 	viewModel = new ViewModel();
 	ko.applyBindings(viewModel);
 	viewModel.add();
-	
-	$('.list-view ul').sortable({
-		axis: 'y'
-	});
 });

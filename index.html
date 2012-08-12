@@ -10,7 +10,6 @@
 		<link rel="alternate stylesheet" href="sci-fi.css" title="Sci-Fi">
 		
 		<script src="libraries/jquery.js"></script>
-		<script src="libraries/jquery-ui.js"></script>
 		<script src="libraries/jquery.details.js"></script>
 		<script src="libraries/knockout.js"></script>
 		<script src="libraries/knockwrap.js"></script>
@@ -41,12 +40,18 @@
 				<option value="Constantia">
 				<option value="Georgia">
 			</datalist>
+			<!-- ko if: message -->
+				<div class="message">
+					<span class="text" data-bind="html: message"></span>
+					<button data-bind="click: $root.clearMessage">Dismiss</button>
+				</div>
+			<!-- /ko -->
 			<div class="list-view">
 				<ul data-bind="foreach: scenes">
 					<li class="list-item" data-bind="click: $root.select, css: { selected: isSelected }">
 						<div class="preview" data-bind="
 							style: {
-								backgroundColor: color,
+								backgroundColor: backgroundColor,
 								backgroundImage: imageCss,
 								backgroundSize: size
 							}
@@ -71,7 +76,7 @@
 					</ul>
 					<div class="preview" data-bind="
 						style: {
-							backgroundColor: color,
+							backgroundColor: backgroundColor,
 							backgroundImage: imageCss,
 							backgroundSize: size
 						}
@@ -85,7 +90,8 @@
 										fontSize: previewFontSize,
 										fontFamily: fontFamily,
 										fontStyle: fontStyle,
-										fontWeight: fontWeight
+										fontWeight: fontWeight,
+										color: fontColor
 									}
 								"></div>
 						</div>
@@ -102,8 +108,8 @@
 								value: key,
 								valueUpdate: 'afterkeydown',
 								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey, keyup: $root.stopKeyBinding }">
-						<details>
-							<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
+						<details class="category">
+							<summary class="header">Image&ensp;<span class="note" data-bind="text: image"></span></summary>
 							<table>
 								<tr>
 									<th>
@@ -114,57 +120,102 @@
 									</td>
 								</tr>
 								<tr>
-									<th>
-										<label for="image-size">Size</label>
-									</th>
+									<th></th>
 									<td>
-										<select id="image-size" data-bind="value: size">
-											<option value="cover">cover</option>
-											<option value="contain">contain</option>
-										</select>
+										<ul class="modifier-list">
+											<li class="modifier">
+												<input id="size-contain" type="radio" value="contain" data-bind="checked: size">
+												<label for="size-contain">Fit</label>
+											</li>
+											<li class="modifier">
+												<input id="size-cover" type="radio" value="cover" data-bind="checked: size">
+												<label for="size-cover">Fill</label>
+											</li>
+										</ul>
 									</td>
 								</tr>
 							</table>
 						</details>
-						<details>
-							<summary>Sound&ensp;<span class="note" data-bind="text: sound"></span></summary>
+						<details class="category">
+							<summary class="header">Sound&ensp;<span class="note" data-bind="text: soundString"></span></summary>
 							<table>
 								<tr>
 									<th>
-										<label for="sound-file">File</label>
+										<label>Files</label>
 									</th>
 									<td>
-										<input id="sound-file" type="text" data-bind="value: sound, valueUpdate: 'afterkeydown'">
+										<ul data-bind="foreach: sounds" class="item-list">
+											<li class="item">
+												<div class="content">
+													<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
+												</div>
+												<div class="controls">
+													<button data-bind="click: remove">Remove</button>
+												</div>
+											</li>
+										</ul>
+										<button data-bind="click: $root.addSound">Add File</button>
 									</td>
 								</tr>
 								<tr>
-									<th><label for="loop">Loop</label></th>
-									<td><input id="loop" type="checkbox" data-bind="checked: loop"></td>
+									<th></th>
+									<td>
+										<ul class="modifier-list">
+											<li class="modifier">
+												<input id="loop" type="checkbox" data-bind="checked: loop">
+												<label for="loop">Loop</label>
+											</li>
+											<li class="modifier">
+												<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
+												<label for="shuffle">Shuffle</label>
+											</li>
+										</ul>
+									</td>
 								</tr>
 								<tr>
 									<th><label for="crossover">Crossover</label></th>
 									<td>
-										<input id="crossover" type="number" min="0" value="0">
-										<span class="note">seconds</span>
+										<ul class="modifier-list">
+											<li class="modifier">
+												<input id="crossover" type="number" min="0" value="0" data-bind="value: crossoverSeconds">
+												<span class="note">seconds</span>
+											</li>
+											<li class="modifier">
+												<input id="crossfade" type="checkbox" data-bind="checked: crossfade">
+												<label for="crossfade">Crossfade</label>
+											</li>
+										</ul>
 									</td>
 								</tr>
 								<tr>
-									<th><label for="crossfade">Crossfade</label></th>
-									<td><input id="crossfade" type="checkbox"></td>
-								</tr>
-								<tr>
-									<th><label for="volume">Volume</label></th>
-									<td><input id="volume" type="number" min="0" max="1" step="0.1" value="1"></td>
+									<th>
+										<label for="volume">Volume</label>
+									</th>
+									<td>
+										<input
+											id="volume"
+											type="range"
+											min="0"
+											max="1"
+											step="0.1"
+											data-bind="value: volume">
+									</td>
 								</tr>
 							</table>
 						</details>
-						<details>
-							<summary>Text&ensp;<span class="note" data-bind="text: text"></span></summary>
+						<details class="category">
+							<summary class="header">Text&ensp;<span class="note" data-bind="text: text"></span></summary>
 							<table>
 								<tr>
 									<th><label for="text">Text</label></th>
 									<td>
-										<textarea id="text" data-bind="value: text, valueUpdate: 'afterkeydown'"></textarea>
+										<textarea
+											id="text"
+											rows="3"
+											data-bind="
+												value: text,
+												valueUpdate: 'afterkeydown'
+											"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -178,34 +229,56 @@
 								<tr>
 									<th></th>
 									<td>
-										<label for="bold">Bold</label> <input id="bold" type="checkbox" data-bind="checked: bold">
-										<label for="italic">Italic</label> <input id="italic" type="checkbox" data-bind="checked: italic">
+										<ul class="modifier-list">
+											<li class="modifier">
+												<input id="bold" type="checkbox" data-bind="checked: bold">
+												<label for="bold"><b>Bold</b></label>
+											</li>
+											<li class="modifier">
+												<input id="italic" type="checkbox" data-bind="checked: italic">
+												<label for="italic"><i>Italic</i></label>
+											</li>
+										</ul>
 									</td>
 								<tr>
 									<th><label for="font-size">Size</label></th>
 									<td>
-										<input id="font-size" type="number" min="0" max="100" step="1" data-bind="value: fontSize">
-										<span class="note">percent of screen width</span>
+										<input id="font-size" type="range" min="3" max="30" step="0.5" data-bind="value: fontSize">
 									</td>
 								</tr>
 								<tr>
-									<th><label for="color">Color</label></th>
-									<td><input id="color" type="color"></td>
+									<th><label for="font-color">Color</label></th>
+									<td><input id="font-color" type="color" data-bind="value: fontColor"></td>
 								</tr>
 							</table>
 						</details>
-						<details>
-							<summary>Other</summary>
+						<details class="category">
+							<summary class="header">Other</summary>
 							<table>
 								<tr>
 									<th><label for="background-color">Background</label></th>
-									<td><input id="background-colo" type="color" data-bind="value: color"></td>
+									<td><input id="background-color" type="color" data-bind="value: backgroundColor"></td>
 								</tr>
 								<tr>
 									<th><label for="fade">Fade in/out</label></th>
 									<td>
 										<input id="fade" type="number" min="0" value="0" data-bind="value: fadeDuration">
 										<span class="note">seconds</span>
+									</td>
+								</tr>
+								<tr>
+									<th><label for="layer">Layer</label></th>
+									<td>
+										<select id="layer" data-bind="value: layer">
+											<option value="background">Background</option>
+											<option value="foreground">Foreground</option>
+										</select>
+										<ul class="modifier-list">
+											<li class="modifier">
+												<input id="mixin" type="checkbox" data-bind="checked: mixin">
+												<label for="mixin">Mixin</label>
+											</li>
+										</ul>
 									</td>
 								</tr>
 							</table>

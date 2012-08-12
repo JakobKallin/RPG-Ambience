@@ -28,6 +28,7 @@ var ViewModel = function(editorWidth) {
 		name: 'Untitled scene',
 		key: 'F1',
 		layer: 'background',
+		mixin: false,
 		image: '',
 		loop: true,
 		shuffle: false,
@@ -117,6 +118,7 @@ var ViewModel = function(editorWidth) {
 		flatScene.crossfades = scene.crossfade;
 		flatScene.loops = scene.loop;
 		flatScene.layer = scene.layer;
+		flatScene.isMixin = scene.mixin;
 		
 		ambience.play(flatScene);
 	};

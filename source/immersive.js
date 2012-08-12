@@ -289,18 +289,12 @@ var ViewModel = function(editorWidth) {
 		self.interfaceIsVisible(true);
 	}
 	
-	var commandKeys = {
-		'Enter': function() {},
-		'Backspace': function() {},
-		'Escape': function() {}
-	};
-	
 	var specialKeyFound = false;
 	self.bindSpecialKey = function(scene, event) {
 		var keyName = Key.name(event.keyCode);
 		if ( keyName ) {
 			specialKeyFound = true;
-			var keyHasCommand = keyName in commandKeys;
+			var keyHasCommand = keyName in commands;
 			if ( !keyHasCommand ) {
 				scene.key = keyName;
 			}
@@ -322,16 +316,54 @@ var ViewModel = function(editorWidth) {
 		specialKeyFound = false;
 	};
 	
-	self.command = ko.observable('');
-	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION'];
+	self.sceneName = ko.observable('');
 	self.onKeyPress = function(event) {
 		var charCode = event.charCode;
-		var focusIsOnForm = formTagNames.indexOf(event.target.tagName) !== -1;
-		if ( charCode !== 0 && !focusIsOnForm ) {
+		if ( charCode !== 0 && !focusIsOnForm(event) ) {
 			event.preventDefault();
 			var character = String.fromCharCode(charCode);
-			self.command(self.command() + character);
+			self.sceneName(self.sceneName() + character);
 		}
+	};
+	
+	self.onKeyDown = function(event) {
+		var keyName = Key.name(event.keyCode);
+		if ( commands[keyName] && !focusIsOnForm(event) ) {
+			event.preventDefault();
+			commands[keyName]();
+		};
+	};
+	
+	self.playNamedScene = function() {
+		var scene = self.namedScene(self.sceneName());
+		if ( scene ) {
+			self.playScene(scene);
+		}
+		self.sceneName('');
+	};
+	
+	self.namedScene = function(name) {
+		if ( name.length > 0 ) {
+			return self.scenes().first(function(scene) {
+				return (
+					scene.name &&
+					scene.name.toUpperCase().startsWith(name.toUpperCase())
+				);
+			});
+		} else {
+			return null;
+		}
+	};
+	
+	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION'];
+	var focusIsOnForm = function(event) {
+		return formTagNames.indexOf(event.target.tagName) !== -1;
+	};
+	
+	var commands = {
+		'Enter': self.playNamedScene,
+		'Backspace': function() {},
+		'Escape': function() {}
 	};
 };
 
@@ -345,6 +377,7 @@ window.addEventListener('load', function() {
 	
 	viewModel = new ViewModel();
 	document.addEventListener('keypress', viewModel.onKeyPress);
+	document.addEventListener('keydown', viewModel.onKeyDown);
 	ko.applyBindings(viewModel);
 	viewModel.add();
 });

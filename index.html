@@ -71,9 +71,9 @@
 			<div class="detail-view" data-bind="event: { drop: $root.handleDroppedFile, dragover: $root.handleDrag }">
 				<div class="selected-item">
 					<ul class="action-list">
-						<button class="play" data-bind="click: $root.playSelected">Play</button>
-						<button class="copy" data-bind="click: $root.copySelected">Copy</button>
-						<button class="remove" data-bind="click: $root.removeSelected">Remove</button>
+						<li class="action play"><button data-bind="click: $root.playSelected">Play</button></li>
+						<li class="action copy"><button data-bind="click: $root.copySelected">Copy</button></li>
+						<li class="action remove"><button data-bind="click: $root.removeSelected">Remove</button></li>
 					</ul>
 					<div class="preview" data-bind="
 						style: {
@@ -297,9 +297,13 @@
 			}">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
-			<ul class="action-list">
-				<button class="show" data-bind="click: $root.showEditor, visible: $root.showButtonIsVisible">Show Editor</button>
-				<button class="hide" data-bind="click: $root.hideEditor, visible: $root.hideButtonIsVisible">Hide Editor</button>
+			<ul class="action-list" data-bind="visible: $root.interfaceIsVisible">
+				<li class="action show" data-bind="visible: $root.editorIsHidden">
+					<button data-bind="click: $root.showEditor">Show Editor</button>
+				</li>
+				<li class="action hide" data-bind="visible: $root.editorIsVisible">
+					<button data-bind="click: $root.hideEditor">Hide Editor</button>
+				</li>
 			</ul>
 		</div>
 	</body>

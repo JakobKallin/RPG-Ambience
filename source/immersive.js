@@ -287,15 +287,7 @@ var ViewModel = function(editorWidth) {
 		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
 		self.interfaceIsVisible(true);
-	};
-	
-	self.showButtonIsVisible = ko.computed(function() {
-		return self.editorIsHidden() && self.interfaceIsVisible();
-	});
-	
-	self.hideButtonIsVisible = ko.computed(function() {
-		return self.editorIsVisible() && self.interfaceIsVisible();
-	});
+	}
 	
 	var commandKeys = {
 		'Enter': function() {},

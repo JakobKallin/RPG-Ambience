@@ -27,6 +27,7 @@ var ViewModel = function(editorWidth) {
 	var baseScene = {
 		name: 'Untitled scene',
 		key: 'F1',
+		layer: 'background',
 		image: '',
 		loop: true,
 		shuffle: false,
@@ -115,6 +116,7 @@ var ViewModel = function(editorWidth) {
 		flatScene.crossoverDuration = scene.crossoverSeconds;
 		flatScene.crossfades = scene.crossfade;
 		flatScene.loops = scene.loop;
+		flatScene.layer = scene.layer;
 		
 		ambience.play(flatScene);
 	};

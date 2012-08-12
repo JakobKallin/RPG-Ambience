@@ -238,6 +238,7 @@
 												<input id="italic" type="checkbox" data-bind="checked: italic">
 												<label for="italic"><i>Italic</i></label>
 											</li>
+										</ul>
 									</td>
 								<tr>
 									<th><label for="font-size">Size</label></th>
@@ -263,6 +264,15 @@
 									<td>
 										<input id="fade" type="number" min="0" value="0" data-bind="value: fadeDuration">
 										<span class="note">seconds</span>
+									</td>
+								</tr>
+								<tr>
+									<th><label for="layer">Layer</label></th>
+									<td>
+										<select id="layer" data-bind="value: layer">
+											<option value="background">Background</option>
+											<option value="foreground">Foreground</option>
+										</select>
 									</td>
 								</tr>
 							</table>

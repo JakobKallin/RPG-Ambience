@@ -242,15 +242,14 @@ var ViewModel = function(editorWidth) {
 	var previousX;
 	var previousY;
 	
-	var theaterButtons = theater.getElementsByTagName('button');
 	var showInterface = function(event) {
 		event.stopPropagation();
 		self.showInterface();
 	};
-	for ( var i = 0; i < theaterButtons.length; i += 1 ) {
-		theaterButtons[i].addEventListener('mousemove', showInterface);
-		theaterButtons[i].addEventListener('mouseover', showInterface);
-	}
+	
+	var theaterForm = document.getElementById('theater-form');
+	theaterForm.addEventListener('mousemove', showInterface);
+	theaterForm.addEventListener('mouseover', showInterface);
 	
 	self.scheduleHiddenInterface = function(viewModel, event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.

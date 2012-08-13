@@ -328,7 +328,7 @@
 			}">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
-			<form class="action-form" data-bind="event: { submit: $root.playNamedScene }">
+			<form id="theater-form" class="action-form" data-bind="event: { submit: $root.playNamedScene }">
 				<ul class="action-list" data-bind="visible: $root.interfaceIsVisible">
 					<li class="action show" data-bind="visible: $root.editorIsHidden">
 						<button type="button" data-bind="click: $root.showEditor">Show Editor</button>

@@ -181,6 +181,7 @@ body {
 
 .selected-item {
 	padding: 1em;
+	overflow: hidden;
 }
 
 .selected-item .action-list {

@@ -233,7 +233,6 @@ body {
 .tab {
 	display: block;
 	float: left;
-	padding: 0.25em 0.5em;
 	border: 1px solid white;
 	border-bottom-width: 0;
 }
@@ -243,6 +242,8 @@ body {
 }
 
 .tab a {
+	display: block;
+	padding: 0.25em 0.5em;
 	text-decoration: none;
 }
 
@@ -252,6 +253,14 @@ body {
 
 .ui-tabs-hide {
 	display: none;
+}
+
+.ui-tabs-selected {
+	background-color: hsl(0, 0%, 15%);
+}
+
+.tab:hover:not(.ui-tabs-selected) {
+	background-color: hsl(0, 0%, 7.5%);
 }
 
 .options table {

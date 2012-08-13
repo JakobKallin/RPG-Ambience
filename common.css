@@ -200,9 +200,11 @@ body {
 }
 
 .detail-view .preview {
-	width: 15em;
-	height: 8.439em; /* Widescreen ratio */
+	float: left;
+	width: 10em;
+	height: 5.625em; /* Widescreen ratio */
 	margin-bottom: 1em;
+	margin-right: 1em;
 	overflow: hidden;
 }
 
@@ -222,39 +224,8 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-.tab-list {
-	overflow: auto;
-	margin-top: 0.5em;
-}
-
-.tab {
-	display: block;
-	float: left;
-	border: 1px solid white;
-	border-bottom-width: 0;
-}
-
-.tab:not(:last-child) {
-	border-right-width: 0;
-}
-
-.tab a {
-	display: block;
-	padding: 0.25em 0.5em;
-	text-decoration: none;
-}
-
-.tab-content {
-	border: 1px solid white;
-}
-
-.ui-tabs-hide {
-	display: none;
-}
-
 .options table {
 	border-collapse: collapse;
-	margin: 1em;
 }
 
 .options td, .options th {
@@ -281,6 +252,41 @@ body {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	width: 100%;
+}
+
+.options.specific {
+	clear: both;
+}
+
+.tab-list {
+	overflow: auto;
+	margin-top: 0.5em;
+}
+
+.tab {
+	display: block;
+	float: left;
+	border: 1px solid white;
+	border-bottom-width: 0;
+}
+
+.tab:not(:last-child) {
+	border-right-width: 0;
+}
+
+.tab a {
+	display: block;
+	padding: 0.25em 0.5em;
+	text-decoration: none;
+}
+
+.tab-content {
+	border: 1px solid white;
+	padding: 1em;
+}
+
+.ui-tabs-hide {
+	display: none;
 }
 
 .item-list .item {

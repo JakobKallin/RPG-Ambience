@@ -51,7 +51,7 @@ var ViewModel = function(editorWidth) {
 			return this === self.current();
 		},
 		get previewFontSize() {
-			return (this.fontSize / 100) * 15 + 'em';
+			return (this.fontSize / 100) * 10 + 'em';
 		},
 		get fontStyle() {
 			if ( this.italic ) {
@@ -131,7 +131,7 @@ var ViewModel = function(editorWidth) {
 	
 	self.select = function(scene) {
 		self.current(scene);
-		$(document.getElementById('selected-item-tabs')).tabs();
+		$('.selected-item .options.specific').tabs();
 		splitter.update();
 	};
 	

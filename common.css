@@ -228,6 +228,10 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
+.options.general table {
+	min-width: 8em;
+}
+
 .options table {
 	border-collapse: collapse;
 }

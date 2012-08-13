@@ -123,8 +123,8 @@ var ViewModel = function(editorWidth) {
 		ambience.play(flatScene);
 	};
 	
-	self.stopTopmost = function() {
-		ambience.stopTopmost();
+	self.fadeOutTopmost = function() {
+		ambience.fadeOutTopmost();
 	};
 	
 	self.current = ko.observable();
@@ -340,7 +340,7 @@ var ViewModel = function(editorWidth) {
 	
 	self.playNamedScene = function() {
 		if ( self.sceneName().length === 0 ) {
-			self.stopTopmost();
+			self.fadeOutTopmost();
 		} else {
 			var scene = self.namedScene(self.sceneName());
 			if ( scene ) {

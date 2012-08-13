@@ -12,8 +12,12 @@
 	color: black;
 }
 
-.list-item:hover, .list-item.selected {
+.list-item.selected {
 	background-color: hsl(0, 0%, 15%);
+}
+
+.list-item:hover:not(.selected) {
+	background-color: hsl(0, 0%, 7.5%);
 }
 
 .list-item,
@@ -26,6 +30,14 @@
 
 .tab {
 	border-bottom-width: 0;
+}
+
+.ui-tabs-selected {
+	background-color: hsl(0, 0%, 15%);
+}
+
+.tab:hover:not(.ui-tabs-selected) {
+	background-color: hsl(0, 0%, 7.5%);
 }
 
 input, select, textarea {

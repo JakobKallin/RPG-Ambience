@@ -251,14 +251,6 @@ body {
 	display: none;
 }
 
-.ui-tabs-selected {
-	background-color: hsl(0, 0%, 15%);
-}
-
-.tab:hover:not(.ui-tabs-selected) {
-	background-color: hsl(0, 0%, 7.5%);
-}
-
 .options table {
 	border-collapse: collapse;
 	margin: 1em;

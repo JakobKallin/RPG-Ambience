@@ -138,10 +138,6 @@ body {
 	cursor: pointer;
 }
 
-.list-item.ui-sortable-helper {
-	cursor: move;
-}
-
 .list-item .preview {
 	display: inline-block;
 	vertical-align: middle;

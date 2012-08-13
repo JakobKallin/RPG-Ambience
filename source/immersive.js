@@ -225,24 +225,6 @@ var ViewModel = function(editorWidth) {
 		var a = 5;
 	};
 	
-	self.handleDroppedFile = function(scene, event) {
-		event.preventDefault();
-		event.stopPropagation();
-		
-		var file = event.originalEvent.dataTransfer.files[0];
-		var reader = new FileReader();
-		reader.onload = function(event) {
-			scene.image = event.target.result;
-		}
-		reader.readAsDataURL(file);
-	};
-	
-	self.handleDrag = function(scene, event) {
-		event.preventDefault();
-		event.stopPropagation();
-		event.dataTransfer.dropEffect = 'copy';
-	};
-	
 	self.hideEditor = function() {
 		self.editorWidth = splitter.leftWidth;
 		self.editorIsVisible(false);

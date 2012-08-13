@@ -33,12 +33,21 @@ Ambience = function(background, foreground) {
 		background.fadeOutScene();
 	}
 	
+	function stopTopmost() {
+		if ( foreground.scene ) {
+			stopForeground();
+		} else if ( background.scene ) {
+			stopBackground();
+		}
+	}
+	
 	return {
 		play: play,
 		stopBackground: stopBackground,
 		stopForeground: stopForeground,
 		fadeOutForeground: fadeOutForeground,
 		fadeOutBackground: fadeOutBackground,
+		stopTopmost: stopTopmost,
 		get sceneIsPlaying() {
 				return Boolean(
 				background.scene ||

@@ -25,7 +25,7 @@ var ViewModel = function(editorWidth) {
 	self.scenes = ko.observableArray();
 	
 	var baseScene = {
-		name: 'Untitled scene',
+		name: 'Untitled',
 		key: 'F1',
 		layer: 'background',
 		mixin: false,

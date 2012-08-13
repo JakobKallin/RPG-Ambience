@@ -369,7 +369,7 @@ var ViewModel = function(editorWidth) {
 		}
 	};
 	
-	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION'];
+	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION', 'A'];
 	var focusIsOnForm = function(event) {
 		return formTagNames.indexOf(event.target.tagName) !== -1;
 	};

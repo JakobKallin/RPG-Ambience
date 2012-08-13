@@ -189,10 +189,14 @@ body {
 	margin-bottom: 1em;
 }
 
-.action-list .action {
+.selected-item .action-list .action {
 	display: block;
 	float: left;
 	margin-right: 0.5em;
+}
+
+.selected-item .action-list .action:last-child {
+	margin-right: 0;
 }
 
 .selected-item .action-list .remove {
@@ -321,6 +325,11 @@ body {
 	position: absolute;
 	top: 1em;
 	left: 1em;
+}
+
+.theater .action-list .action {
+	display: inline;
+	margin-right: 0.5em;
 }
 
 .theater .layer {

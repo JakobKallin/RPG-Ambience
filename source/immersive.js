@@ -302,22 +302,47 @@ var ViewModel = function(editorWidth) {
 		specialKeyFound = false;
 	};
 	
-	self.sceneName = ko.observable('');
-	self.onKeyPress = function(event) {
-		var charCode = event.charCode;
-		if ( charCode !== 0 && !focusIsOnForm(event) ) {
-			event.preventDefault();
-			var character = String.fromCharCode(charCode);
-			self.sceneName(self.sceneName() + character);
+	self.keyedScene = function(targetKey) {
+		if ( targetKey ) {
+			return self.scenes().first(function(scene) {
+				return (
+					scene.key &&
+					scene.key === targetKey
+				);
+			});
+		} else {
+			return null;
 		}
 	};
 	
 	self.onKeyDown = function(event) {
-		var keyName = Key.name(event.keyCode);
-		if ( commands[keyName] && !focusIsOnForm(event) ) {
-			event.preventDefault();
-			commands[keyName]();
-		};
+		if ( !focusIsOnForm(event) ) {
+			var key = Key.name(event.keyCode);
+			if ( commands[key]  ) {
+				event.preventDefault();
+				commands[key]();
+			} else {
+				var scene = self.keyedScene(key);
+				if ( scene ) {
+					self.playScene(scene);
+				}
+			}
+		}
+	};
+	
+	self.sceneName = ko.observable('');
+	self.onKeyPress = function(event) {
+		if ( !focusIsOnForm(event) ) {
+			var character = String.fromCharCode(event.charCode);
+			var scene = self.keyedScene(character.toUpperCase());
+			if ( scene ) {
+				self.playScene(scene);
+				self.sceneName('');
+			} else if ( character ) {
+				event.preventDefault();
+				self.sceneName(self.sceneName() + character);
+			}
+		}
 	};
 	
 	self.playNamedScene = function() {

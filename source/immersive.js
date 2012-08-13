@@ -293,10 +293,11 @@ var ViewModel = function(editorWidth) {
 		self.interfaceIsVisible(true);
 	}
 	
+	var bindableKeys = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
 	var specialKeyFound = false;
 	self.bindSpecialKey = function(scene, event) {
 		var keyName = Key.name(event.keyCode);
-		if ( keyName ) {
+		if ( bindableKeys.contains(keyName) ) {
 			specialKeyFound = true;
 			var keyHasCommand = keyName in commands;
 			if ( !keyHasCommand ) {

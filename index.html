@@ -123,7 +123,11 @@
 										data-bind="
 											value: key,
 											valueUpdate: 'afterkeydown',
-											event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey }
+											event: {
+												keydown: $root.bindSpecialKey,
+												keypress: $root.bindTextKey,
+												keyup: $root.stopKeyBinding
+											}
 										">
 								</td>
 							</tr>

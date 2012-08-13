@@ -123,6 +123,10 @@ var ViewModel = function(editorWidth) {
 		ambience.play(flatScene);
 	};
 	
+	self.stopTopmost = function() {
+		ambience.stopTopmost();
+	};
+	
 	self.current = ko.observable();
 	
 	self.select = function(scene) {
@@ -287,23 +291,17 @@ var ViewModel = function(editorWidth) {
 		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
 		self.interfaceIsVisible(true);
-	};
-	
-	self.showButtonIsVisible = ko.computed(function() {
-		return self.editorIsHidden() && self.interfaceIsVisible();
-	});
-	
-	self.hideButtonIsVisible = ko.computed(function() {
-		return self.editorIsVisible() && self.interfaceIsVisible();
-	});
+	}
 	
 	var specialKeyFound = false;
 	self.bindSpecialKey = function(scene, event) {
 		var keyName = Key.name(event.keyCode);
 		if ( keyName ) {
-			event.preventDefault();
-			scene.key = keyName;
 			specialKeyFound = true;
+			var keyHasCommand = keyName in commands;
+			if ( !keyHasCommand ) {
+				scene.key = keyName;
+			}
 		} else {
 			return true;
 		}
@@ -316,7 +314,70 @@ var ViewModel = function(editorWidth) {
 				scene.key = keyText.toUpperCase();
 			}
 		}
-		specialKeyFound = false; // We could do this in keyUp as well.
+	};
+	
+	self.stopKeyBinding = function(scene, event) {
+		specialKeyFound = false;
+	};
+	
+	self.sceneName = ko.observable('');
+	self.onKeyPress = function(event) {
+		var charCode = event.charCode;
+		if ( charCode !== 0 && !focusIsOnForm(event) ) {
+			event.preventDefault();
+			var character = String.fromCharCode(charCode);
+			self.sceneName(self.sceneName() + character);
+		}
+	};
+	
+	self.onKeyDown = function(event) {
+		var keyName = Key.name(event.keyCode);
+		if ( commands[keyName] && !focusIsOnForm(event) ) {
+			event.preventDefault();
+			commands[keyName]();
+		};
+	};
+	
+	self.playNamedScene = function() {
+		if ( self.sceneName().length === 0 ) {
+			self.stopTopmost();
+		} else {
+			var scene = self.namedScene(self.sceneName());
+			if ( scene ) {
+				self.playScene(scene);
+			}
+			self.sceneName('');
+		}
+	};
+	
+	self.namedScene = function(name) {
+		if ( name.length > 0 ) {
+			return self.scenes().first(function(scene) {
+				return (
+					scene.name &&
+					scene.name.toUpperCase().startsWith(name.toUpperCase())
+				);
+			});
+		} else {
+			return null;
+		}
+	};
+	
+	self.backspaceSceneName = function() {
+		if ( self.sceneName().length > 0 ) {
+			self.sceneName(self.sceneName().substring(0, self.sceneName().length - 1));
+		}
+	};
+	
+	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION'];
+	var focusIsOnForm = function(event) {
+		return formTagNames.indexOf(event.target.tagName) !== -1;
+	};
+	
+	var commands = {
+		'Enter': self.playNamedScene,
+		'Backspace': self.backspaceSceneName,
+		'Escape': function() {}
 	};
 };
 
@@ -329,6 +390,8 @@ window.addEventListener('load', function() {
 	);
 	
 	viewModel = new ViewModel();
+	document.addEventListener('keypress', viewModel.onKeyPress);
+	document.addEventListener('keydown', viewModel.onKeyDown);
 	ko.applyBindings(viewModel);
 	viewModel.add();
 });

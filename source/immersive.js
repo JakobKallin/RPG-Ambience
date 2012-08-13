@@ -131,7 +131,7 @@ var ViewModel = function(editorWidth) {
 	
 	self.select = function(scene) {
 		self.current(scene);
-		$('details').details();
+		$(document.getElementById('selected-item-tabs')).tabs();
 		splitter.update();
 	};
 	

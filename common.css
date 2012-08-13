@@ -247,12 +247,11 @@ body {
 }
 
 .tab-content {
-	display: none;
 	border: 1px solid white;
 }
 
-.tab-content:target {
-	display: block;
+.ui-tabs-hide {
+	display: none;
 }
 
 .options table {

@@ -10,6 +10,7 @@
 		<link rel="alternate stylesheet" href="sci-fi.css" title="Sci-Fi">
 		
 		<script src="libraries/jquery.js"></script>
+		<script src="libraries/jquery-ui.js"></script>
 		<script src="libraries/jquery.details.js"></script>
 		<script src="libraries/knockout.js"></script>
 		<script src="libraries/knockwrap.js"></script>
@@ -108,188 +109,190 @@
 							data-bind="
 								value: key,
 								valueUpdate: 'afterkeydown',
-								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey, keyup: $root.stopKeyBinding }">
-						<ul class="tab-list">
-							<li class="tab"><a href="#image-tab">Image</a></li>
-							<li class="tab"><a href="#sound-tab">Sound</a></li>
-							<li class="tab"><a href="#text-tab">Text</a></li>
-							<li class="tab"><a href="#other-tab">Other</a></li>
-						</ul>
-						<div class="tab-content" id="image-tab">
-							<table>
-								<tr>
-									<th>
-										<label for="image-file">File</label>
-									</th>
-									<td>
-										<input id="image-file" type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
-									</td>
-								</tr>
-								<tr>
-									<th></th>
-									<td>
-										<ul class="modifier-list">
-											<li class="modifier">
-												<input id="size-contain" type="radio" value="contain" data-bind="checked: size">
-												<label for="size-contain">Fit</label>
-											</li>
-											<li class="modifier">
-												<input id="size-cover" type="radio" value="cover" data-bind="checked: size">
-												<label for="size-cover">Fill</label>
-											</li>
-										</ul>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class="tab-content" id="sound-tab">
-							<table>
-								<tr>
-									<th>
-										<label>Files</label>
-									</th>
-									<td>
-										<ul data-bind="foreach: sounds" class="item-list">
-											<li class="item">
-												<div class="content">
-													<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
-												</div>
-												<div class="controls">
-													<button data-bind="click: remove">Remove</button>
-												</div>
-											</li>
-										</ul>
-										<button data-bind="click: $root.addSound">Add File</button>
-									</td>
-								</tr>
-								<tr>
-									<th></th>
-									<td>
-										<ul class="modifier-list">
-											<li class="modifier">
-												<input id="loop" type="checkbox" data-bind="checked: loop">
-												<label for="loop">Loop</label>
-											</li>
-											<li class="modifier">
-												<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
-												<label for="shuffle">Shuffle</label>
-											</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<th><label for="crossover">Crossover</label></th>
-									<td>
-										<ul class="modifier-list">
-											<li class="modifier">
-												<input id="crossover" type="number" min="0" value="0" data-bind="value: crossoverSeconds">
-												<span class="note">seconds</span>
-											</li>
-											<li class="modifier">
-												<input id="crossfade" type="checkbox" data-bind="checked: crossfade">
-												<label for="crossfade">Crossfade</label>
-											</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<th>
-										<label for="volume">Volume</label>
-									</th>
-									<td>
-										<input
-											id="volume"
-											type="range"
-											min="0"
-											max="1"
-											step="0.1"
-											data-bind="value: volume">
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class="tab-content" id="text-tab">
-							<table>
-								<tr>
-									<th><label for="text">Text</label></th>
-									<td>
-										<textarea
-											id="text"
-											rows="3"
-											data-bind="
-												value: text,
-												valueUpdate: 'afterkeydown'
-											"></textarea>
-									</td>
-								</tr>
-								<tr>
-									<th>
-										<label for="font">Font</label>
-									</th>
-									<td>
-										<input id="font" type="text" list="fonts" data-bind="value: fontFamily, valueUpdate: 'afterkeydown'">
-									</td>
-								</tr>
-								<tr>
-									<th></th>
-									<td>
-										<ul class="modifier-list">
-											<li class="modifier">
-												<input id="bold" type="checkbox" data-bind="checked: bold">
-												<label for="bold"><b>Bold</b></label>
-											</li>
-											<li class="modifier">
-												<input id="italic" type="checkbox" data-bind="checked: italic">
-												<label for="italic"><i>Italic</i></label>
-											</li>
-										</ul>
-									</td>
-								<tr>
-									<th><label for="font-size">Size</label></th>
-									<td>
-										<input id="font-size" type="range" min="3" max="30" step="0.5" data-bind="value: fontSize">
-									</td>
-								</tr>
-								<tr>
-									<th><label for="font-color">Color</label></th>
-									<td><input id="font-color" type="color" data-bind="value: fontColor"></td>
-								</tr>
-							</table>
-						</div>
-						<div class="tab-content" id="other-tab">
-							<table>
-								<tr>
-									<th><label for="background-color">Background</label></th>
-									<td><input id="background-color" type="color" data-bind="value: backgroundColor"></td>
-								</tr>
-								<tr>
-									<th><label for="fade">Fade in/out</label></th>
-									<td>
-										<input id="fade" type="number" min="0" value="0" data-bind="value: fadeDuration">
-										<span class="note">seconds</span>
-									</td>
-								</tr>
-								<tr>
-									<th><label for="layer">Layer</label></th>
-									<td>
-										<select id="layer" data-bind="value: layer">
-											<option value="background">Background</option>
-											<option value="foreground">Foreground</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th></th>
-									<td>
-										<ul class="modifier-list">
-											<li class="modifier">
-												<input id="mixin" type="checkbox" data-bind="checked: mixin">
-												<label for="mixin">Mixin</label>
-											</li>
-										</ul>
-									</td>
-								</tr>
-							</table>
+								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey }">
+						<div id="selected-item-tabs">
+							<ul class="tab-list">
+								<li class="tab"><a href="#image-tab">Image</a></li>
+								<li class="tab"><a href="#sound-tab">Sound</a></li>
+								<li class="tab"><a href="#text-tab">Text</a></li>
+								<li class="tab"><a href="#other-tab">Other</a></li>
+							</ul>
+							<div class="tab-content" id="image-tab">
+								<table>
+									<tr>
+										<th>
+											<label for="image-file">File</label>
+										</th>
+										<td>
+											<input id="image-file" type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
+										</td>
+									</tr>
+									<tr>
+										<th></th>
+										<td>
+											<ul class="modifier-list">
+												<li class="modifier">
+													<input id="size-contain" type="radio" value="contain" data-bind="checked: size">
+													<label for="size-contain">Fit</label>
+												</li>
+												<li class="modifier">
+													<input id="size-cover" type="radio" value="cover" data-bind="checked: size">
+													<label for="size-cover">Fill</label>
+												</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="tab-content" id="sound-tab">
+								<table>
+									<tr>
+										<th>
+											<label>Files</label>
+										</th>
+										<td>
+											<ul data-bind="foreach: sounds" class="item-list">
+												<li class="item">
+													<div class="content">
+														<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
+													</div>
+													<div class="controls">
+														<button data-bind="click: remove">Remove</button>
+													</div>
+												</li>
+											</ul>
+											<button data-bind="click: $root.addSound">Add File</button>
+										</td>
+									</tr>
+									<tr>
+										<th></th>
+										<td>
+											<ul class="modifier-list">
+												<li class="modifier">
+													<input id="loop" type="checkbox" data-bind="checked: loop">
+													<label for="loop">Loop</label>
+												</li>
+												<li class="modifier">
+													<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
+													<label for="shuffle">Shuffle</label>
+												</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<th><label for="crossover">Crossover</label></th>
+										<td>
+											<ul class="modifier-list">
+												<li class="modifier">
+													<input id="crossover" type="number" min="0" value="0" data-bind="value: crossoverSeconds">
+													<span class="note">seconds</span>
+												</li>
+												<li class="modifier">
+													<input id="crossfade" type="checkbox" data-bind="checked: crossfade">
+													<label for="crossfade">Crossfade</label>
+												</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<th>
+											<label for="volume">Volume</label>
+										</th>
+										<td>
+											<input
+												id="volume"
+												type="range"
+												min="0"
+												max="1"
+												step="0.1"
+												data-bind="value: volume">
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="tab-content" id="text-tab">
+								<table>
+									<tr>
+										<th><label for="text">Text</label></th>
+										<td>
+											<textarea
+												id="text"
+												rows="3"
+												data-bind="
+													value: text,
+													valueUpdate: 'afterkeydown'
+												"></textarea>
+										</td>
+									</tr>
+									<tr>
+										<th>
+											<label for="font">Font</label>
+										</th>
+										<td>
+											<input id="font" type="text" list="fonts" data-bind="value: fontFamily, valueUpdate: 'afterkeydown'">
+										</td>
+									</tr>
+									<tr>
+										<th></th>
+										<td>
+											<ul class="modifier-list">
+												<li class="modifier">
+													<input id="bold" type="checkbox" data-bind="checked: bold">
+													<label for="bold"><b>Bold</b></label>
+												</li>
+												<li class="modifier">
+													<input id="italic" type="checkbox" data-bind="checked: italic">
+													<label for="italic"><i>Italic</i></label>
+												</li>
+											</ul>
+										</td>
+									<tr>
+										<th><label for="font-size">Size</label></th>
+										<td>
+											<input id="font-size" type="range" min="3" max="30" step="0.5" data-bind="value: fontSize">
+										</td>
+									</tr>
+									<tr>
+										<th><label for="font-color">Color</label></th>
+										<td><input id="font-color" type="color" data-bind="value: fontColor"></td>
+									</tr>
+								</table>
+							</div>
+							<div class="tab-content" id="other-tab">
+								<table>
+									<tr>
+										<th><label for="background-color">Background</label></th>
+										<td><input id="background-color" type="color" data-bind="value: backgroundColor"></td>
+									</tr>
+									<tr>
+										<th><label for="fade">Fade in/out</label></th>
+										<td>
+											<input id="fade" type="number" min="0" value="0" data-bind="value: fadeDuration">
+											<span class="note">seconds</span>
+										</td>
+									</tr>
+									<tr>
+										<th><label for="layer">Layer</label></th>
+										<td>
+											<select id="layer" data-bind="value: layer">
+												<option value="background">Background</option>
+												<option value="foreground">Foreground</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th></th>
+										<td>
+											<ul class="modifier-list">
+												<li class="modifier">
+													<input id="mixin" type="checkbox" data-bind="checked: mixin">
+													<label for="mixin">Mixin</label>
+												</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>

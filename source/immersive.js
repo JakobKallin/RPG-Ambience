@@ -26,7 +26,7 @@ var ViewModel = function(editorWidth) {
 	
 	var baseScene = {
 		name: 'Untitled',
-		key: 'F1',
+		key: '',
 		layer: 'background',
 		mixin: false,
 		image: '',

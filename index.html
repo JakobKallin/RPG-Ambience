@@ -102,8 +102,13 @@
 								value: key,
 								valueUpdate: 'afterkeydown',
 								event: { keydown: $root.bindSpecialKey, keypress: $root.bindTextKey }">
-						<details>
-							<summary>Image&ensp;<span class="note" data-bind="text: image"></span></summary>
+						<ul class="tab-list">
+							<li class="tab"><a href="#image-tab">Image</a></li>
+							<li class="tab"><a href="#sound-tab">Sound</a></li>
+							<li class="tab"><a href="#text-tab">Text</a></li>
+							<li class="tab"><a href="#other-tab">Other</a></li>
+						</ul>
+						<div class="tab-content" id="image-tab">
 							<table>
 								<tr>
 									<th>
@@ -125,9 +130,8 @@
 									</td>
 								</tr>
 							</table>
-						</details>
-						<details>
-							<summary>Sound&ensp;<span class="note" data-bind="text: sound"></span></summary>
+						</div>
+						<div class="tab-content" id="sound-tab">
 							<table>
 								<tr>
 									<th>
@@ -157,9 +161,8 @@
 									<td><input id="volume" type="number" min="0" max="1" step="0.1" value="1"></td>
 								</tr>
 							</table>
-						</details>
-						<details>
-							<summary>Text&ensp;<span class="note" data-bind="text: text"></span></summary>
+						</div>
+						<div class="tab-content" id="text-tab">
 							<table>
 								<tr>
 									<th><label for="text">Text</label></th>
@@ -193,9 +196,8 @@
 									<td><input id="color" type="color"></td>
 								</tr>
 							</table>
-						</details>
-						<details>
-							<summary>Other</summary>
+						</div>
+						<div class="tab-content" id="other-tab">
 							<table>
 								<tr>
 									<th><label for="background-color">Background</label></th>
@@ -209,7 +211,7 @@
 									</td>
 								</tr>
 							</table>
-						</details>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -72,7 +72,7 @@ body {
 	right: 0;
 	width: 0.25em;
 	height: 100%;
-	border: 1px solid black;
+	border: 1px solid white;
 	border-top-width: 0;
 	border-bottom-width: 0;
 	cursor: w-resize;
@@ -82,6 +82,7 @@ body {
 	left: 0;
 	line-height: 1.5;
 	overflow: auto;
+	color: white;
 }
 
 .note {
@@ -207,21 +208,39 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-.detail-view summary {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+.tab-list {
+	overflow: auto;
+	margin-top: 0.5em;
 }
 
-.detail-view summary br {
+.tab {
+	display: block;
+	float: left;
+	padding: 0.25em 0.5em;
+	border: 1px solid white;
+	border-bottom-width: 0;
+}
+
+.tab:not(:last-child) {
+	border-right-width: 0;
+}
+
+.tab a {
+	text-decoration: none;
+}
+
+.tab-content {
 	display: none;
+	border: 1px solid white;
+}
+
+.tab-content:target {
+	display: block;
 }
 
 .options table {
 	border-collapse: collapse;
-	margin-left: 1em;
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
+	margin: 1em;
 }
 
 .options td, .options th {

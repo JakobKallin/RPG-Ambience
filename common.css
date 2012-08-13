@@ -89,6 +89,22 @@ body {
 	opacity: 0.5;
 }
 
+.message {
+	margin: 2em;
+	margin-bottom: -1em;
+	padding: 0.5em;
+	text-align: center;
+	overflow: auto;
+}
+
+.message button {
+	float: right;
+}
+
+.message .text, .message button {
+	vertical-align: middle;
+}
+
 .preview {
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -239,6 +255,7 @@ body {
 	font-weight: normal;
 	text-align: right;
 	padding-left: 1em;
+	vertical-align: top;
 }
 
 .options th label:after {
@@ -257,7 +274,23 @@ body {
 	width: 100%;
 }
 
-.options li {
+.item-list .item {
+	display: table;
+	width: 100%;
+	margin-bottom: 0.5em;
+}
+
+.item-list .item .content {
+	display: table-cell;
+	width: 100%;
+}
+
+.item-list .item .controls {
+	display: table-cell;
+	padding-left: 0.5em;
+}
+
+.modifier-list .modifier {
 	display: block;
 	float: left;
 	margin-right: 1em;

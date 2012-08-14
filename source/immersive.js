@@ -191,7 +191,9 @@ var ViewModel = function(editorWidth) {
 		var newScene = self.createScene();
 		// This for loop does not work in Opera.
 		for ( var property in this ) {
-			var propertyIsGetter = Boolean(Object.getPropertyDescriptor(this, property));
+			var descriptor = Object.getPropertyDescriptor(this, property);
+			// We need to check for .get because the property might be an array, and arrays are not wrapped.
+			var propertyIsGetter = descriptor.get && !descriptor.set;
 			if ( !propertyIsGetter ) {
 				newScene[property] = this[property];
 			}

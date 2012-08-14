@@ -129,9 +129,16 @@ var ViewModel = function(editorWidth) {
 	
 	self.current = ko.observable();
 	
+	var selectedTab = ko.observable(0);
 	self.select = function(scene) {
 		self.current(scene);
-		$('.selected-item .options.specific').tabs();
+		var specificOptions = $('.selected-item .options.specific');
+		specificOptions.tabs({
+			select: function(event, ui) {
+				selectedTab(ui.index);
+			}
+		});
+		specificOptions.tabs('select', selectedTab());
 		splitter.update();
 	};
 	

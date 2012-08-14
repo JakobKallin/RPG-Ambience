@@ -103,7 +103,7 @@ describe('Ambience layer', function() {
 			expect(backgroundNode.style.backgroundColor).toBe('red');
 			expect(backgroundNode.querySelectorAll('.image').length).toBe(1);
 			expect(audioNodes.length).toBe(1);
-			expect(backgroundNode.querySelectorAll('.text').length).toBe(1);
+			expect(backgroundNode.querySelectorAll('.text.outer').length).toBe(1);
 			expect(backgroundNode.querySelectorAll('.video').length).toBe(1);
 		});
 		

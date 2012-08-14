@@ -107,4 +107,18 @@ describe('Ambience mixin', function() {
 			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.75);
 		});
 	});
+	
+	it('only mixes in properties of media when media itself is present', function() {
+		var base = new Ambience.Scene();
+		base.text = 'Base';
+		base.textStyle = { color: 'red' }
+		ambience.play(base);
+		
+		var mixin = new Ambience.Scene();
+		mixin.isMixin = true;
+		mixin.textStyle = { color: 'blue' };
+		ambience.play(mixin);
+		
+		expect(backgroundNode.querySelector('.text.inner').style.color).toBe('red');
+	});
 });

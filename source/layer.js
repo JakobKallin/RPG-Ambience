@@ -1,8 +1,7 @@
 Ambience.Layer = function(node) {
-	var scene;
-	
 	var isFadingIn;
 	var isFadingOut;
+	var fadeOutDuration;
 	
 	var fadeAnimation = new Animation(node.style, 'opacity');
 	var stopTimer;
@@ -15,16 +14,38 @@ Ambience.Layer = function(node) {
 		'video': new Ambience.Video(node)
 	};
 	
+	var playingMedia = [];
+	for ( var mediaType in mediaPlayers ) {
+		wrapStop(mediaPlayers[mediaType], mediaType, playingMedia);
+		wrapPlay(mediaPlayers[mediaType], mediaType, playingMedia);
+	}
+	
 	stopScene();
+	
+	function wrapStop(player, mediaType, playingMedia) {
+		var oldStop = player.stop;
+		player.stop = function() {
+			if ( playingMedia.contains(mediaType) ) {
+				oldStop.apply(player, arguments);
+				playingMedia.remove(mediaType);
+			}
+		};
+	}
+	
+	function wrapPlay(player, mediaType, playingMedia) {
+		var oldPlay = player.play;
+		player.play = function() {
+			oldPlay.apply(player, arguments);
+			playingMedia.push(mediaType);
+		};
+	}
 	
 	function stopScene() {
 		node.style.visibility = 'hidden';
 		node.style.opacity = 0;
 		
 		for ( var mediaType in mediaPlayers ) {
-			if ( scene && scene[mediaType] ) {
-				mediaPlayers[mediaType].stop();
-			}
+			mediaPlayers[mediaType].stop();
 		}
 		
 		stopFadeIn();
@@ -33,43 +54,42 @@ Ambience.Layer = function(node) {
 		
 		window.clearTimeout(stopTimer);
 		stopTimer = null;
-		
-		scene = null;
 	}
 	
 	function stopRedefinedMedia(newScene) {
 		for ( var mediaType in mediaPlayers ) {
-			if ( scene[mediaType] && newScene[mediaType] ) {
+			if ( playingMedia.contains(mediaType) && newScene[mediaType] ) {
 				mediaPlayers[mediaType].stop();
 			}
 		}
 	}
 	
 	function playScene(newScene) {
-		if ( scene && newScene.isMixin ) {
+		var alreadyPlaying = playingMedia.length > 0;
+		if ( alreadyPlaying && newScene.isMixin ) {
 			stopRedefinedMedia(newScene);
-		} else if ( scene && !newScene.isMixin ) {
+		} else if ( alreadyPlaying && !newScene.isMixin ) {
 			stopScene();
 		}
 		
-		scene = newScene;
+		fadeOutDuration = newScene.fadeOutDuration;
 		
-		playFadeIn();
+		playFadeIn(newScene);
 		
 		for ( var mediaType in mediaPlayers ) {
-			if ( scene && scene[mediaType] ) {
-				mediaPlayers[mediaType].play(scene);
+			if ( newScene[mediaType] ) {
+				mediaPlayers[mediaType].play(newScene);
 			}
 		}
 	}
 	
-	function playFadeIn() {
-		if ( scene.isVisual ) {
+	function playFadeIn(newScene) {
+		if ( newScene.isVisual ) {
 			node.style.visibility = 'visible';
 		}
 		
 		isFadingIn = true;
-		fadeAnimation.start(1, scene.fadeInDuration, {onEnded: onFadeInEnded});		
+		fadeAnimation.start(1, newScene.fadeInDuration, {onEnded: onFadeInEnded});		
 	}
 	
 	function onFadeInEnded() {
@@ -81,18 +101,18 @@ Ambience.Layer = function(node) {
 	}
 	
 	function fadeOutScene() {
-		if ( scene ) {
+		if ( playingMedia.length > 0 ) {
 			if ( isFadingOut ) {
 				stopScene();
 			} else {
 				isFadingOut = true;
 				
-				if ( scene.sounds ) { mediaPlayers.sounds.fadeOut(); }
-				if ( scene.video ) { mediaPlayers.video.fadeOut(); }
+				if ( playingMedia.contains('sounds') ) { mediaPlayers.sounds.fadeOut(); }
+				if ( playingMedia.contains('video') ) { mediaPlayers.video.fadeOut(); }
 				
 				// The current opacity compared to 1, if the scene has been halfway faded in.
 				var opacityPercentage = node.style.opacity / 1;
-				var fadeDuration = scene.fadeOutDuration * opacityPercentage;
+				var fadeDuration = fadeOutDuration * opacityPercentage;
 				fadeAnimation.start(0, fadeDuration);
 				
 				stopTimer = window.setTimeout(stopScene, fadeDuration);
@@ -104,8 +124,8 @@ Ambience.Layer = function(node) {
 		playScene: playScene,
 		stopScene: stopScene,
 		fadeOutScene: fadeOutScene,
-		get scene() {
-			return scene;
+		get isPlaying() {
+			return playingMedia.length > 0;
 		}
 	};
 };

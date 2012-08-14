@@ -32,41 +32,52 @@ Ambience.Layer = function(node) {
 		fadeOutDuration = 0;
 	}
 	
-	function stopRedefinedMedia(newScene) {
-		for ( var mediaType in mediaPlayers ) {
-			if ( playingMedia.contains(mediaType) && newScene[mediaType] ) {
-				mediaPlayers[mediaType].stop();
-				playingMedia.remove(mediaType);
-			}
+	function playScene(scene) {
+		var alreadyPlaying = playingMedia.length > 0;
+		if ( alreadyPlaying && scene.isMixin ) {
+			playMixin(scene);
+		} else {
+			playRegularScene(scene);
 		}
 	}
 	
-	function playScene(newScene) {
-		var alreadyPlaying = playingMedia.length > 0;
-		if ( alreadyPlaying && newScene.isMixin ) {
-			stopRedefinedMedia(newScene);
-		} else if ( alreadyPlaying && !newScene.isMixin ) {
-			stopScene();
-		}
+	function playRegularScene(scene) {
+		stopScene();
 		
-		fadeOutDuration = newScene.fadeOutDuration;
-		playFadeIn(newScene);
+		fadeOutDuration = scene.fadeOutDuration;
+		playFadeIn(scene);
 		
 		for ( var mediaType in mediaPlayers ) {
-			if ( newScene[mediaType] ) {
-				mediaPlayers[mediaType].play(newScene);
+			if ( scene[mediaType] ) {
+				mediaPlayers[mediaType].play(scene);
 				playingMedia.push(mediaType);
 			}
 		}
 	}
 	
-	function playFadeIn(newScene) {
-		if ( newScene.isVisual ) {
+	function playMixin(mixin) {
+		for ( var mediaType in mediaPlayers ) {
+			if ( playingMedia.contains(mediaType) && mixin[mediaType] ) {
+				mediaPlayers[mediaType].stop();
+				playingMedia.remove(mediaType);
+			}
+		}
+		
+		for ( var mediaType in mediaPlayers ) {
+			if ( mixin[mediaType] ) {
+				mediaPlayers[mediaType].play(mixin);
+				playingMedia.push(mediaType);
+			}
+		}
+	}
+	
+	function playFadeIn(scene) {
+		if ( scene.isVisual ) {
 			node.style.visibility = 'visible';
 		}
 		
 		isFadingIn = true;
-		fadeAnimation.start(1, newScene.fadeInDuration, {onEnded: onFadeInEnded});		
+		fadeAnimation.start(1, scene.fadeInDuration, {onEnded: onFadeInEnded});		
 	}
 	
 	function onFadeInEnded() {

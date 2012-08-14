@@ -82,4 +82,29 @@ describe('Ambience mixin', function() {
 			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.75);
 		});
 	});
+	
+	it('respects current fade level when mixed-in during fade', function() {
+		runs(function() {
+			var base = new Ambience.Scene();
+			base.image = 'test-image.jpg';
+			base.fadeDuration = 2000;
+			ambience.play(base);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			var mixin = new Ambience.Scene();
+			mixin.isMixin = true;
+			mixin.text = 'Mixin';
+			ambience.play(mixin);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			expect(Number(backgroundNode.style.opacity)).toBeGreaterThan(0.25);
+			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.75);
+		});
+	});
 });

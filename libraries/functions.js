@@ -1,3 +1,11 @@
+Object.copy = function(original) {
+	var copy = {};
+	for ( var property in original ) {
+		copy[property] = original[property];
+	}
+	return copy;
+};
+
 Array.prototype.contains = function(value) {
 	return this.indexOf(value) !== -1;
 };

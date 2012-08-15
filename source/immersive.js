@@ -196,20 +196,13 @@ var ViewModel = function(editorWidth) {
 	
 	self.copySelected = function() {
 		var newScene = self.createScene();
-		// This for loop does not work in Opera.
 		for ( var property in this ) {
-			var descriptor = Object.getPropertyDescriptor(this, property);
-			// We need to check for .get because the property might be an array, and arrays are not wrapped.
-			var propertyIsGetter = descriptor.get && !descriptor.set;
-			if ( !propertyIsGetter ) {
+			if ( !(this[property] instanceof Object) ) {
 				newScene[property] = this[property];
 			}
-		};
-		
+		}
 		this.sounds.map(function(sound) {
-			var newSound = new SoundViewModel(newScene);
-			newSound.path = sound.path;
-			newScene.sounds.push(newSound);
+			newScene.sounds.push(Object.copy(sound));
 		});
 		
 		var index = self.scenes.indexOf(self.current()) + 1
@@ -217,21 +210,12 @@ var ViewModel = function(editorWidth) {
 		self.select(newScene);
 	};
 	
-	function SoundViewModel(scene) {
-		this.path = '';
-		this.remove = function() {
-			var index = scene.sounds.indexOf(this);
-			scene.sounds.splice(index, 1);
-		};
-	};
-	
 	self.addSound = function() {
-		var sound = new SoundViewModel(this);
-		this.sounds.push(sound);
+		this.sounds.push({ path: '' });
 	};
 	
-	self.removeSound = function(e) {
-		var a = 5;
+	self.removeSound = function() {
+		self.current().sounds.remove(this);
 	};
 	
 	self.hideEditor = function() {

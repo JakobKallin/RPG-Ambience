@@ -9,44 +9,44 @@ var AdventureViewModel = function(editor) {
 			key: '',
 			layer: 'background',
 			mixin: false,
+			backgroundColor: '#000000',
+			fadeDuration: 0,
+			
+			// Image
 			image: '',
+			size: 'contain',
+			get imageCss() {
+				return 'url("' + this.image + '")';
+			},
+			
+			// Sound
 			sounds: [],
 			loop: true,
 			shuffle: false,
 			volume: 1,
-			text: '',
-			backgroundColor: '#000000',
-			size: 'contain',
-			fadeDuration: 0,
-			crossoverSeconds: 0,
+			crossover: 0,
 			crossfade: false,
+			
+			// Text
+			text: '',
 			fontSize: 5,
 			fontFamily: '',
 			fontColor: '#ffffff',
 			bold: false,
 			italic: false,
-			get imageCss() {
-				return 'url("' + this.image + '")';
+			get fontStyle() {
+				return (this.italic) ? 'italic' : 'normal';
 			},
-			get isSelected() {
-				return this === self.current();
+			get fontWeight() {
+				return (this.bold) ? 'bold' : 'normal';
 			},
 			get previewFontSize() {
 				return (this.fontSize / 100) * 10 + 'em';
 			},
-			get fontStyle() {
-				if ( this.italic ) {
-					return 'italic';
-				} else {
-					return 'normal';
-				}
-			},
-			get fontWeight() {
-				if ( this.bold ) {
-					return 'bold';
-				} else {
-					return 'normal';
-				}
+			
+			// State
+			get isSelected() {
+				return this === self.current();
 			}
 		};
 	};

@@ -25,18 +25,23 @@ var ViewModel = function(editorWidth) {
 		
 		converted.name = scene.name;
 		converted.key = scene.key;
+		converted.layer = scene.layer;
+		converted.isMixin = scene.mixin;
+		converted.backgroundColor = scene.backgroundColor;
+		converted.fadeDuration = scene.fadeDuration * 1000;
+		
 		converted.image = encodeURI(scene.image);
+		converted.imageStyle = { size: scene.size };
+		
 		converted.sounds = scene.sounds.map(function(sound) {
 			return encodeURI(sound.path);
 		});
-		
-		if ( scene.shuffle ) {
-			converted.soundOrder = 'random';
-		} else {
-			converted.soundOrder = 'linear';
-		}
-		
+		converted.soundOrder = (scene.shuffle) ? 'random' : 'linear';
+		converted.loops = scene.loop;
 		converted.volume = scene.volume;
+		converted.crossoverDuration = scene.crossover;
+		converted.crossfades = scene.crossfade;
+		
 		converted.text = scene.text;
 		converted.textStyle = {
 			fontSize: scene.fontSize + 'vw',
@@ -45,14 +50,6 @@ var ViewModel = function(editorWidth) {
 			fontWeight: scene.fontWeight,
 			color: scene.fontColor
 		};
-		converted.backgroundColor = scene.backgroundColor;
-		converted.imageStyle = { size: scene.size };
-		converted.fadeDuration = scene.fadeDuration * 1000;
-		converted.crossoverDuration = scene.crossoverSeconds;
-		converted.crossfades = scene.crossfade;
-		converted.loops = scene.loop;
-		converted.layer = scene.layer;
-		converted.isMixin = scene.mixin;
 		
 		return converted;
 	};

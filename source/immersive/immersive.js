@@ -1,29 +1,20 @@
-var splitter;
-var ambience;
-var viewModel;
-		
 var ViewModel = function(editorWidth) {
 	var self = this;
 	
-	self.editorWidth = editorWidth;
-	self.editorIsVisible = ko.observable(true);
-	self.editorIsHidden = ko.computed(function() {
-		return !self.editorIsVisible();
-	});
-	self.interfaceIsVisible = ko.observable(true);
-	self.message = ko.observable(null);
-	self.appIsRunLocally = window.location.protocol === 'file:';
-	
-	if ( !self.appIsRunLocally ) {
-		self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
+	self.start = function() {
+		startAmbience();
+		startInterface();
 	}
 	
-	self.clearMessage = function() {
-		self.message(null);
-	};
+	var ambience;
+	function startAmbience() {
+		ambience = new Ambience(
+			new Ambience.Layer(document.getElementById('background')),
+			new Ambience.Layer(document.getElementById('foreground'))
+		);
+	}
 	
 	self.adventure = new AdventureViewModel(self);
-	
 	self.playScene = function(scene) {
 		var flatScene = new Ambience.Scene();
 		flatScene.name = scene.name;
@@ -60,14 +51,46 @@ var ViewModel = function(editorWidth) {
 		ambience.play(flatScene);
 	};
 	
+	function startInterface() {
+		self.splitter = new Splitter(document.body, editorWidth);
+		
+		var appIsRunLocally = window.location.protocol === 'file:';
+		if ( !appIsRunLocally ) {
+			self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
+		}
+		
+		document.addEventListener('keypress', viewModel.onKeyPress);
+		document.addEventListener('keydown', viewModel.onKeyDown);
+		
+		var theaterForm = document.getElementById('theater-form');
+		var showInterface = function(event) {
+			event.stopPropagation();
+			self.showInterface();
+		};
+		theaterForm.addEventListener('mousemove', showInterface);
+		theaterForm.addEventListener('mouseover', showInterface)
+	}
+	
+	self.message = ko.observable(null);
+	self.clearMessage = function() {
+		self.message(null);
+	};
+	
+	self.editorWidth = editorWidth;
+	self.editorIsVisible = ko.observable(true);
+	self.editorIsHidden = ko.computed(function() {
+		return !self.editorIsVisible();
+	});
+	self.interfaceIsVisible = ko.observable(true);
+	
 	self.hideEditor = function() {
-		self.editorWidth = splitter.leftWidth;
+		self.editorWidth = self.splitter.leftWidth;
 		self.editorIsVisible(false);
-		splitter.update(0);
+		self.splitter.update(0);
 	};
 	
 	self.showEditor = function() {
-		splitter.update(self.editorWidth);
+		self.splitter.update(self.editorWidth);
 		self.editorIsVisible(true);
 	};
 	
@@ -77,14 +100,16 @@ var ViewModel = function(editorWidth) {
 	var previousX;
 	var previousY;
 	
-	var showInterface = function(event) {
-		event.stopPropagation();
-		self.showInterface();
+	self.hideInterface = function() {
+		theater.style.cursor = 'none';
+		self.interfaceIsVisible(false);
 	};
-	
-	var theaterForm = document.getElementById('theater-form');
-	theaterForm.addEventListener('mousemove', showInterface);
-	theaterForm.addEventListener('mouseover', showInterface);
+
+	self.showInterface = function() {
+		clearTimeout(cursorTimer);
+		theater.style.cursor = 'auto';
+		self.interfaceIsVisible(true);
+	}
 	
 	self.scheduleHiddenInterface = function(viewModel, event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
@@ -98,38 +123,19 @@ var ViewModel = function(editorWidth) {
 		previousY = event.screenY;
 	};
 	
-	self.hideInterface = function() {
-		theater.style.cursor = 'none';
-		self.interfaceIsVisible(false);
-	};
-
-	self.showInterface = function() {
-		clearTimeout(cursorTimer);
-		theater.style.cursor = 'auto';
-		self.interfaceIsVisible(true);
-	}
-	
-	self.keyedScene = function(targetKey) {
-		if ( targetKey ) {
-			return self.scenes().first(function(scene) {
-				return (
-					scene.key &&
-					scene.key === targetKey
-				);
-			});
-		} else {
-			return null;
-		}
+	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION', 'A'];
+	var focusIsOnForm = function(event) {
+		return formTagNames.indexOf(event.target.tagName) !== -1;
 	};
 	
 	self.onKeyDown = function(event) {
 		if ( !focusIsOnForm(event) ) {
 			var key = Key.name(event.keyCode);
-			if ( commands[key]  ) {
+			if ( self.commands[key]  ) {
 				event.preventDefault();
-				commands[key]();
+				self.commands[key]();
 			} else {
-				var scene = self.keyedScene(key);
+				var scene = self.adventure.keyedScene(key);
 				if ( scene ) {
 					self.playScene(scene);
 				}
@@ -141,7 +147,7 @@ var ViewModel = function(editorWidth) {
 	self.onKeyPress = function(event) {
 		if ( !focusIsOnForm(event) ) {
 			var character = String.fromCharCode(event.charCode);
-			var scene = self.keyedScene(character.toUpperCase());
+			var scene = self.adventure.keyedScene(character.toUpperCase());
 			if ( scene ) {
 				self.playScene(scene);
 				self.sceneName('');
@@ -152,11 +158,17 @@ var ViewModel = function(editorWidth) {
 		}
 	};
 	
+	self.backspaceSceneName = function() {
+		if ( self.sceneName().length > 0 ) {
+			self.sceneName(self.sceneName().substring(0, self.sceneName().length - 1));
+		}
+	};
+	
 	self.playNamedScene = function() {
 		if ( self.sceneName().length === 0 ) {
-			self.fadeOutTopmost();
+			ambience.fadeOutTopmost();
 		} else {
-			var scene = self.namedScene(self.sceneName());
+			var scene = self.adventure.namedScene(self.sceneName());
 			if ( scene ) {
 				self.playScene(scene);
 			}
@@ -164,31 +176,7 @@ var ViewModel = function(editorWidth) {
 		}
 	};
 	
-	self.namedScene = function(name) {
-		if ( name.length > 0 ) {
-			return self.scenes().first(function(scene) {
-				return (
-					scene.name &&
-					scene.name.toUpperCase().startsWith(name.toUpperCase())
-				);
-			});
-		} else {
-			return null;
-		}
-	};
-	
-	self.backspaceSceneName = function() {
-		if ( self.sceneName().length > 0 ) {
-			self.sceneName(self.sceneName().substring(0, self.sceneName().length - 1));
-		}
-	};
-	
-	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION', 'A'];
-	var focusIsOnForm = function(event) {
-		return formTagNames.indexOf(event.target.tagName) !== -1;
-	};
-	
-	var commands = {
+	self.commands = {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName,
 		'Escape': function() {}
@@ -196,16 +184,8 @@ var ViewModel = function(editorWidth) {
 };
 
 window.addEventListener('load', function() {
-	splitter = new Splitter(document.body, 0.6);
-	
-	ambience = new Ambience(
-		new Ambience.Layer(document.getElementById('background')),
-		new Ambience.Layer(document.getElementById('foreground'))
-	);
-	
-	viewModel = new ViewModel();
-	document.addEventListener('keypress', viewModel.onKeyPress);
-	document.addEventListener('keydown', viewModel.onKeyDown);
+	viewModel = new ViewModel(0.6);
+	viewModel.start();
 	ko.applyBindings(viewModel);
 	viewModel.adventure.add();
 });

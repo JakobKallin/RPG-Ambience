@@ -82,7 +82,7 @@ var AdventureViewModel = function(editor) {
 			}
 		});
 		specificOptions.tabs('select', selectedTab());
-		splitter.update();
+		editor.splitter.update();
 	};
 	
 	self.add = function() {
@@ -168,7 +168,7 @@ var AdventureViewModel = function(editor) {
 		var keyName = Key.name(event.keyCode);
 		if ( bindableKeys.contains(keyName) ) {
 			specialKeyFound = true;
-			var keyHasCommand = keyName in commands;
+			var keyHasCommand = keyName in editor.commands;
 			if ( !keyHasCommand ) {
 				scene.key = keyName;
 			}
@@ -188,5 +188,25 @@ var AdventureViewModel = function(editor) {
 	
 	self.stopKeyBinding = function(scene, event) {
 		specialKeyFound = false;
+	};
+	
+	self.namedScene = function(name) {
+		if ( name.length > 0 ) {
+			return self.scenes().first(function(scene) {
+				return scene.name && scene.name.toUpperCase().startsWith(name.toUpperCase());
+			});
+		} else {
+			return null;
+		}
+	};
+	
+	self.keyedScene = function(targetKey) {
+		if ( targetKey ) {
+			return self.scenes().first(function(scene) {
+				return scene.key && scene.key === targetKey;
+			});
+		} else {
+			return null;
+		}
 	};
 };

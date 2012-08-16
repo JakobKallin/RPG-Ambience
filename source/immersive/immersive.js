@@ -25,12 +25,7 @@ var ViewModel = function(editorWidth) {
 		
 		converted.name = scene.name;
 		converted.key = scene.key;
-		
-		if ( scene.image.path ) {
-			converted.image = scene.image.path;
-			converted.imageStyle = { size: scene.image.size };
-		}
-		
+		converted.image = encodeURI(scene.image);
 		converted.sounds = scene.sounds.map(function(sound) {
 			return encodeURI(sound.path);
 		});
@@ -51,6 +46,7 @@ var ViewModel = function(editorWidth) {
 			color: scene.fontColor
 		};
 		converted.backgroundColor = scene.backgroundColor;
+		converted.imageStyle = { size: scene.size };
 		converted.fadeDuration = scene.fadeDuration * 1000;
 		converted.crossoverDuration = scene.crossoverSeconds;
 		converted.crossfades = scene.crossfade;

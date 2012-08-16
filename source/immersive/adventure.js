@@ -3,30 +3,20 @@ var AdventureViewModel = function(editor) {
 	
 	self.scenes = ko.observableArray();
 	
-	// Creates entirely new objects because prototypes cause problems with both Knockout and copying.
-	self.Scene = function() {
-		var scene = {
+	self.newScene = function() {
+		return {
 			name: 'Untitled',
 			key: '',
 			layer: 'background',
 			mixin: false,
-			image: {
-				path: '',
-				size: 'contain',
-				get css() {
-					if ( this.path ) {
-						return 'url("' + this.path + '")';
-					} else {
-						return 'none';
-					}
-				}
-			},
+			image: '',
 			sounds: [],
 			loop: true,
 			shuffle: false,
 			volume: 1,
 			text: '',
 			backgroundColor: '#000000',
+			size: 'contain',
 			fadeDuration: 0,
 			crossoverSeconds: 0,
 			crossfade: false,
@@ -35,6 +25,9 @@ var AdventureViewModel = function(editor) {
 			fontColor: '#ffffff',
 			bold: false,
 			italic: false,
+			get imageCss() {
+				return 'url("' + this.image + '")';
+			},
 			get isSelected() {
 				return this === self.current();
 			},
@@ -56,7 +49,10 @@ var AdventureViewModel = function(editor) {
 				}
 			}
 		};
-		
+	};
+	
+	self.createScene = function() {
+		var scene = self.newScene();
 		self.wrapScene(scene);
 		return scene;
 	};
@@ -85,7 +81,7 @@ var AdventureViewModel = function(editor) {
 	};
 	
 	self.add = function() {
-		self.scenes.push(new self.Scene());
+		self.scenes.push(self.createScene());
 		self.select(self.last());
 	};
 	
@@ -133,7 +129,8 @@ var AdventureViewModel = function(editor) {
 	};
 	
 	self.copyScene = function(original) {
-		var copy = new self.Scene();
+		var copy = self.newScene();
+		knockwrap.wrapObject(copy);
 		
 		for ( var property in original ) {
 			if ( !(original[property] instanceof Object) ) {
@@ -141,9 +138,9 @@ var AdventureViewModel = function(editor) {
 			}
 		}
 		
-		for ( var property in original.image ) {
-			copy.image[property] = original.image[property];
-		}
+		original.sounds.map(function(sound) {
+			copy.sounds.push({ path: sound.path });
+		});
 		
 		return copy;
 	};

@@ -157,7 +157,6 @@ var ViewModel = function(editorWidth) {
 				self.playScene(scene);
 				self.sceneName('');
 			} else if ( character ) {
-				event.preventDefault();
 				self.sceneName(self.sceneName() + character);
 			}
 		}

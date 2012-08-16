@@ -16,42 +16,8 @@ var ViewModel = function(editorWidth) {
 	
 	self.adventure = new AdventureViewModel(self);
 	self.playScene = function(scene) {
-		converted = self.convertScene(scene);
+		converted = self.adventure.convertScene(scene);
 		ambience.play(converted);
-	};
-	
-	self.convertScene = function(scene) {
-		var converted = new Ambience.Scene();
-		
-		converted.name = scene.name;
-		converted.key = scene.key;
-		converted.layer = scene.layer;
-		converted.isMixin = scene.mixin;
-		converted.backgroundColor = scene.backgroundColor;
-		converted.fadeDuration = scene.fadeDuration * 1000;
-		
-		converted.image = scene.image;
-		converted.imageStyle = { size: scene.size };
-		
-		converted.sounds = scene.sounds.map(function(sound) {
-			return sound.path;
-		});
-		converted.soundOrder = (scene.shuffle) ? 'random' : 'linear';
-		converted.loops = scene.loop;
-		converted.volume = scene.volume;
-		converted.crossoverDuration = scene.crossover;
-		converted.crossfades = scene.crossfade;
-		
-		converted.text = scene.text;
-		converted.textStyle = {
-			fontSize: scene.fontSize + 'vw',
-			fontFamily: scene.fontFamily,
-			fontStyle: scene.fontStyle,
-			fontWeight: scene.fontWeight,
-			color: scene.fontColor
-		};
-		
-		return converted;
 	};
 	
 	function startInterface() {

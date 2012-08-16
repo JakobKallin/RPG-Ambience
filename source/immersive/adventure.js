@@ -54,13 +54,6 @@ var AdventureViewModel = function(editor) {
 				} else {
 					return 'normal';
 				}
-			},
-			get soundString() {
-				var soundPaths = this.sounds.map(function(sound) {
-					return sound.path;
-				});
-				
-				return soundPaths.join(', ');
 			}
 		};
 		

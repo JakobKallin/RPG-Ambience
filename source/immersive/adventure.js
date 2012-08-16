@@ -68,7 +68,7 @@ var AdventureViewModel = function(editor) {
 		converted.fadeDuration = scene.fadeDuration * 1000;
 		
 		converted.image = scene.image;
-		converted.imageStyle = { size: scene.size };
+		converted.imageStyle = { backgroundSize: scene.size };
 		
 		converted.sounds = scene.sounds.map(function(sound) {
 			return sound.path;

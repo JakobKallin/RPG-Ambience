@@ -30,11 +30,11 @@ var ViewModel = function(editorWidth) {
 		converted.backgroundColor = scene.backgroundColor;
 		converted.fadeDuration = scene.fadeDuration * 1000;
 		
-		converted.image = encodeURI(scene.image);
+		converted.image = scene.image;
 		converted.imageStyle = { size: scene.size };
 		
 		converted.sounds = scene.sounds.map(function(sound) {
-			return encodeURI(sound.path);
+			return sound.path;
 		});
 		converted.soundOrder = (scene.shuffle) ? 'random' : 'linear';
 		converted.loops = scene.loop;

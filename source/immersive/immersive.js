@@ -149,7 +149,8 @@ var ViewModel = function(editorWidth) {
 	
 	self.sceneName = ko.observable('');
 	self.onKeyPress = function(event) {
-		if ( !focusIsOnForm(event) ) {
+		// Firefox handles charCode 0 as a string so we guard against it here.
+		if ( !focusIsOnForm(event) && event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
 			var scene = self.adventure.keyedScene(character.toUpperCase());
 			if ( scene ) {

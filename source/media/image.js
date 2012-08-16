@@ -9,10 +9,8 @@ Ambience.Image = function(container) {
 		node.style.backgroundImage = 'url("' + encodeURI(scene.image) + '")';
 		
 		for ( var property in scene.imageStyle ) {
-			var cssValue = scene.imageStyle[property];
-			// Needs to be camelcase to work in Firefox and possibly other browsers.
-			var cssProperty = 'background-' + property;
-			node.style[cssProperty] = cssValue;
+			var value = scene.imageStyle[property];
+			node.style[property] = value;
 		}
 	}
 	

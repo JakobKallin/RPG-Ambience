@@ -10,9 +10,9 @@ Ambience.Text = function(container) {
 		outerNode.appendChild(innerNode);
 		
 		innerNode.textContent = scene.text;
-		for ( var cssProperty in scene.textStyle ) {
-			var cssValue = scene.textStyle[cssProperty];
-			innerNode.style[cssProperty] = cssValue;
+		for ( var property in scene.textStyle ) {
+			var value = scene.textStyle[property];
+			innerNode.style[property] = value;
 		}
 		
 		container.appendChild(outerNode);

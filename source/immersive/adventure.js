@@ -3,67 +3,67 @@ var AdventureViewModel = function(editor) {
 	
 	self.scenes = ko.observableArray();
 	
-	var baseScene = {
-		name: 'Untitled',
-		key: '',
-		layer: 'background',
-		mixin: false,
-		image: {
-			path: '',
-			size: 'contain',
-			get css() {
-				if ( this.path ) {
-					return 'url("' + this.path + '")';
-				} else {
-					return 'none';
+	// Creates entirely new objects because prototypes cause problems with both Knockout and copying.
+	self.Scene = function() {
+		var scene = {
+			name: 'Untitled',
+			key: '',
+			layer: 'background',
+			mixin: false,
+			image: {
+				path: '',
+				size: 'contain',
+				get css() {
+					if ( this.path ) {
+						return 'url("' + this.path + '")';
+					} else {
+						return 'none';
+					}
 				}
+			},
+			sounds: [],
+			loop: true,
+			shuffle: false,
+			volume: 1,
+			text: '',
+			backgroundColor: '#000000',
+			fadeDuration: 0,
+			crossoverSeconds: 0,
+			crossfade: false,
+			fontSize: 5,
+			fontFamily: '',
+			fontColor: '#ffffff',
+			bold: false,
+			italic: false,
+			get isSelected() {
+				return this === self.current();
+			},
+			get previewFontSize() {
+				return (this.fontSize / 100) * 10 + 'em';
+			},
+			get fontStyle() {
+				if ( this.italic ) {
+					return 'italic';
+				} else {
+					return 'normal';
+				}
+			},
+			get fontWeight() {
+				if ( this.bold ) {
+					return 'bold';
+				} else {
+					return 'normal';
+				}
+			},
+			get soundString() {
+				var soundPaths = this.sounds.map(function(sound) {
+					return sound.path;
+				});
+				
+				return soundPaths.join(', ');
 			}
-		},
-		loop: true,
-		shuffle: false,
-		volume: 1,
-		text: '',
-		backgroundColor: '#000000',
-		fadeDuration: 0,
-		crossoverSeconds: 0,
-		crossfade: false,
-		fontSize: 5,
-		fontFamily: '',
-		fontColor: '#ffffff',
-		bold: false,
-		italic: false,
-		get isSelected() {
-			return this === self.current();
-		},
-		get previewFontSize() {
-			return (this.fontSize / 100) * 10 + 'em';
-		},
-		get fontStyle() {
-			if ( this.italic ) {
-				return 'italic';
-			} else {
-				return 'normal';
-			}
-		},
-		get fontWeight() {
-			if ( this.bold ) {
-				return 'bold';
-			} else {
-				return 'normal';
-			}
-		},
-		get soundString() {
-			var soundPaths = this.sounds.map(function(sound) {
-				return sound.path;
-			});
-			
-			return soundPaths.join(', ');
-		}
-	};
-	
-	self.createScene = function() {
-		var scene = Object.create(baseScene);
-		scene.sounds = []; // Defined here because each scene needs its own list, not that of its prototype.
+		};
+		
 		self.wrapScene(scene);
 		return scene;
 	};
@@ -92,7 +92,7 @@ var AdventureViewModel = function(editor) {
 	};
 	
 	self.add = function() {
-		self.scenes.push(self.createScene());
+		self.scenes.push(new self.Scene());
 		self.select(self.last());
 	};
 	
@@ -139,21 +139,28 @@ var AdventureViewModel = function(editor) {
 		self.scenes.splice(index, 1);
 	};
 	
+	self.copyScene = function(original) {
+		var copy = new self.Scene();
+		
+		for ( var property in original ) {
+			if ( !(original[property] instanceof Object) ) {
+				copy[property] = original[property];
+			}
+		}
+		
+		for ( var property in original.image ) {
+			copy.image[property] = original.image[property];
+		}
+		
+		return copy;
+	};
+	
 	self.playSelected = function() {
 		editor.playScene(self.current());
 	};
 	
 	self.copySelected = function() {
-		var newScene = self.createScene();
-		for ( var property in this ) {
-			if ( !(this[property] instanceof Object) ) {
- 				newScene[property] = this[property];
- 			}
-		}
-
-		this.sounds.map(function(sound) {
-			newScene.sounds.push(Object.copy(sound));
-		});
+		var newScene = self.copyScene(this);
 		
 		var index = self.scenes.indexOf(self.current()) + 1
 		self.scenes.splice(index, 0, newScene);

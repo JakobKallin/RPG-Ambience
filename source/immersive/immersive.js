@@ -16,39 +16,45 @@ var ViewModel = function(editorWidth) {
 	
 	self.adventure = new AdventureViewModel(self);
 	self.playScene = function(scene) {
-		var flatScene = new Ambience.Scene();
-		flatScene.name = scene.name;
-		flatScene.key = scene.key;
-		flatScene.image = encodeURI(scene.image);
-		flatScene.sounds = scene.sounds.map(function(sound) {
+		converted = self.convertScene(scene);
+		ambience.play(converted);
+	};
+	
+	self.convertScene = function(scene) {
+		var converted = new Ambience.Scene();
+		
+		converted.name = scene.name;
+		converted.key = scene.key;
+		converted.image = encodeURI(scene.image);
+		converted.sounds = scene.sounds.map(function(sound) {
 			return encodeURI(sound.path);
 		});
 		
 		if ( scene.shuffle ) {
-			flatScene.soundOrder = 'random';
+			converted.soundOrder = 'random';
 		} else {
-			flatScene.soundOrder = 'linear';
+			converted.soundOrder = 'linear';
 		}
 		
-		flatScene.volume = scene.volume;
-		flatScene.text = scene.text;
-		flatScene.textStyle = {
+		converted.volume = scene.volume;
+		converted.text = scene.text;
+		converted.textStyle = {
 			fontSize: scene.fontSize + 'vw',
 			fontFamily: scene.fontFamily,
 			fontStyle: scene.fontStyle,
 			fontWeight: scene.fontWeight,
 			color: scene.fontColor
 		};
-		flatScene.backgroundColor = scene.backgroundColor;
-		flatScene.imageStyle = { size: scene.size };
-		flatScene.fadeDuration = scene.fadeDuration * 1000;
-		flatScene.crossoverDuration = scene.crossoverSeconds;
-		flatScene.crossfades = scene.crossfade;
-		flatScene.loops = scene.loop;
-		flatScene.layer = scene.layer;
-		flatScene.isMixin = scene.mixin;
+		converted.backgroundColor = scene.backgroundColor;
+		converted.imageStyle = { size: scene.size };
+		converted.fadeDuration = scene.fadeDuration * 1000;
+		converted.crossoverDuration = scene.crossoverSeconds;
+		converted.crossfades = scene.crossfade;
+		converted.loops = scene.loop;
+		converted.layer = scene.layer;
+		converted.isMixin = scene.mixin;
 		
-		ambience.play(flatScene);
+		return converted;
 	};
 	
 	function startInterface() {

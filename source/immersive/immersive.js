@@ -62,8 +62,8 @@ var ViewModel = function(editorWidth) {
 			self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
 		}
 		
-		document.addEventListener('keypress', viewModel.onKeyPress);
-		document.addEventListener('keydown', viewModel.onKeyDown);
+		document.addEventListener('keypress', self.onKeyPress);
+		document.addEventListener('keydown', self.onKeyDown);
 		
 		var theaterForm = document.getElementById('theater-form');
 		var showInterface = function(event) {
@@ -188,7 +188,7 @@ var ViewModel = function(editorWidth) {
 };
 
 window.addEventListener('load', function() {
-	viewModel = new ViewModel(0.6);
+	var viewModel = new ViewModel(0.6);
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	viewModel.adventure.add();

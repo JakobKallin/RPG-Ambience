@@ -53,12 +53,8 @@ var AdventureViewModel = function(editor) {
 	
 	self.createScene = function() {
 		var scene = self.newScene();
-		self.wrapScene(scene);
-		return scene;
-	};
-	
-	self.wrapScene = function(scene) {
 		knockwrap.wrapObject(scene);
+		return scene;
 	};
 	
 	self.fadeOutTopmost = function() {
@@ -129,8 +125,7 @@ var AdventureViewModel = function(editor) {
 	};
 	
 	self.copyScene = function(original) {
-		var copy = self.newScene();
-		knockwrap.wrapObject(copy);
+		var copy = self.createScene();
 		
 		for ( var property in original ) {
 			if ( !(original[property] instanceof Object) ) {

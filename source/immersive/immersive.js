@@ -137,6 +137,7 @@ var ViewModel = function(editorWidth) {
 			} else {
 				var scene = self.adventure.keyedScene(key);
 				if ( scene ) {
+					event.preventDefault();
 					self.playScene(scene);
 				}
 			}

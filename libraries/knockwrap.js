@@ -26,6 +26,8 @@ knockwrap = function() {
 			wrapGetter(target, property);
 		} else if ( target[property] instanceof Array ) {
 			wrapArrayProperty(target, property);
+		} else if ( target[property] instanceof Object ) {
+			wrapObjectProperty(target, property);
 		} else {
 			wrapSimpleProperty(target, property);
 		}
@@ -44,6 +46,10 @@ knockwrap = function() {
 			set: setter
 		});
 	}
+	
+	function wrapObjectProperty(target, property) {
+		wrapObject(target[property]);
+	};
 	
 	function wrapGetter(target, property) {
 		var descriptor = Object.getPropertyDescriptor(target, property);

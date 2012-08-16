@@ -55,8 +55,8 @@
 							<div class="preview" data-bind="
 								style: {
 									backgroundColor: backgroundColor,
-									backgroundImage: imageCss,
-									backgroundSize: size
+									backgroundImage: image.css,
+									backgroundSize: image.size
 								}
 							"></div>
 							<span data-bind="text: name"></span>
@@ -80,8 +80,8 @@
 						<div class="preview" data-bind="
 							style: {
 								backgroundColor: backgroundColor,
-								backgroundImage: imageCss,
-								backgroundSize: size
+								backgroundImage: image.css,
+								backgroundSize: image.size
 							}
 						">
 							<div class="text outer">
@@ -141,14 +141,14 @@
 								<li class="tab"><a href="#text-tab">Text</a></li>
 								<li class="tab"><a href="#other-tab">Other</a></li>
 							</ul>
-							<div class="tab-content" id="image-tab">
+							<div class="tab-content" id="image-tab" data-bind="with: image">
 								<table>
 									<tr>
 										<th>
 											<label for="image-file">File</label>
 										</th>
 										<td>
-											<input id="image-file" type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
+											<input id="image-file" type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
 										</td>
 									</tr>
 									<tr>

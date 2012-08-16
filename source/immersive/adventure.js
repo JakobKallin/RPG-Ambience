@@ -8,13 +8,22 @@ var AdventureViewModel = function(editor) {
 		key: '',
 		layer: 'background',
 		mixin: false,
-		image: '',
+		image: {
+			path: '',
+			size: 'contain',
+			get css() {
+				if ( this.path ) {
+					return 'url("' + this.path + '")';
+				} else {
+					return 'none';
+				}
+			}
+		},
 		loop: true,
 		shuffle: false,
 		volume: 1,
 		text: '',
 		backgroundColor: '#000000',
-		size: 'contain',
 		fadeDuration: 0,
 		crossoverSeconds: 0,
 		crossfade: false,
@@ -23,9 +32,6 @@ var AdventureViewModel = function(editor) {
 		fontColor: '#ffffff',
 		bold: false,
 		italic: false,
-		get imageCss() {
-			return 'url("' + this.image + '")';
-		},
 		get isSelected() {
 			return this === self.current();
 		},

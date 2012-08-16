@@ -6,7 +6,7 @@ Ambience.Image = function(container) {
 		node.className = 'image';
 		container.insertBefore(node, container.firstChild);
 	
-		node.style.backgroundImage = 'url("' + scene.image + '")';
+		node.style.backgroundImage = 'url("' + encodeURI(scene.image) + '")';
 		
 		for ( var property in scene.imageStyle ) {
 			var cssValue = scene.imageStyle[property];

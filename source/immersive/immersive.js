@@ -153,8 +153,9 @@ var ViewModel = function(editorWidth) {
 	};
 };
 
+var viewModel;
 window.addEventListener('load', function() {
-	var viewModel = new ViewModel(0.6);
+	viewModel = new ViewModel(0.6);
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	viewModel.adventure.add();

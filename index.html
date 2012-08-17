@@ -168,24 +168,24 @@
 									</tr>
 								</table>
 							</div>
-							<div class="tab-content" id="sound-tab">
+							<div class="tab-content" id="sound-tab" data-bind="with: sound">
 								<table>
 									<tr>
 										<th>
 											<label>Files</label>
 										</th>
 										<td>
-											<ul data-bind="foreach: sounds" class="item-list">
+											<ul data-bind="foreach: files" class="item-list">
 												<li class="item">
 													<div class="content">
 														<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
 													</div>
 													<div class="controls">
-														<button data-bind="click: $parent.removeSound">Remove</button>
+														<button data-bind="click: $parent.removeFile">Remove</button>
 													</div>
 												</li>
 											</ul>
-											<button data-bind="click: $parent.addSound">Add File</button>
+											<button data-bind="click: addFile">Add File</button>
 										</td>
 									</tr>
 									<tr>

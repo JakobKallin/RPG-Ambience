@@ -1,11 +1,14 @@
 knockwrap = function() {
 	function wrapObject(target) {
-		if ( target instanceof Object ) {
+		if ( target instanceof Object && !target.isKnockwrapped ) {
 			for ( var property in target ) {
 				wrapProperty(target, property);
 			}
 			Object.defineProperty(target, 'copy', {
 				value: copyObject
+			});
+			Object.defineProperty(target, 'isKnockwrapped', {
+				value: true
 			});
 		}
 	}

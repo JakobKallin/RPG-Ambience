@@ -23,14 +23,19 @@ var AdventureViewModel = function(editor) {
 			
 			// Sound
 			// Difficult to factor out into separate object because it needs a removeFile function, but Knockout calls it with a redefined "this", making it difficult to access the list of files.
-			sounds: [],
-			loop: true,
-			shuffle: false,
-			volume: 1,
-			crossover: 0,
-			crossfade: false,
-			removeSound: function(sound) {
-				this.sounds.remove(sound);
+			sound: {
+				files: [],
+				removeFile: function(file) {
+					this.files.remove(file);
+				},
+				addFile: function() {
+					this.files.push({ path: '' });
+				},
+				loop: true,
+				shuffle: false,
+				volume: 1,
+				crossover: 0,
+				crossfade: false,
 			},
 			
 			// Text
@@ -76,14 +81,14 @@ var AdventureViewModel = function(editor) {
 		converted.image = scene.image.path;
 		converted.imageStyle = { backgroundSize: scene.image.size };
 		
-		converted.sounds = scene.sounds.map(function(sound) {
-			return sound.path;
+		converted.sounds = scene.sound.files.map(function(file) {
+			return file.path;
 		});
-		converted.soundOrder = (scene.shuffle) ? 'random' : 'linear';
-		converted.loops = scene.loop;
-		converted.volume = scene.volume;
-		converted.crossoverDuration = scene.crossover;
-		converted.crossfades = scene.crossfade;
+		converted.soundOrder = (scene.sound.shuffle) ? 'random' : 'linear';
+		converted.loops = scene.sound.loop;
+		converted.volume = scene.sound.volume;
+		converted.crossoverDuration = scene.sound.crossover;
+		converted.crossfades = scene.sound.crossfade;
 		
 		converted.text = scene.text;
 		converted.textStyle = {
@@ -178,10 +183,6 @@ var AdventureViewModel = function(editor) {
 		var index = self.scenes.indexOf(self.current()) + 1
 		self.scenes.splice(index, 0, newScene);
 		self.select(newScene);
-	};
-	
-	self.addSound = function() {
-		this.sounds.push({ path: '' });
 	};
 	
 	var bindableKeys = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];

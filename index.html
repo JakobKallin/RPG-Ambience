@@ -148,7 +148,13 @@
 											<label for="image-file">File</label>
 										</th>
 										<td>
-											<input id="image-file" type="text" data-bind="value: image.path, valueUpdate: 'afterkeydown'">
+											<input
+												id="image-file"
+												type="text"
+												data-bind="
+													value: image.path,
+													valueUpdate: 'afterkeydown',
+													attr: { placeholder: $root.pathPlaceholder }">
 										</td>
 									</tr>
 									<tr>
@@ -178,7 +184,12 @@
 											<ul data-bind="foreach: files" class="item-list">
 												<li class="item">
 													<div class="content">
-														<input type="text" data-bind="value: path, valueUpdate: 'afterkeydown'">
+														<input
+															type="text"
+															data-bind="
+																value: path,
+																valueUpdate: 'afterkeydown',
+																attr: { placeholder: $root.pathPlaceholder }">
 													</div>
 													<div class="controls">
 														<button data-bind="click: $parent.removeFile">Remove</button>

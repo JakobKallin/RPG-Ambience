@@ -14,7 +14,6 @@ var ViewModel = function(editorWidth) {
 		);
 	}
 	
-	self.adventure = new AdventureViewModel(self);
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
 		ambience.play(converted);
@@ -23,9 +22,12 @@ var ViewModel = function(editorWidth) {
 	function startInterface() {
 		self.splitter = new Splitter(document.body, editorWidth);
 		
-		var appIsRunLocally = window.location.protocol === 'file:';
-		if ( !appIsRunLocally ) {
+		self.appIsRunLocally = window.location.protocol === 'file:';
+		if ( self.appIsRunLocally ) {
+			self.pathPlaceholder = 'File path or URL';
+		} else {
 			self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
+			self.pathPlaceholder = 'URL';
 		}
 		
 		document.addEventListener('keypress', self.onKeyPress);
@@ -37,7 +39,9 @@ var ViewModel = function(editorWidth) {
 			self.showInterface();
 		};
 		theaterForm.addEventListener('mousemove', showInterface);
-		theaterForm.addEventListener('mouseover', showInterface)
+		theaterForm.addEventListener('mouseover', showInterface);
+		
+		self.adventure = new AdventureViewModel(self);
 	}
 	
 	self.message = ko.observable(null);

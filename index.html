@@ -88,13 +88,13 @@
 								<div
 									class="text inner"
 									data-bind="
-										text: text,
+										text: text.string,
 										style: {
-											fontSize: previewFontSize,
-											fontFamily: fontFamily,
-											fontStyle: fontStyle,
-											fontWeight: fontWeight,
-											color: fontColor
+											fontSize: text.previewSize,
+											fontFamily: text.font,
+											fontStyle: text.style,
+											fontWeight: text.weight,
+											color: text.color
 										}
 									"></div>
 							</div>
@@ -234,7 +234,7 @@
 									</tr>
 								</table>
 							</div>
-							<div class="tab-content" id="text-tab">
+							<div class="tab-content" id="text-tab" data-bind="with: text">
 								<table>
 									<tr>
 										<th><label for="text">Text</label></th>
@@ -243,7 +243,7 @@
 												id="text"
 												rows="3"
 												data-bind="
-													value: text,
+													value: string,
 													valueUpdate: 'afterkeydown'
 												"></textarea>
 										</td>
@@ -253,7 +253,7 @@
 											<label for="font">Font</label>
 										</th>
 										<td>
-											<input id="font" type="text" list="fonts" data-bind="value: fontFamily, valueUpdate: 'afterkeydown'">
+											<input id="font" type="text" list="fonts" data-bind="value: font, valueUpdate: 'afterkeydown'">
 										</td>
 									</tr>
 									<tr>
@@ -273,12 +273,12 @@
 									<tr>
 										<th><label for="font-size">Size</label></th>
 										<td>
-											<input id="font-size" type="range" min="3" max="30" step="0.5" data-bind="value: fontSize">
+											<input id="font-size" type="range" min="3" max="30" step="0.5" data-bind="value: size">
 										</td>
 									</tr>
 									<tr>
 										<th><label for="font-color">Color</label></th>
-										<td><input id="font-color" type="color" data-bind="value: fontColor"></td>
+										<td><input id="font-color" type="color" data-bind="value: color"></td>
 									</tr>
 								</table>
 							</div>

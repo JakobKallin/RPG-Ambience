@@ -39,20 +39,22 @@ var AdventureViewModel = function(editor) {
 			},
 			
 			// Text
-			text: '',
-			fontSize: 5,
-			fontFamily: '',
-			fontColor: '#ffffff',
-			bold: false,
-			italic: false,
-			get fontStyle() {
-				return (this.italic) ? 'italic' : 'normal';
-			},
-			get fontWeight() {
-				return (this.bold) ? 'bold' : 'normal';
-			},
-			get previewFontSize() {
-				return (this.fontSize / 100) * 10 + 'em';
+			text: {
+				string: '',
+				size: 5,
+				font: '',
+				color: '#ffffff',
+				bold: false,
+				italic: false,
+				get style() {
+					return (this.italic) ? 'italic' : 'normal';
+				},
+				get weight() {
+					return (this.bold) ? 'bold' : 'normal';
+				},
+				get previewSize() {
+					return (this.size / 100) * 10 + 'em';
+				}				
 			},
 			
 			// State
@@ -90,13 +92,14 @@ var AdventureViewModel = function(editor) {
 		converted.crossoverDuration = scene.sound.crossover;
 		converted.crossfades = scene.sound.crossfade;
 		
-		converted.text = scene.text;
+		var text = scene.text;
+		converted.text = text.string;
 		converted.textStyle = {
-			fontSize: scene.fontSize + 'vw',
-			fontFamily: scene.fontFamily,
-			fontStyle: scene.fontStyle,
-			fontWeight: scene.fontWeight,
-			color: scene.fontColor
+			fontSize: text.size + 'vw',
+			fontFamily: text.font,
+			fontStyle: text.style,
+			fontWeight: text.weight,
+			color: text.color
 		};
 		
 		return converted;

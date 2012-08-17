@@ -29,6 +29,9 @@ var AdventureViewModel = function(editor) {
 			volume: 1,
 			crossover: 0,
 			crossfade: false,
+			removeSound: function(sound) {
+				this.sounds.remove(sound);
+			},
 			
 			// Text
 			text: '',
@@ -179,10 +182,6 @@ var AdventureViewModel = function(editor) {
 	
 	self.addSound = function() {
 		this.sounds.push({ path: '' });
-	};
-	
-	self.removeSound = function() {
-		self.current().sounds.remove(this);
 	};
 	
 	var bindableKeys = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];

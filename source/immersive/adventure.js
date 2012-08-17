@@ -22,6 +22,7 @@ var AdventureViewModel = function(editor) {
 			},
 			
 			// Sound
+			// Difficult to factor out into separate object because it needs a removeFile function, but Knockout calls it with a redefined "this", making it difficult to access the list of files.
 			sounds: [],
 			loop: true,
 			shuffle: false,

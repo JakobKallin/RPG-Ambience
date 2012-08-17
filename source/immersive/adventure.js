@@ -13,10 +13,12 @@ var AdventureViewModel = function(editor) {
 			fadeDuration: 0,
 			
 			// Image
-			image: '',
-			size: 'contain',
-			get imageCss() {
-				return 'url("' + this.image + '")';
+			image: {
+				path: '',
+				size: 'contain',
+				get css() {
+					return 'url("' + this.path + '")';
+				}
 			},
 			
 			// Sound
@@ -67,8 +69,8 @@ var AdventureViewModel = function(editor) {
 		converted.backgroundColor = scene.backgroundColor;
 		converted.fadeDuration = scene.fadeDuration * 1000;
 		
-		converted.image = scene.image;
-		converted.imageStyle = { backgroundSize: scene.size };
+		converted.image = scene.image.path;
+		converted.imageStyle = { backgroundSize: scene.image.size };
 		
 		converted.sounds = scene.sounds.map(function(sound) {
 			return sound.path;

@@ -55,8 +55,8 @@
 							<div class="preview" data-bind="
 								style: {
 									backgroundColor: backgroundColor,
-									backgroundImage: imageCss,
-									backgroundSize: size
+									backgroundImage: image.css,
+									backgroundSize: image.size
 								}
 							"></div>
 							<span data-bind="text: name"></span>
@@ -80,8 +80,8 @@
 						<div class="preview" data-bind="
 							style: {
 								backgroundColor: backgroundColor,
-								backgroundImage: imageCss,
-								backgroundSize: size
+								backgroundImage: image.css,
+								backgroundSize: image.size
 							}
 						">
 							<div class="text outer">
@@ -148,7 +148,7 @@
 											<label for="image-file">File</label>
 										</th>
 										<td>
-											<input id="image-file" type="text" data-bind="value: image, valueUpdate: 'afterkeydown'">
+											<input id="image-file" type="text" data-bind="value: image.path, valueUpdate: 'afterkeydown'">
 										</td>
 									</tr>
 									<tr>
@@ -156,11 +156,11 @@
 										<td>
 											<ul class="modifier-list">
 												<li class="modifier">
-													<input id="size-contain" type="radio" value="contain" data-bind="checked: size">
+													<input id="size-contain" type="radio" value="contain" data-bind="checked: image.size">
 													<label for="size-contain">Fit</label>
 												</li>
 												<li class="modifier">
-													<input id="size-cover" type="radio" value="cover" data-bind="checked: size">
+													<input id="size-cover" type="radio" value="cover" data-bind="checked: image.size">
 													<label for="size-cover">Fill</label>
 												</li>
 											</ul>

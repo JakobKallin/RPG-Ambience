@@ -159,19 +159,7 @@ var AdventureViewModel = function(editor) {
 	};
 	
 	self.copyScene = function(original) {
-		var copy = self.createScene();
-		
-		for ( var property in original ) {
-			if ( !(original[property] instanceof Object) ) {
-				copy[property] = original[property];
-			}
-		}
-		
-		original.sounds.map(function(sound) {
-			copy.sounds.push({ path: sound.path });
-		});
-		
-		return copy;
+		return original.copy();
 	};
 	
 	self.playSelected = function() {

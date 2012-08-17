@@ -1,27 +1,17 @@
-Object.getPropertyDescriptor = function(target, property) {
-	var descriptor = Object.getOwnPropertyDescriptor(target, property);
-	var proto = Object.getPrototypeOf(target);
-	
-	if ( descriptor ) {
-		return descriptor;
-	} else if ( proto ) {
-		return Object.getPropertyDescriptor(proto, property);
-	} else {
-		return undefined;
-	}
-};
-
 knockwrap = function() {
 	function wrapObject(target) {
 		if ( target instanceof Object ) {
 			for ( var property in target ) {
 				wrapProperty(target, property);
 			}
+			Object.defineProperty(target, 'copy', {
+				value: copyObject
+			});
 		}
 	}
 	
 	function wrapProperty(target, property) {
-		var descriptor = Object.getPropertyDescriptor(target, property);
+		var descriptor = Object.getOwnPropertyDescriptor(target, property);
 		if ( descriptor.get ) {
 			wrapGetter(target, property);
 		} else if ( target[property] instanceof Array ) {
@@ -43,7 +33,8 @@ knockwrap = function() {
 		};
 		Object.defineProperty(target, property, {
 			get: getter,
-			set: setter
+			set: setter,
+			enumerable: true
 		});
 	}
 	
@@ -52,15 +43,19 @@ knockwrap = function() {
 	};
 	
 	function wrapGetter(target, property) {
-		var descriptor = Object.getPropertyDescriptor(target, property);
+		var descriptor = Object.getOwnPropertyDescriptor(target, property);
 		var originalGetter = descriptor.get;
 		var observable = ko.computed(originalGetter, target);
 		var wrappedGetter = function() {
 			return observable();
 		};
 		
+		// We save the original getter so that we can copy it later.
+		wrappedGetter.original = originalGetter;
+		
 		Object.defineProperty(target, property, {
-			get: wrappedGetter
+			get: wrappedGetter,
+			enumerable: true
 		});
 	}
 	
@@ -82,7 +77,8 @@ knockwrap = function() {
 	
 	function wrapArrayIndex(wrapper, index, observable) {
 		Object.defineProperty(wrapper, index, {
-			get: function() { return observable()[index]; }
+			get: function() { return observable()[index]; },
+			enumerable: true
 		});
 	}
 	
@@ -91,7 +87,8 @@ knockwrap = function() {
 			return observable().length;
 		};
 		Object.defineProperty(wrapper, 'length', {
-			get: getter
+			get: getter,
+			enumerable: true
 		});
 	}
 	
@@ -125,6 +122,58 @@ knockwrap = function() {
 		
 		var newMaxLength = Math.max(maxLength, newLength);
 		return newMaxLength;
+	}
+	
+	function copyValue(original) {
+		if ( original instanceof Object ) {
+			return copyObject.call(original);
+		} else {
+			return original;
+		}
+	}
+	
+	function copyObject() {
+		var original = this;
+		var copy = {};
+		for ( var property in original ) {
+			var descriptor = Object.getOwnPropertyDescriptor(original, property);
+			// We need to check for .get because the property might be an array or object, and those are not wrapped.
+			var propertyIsArray = (
+				!descriptor.get &&
+				!descriptor.set &&
+				original[property] instanceof Array
+			);
+			var propertyIsObject = (
+				!descriptor.get &&
+				!descriptor.set &&
+				original[property] instanceof Object &&
+				!propertyIsArray
+			);
+			var propertyIsGetter = descriptor.get && !descriptor.set;
+			
+			if ( propertyIsObject ) {
+				copy[property] = copyObject.call(original[property]);
+			} else if ( propertyIsArray ) {
+				copy[property] = [];
+				original[property].map(function(originalValue) {
+					var copiedValue = copyValue(originalValue);
+					copy[property].push(copiedValue);
+				});
+			} else if ( propertyIsGetter ) {
+				var descriptor = Object.getOwnPropertyDescriptor(original, property);
+				Object.defineProperty(copy, property, {
+					// We use the original getter, which will be wrapped below.
+					get: descriptor.get.original,
+					configurable: true,
+					enumerable: true
+				});
+			} else {
+				copy[property] = copyValue(original[property]);
+			}
+		};
+		
+		knockwrap.wrapObject(copy);
+		return copy;
 	}
 	
 	return {

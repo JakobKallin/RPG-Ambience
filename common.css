@@ -90,6 +90,16 @@ body {
 	opacity: 0.5;
 }
 
+.controls {
+	margin: 1em 2em -1em 2em;
+	text-align: right;
+}
+
+.controls .action-list .action {
+	display: inline;
+	margin-right: 0.5em;
+}
+
 .message {
 	margin: 2em;
 	margin-bottom: -1em;

@@ -19,6 +19,14 @@ var ViewModel = function(editorWidth) {
 		ambience.play(converted);
 	};
 	
+	self.playSelected = function() {
+		self.playScene(self.adventure.current());
+	};
+	
+	self.stopCurrent = function() {
+		ambience.fadeOutTopmost();
+	};
+	
 	function startInterface() {
 		self.splitter = new Splitter(document.body, editorWidth);
 		

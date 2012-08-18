@@ -179,10 +179,6 @@ var AdventureViewModel = function(editor) {
 		return original.copy();
 	};
 	
-	self.playSelected = function() {
-		editor.playScene(self.current());
-	};
-	
 	self.copySelected = function() {
 		var newScene = self.copyScene(this);
 		

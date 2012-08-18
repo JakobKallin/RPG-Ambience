@@ -42,6 +42,12 @@
 				<option value="Constantia">
 				<option value="Georgia">
 			</datalist>
+			<div class="controls">
+				<ul class="action-list">
+					<li class="action play"><button data-bind="click: playSelected">Play</button></li>
+					<li class="action stop"><button data-bind="click: stopCurrent">Stop</button></li>
+				</ul>
+			</div>
 			<!-- ko if: message -->
 				<div class="message">
 					<span class="text" data-bind="html: message"></span>
@@ -88,7 +94,6 @@
 				<div class="detail-view">
 					<div class="selected-item">
 						<ul class="action-list">
-							<li class="action play"><button data-bind="click: $parent.playSelected">Play</button></li>
 							<li class="action copy"><button data-bind="click: $parent.copySelected">Copy</button></li>
 							<li class="action remove"><button data-bind="click: $parent.removeSelected">Remove</button></li>
 						</ul>

@@ -57,6 +57,11 @@ var ViewModel = function(editorWidth) {
 		self.message(null);
 	};
 	
+	self.instructionsAreVisible = ko.observable(true);
+	self.hideInstructions = function() {
+		self.instructionsAreVisible(false);
+	};
+	
 	self.editorWidth = editorWidth;
 	self.editorIsVisible = ko.observable(true);
 	self.editorIsHidden = ko.computed(function() {

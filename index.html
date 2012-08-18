@@ -360,14 +360,17 @@
 				mouseover: $root.scheduleHiddenInterface,
 				mouseout: $root.showInterface
 			}">
+			<!-- ko if: instructionsAreVisible -->
 			<div class="instructions outer">
 				<div class="instructions inner">
 					<p><em>Play your scenes here:</em></p>
 					<p>If the scene has a name, type all or part of the name and press Enter.</p>
 					<p>If the scene has a hotkey, press the hotkey.</p>
 					<p>To stop the scene, press Enter.</p>
+					<p><button type="button" data-bind="click: hideInstructions">Dismiss</button></p>
 				</div>
 			</div>
+			<!-- /ko -->
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 			<form id="theater-form" class="action-form" data-bind="event: { submit: $root.playNamedScene }">

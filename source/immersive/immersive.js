@@ -14,6 +14,24 @@ var ViewModel = function(editorWidth) {
 		);
 	}
 	
+	self.loadAdventure = function() {
+		return;
+	};
+	
+	self.adventureBase64 = ko.observable('');
+	self.adventureUrl = ko.computed(function() {
+		return 'data:application/json;base64,' + self.adventureBase64();
+	});
+	
+	self.saveAdventure = function() {
+		var state = self.adventure.scenes().map(function(scene) {
+			return scene.copyState();
+		});
+		var adventureJson = JSON.stringify(state);
+		self.adventureBase64(Base64.encode(adventureJson));
+		return true;
+	};
+	
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
 		ambience.play(converted);

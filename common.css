@@ -92,7 +92,14 @@ body {
 
 .controls {
 	margin: 1em 2em -1em 2em;
-	text-align: right;
+}
+
+.controls .action-list.adventure {
+	float: left;
+}
+
+.controls .action-list.playback {
+	float: right;
 }
 
 .controls .action-list .action {
@@ -104,6 +111,7 @@ body {
 }
 
 .message {
+	clear: both;
 	margin: 2em;
 	margin-bottom: -1em;
 	padding: 0.5em;
@@ -143,6 +151,7 @@ body {
 
 .list-view {
 	float: left;
+	clear: left;
 	width: 40%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -197,6 +206,7 @@ body {
 
 .detail-view {
 	float: right;
+	clear: right;
 	width: 60%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;

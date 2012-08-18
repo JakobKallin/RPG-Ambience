@@ -14,6 +14,7 @@
 		<script src="libraries/jquery.details.js"></script>
 		<script src="libraries/knockout.js"></script>
 		<script src="libraries/knockwrap.js"></script>
+		<script src="libraries/base64.js"></script>
 		
 		<script src="libraries/functions.js"></script>
 		<script src="libraries/splitter.js"></script>
@@ -43,7 +44,17 @@
 				<option value="Georgia">
 			</datalist>
 			<div class="controls">
-				<ul class="action-list">
+				<ul class="action-list adventure">
+					<li class="action load"><button data-bind="click: loadAdventure">Load Adventure</button></li>
+					<li class="action save">
+						<a
+							download="adventure.json"
+							data-bind="
+								click: saveAdventure,
+								attr: { href: adventureUrl }">Save Adventure</a>
+					</li>
+				</ul>
+				<ul class="action-list playback">
 					<li class="action play"><button data-bind="click: playSelected">Play</button></li>
 					<li class="action stop"><button data-bind="click: stopCurrent">Stop</button></li>
 				</ul>

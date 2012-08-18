@@ -97,6 +97,9 @@ body {
 
 .controls .action-list .action {
 	display: inline;
+}
+
+.controls .action-list .action:not(:last-child) {
 	margin-right: 0.5em;
 }
 
@@ -214,11 +217,10 @@ body {
 .selected-item .action-list .action {
 	display: block;
 	float: left;
-	margin-right: 0.5em;
 }
 
-.selected-item .action-list .action:last-child {
-	margin-right: 0;
+.selected-item .action-list .action:not(:last-child) {
+	margin-right: 0.5em;
 }
 
 .selected-item .action-list .remove {
@@ -358,6 +360,9 @@ body {
 
 .theater .action-list .action {
 	display: inline;
+}
+
+.theater .action-list .action:not(:last-child) {
 	margin-right: 0.5em;
 }
 

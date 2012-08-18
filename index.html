@@ -135,7 +135,7 @@
 									</td>
 								</tr>
 								<tr>
-									<th><label for="key">Key</label></th>
+									<th><label for="key">Hotkey</label></th>
 									<td>
 										<input
 											id="key"
@@ -360,6 +360,14 @@
 				mouseover: $root.scheduleHiddenInterface,
 				mouseout: $root.showInterface
 			}">
+			<div class="instructions outer">
+				<div class="instructions inner">
+					<p><em>Play your scenes here:</em></p>
+					<p>If the scene has a name, type all or part of the name and press Enter.</p>
+					<p>If the scene has a hotkey, press the hotkey.</p>
+					<p>To stop the scene, press Enter.</p>
+				</div>
+			</div>
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 			<form id="theater-form" class="action-form" data-bind="event: { submit: $root.playNamedScene }">

@@ -58,7 +58,22 @@
 									backgroundImage: image.css,
 									backgroundSize: image.size
 								}
-							"></div>
+							">
+								<div class="text outer">
+									<div
+										class="text inner"
+										data-bind="
+											text: text.string,
+											style: {
+												fontSize: text.smallPreviewSize,
+												fontFamily: text.font,
+												fontStyle: text.style,
+												fontWeight: text.weight,
+												color: text.color
+											}
+										"></div>
+								</div>
+							</div>
 							<span data-bind="text: name"></span>
 							<!-- ko if: key -->
 								<span data-bind="text: key" class="key"></span>
@@ -90,7 +105,7 @@
 									data-bind="
 										text: text.string,
 										style: {
-											fontSize: text.previewSize,
+											fontSize: text.largePreviewSize,
 											fontFamily: text.font,
 											fontStyle: text.style,
 											fontWeight: text.weight,
@@ -334,7 +349,7 @@
 				<!-- /ko -->
 			<!-- /ko -->
 		</div>
-		<div id="theater" class="theater preview" data-bind="
+		<div id="theater" class="theater" data-bind="
 			event: {
 				mousemove: $root.scheduleHiddenInterface,
 				mouseover: $root.scheduleHiddenInterface,

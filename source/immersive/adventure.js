@@ -52,9 +52,12 @@ var AdventureViewModel = function(editor) {
 				get weight() {
 					return (this.bold) ? 'bold' : 'normal';
 				},
-				get previewSize() {
+				get largePreviewSize() {
 					return (this.size / 100) * 10 + 'em';
-				}				
+				},
+				get smallPreviewSize() {
+					return (this.size / 100) * 5 + 'em';
+				}
 			},
 			
 			// State

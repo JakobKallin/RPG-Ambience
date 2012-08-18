@@ -109,11 +109,23 @@ body {
 .preview {
 	background-position: center center;
 	background-repeat: no-repeat;
+	overflow: hidden;
 }
 
-.preview img {
-	display: block;
-	width: 100%;
+.preview .text.outer {
+	display: table;
+	height: 100%;
+	margin: 0 auto;
+	font-family: serif;
+}
+
+.preview .text.inner {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	color: white;
+	white-space: pre;
+	text-rendering: optimizeLegibility;
 }
 
 .list-view {
@@ -209,23 +221,6 @@ body {
 	height: 5.625em; /* Widescreen ratio */
 	margin-bottom: 1em;
 	margin-right: 1em;
-	overflow: hidden;
-}
-
-.detail-view .text.outer {
-	display: table;
-	height: 100%;
-	margin: 0 auto;
-	font-family: serif;
-}
-
-.detail-view .text.inner {
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	color: white;
-	white-space: pre;
-	text-rendering: optimizeLegibility;
 }
 
 .options.general table {

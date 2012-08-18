@@ -8,22 +8,6 @@ li {
 	list-style-type: none;
 }
 
-details, summary {
-	display: block;
-}
-
-details.open table {
-	display: table;
-}
-
-summary[tabindex]:before {
-	content: "▶ ";
-}
-
-details.open summary[tabindex]:before {
-	content: "▼ ";
-}
-
 label[for] {
 	cursor: pointer;
 }
@@ -32,7 +16,7 @@ button, input, select, textarea {
 	font-size: 1em;
 }
 
-button, summary, input[type=checkbox] {
+button, input[type=checkbox] {
 	cursor: pointer;
 }
 

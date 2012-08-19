@@ -37,12 +37,6 @@
 	</head>
 	<body>
 		<div id="editor" class="editor">
-			<datalist id="fonts">
-				<option value="Calibri">
-				<option value="Cambria">
-				<option value="Constantia">
-				<option value="Georgia">
-			</datalist>
 			<div class="controls">
 				<ul class="action-list adventure">
 					<li class="action load"><button data-bind="click: loadAdventure">Load Adventure</button></li>
@@ -295,7 +289,7 @@
 											<label for="font">Font</label>
 										</th>
 										<td>
-											<input id="font" type="text" list="fonts" data-bind="value: font, valueUpdate: 'afterkeydown'">
+											<input id="font" type="text" data-bind="value: font, valueUpdate: 'afterkeydown'">
 										</td>
 									</tr>
 									<tr>

@@ -39,7 +39,14 @@
 		<div id="editor" class="editor">
 			<div class="controls">
 				<ul class="action-list adventure">
-					<li class="action load"><button data-bind="click: loadAdventure">Load Adventure</button></li>
+					<li class="action load">
+						<button data-bind="click: showAdventureSelector">Load Adventure</button>
+						<input
+							type="file"
+							style="display: none"
+							id="adventure-file"
+							data-bind="event: { change: readAdventure }">
+					</li>
 					<li class="action save">
 						<a
 							download="adventure.json"

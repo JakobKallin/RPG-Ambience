@@ -3,6 +3,16 @@ var AdventureViewModel = function(editor) {
 	
 	self.scenes = ko.observableArray();
 	
+	self.load = function(config) {
+		self.scenes.splice(0);
+		var newScenes = config;
+		newScenes.map(function(sceneConfig) {
+			var newScene = self.createScene();
+			Object.overlay(newScene, sceneConfig);
+			self.scenes.push(newScene);
+		});
+	};
+	
 	self.newScene = function() {
 		return {
 			name: 'Untitled',

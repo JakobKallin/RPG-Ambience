@@ -1,3 +1,19 @@
+Object.overlay = function(base, overlay) {
+	for ( var property in base ) {
+		if ( property in overlay ) {
+			if ( base[property] instanceof Array ) {
+				overlay[property].map(function(subvalue) {
+					base[property].push(subvalue);
+				});
+			} else if ( base[property] instanceof Object ) {
+				Object.overlay(base[property], overlay[property])
+			} else {
+				base[property] = overlay[property];
+			}
+		}
+	}
+};
+
 Array.prototype.contains = function(value) {
 	return this.indexOf(value) !== -1;
 };

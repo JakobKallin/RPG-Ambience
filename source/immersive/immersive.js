@@ -14,8 +14,19 @@ var ViewModel = function(editorWidth) {
 		);
 	}
 	
-	self.loadAdventure = function() {
-		return;
+	var adventureFileInput = document.getElementById('adventure-file');
+	self.showAdventureSelector = function() {
+		adventureFileInput.click();
+	};
+	
+	self.readAdventure = function(viewModel, selectEvent) {
+		var file = selectEvent.target.files[0];
+		var reader = new FileReader();
+		reader.onload = function(loadEvent) {
+			var config = JSON.parse(loadEvent.target.result);
+			self.adventure.load(config);
+		};
+		reader.readAsText(file);
 	};
 	
 	self.adventureBase64 = ko.observable('');

@@ -19,8 +19,21 @@ var ViewModel = function(editorWidth) {
 		adventureFileInput.click();
 	};
 	
-	self.readAdventure = function(viewModel, selectEvent) {
+	self.readSelectedAdventure = function(viewModel, selectEvent) {
 		var file = selectEvent.target.files[0];
+		self.readAdventure(file);
+	};
+	
+	self.readDroppedAdventure = function(viewModel, dropEvent) {
+		var file = dropEvent.originalEvent.dataTransfer.files[0];
+		self.readAdventure(file);
+	};
+	
+	self.handleDrag = function(viewModel, dragEvent) {
+		dragEvent.originalEvent.dataTransfer.dropEffect = 'copy';
+	};
+	
+	self.readAdventure = function(file) {
 		var reader = new FileReader();
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);

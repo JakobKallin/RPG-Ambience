@@ -11,6 +11,10 @@ var AdventureViewModel = function(editor) {
 			Object.overlay(newScene, sceneConfig);
 			self.scenes.push(newScene);
 		});
+		
+		if ( self.scenes().length > 0 ) {
+			self.select(self.scenes()[0]);
+		}
 	};
 	
 	self.newScene = function() {

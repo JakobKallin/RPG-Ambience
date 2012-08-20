@@ -1,6 +1,34 @@
 var AdventureViewModel = function(editor) {
 	var self = this;
 	
+	self.start = function() {
+		self.add();
+		$('.list-view ul').sortable({
+			axis: 'y',
+			start: onSortStarted,
+			update: onSortEnded
+		});
+	};
+	
+	var sortedIndex;
+	function onSortStarted(event, ui) {
+		sortedIndex = ui.item.index();
+	}
+	
+	function onSortEnded(event, ui) {
+		// Remove the reordered node.
+		var oldIndex = sortedIndex;
+		var newIndex = ui.item.index();
+		ui.item.remove();
+		
+		// Apply the corresponding reordering through Knockout.
+		var sortedScene = self.scenes()[oldIndex];
+		self.scenes.splice(oldIndex, 1);
+		self.scenes.splice(newIndex, 0, sortedScene);
+		
+		// Apparently, the Knockout templating engine takes care of the rest.
+	}	
+	
 	self.scenes = ko.observableArray();
 	
 	self.load = function(config) {

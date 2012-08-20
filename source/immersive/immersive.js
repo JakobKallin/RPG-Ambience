@@ -223,5 +223,5 @@ window.addEventListener('load', function() {
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	ko.applyBindings(viewModel, document.head);
-	viewModel.adventure.add();
+	viewModel.adventure.start();
 });

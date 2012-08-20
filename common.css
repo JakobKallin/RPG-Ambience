@@ -415,3 +415,7 @@ body {
 	white-space: pre;
 	text-rendering: optimizeLegibility;
 }
+
+.ui-sortable-helper {
+	cursor: move !important;
+}

@@ -49,11 +49,13 @@
 					</li>
 					<li class="action save">
 						<a
-							download="adventure.json"
 							target="_blank"
 							data-bind="
 								click: saveAdventure,
-								attr: { href: adventureUrl },
+								attr: {
+									href: adventureUrl,
+									download: adventureFileName
+								},
 								event: { mouseover: saveAdventure }">Save Adventure</a>
 					</li>
 				</ul>

@@ -15,6 +15,7 @@ var ViewModel = function(editorWidth) {
 	}
 	
 	var adventureFileInput = document.getElementById('adventure-file');
+	self.adventureFileName = ko.observable('adventure.json');
 	self.showAdventureSelector = function() {
 		adventureFileInput.click();
 	};
@@ -34,6 +35,8 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.readAdventure = function(file) {
+		self.adventureFileName(file.name);
+		
 		var reader = new FileReader();
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);

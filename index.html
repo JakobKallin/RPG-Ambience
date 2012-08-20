@@ -34,10 +34,12 @@
 		<script src="source/scene.js"></script>
 		<script src="source/immersive/adventure.js"></script>
 		<script src="source/immersive/immersive.js"></script>
+		
+		<base data-bind="attr: { href: basePath }">
 	</head>
 	<body>
 		<div id="editor" class="editor" data-bind="event: { drop: readDroppedAdventure, dragover: handleDrag }">
-			<div class="controls">
+			<div class="menu-bar">
 				<ul class="action-list adventure">
 					<li class="action load">
 						<button data-bind="click: showAdventureSelector">Load Adventure</button>
@@ -49,12 +51,25 @@
 					</li>
 					<li class="action save">
 						<a
-							download="adventure.json"
 							target="_blank"
 							data-bind="
 								click: saveAdventure,
-								attr: { href: adventureUrl },
+								attr: {
+									href: adventureUrl,
+									download: adventureFileName
+								},
 								event: { mouseover: saveAdventure }">Save Adventure</a>
+					</li>
+					<li class="action media-folder">
+						<label for="media-folder">Media folder</label>
+						<input
+							id="media-folder"
+							type="text"
+							data-bind="
+								attr: { placeholder: pathPlaceholder },
+								value: basePath,
+								valueUpdate: 'afterkeydown'
+							">
 					</li>
 				</ul>
 				<ul class="action-list playback">
@@ -94,7 +109,12 @@
 										"></div>
 								</div>
 							</div>
-							<span data-bind="text: name"></span>
+							<!-- ko if: name -->
+								<span data-bind="text: name"></span>
+							<!-- /ko -->
+							<!-- ko ifnot: name -->
+								<span class="note">Untitled</span>
+							<!-- /ko -->
 							<!-- ko if: key -->
 								<span data-bind="text: key" class="key"></span>
 							<!-- /ko -->
@@ -141,7 +161,7 @@
 										<input
 											id="name"
 											type="text"
-											size="10"
+											placeholder="Untitled"
 											data-bind="
 												value: name,
 												valueUpdate: 'afterkeydown'
@@ -154,7 +174,6 @@
 										<input
 											id="key"
 											type="text"
-											size="1"
 											data-bind="
 												value: key,
 												valueUpdate: 'afterkeydown',

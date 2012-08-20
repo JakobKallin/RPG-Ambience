@@ -19,7 +19,7 @@ var AdventureViewModel = function(editor) {
 	
 	self.newScene = function() {
 		return {
-			name: 'Untitled',
+			name: '',
 			key: '',
 			layer: 'background',
 			mixin: false,
@@ -31,7 +31,7 @@ var AdventureViewModel = function(editor) {
 				path: '',
 				size: 'contain',
 				get css() {
-					return 'url("' + this.path + '")';
+					return 'url("' + encodeURI(this.path) + '")';
 				}
 			},
 			

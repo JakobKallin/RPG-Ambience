@@ -15,6 +15,7 @@ var ViewModel = function(editorWidth) {
 	}
 	
 	var adventureFileInput = document.getElementById('adventure-file');
+	self.adventureFileName = ko.observable('adventure.json');
 	self.showAdventureSelector = function() {
 		adventureFileInput.click();
 	};
@@ -34,6 +35,8 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.readAdventure = function(file) {
+		self.adventureFileName(file.name);
+		
 		var reader = new FileReader();
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);
@@ -55,6 +58,8 @@ var ViewModel = function(editorWidth) {
 		self.adventureBase64(Base64.encode(adventureJson));
 		return true;
 	};
+	
+	self.basePath = ko.observable('');
 	
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
@@ -217,5 +222,6 @@ window.addEventListener('load', function() {
 	viewModel = new ViewModel(0.6);
 	viewModel.start();
 	ko.applyBindings(viewModel);
+	ko.applyBindings(viewModel, document.head);
 	viewModel.adventure.add();
 });

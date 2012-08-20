@@ -74,8 +74,9 @@ body {
 	opacity: 0.5;
 }
 
-.controls {
-	margin: 1em 2em -1em 2em;
+.editor > .controls {
+	margin: 1em 2em;
+	overflow: auto;
 }
 
 .controls .action-list.adventure {
@@ -96,8 +97,7 @@ body {
 
 .message {
 	clear: both;
-	margin: 2em;
-	margin-bottom: -1em;
+	margin: 1em 2em;
 	padding: 0.5em;
 	text-align: center;
 	overflow: auto;
@@ -139,8 +139,7 @@ body {
 	width: 40%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	padding: 2em;
-	padding-right: 0.5em;
+	padding: 0 0.5em 2em 2em;
 }
 
 .list-item {
@@ -194,8 +193,7 @@ body {
 	width: 60%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	padding: 2em;
-	padding-left: 0.5em;
+	padding: 0 2em 2em 0.5em;
 }
 
 .selected-item {

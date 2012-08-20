@@ -327,6 +327,7 @@ body {
 .theater .instructions.outer {
 	position: absolute;
 	display: table;
+	width: 100%;
 	height: 100%;
 }
 

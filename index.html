@@ -12,6 +12,7 @@
 		<script src="libraries/jquery.js"></script>
 		<script src="libraries/jquery-ui.js"></script>
 		<script src="libraries/knockout.js"></script>
+		<script src="libraries/knockout-sortable.js"></script>
 		<script src="libraries/knockwrap.js"></script>
 		<script src="libraries/base64.js"></script>
 		
@@ -83,7 +84,7 @@
 			<!-- /ko -->
 			<!-- ko with: adventure -->
 				<div class="list-view">
-					<ul data-bind="foreach: scenes">
+					<ul data-bind="foreach: scenes, sortable: true">
 						<li class="list-item" data-bind="click: $parent.select, css: { selected: isSelected }">
 							<div class="preview" data-bind="
 								style: {
@@ -228,12 +229,12 @@
 							<div class="tab-content" id="sound-tab" data-bind="with: sound">
 								<table>
 									<tr>
-										<th>
-											<label>Files</label>
-										</th>
-										<td>
-											<ul data-bind="foreach: files" class="item-list">
+										<td colspan="2">
+											<ol data-bind="foreach: files, sortable: true" class="item-list">
 												<li class="item">
+													<div class="move">
+														<img src="images/move.svg">
+													</div>
 													<div class="content">
 														<input
 															type="text"
@@ -242,16 +243,16 @@
 																valueUpdate: 'afterkeydown',
 																attr: { placeholder: $root.pathPlaceholder }">
 													</div>
-													<div class="controls">
+													<div class="remove">
 														<button data-bind="click: $parent.removeFile">Remove</button>
 													</div>
 												</li>
-											</ul>
+											</ol>
 											<button data-bind="click: addFile">Add File</button>
 										</td>
 									</tr>
 									<tr>
-										<th></th>
+										<th><label>Playback</label></th>
 										<td>
 											<ul class="modifier-list">
 												<li class="modifier">

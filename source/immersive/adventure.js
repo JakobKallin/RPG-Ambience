@@ -39,7 +39,7 @@ var AdventureViewModel = function(editor) {
 			},
 			
 			sound: {
-				files: [ { path: '' } ],
+				files: [],
 				removeFile: function(file) {
 					this.files.remove(file);
 				},
@@ -169,8 +169,10 @@ var AdventureViewModel = function(editor) {
 	};
 	
 	self.add = function() {
-		self.scenes.push(self.createScene());
-		self.select(self.last());
+		var newScene = self.createScene();
+		self.scenes.push(newScene);
+		newScene.sound.addFile({ path: '' });
+		self.select(newScene);
 	};
 	
 	self.previous = function() {

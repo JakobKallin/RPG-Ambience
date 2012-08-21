@@ -39,7 +39,7 @@ var AdventureViewModel = function(editor) {
 			},
 			
 			sound: {
-				files: [],
+				files: [ { path: '' } ],
 				removeFile: function(file) {
 					this.files.remove(file);
 				},

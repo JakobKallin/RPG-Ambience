@@ -30,7 +30,6 @@ var AdventureViewModel = function(editor) {
 			backgroundColor: '#000000',
 			fadeDuration: 0,
 			
-			// Image
 			image: {
 				path: '',
 				size: 'contain',
@@ -39,8 +38,6 @@ var AdventureViewModel = function(editor) {
 				}
 			},
 			
-			// Sound
-			// Difficult to factor out into separate object because it needs a removeFile function, but Knockout calls it with a redefined "this", making it difficult to access the list of files.
 			sound: {
 				files: [],
 				removeFile: function(file) {
@@ -56,7 +53,6 @@ var AdventureViewModel = function(editor) {
 				crossfade: false,
 			},
 			
-			// Text
 			text: {
 				string: '',
 				size: 5,

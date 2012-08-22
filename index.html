@@ -104,7 +104,8 @@
 												fontStyle: text.style,
 												fontWeight: text.weight,
 												color: text.color,
-												textAlign: text.alignment
+												textAlign: text.alignment,
+												padding: text.previewPadding
 											}
 										"></div>
 								</div>
@@ -149,7 +150,8 @@
 											fontStyle: text.style,
 											fontWeight: text.weight,
 											color: text.color,
-											textAlign: text.alignment
+											textAlign: text.alignment,
+											padding: text.previewPadding
 										}
 									"></div>
 							</div>
@@ -353,6 +355,12 @@
 												<option value="center">Center</option>
 												<option value="right">Right</option>
 											</select>
+										</td>
+									</tr>
+									<tr>
+										<th><label for="text-padding">Padding</label></th>
+										<td>
+											<input id="text-padding" type="range" min="0" max="40" step="2" data-bind="value: padding">
 										</td>
 									</tr>
 								</table>

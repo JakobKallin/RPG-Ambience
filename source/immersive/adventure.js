@@ -61,6 +61,7 @@ var AdventureViewModel = function(editor) {
 				bold: false,
 				italic: false,
 				alignment: 'center',
+				padding: 0,
 				get style() {
 					return (this.italic) ? 'italic' : 'normal';
 				},
@@ -72,6 +73,10 @@ var AdventureViewModel = function(editor) {
 				},
 				get smallPreviewSize() {
 					return (this.size / 100) * 5 + 'em';
+				},
+				get previewPadding() {
+					// The percentage is relative to the container's width, so the same property can be used for all previews.
+					return '0 ' + this.padding + '%';
 				}
 			},
 			
@@ -118,7 +123,8 @@ var AdventureViewModel = function(editor) {
 			fontStyle: text.style,
 			fontWeight: text.weight,
 			color: text.color,
-			textAlign: text.alignment
+			textAlign: text.alignment,
+			padding: '0 ' + text.padding + 'vw'
 		};
 		
 		return converted;

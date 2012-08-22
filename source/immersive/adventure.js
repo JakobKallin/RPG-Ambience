@@ -9,8 +9,10 @@ var AdventureViewModel = function(editor) {
 	self.basePath = ko.observable('');
 	
 	self.load = function(config) {
+		self.basePath(config.basePath);
+		
 		self.scenes.splice(0);
-		var newScenes = config;
+		var newScenes = config.scenes;
 		newScenes.map(function(sceneConfig) {
 			var newScene = self.createScene();
 			Object.overlay(newScene, sceneConfig);
@@ -37,12 +39,10 @@ var AdventureViewModel = function(editor) {
 				path: '',
 				size: 'contain',
 				get css() {
-					var path = this.path;
-					var pathIsAbsolute = this.path.startsWith('file://') || this.path.startsWith('http://');
-					if ( !pathIsAbsolute ) {
-						path = self.basePath() + path;
-					}
-					return 'url("' + encodeURI(path) + '")';						
+					return 'url("' + encodeURI(this.absolutePath) + '")';						
+				},
+				get absolutePath() {
+					return self.absolutePath(this.path);
 				}
 			},
 			
@@ -113,7 +113,7 @@ var AdventureViewModel = function(editor) {
 		converted.fadesIn = scene.fadeIn;
 		converted.fadesOut = scene.fadeOut;
 		
-		converted.image = scene.image.path;
+		converted.image = scene.image.absolutePath;
 		converted.imageStyle = { backgroundSize: scene.image.size };
 		
 		var actualSoundFiles = scene.sound.files.filter(function(file) {
@@ -121,7 +121,7 @@ var AdventureViewModel = function(editor) {
 		});
 		if ( actualSoundFiles.length > 0 ) {
 			converted.sounds = actualSoundFiles.map(function(file) {
-				return file.path;
+				return self.absolutePath(file.path);
 			});
 		}
 		
@@ -273,6 +273,15 @@ var AdventureViewModel = function(editor) {
 			});
 		} else {
 			return null;
+		}
+	};
+	
+	self.absolutePath = function(path) {
+		var pathIsAbsolute = path.startsWith('file://') || path.startsWith('http://');
+		if ( !pathIsAbsolute ) {
+			return self.basePath() + path;
+		} else {
+			return path;			
 		}
 	};
 };

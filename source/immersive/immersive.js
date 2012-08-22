@@ -51,9 +51,12 @@ var ViewModel = function(editorWidth) {
 	});
 	
 	self.saveAdventure = function() {
-		var state = self.adventure.scenes().map(function(scene) {
-			return scene.copyState();
-		});
+		var state = {
+			basePath: self.adventure.basePath(),
+			scenes: self.adventure.scenes().map(function(scene) {
+				return scene.copyState();
+			})
+		};
 		var adventureJson = JSON.stringify(state);
 		self.adventureBase64(Base64.encode(adventureJson));
 		return true;

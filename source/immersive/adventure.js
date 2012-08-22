@@ -110,9 +110,15 @@ var AdventureViewModel = function(editor) {
 		converted.image = scene.image.path;
 		converted.imageStyle = { backgroundSize: scene.image.size };
 		
-		converted.sounds = scene.sound.files.map(function(file) {
-			return file.path;
+		var actualSoundFiles = scene.sound.files.filter(function(file) {
+			return file.path.length > 0;
 		});
+		if ( actualSoundFiles.length > 0 ) {
+			converted.sounds = actualSoundFiles.map(function(file) {
+				return file.path;
+			});
+		}
+		
 		converted.soundOrder = (scene.sound.shuffle) ? 'random' : 'linear';
 		converted.loops = scene.sound.loop;
 		converted.volume = scene.sound.volume;

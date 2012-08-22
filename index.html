@@ -88,7 +88,7 @@
 						<li class="list-item" data-bind="click: $parent.select, css: { selected: isSelected }">
 							<div class="preview" data-bind="
 								style: {
-									backgroundColor: backgroundColor,
+									backgroundColor: background,
 									backgroundImage: image.css,
 									backgroundSize: image.size
 								}
@@ -134,7 +134,7 @@
 						</ul>
 						<div class="preview" data-bind="
 							style: {
-								backgroundColor: backgroundColor,
+								backgroundColor: background,
 								backgroundImage: image.css,
 								backgroundSize: image.size
 							}
@@ -369,12 +369,12 @@
 								<table>
 									<tr>
 										<th><label for="background-color">Background</label></th>
-										<td><input id="background-color" type="color" data-bind="value: backgroundColor"></td>
+										<td><input id="background-color" type="color" data-bind="value: background"></td>
 									</tr>
 									<tr>
 										<th><label for="fade">Fade</label></th>
 										<td>
-											<input id="fade" type="number" min="0" value="0" data-bind="value: fadeDuration">
+											<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
 											<span class="note">seconds</span>
 										</td>
 									</tr>

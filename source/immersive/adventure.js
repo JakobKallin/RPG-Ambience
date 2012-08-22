@@ -27,8 +27,8 @@ var AdventureViewModel = function(editor) {
 			key: '',
 			layer: 'background',
 			mixin: false,
-			backgroundColor: '#000000',
-			fadeDuration: 0,
+			background: '#000000',
+			fade: 0,
 			fadeIn: true,
 			fadeOut: true,
 			
@@ -102,8 +102,8 @@ var AdventureViewModel = function(editor) {
 		converted.key = scene.key;
 		converted.layer = scene.layer;
 		converted.isMixin = scene.mixin;
-		converted.backgroundColor = scene.backgroundColor;
-		converted.fadeDuration = scene.fadeDuration * 1000;
+		converted.backgroundColor = scene.background;
+		converted.fadeDuration = scene.fade * 1000;
 		converted.fadesIn = scene.fadeIn;
 		converted.fadesOut = scene.fadeOut;
 		

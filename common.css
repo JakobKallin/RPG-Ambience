@@ -137,7 +137,7 @@ body {
 	vertical-align: middle;
 	text-align: center;
 	color: white;
-	white-space: pre;
+	white-space: pre-line;
 	text-rendering: optimizeLegibility;
 }
 
@@ -426,7 +426,7 @@ body {
 	vertical-align: middle;
 	text-align: center;
 	color: white;
-	white-space: pre;
+	white-space: pre-line;
 	text-rendering: optimizeLegibility;
 }
 

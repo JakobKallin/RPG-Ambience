@@ -14,7 +14,12 @@ ko.bindingHandlers.sortable = {
 			
 			// Apply the corresponding reordering through Knockout.
 			var observable = allBindingsAccessor().foreach;
-			var sortedValue = observable()[oldIndex];
+			// Account for Knockwrap.
+			if ( observable instanceof Function ) {
+				var sortedValue = observable()[oldIndex];
+			} else {
+				var sortedValue = observable[oldIndex];
+			}
 			observable.splice(oldIndex, 1);
 			observable.splice(newIndex, 0, sortedValue);
 			
@@ -24,7 +29,7 @@ ko.bindingHandlers.sortable = {
 		$(element).sortable({
 			axis: 'y',
 			start: onSortStarted,
-			update: onSortEnded
+			stop: onSortEnded
 		});
 	}
 };

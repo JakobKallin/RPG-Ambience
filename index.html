@@ -103,7 +103,8 @@
 												fontFamily: text.font,
 												fontStyle: text.style,
 												fontWeight: text.weight,
-												color: text.color
+												color: text.color,
+												textAlign: text.alignment
 											}
 										"></div>
 								</div>
@@ -147,7 +148,8 @@
 											fontFamily: text.font,
 											fontStyle: text.style,
 											fontWeight: text.weight,
-											color: text.color
+											color: text.color,
+											textAlign: text.alignment
 										}
 									"></div>
 							</div>
@@ -342,6 +344,16 @@
 									<tr>
 										<th><label for="font-color">Color</label></th>
 										<td><input id="font-color" type="color" data-bind="value: color"></td>
+									</tr>
+									<tr>
+										<th><label for="text-alignment">Align</label></th>
+										<td>
+											<select id="text-alignment" data-bind="value: alignment">
+												<option value="left">Left</option>
+												<option value="center">Center</option>
+												<option value="right">Right</option>
+											</select>
+										</td>
 									</tr>
 								</table>
 							</div>

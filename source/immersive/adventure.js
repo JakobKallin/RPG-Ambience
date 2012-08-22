@@ -60,6 +60,7 @@ var AdventureViewModel = function(editor) {
 				color: '#ffffff',
 				bold: false,
 				italic: false,
+				alignment: 'center',
 				get style() {
 					return (this.italic) ? 'italic' : 'normal';
 				},
@@ -116,7 +117,8 @@ var AdventureViewModel = function(editor) {
 			fontFamily: text.font,
 			fontStyle: text.style,
 			fontWeight: text.weight,
-			color: text.color
+			color: text.color,
+			textAlign: text.alignment
 		};
 		
 		return converted;

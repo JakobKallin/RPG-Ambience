@@ -59,8 +59,6 @@ var ViewModel = function(editorWidth) {
 		return true;
 	};
 	
-	self.basePath = ko.observable('');
-	
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
 		ambience.play(converted);
@@ -222,6 +220,5 @@ window.addEventListener('load', function() {
 	viewModel = new ViewModel(0.6);
 	viewModel.start();
 	ko.applyBindings(viewModel);
-	ko.applyBindings(viewModel, document.head);
 	viewModel.adventure.start();
 });

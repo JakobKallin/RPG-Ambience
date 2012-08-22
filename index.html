@@ -33,8 +33,6 @@
 		<script src="source/scene.js"></script>
 		<script src="source/immersive/adventure.js"></script>
 		<script src="source/immersive/immersive.js"></script>
-		
-		<base data-bind="attr: { href: basePath }">
 	</head>
 	<body>
 		<div id="editor" class="editor" data-bind="event: { drop: readDroppedAdventure, dragover: handleDrag }">
@@ -66,7 +64,7 @@
 							type="text"
 							data-bind="
 								attr: { placeholder: pathPlaceholder },
-								value: basePath,
+								value: adventure.basePath,
 								valueUpdate: 'afterkeydown'
 							">
 					</li>

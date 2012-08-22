@@ -6,6 +6,7 @@ var AdventureViewModel = function(editor) {
 	};	
 	
 	self.scenes = ko.observableArray();
+	self.basePath = ko.observable('');
 	
 	self.load = function(config) {
 		self.scenes.splice(0);
@@ -36,7 +37,12 @@ var AdventureViewModel = function(editor) {
 				path: '',
 				size: 'contain',
 				get css() {
-					return 'url("' + encodeURI(this.path) + '")';
+					var path = this.path;
+					var pathIsAbsolute = this.path.startsWith('file://') || this.path.startsWith('http://');
+					if ( !pathIsAbsolute ) {
+						path = self.basePath() + path;
+					}
+					return 'url("' + encodeURI(path) + '")';						
 				}
 			},
 			

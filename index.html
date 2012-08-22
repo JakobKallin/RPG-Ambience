@@ -35,7 +35,16 @@
 		<script src="source/immersive/immersive.js"></script>
 	</head>
 	<body>
-		<div id="editor" class="editor" data-bind="event: { drop: readDroppedAdventure, dragover: handleDrag }">
+		<div
+			id="editor"
+			class="editor"
+			data-bind="
+				event: {
+					drop: readDroppedAdventure,
+					dragover: handleDrag,
+					keydown: stopPropagation,
+					keypress: stopPropagation
+				}">
 			<div class="menu-bar">
 				<ul class="action-list adventure">
 					<li class="action load">

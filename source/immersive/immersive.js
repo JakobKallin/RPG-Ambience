@@ -154,23 +154,21 @@ var ViewModel = function(editorWidth) {
 		previousY = event.screenY;
 	};
 	
-	var formTagNames = ['INPUT', 'TEXTAREA', 'BUTTON', 'SELECT', 'OPTION', 'A'];
-	var focusIsOnForm = function(event) {
-		return formTagNames.indexOf(event.target.tagName) !== -1;
-	};
+	self.stopPropagation = function(viewModel, event) {
+		event.stopPropagation();
+		return true;
+	}
 	
 	self.onKeyDown = function(event) {
-		if ( !focusIsOnForm(event) ) {
-			var key = Key.name(event.keyCode);
-			if ( self.commands[key]  ) {
+		var key = Key.name(event.keyCode);
+		if ( self.commands[key]  ) {
+			event.preventDefault();
+			self.commands[key]();
+		} else {
+			var scene = self.adventure.keyedScene(key);
+			if ( scene ) {
 				event.preventDefault();
-				self.commands[key]();
-			} else {
-				var scene = self.adventure.keyedScene(key);
-				if ( scene ) {
-					event.preventDefault();
-					self.playScene(scene);
-				}
+				self.playScene(scene);
 			}
 		}
 	};
@@ -178,7 +176,7 @@ var ViewModel = function(editorWidth) {
 	self.sceneName = ko.observable('');
 	self.onKeyPress = function(event) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
-		if ( !focusIsOnForm(event) && event.charCode !== 0 ) {
+		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
 			var scene = self.adventure.keyedScene(character.toUpperCase());
 			if ( scene ) {

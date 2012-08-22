@@ -29,6 +29,8 @@ var AdventureViewModel = function(editor) {
 			mixin: false,
 			backgroundColor: '#000000',
 			fadeDuration: 0,
+			fadeIn: true,
+			fadeOut: true,
 			
 			image: {
 				path: '',
@@ -102,6 +104,8 @@ var AdventureViewModel = function(editor) {
 		converted.isMixin = scene.mixin;
 		converted.backgroundColor = scene.backgroundColor;
 		converted.fadeDuration = scene.fadeDuration * 1000;
+		converted.fadesIn = scene.fadeIn;
+		converted.fadesOut = scene.fadeOut;
 		
 		converted.image = scene.image.path;
 		converted.imageStyle = { backgroundSize: scene.image.size };

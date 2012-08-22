@@ -372,10 +372,25 @@
 										<td><input id="background-color" type="color" data-bind="value: backgroundColor"></td>
 									</tr>
 									<tr>
-										<th><label for="fade">Fade in/out</label></th>
+										<th><label for="fade">Fade</label></th>
 										<td>
 											<input id="fade" type="number" min="0" value="0" data-bind="value: fadeDuration">
 											<span class="note">seconds</span>
+										</td>
+									</tr>
+									<tr>
+										<th></th>
+										<td>
+											<ul class="modifier-list">
+												<li class="modifier">
+													<input id="fade-in" type="checkbox" data-bind="checked: fadeIn">
+													<label for="fade-in">In</label>
+												</li>
+												<li class="modifier">
+													<input id="fade-out" type="checkbox" data-bind="checked: fadeOut">
+													<label for="fade-out">Out</label>
+												</li>
+											</ul>
 										</td>
 									</tr>
 									<tr>

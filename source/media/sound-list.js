@@ -8,7 +8,7 @@ Ambience.SoundList = function(container, stopScene) {
 		scene = newScene;
 
 		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
-		playNextTrack(scene.fadeDuration);
+		playNextTrack(scene.fadeInDuration);
 	}
 	
 	function playNextTrack(fadeDuration) {
@@ -43,7 +43,7 @@ Ambience.SoundList = function(container, stopScene) {
 	}
 	
 	function fadeOut() {
-		sounds.map(function(sound) { sound.fadeOut(scene.fadeDuration); });
+		sounds.map(function(sound) { sound.fadeOut(scene.fadeOutDuration); });
 	}
 	
 	function stop() {

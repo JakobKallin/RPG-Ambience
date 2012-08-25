@@ -113,8 +113,10 @@ var AdventureViewModel = function(editor) {
 		converted.fadesIn = scene.fadeIn;
 		converted.fadesOut = scene.fadeOut;
 		
-		converted.image = scene.image.absolutePath;
-		converted.imageStyle = { backgroundSize: scene.image.size };
+		if ( scene.image.path.length > 0 ) {
+			converted.image = scene.image.absolutePath;
+			converted.imageStyle = { backgroundSize: scene.image.size };
+		}
 		
 		var actualSoundFiles = scene.sound.files.filter(function(file) {
 			return file.path.length > 0;

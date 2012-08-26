@@ -41,6 +41,8 @@ var ViewModel = function(editorWidth) {
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);
 			self.adventure.load(config);
+			// This is so that the exit confirmation dialog will not show up when the user only loads an adventure.
+			self.saveAdventure();
 		};
 		reader.readAsText(file);
 	};
@@ -69,6 +71,7 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.onExit = function() {
+		self.serializeAdventure();
 		if ( self.latestAdventureString() !== self.savedAdventureString ) {
 			return 'There are unsaved changes in your adventure.';  				
 		}

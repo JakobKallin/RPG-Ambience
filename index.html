@@ -422,12 +422,37 @@
 		</div>
 		<div id="theater" class="theater" data-bind="
 			event: {
-				mousemove: $root.scheduleHiddenInterface,
-				mouseover: $root.scheduleHiddenInterface,
-				mouseout: $root.showInterface
+				mousemove: scheduleHiddenInterface,
+				mouseover: scheduleHiddenInterface,
+				mouseout: showInterface
 			}">
+			<form
+				id="theater-form"
+				class="action-form"
+				data-bind="
+					event: {
+						submit: playNamedScene,
+						keydown: stopPropagation,
+						keypress: stopPropagation
+					}">
+				<ul class="action-list" data-bind="visible: interfaceIsVisible">
+					<li class="action toggle">
+						<button
+							type="button"
+							data-bind="
+								click: toggleEditor,
+								text: toggleButtonText">Show Editor</button>
+					</li>
+				</ul>
+			</form>
 			<!-- ko if: instructionsAreVisible -->
-			<div class="instructions outer">
+			<div
+				class="instructions outer"
+				data-bind="
+					event: {
+						keydown: stopPropagation,
+						keypress: stopPropagation
+					}">
 				<div class="instructions inner">
 					<p><em>Play your scenes here:</em></p>
 					<p>If the scene has a name, type all or part of the name and press Enter.</p>
@@ -439,16 +464,6 @@
 			<!-- /ko -->
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
-			<form id="theater-form" class="action-form" data-bind="event: { submit: $root.playNamedScene }">
-				<ul class="action-list" data-bind="visible: $root.interfaceIsVisible">
-					<li class="action show" data-bind="visible: $root.editorIsHidden">
-						<button type="button" data-bind="click: $root.showEditor">Show Editor</button>
-					</li>
-					<li class="action hide" data-bind="visible: $root.editorIsVisible">
-						<button type="button" data-bind="click: $root.hideEditor">Hide Editor</button>
-					</li>
-				</ul>
-			</form>
 		</div>
 	</body>
 </html>

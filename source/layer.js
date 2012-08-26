@@ -63,6 +63,10 @@ Ambience.Layer = function(node) {
 	}
 	
 	function playMixin(mixin) {
+		if ( mixin.isVisual ) {
+			node.style.visibility = 'visible';
+		}
+		
 		for ( var mediaType in mediaPlayers ) {
 			if ( playingMedia.contains(mediaType) && mixin[mediaType] ) {
 				mediaPlayers[mediaType].stop();

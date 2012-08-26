@@ -147,4 +147,17 @@ describe('Ambience mixin', function() {
 			expect(ambience.sceneIsPlaying).toBe(true);
 		});
 	});
+	
+	it('displays visual mixin even when previous scene was not visual', function() {
+		var scene = Ambience.Scene();
+		scene.sounds = ['test-audio-2s.ogg'];
+		ambience.play(scene);
+		
+		var mixin = new Ambience.Scene();
+		mixin.isMixin = true;
+		mixin.image = 'test-image.jpg';
+		ambience.play(mixin);
+		
+		expect(backgroundNode.style.visibility).toBe('visible');
+	});
 });

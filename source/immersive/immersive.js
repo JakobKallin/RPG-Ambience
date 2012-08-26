@@ -45,12 +45,19 @@ var ViewModel = function(editorWidth) {
 		reader.readAsText(file);
 	};
 	
-	self.adventureBase64 = ko.observable('');
+	self.latestAdventureString = ko.observable('');
+	self.savedAdventureString = '';
 	self.adventureUrl = ko.computed(function() {
-		return 'data:application/json;base64,' + self.adventureBase64();
+		return 'data:application/json;base64,' + self.latestAdventureString();
 	});
 	
 	self.saveAdventure = function() {
+		self.serializeAdventure();
+		self.savedAdventureString = self.latestAdventureString();
+		return true;
+	};
+	
+	self.serializeAdventure = function() {
 		var state = {
 			basePath: self.adventure.basePath(),
 			scenes: self.adventure.scenes().map(function(scene) {
@@ -58,9 +65,15 @@ var ViewModel = function(editorWidth) {
 			})
 		};
 		var adventureJson = JSON.stringify(state);
-		self.adventureBase64(Base64.encode(adventureJson));
-		return true;
+		self.latestAdventureString(Base64.encode(adventureJson));
 	};
+	
+	self.onExit = function() {
+		if ( self.latestAdventureString() !== self.savedAdventureString ) {
+			return 'There are unsaved changes in your adventure.';  				
+		}
+	};
+	window.addEventListener('beforeunload', self.onExit);
 	
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
@@ -222,4 +235,5 @@ window.addEventListener('load', function() {
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	viewModel.adventure.start();
+	viewModel.serializeAdventure(); // This is so that the exit confirmation dialog will appear even when nothing has been done.
 });

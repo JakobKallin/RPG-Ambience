@@ -121,4 +121,30 @@ describe('Ambience mixin', function() {
 		
 		expect(backgroundNode.querySelector('.text.inner').style.color).toBe('red');
 	});
+	
+	it('keeps playing scene with image even after audio of mixed-in audio-only scene ends', function() {
+		runs(function() {
+			var scene = new Ambience.Scene();
+			scene.image = 'test-image.jpg';
+			ambience.play(scene);
+			
+			var mixin = new Ambience.Scene();
+			mixin.isMixin = true;
+			mixin.sounds = ['test-audio-2s.ogg'];
+			mixin.loops = false;
+			ambience.play(mixin);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			expect(backgroundNode.getElementsByTagName('audio').length).toBe(1);
+		});
+		
+		waits(3000);
+		
+		runs(function() {
+			expect(ambience.sceneIsPlaying).toBe(true);
+		});
+	});
 });

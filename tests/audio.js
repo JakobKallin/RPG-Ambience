@@ -169,23 +169,20 @@ describe('Ambience audio', function() {
 	});
 	*/
 	
-	it('crossfades', function() {
+	it('respects fade level when a new track is started during fade', function() {
 		runs(function() {
 			var scene = new Ambience.Scene();
-			scene.crossoverDuration = 2;
-			scene.crossfades = true;
 			scene.sounds = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
+			scene.fadeDuration = 10000;
+			scene.fadesIn = false;
 			ambience.play(scene);
+			ambience.fadeOutBackground();
 		});
 		
-		waits(4000); // Tracks should have the same volume at this point.
+		waits(6000);
 		
 		runs(function() {
-			expect(audioNodes[0].volume).toBeGreaterThan(0.25);
-			expect(audioNodes[0].volume).toBeLessThan(0.75);
-			
-			expect(audioNodes[1].volume).toBeGreaterThan(0.25);
-			expect(audioNodes[1].volume).toBeLessThan(0.75);
+			expect(audioNodes[0].volume).toBeLessThan(0.5);
 		});
 	});
 });

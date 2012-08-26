@@ -8,7 +8,7 @@ Ambience.Layer = function(node) {
 	var mediaPlayers = {
 		'backgroundColor': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
-		'sounds': new Ambience.SoundList(node, stopScene),
+		'sounds': new Ambience.SoundList(node, stopSceneIfSoundOnly),
 		'text': new Ambience.Text(node),
 		'video': new Ambience.Video(node)
 	};
@@ -30,6 +30,13 @@ Ambience.Layer = function(node) {
 		node.style.visibility = 'hidden';
 		node.style.opacity = 0;
 		fadeOutDuration = 0;
+	}
+	
+	function stopSceneIfSoundOnly() {
+		// The 2 below is because there might be a background color as well.
+		if ( playingMedia.contains('sounds') && playingMedia.length <= 2 ) {
+			stopScene();
+		}
 	}
 	
 	function playScene(scene) {

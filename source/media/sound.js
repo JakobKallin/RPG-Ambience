@@ -1,4 +1,4 @@
-Ambience.Sound = function(path, maxVolume, container) {
+Ambience.Sound = function(path, container) {
 	var node = document.createElement('audio');
 	node.src = encodeURI(path);
 	node.volume = 0;
@@ -6,10 +6,11 @@ Ambience.Sound = function(path, maxVolume, container) {
 	var hasStopped = false;
 	var fade = new Animation(node, 'volume');
 	
-	function play(fadeDuration, callbacks) {
+	function play(fadeDuration, startVolume, endVolume, callbacks) {
 		node.addEventListener('ended', callbacks.onEnded);
 		node.addEventListener('timeupdate', callbacks.onTimeUpdate);
-		fade.start(maxVolume, fadeDuration);
+		node.volume = startVolume;
+		fade.start(endVolume, fadeDuration);
 		container.appendChild(node);
 		node.play();
 	}
@@ -19,10 +20,7 @@ Ambience.Sound = function(path, maxVolume, container) {
 			duration = 0;
 		}
 		
-		// The current volume compared to the scene's defined volume, if it has been halfway faded in.
-		var volumePercentage = node.volume / maxVolume;
-		var actualDuration = duration * volumePercentage
-		fade.start(0, actualDuration);
+		fade.start(0, duration);
 	}
 	
 	function stop() {

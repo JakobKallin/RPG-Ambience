@@ -8,6 +8,7 @@ function Animation(object, property) {
 	
 	// We could use a speed instead of a duration, but that makes it difficult to fade to and from values other than 1.
 	var duration;
+	var elapsed;
 	var onCompleted;
 	var onEnded;
 	
@@ -25,6 +26,7 @@ function Animation(object, property) {
 	var tick = function() {
 		tickIndex += 1;
 		value += amount;
+		elapsed += interval;
 		
 		if ( direction === 'increase' ) {
 			value = Math.min(value, endValue);
@@ -58,6 +60,7 @@ function Animation(object, property) {
 		
 		endValue = newEndValue;
 		duration = newDuration;
+		elapsed = 0;
 		onCompleted = callbacks.onCompleted;
 		onEnded = callbacks.onEnded;
 		
@@ -114,4 +117,16 @@ function Animation(object, property) {
 			}
 		}
 	}
+	
+	Object.defineProperty(this, 'elapsed', {
+		get: function() { return elapsed; }
+	});
+	
+	Object.defineProperty(this, 'remaining', {
+		get: function() { return duration - elapsed; }
+	});
+	
+	Object.defineProperty(this, 'direction', {
+		get: function() { return direction; }
+	});
 }

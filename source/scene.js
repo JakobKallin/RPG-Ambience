@@ -8,7 +8,6 @@ Ambience.Scene.base = {
 	fadesIn: true,
 	fadesOut: true,
 	crossoverDuration: 0,
-	crossfades: false,
 	soundOrder: 'linear',
 	loops: true,
 	backgroundColor: 'black',

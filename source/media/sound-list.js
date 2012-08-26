@@ -1,17 +1,21 @@
-Ambience.SoundList = function(container, stopScene) {
+Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 	var scene;
 	var trackIndex;
 	var sounds = [];
-	var isCrossfading = false;
+	
+	// Dummy animation object used for tracking what state sound objects should be in.
+	var state = { volume: 0 };
+	var fade = new Animation(state, 'volume');
 	
 	function play(newScene) {
 		scene = newScene;
-
+		
+		fade.start(scene.volume, scene.fadeInDuration)
 		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
-		playNextTrack(scene.fadeInDuration);
+		playNextTrack();
 	}
 	
-	function playNextTrack(fadeDuration) {
+	function playNextTrack() {
 		// We need this so that we stop audio-only effects after they have actually played once.
 		var hasPlayedBefore = trackIndex !== -1;
 		
@@ -25,24 +29,24 @@ Ambience.SoundList = function(container, stopScene) {
 		var oneShot = !scene.loops && scene.hasOnlySound;
 		
 		if ( oneShot && allTracksHavePlayed ) {
-			stopScene();
+			stopSceneIfSoundOnly();
 		} else if ( scene.loops || !allTracksHavePlayed ) {
 			var trackPath = scene.sounds[trackIndex];
-			var sound = new Ambience.Sound(trackPath, scene.volume, container);
-			sound.play(
-				fadeDuration,
-				{
-					onTimeUpdate: onTimeUpdate,
-					onEnded: function() {
-						onTrackEnded(sound);
-					}
-				}
-			);
+			var sound = new Ambience.Sound(trackPath, container);
+			var onEnded = function() { onTrackEnded(sound); };
+			
+			if ( fade.direction === 'increase' ) {
+				var endVolume = scene.volume;
+			} else {
+				var endVolume = 0;
+			}
+			sound.play(fade.remaining, state.volume, endVolume, { onTimeUpdate: onTimeUpdate, onEnded: onEnded});
 			sounds.push(sound);
 		}
 	}
 	
 	function fadeOut() {
+		fade.start(0, scene.fadeOutDuration, { onEnded: stop });
 		sounds.map(function(sound) { sound.fadeOut(scene.fadeOutDuration); });
 	}
 	
@@ -72,15 +76,9 @@ Ambience.SoundList = function(container, stopScene) {
 	}
 	
 	function crossover() {
-		if ( scene.crossfades ) {
-			sounds.map(function(sound) { sound.fadeOut(scene.crossoverDurationMillis); });
-			playNextTrack(scene.crossoverDurationMillis);
-		} else {
-			// New track starts early but does not fade in.
-			// Likewise, current track does not fade out but simply ends normally (with onTrackEnded eventually removing it).
-			playNextTrack(0);
-		}
-		
+		// New track starts early but does not fade in.
+		// Likewise, current track does not fade out but simply ends normally (with onTrackEnded eventually removing it).
+		playNextTrack();
 	}
 	
 	return {

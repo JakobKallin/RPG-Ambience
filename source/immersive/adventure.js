@@ -57,8 +57,7 @@ var AdventureViewModel = function(editor) {
 				loop: true,
 				shuffle: false,
 				volume: 1,
-				crossover: 0,
-				crossfade: false,
+				crossover: 0
 			},
 			
 			text: {
@@ -131,7 +130,6 @@ var AdventureViewModel = function(editor) {
 		converted.loops = scene.sound.loop;
 		converted.volume = scene.sound.volume;
 		converted.crossoverDuration = scene.sound.crossover;
-		converted.crossfades = scene.sound.crossfade;
 		
 		var text = scene.text;
 		converted.text = text.string;

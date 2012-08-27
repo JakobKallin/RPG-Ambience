@@ -126,6 +126,14 @@
 							<!-- ko if: key -->
 								<span data-bind="text: key" class="key"></span>
 							<!-- /ko -->
+							<div class="icons">
+								<!-- ko if: mixin -->
+									<img src="images/mixin.svg" title="Mixin">
+								<!-- /ko -->
+								<!-- ko if: isForeground -->
+									<img src="images/foreground.svg" title="Foreground">
+								<!-- /ko -->
+							</div>
 						</li>
 					</ul>
 					<div class="add-item">

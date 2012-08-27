@@ -8,6 +8,10 @@ li {
 	list-style-type: none;
 }
 
+*[title] {
+	cursor: help;
+}
+
 label[for] {
 	cursor: pointer;
 }
@@ -150,38 +154,50 @@ body {
 	padding: 0 0.5em 2em 2em;
 }
 
-.list-item {
-	position: relative;
-	display: block;
-	margin-bottom: 1em;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.list-item:hover, .list-item.selected {
-	cursor: pointer;
-}
-
-.list-item .preview {
-	display: inline-block;
-	vertical-align: middle;
-	width: 5em;
-	height: 2.8125em; /* Widescreen ratio */
-	margin-right: 0.5em;
-}
-
-.list-item .key {
-	opacity: 0.5;
-}
-
-.list-item .key:before {
-	content: "(";
-}
-
-.list-item .key:after {
-	content: ")";
-}
+	.list-item {
+		position: relative;
+		display: block;
+		margin-bottom: 1em;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	
+	.list-item:hover, .list-item.selected {
+		cursor: pointer;
+	}
+	
+	.list-item .preview {
+		display: inline-block;
+		vertical-align: middle;
+		width: 5em;
+		height: 2.8125em; /* Widescreen ratio */
+		margin-right: 0.5em;
+	}
+	
+	.list-item .key {
+		opacity: 0.5;
+	}
+	
+	.list-item .key:before {
+		content: "(";
+	}
+	
+	.list-item .key:after {
+		content: ")";
+	}
+	
+	.list-item .icons {
+		position: absolute;
+		right: 0;
+		top: 0;
+		line-height: 2.8125em;
+		margin-right: 0.75em;
+	}
+	
+		.list-item .icons img {
+			opacity: 0.35;
+		}
 
 .add-item {
 	display: block;

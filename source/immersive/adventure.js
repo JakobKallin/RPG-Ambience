@@ -34,6 +34,9 @@ var AdventureViewModel = function(editor) {
 			fade: 0,
 			fadeIn: true,
 			fadeOut: true,
+			get isForeground() {
+				return this.layer === 'foreground'
+			},
 			
 			image: {
 				path: '',

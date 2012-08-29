@@ -41,23 +41,14 @@ var ViewModel = function(editorWidth) {
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);
 			self.adventure.load(config);
-			// This is so that the exit confirmation dialog will not show up when the user only loads an adventure.
-			self.saveAdventure();
 		};
 		reader.readAsText(file);
 	};
 	
-	self.latestAdventureString = ko.observable('');
-	self.savedAdventureString = '';
+	self.adventureString = ko.observable('');
 	self.adventureUrl = ko.computed(function() {
-		return 'data:application/json;base64,' + self.latestAdventureString();
+		return 'data:application/json;base64,' + self.adventureString();
 	});
-	
-	self.saveAdventure = function() {
-		self.serializeAdventure();
-		self.savedAdventureString = self.latestAdventureString();
-		return true;
-	};
 	
 	self.serializeAdventure = function() {
 		var state = {
@@ -67,16 +58,20 @@ var ViewModel = function(editorWidth) {
 			})
 		};
 		var adventureJson = JSON.stringify(state);
-		self.latestAdventureString(Base64.encode(adventureJson));
+		self.adventureString(Base64.encode(adventureJson));
 	};
 	
-	self.onExit = function() {
-		self.serializeAdventure();
-		if ( self.latestAdventureString() !== self.savedAdventureString ) {
-			return 'There are unsaved changes in your adventure.';  				
-		}
+	self.autosaveAdventure = function() {
+		var state = {
+			basePath: self.adventure.basePath(),
+			scenes: self.adventure.scenes().map(function(scene) {
+				return scene.copyState();
+			})
+		};
+		localStorage.adventure = JSON.stringify(state);
 	};
-	window.addEventListener('beforeunload', self.onExit);
+	
+	window.addEventListener('beforeunload', self.autosaveAdventure);
 	
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
@@ -256,6 +251,11 @@ window.addEventListener('load', function() {
 	viewModel = new ViewModel(0.6);
 	viewModel.start();
 	ko.applyBindings(viewModel);
-	viewModel.adventure.start();
-	viewModel.serializeAdventure(); // This is so that the exit confirmation dialog will appear even when nothing has been done.
+	
+	if ( localStorage.adventure ) {
+		var config = JSON.parse(localStorage.adventure);
+		viewModel.adventure.load(config);
+	} else {
+		viewModel.adventure.add();
+	}
 });

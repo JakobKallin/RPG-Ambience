@@ -1,10 +1,6 @@
 var AdventureViewModel = function(editor) {
 	var self = this;
 	
-	self.start = function() {
-		self.add();
-	};	
-	
 	self.scenes = ko.observableArray();
 	self.basePath = ko.observable('');
 	

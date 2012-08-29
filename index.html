@@ -59,12 +59,12 @@
 						<a
 							target="_blank"
 							data-bind="
-								click: saveAdventure,
+								click: serializeAdventure,
 								attr: {
 									href: adventureUrl,
 									download: adventureFileName
 								},
-								event: { mouseover: serializeAdventure }">Save Adventure</a>
+								event: { mouseover: serializeAdventure, focus: serializeAdventure }">Save Adventure</a>
 					</li>
 					<li class="action media-folder">
 						<label for="media-folder">Media folder</label>

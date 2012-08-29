@@ -52,8 +52,8 @@ var ViewModel = function(editorWidth) {
 	
 	self.serializeAdventure = function() {
 		var state = {
-			basePath: self.adventure.model.basePath,
-			scenes: self.adventure.model.scenes.map(function(scene) {
+			basePath: self.adventure.basePath,
+			scenes: self.adventure.scenes.map(function(scene) {
 				return scene.copyState();
 			})
 		};
@@ -63,8 +63,8 @@ var ViewModel = function(editorWidth) {
 	
 	self.autosaveAdventure = function() {
 		var state = {
-			basePath: self.adventure.model.basePath,
-			scenes: self.adventure.model.scenes.map(function(scene) {
+			basePath: self.adventure.basePath,
+			scenes: self.adventure.scenes.map(function(scene) {
 				return scene.copyState();
 			})
 		};

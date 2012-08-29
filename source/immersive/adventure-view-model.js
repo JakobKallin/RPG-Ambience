@@ -1,22 +1,22 @@
 var AdventureViewModel = function(editor) {
-	var self = this;
+	var model = new Adventure();
+	knockwrap.wrap(model);
 	
-	self.model = new Adventure();
-	knockwrap.wrap(self.model);
+	var self = Object.create(model);
 	
 	self.load = function(config) {
-		self.model.basePath = config.basePath;
+		self.basePath = config.basePath;
 		
-		self.model.scenes.splice(0);
+		self.scenes.splice(0);
 		var newScenes = config.scenes;
 		newScenes.map(function(sceneConfig) {
 			var newScene = self.newScene();
 			Object.overlay(newScene, sceneConfig);
-			self.model.scenes.push(newScene);
+			self.scenes.push(newScene);
 		});
 		
-		if ( self.model.scenes.length > 0 ) {
-			self.select(self.model.scenes[0]);
+		if ( self.scenes.length > 0 ) {
+			self.select(self.scenes[0]);
 		}
 	};
 	
@@ -161,33 +161,33 @@ var AdventureViewModel = function(editor) {
 	
 	self.add = function() {
 		var newScene = self.newScene();
-		self.model.scenes.push(newScene);
+		self.scenes.push(newScene);
 		newScene.sound.addFile({ path: '' });
 		self.select(newScene);
 	};
 	
 	self.previous = function() {
-		var index = self.model.scenes.indexOf(self.current());
+		var index = self.scenes.indexOf(self.current());
 		if ( index > 0 ) {
-			return self.model.scenes[index - 1];
+			return self.scenes[index - 1];
 		} else {
 			return null;
 		}
 	};
 	
 	self.next = function() {
-		var index = self.model.scenes.indexOf(self.current());
-		if ( index < self.model.scenes.length - 1 ) {
-			return self.model.scenes[index + 1];
+		var index = self.scenes.indexOf(self.current());
+		if ( index < self.scenes.length - 1 ) {
+			return self.scenes[index + 1];
 		} else {
 			return null;
 		}
 	};
 	
 	self.last = function() {
-		var index = self.model.scenes.length - 1;
+		var index = self.scenes.length - 1;
 		if ( index !== -1 ) {
-			return self.model.scenes[index];
+			return self.scenes[index];
 		} else {
 			return null;
 		}
@@ -205,8 +205,8 @@ var AdventureViewModel = function(editor) {
 			self.add();
 		}
 		
-		var index = self.model.scenes.indexOf(this);
-		self.model.scenes.splice(index, 1);
+		var index = self.scenes.indexOf(this);
+		self.scenes.splice(index, 1);
 	};
 	
 	self.copyScene = function(original) {
@@ -216,8 +216,8 @@ var AdventureViewModel = function(editor) {
 	self.copySelected = function() {
 		var newScene = self.copyScene(this);
 		
-		var index = self.model.scenes.indexOf(self.current()) + 1
-		self.model.scenes.splice(index, 0, newScene);
+		var index = self.scenes.indexOf(self.current()) + 1
+		self.scenes.splice(index, 0, newScene);
 		self.select(newScene);
 	};
 	
@@ -251,7 +251,7 @@ var AdventureViewModel = function(editor) {
 	
 	self.namedScene = function(name) {
 		if ( name.length > 0 ) {
-			return self.model.scenes.first(function(scene) {
+			return self.scenes.first(function(scene) {
 				return scene.name && scene.name.toUpperCase().startsWith(name.toUpperCase());
 			});
 		} else {
@@ -261,7 +261,7 @@ var AdventureViewModel = function(editor) {
 	
 	self.keyedScene = function(targetKey) {
 		if ( targetKey ) {
-			return self.model.scenes.first(function(scene) {
+			return self.scenes.first(function(scene) {
 				return scene.key && scene.key === targetKey;
 			});
 		} else {
@@ -272,9 +272,11 @@ var AdventureViewModel = function(editor) {
 	self.absolutePath = function(path) {
 		var pathIsAbsolute = path.startsWith('file://') || path.startsWith('http://');
 		if ( !pathIsAbsolute ) {
-			return self.model.basePath + path;
+			return self.basePath + path;
 		} else {
 			return path;			
 		}
 	};
+	
+	return self;
 };

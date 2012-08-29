@@ -32,6 +32,7 @@
 		<script src="source/layer.js"></script>
 		<script src="source/scene.js"></script>
 		<script src="source/immersive/adventure.js"></script>
+		<script src="source/immersive/adventure-view-model.js"></script>
 		<script src="source/immersive/immersive.js"></script>
 	</head>
 	<body>
@@ -73,7 +74,7 @@
 							type="text"
 							data-bind="
 								attr: { placeholder: pathPlaceholder },
-								value: adventure.basePath,
+								value: adventure.model.basePath,
 								valueUpdate: 'afterkeydown'
 							">
 					</li>
@@ -91,7 +92,7 @@
 			<!-- /ko -->
 			<!-- ko with: adventure -->
 				<div class="list-view">
-					<ul data-bind="foreach: scenes, sortable: true">
+					<ul data-bind="foreach: model.scenes, sortable: true">
 						<li class="list-item" data-bind="click: $parent.select, css: { selected: isSelected }">
 							<div class="preview" data-bind="
 								style: {

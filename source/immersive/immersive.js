@@ -40,7 +40,7 @@ var ViewModel = function(editorWidth) {
 		var reader = new FileReader();
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);
-			self.adventure.load(config);
+			self.loadAdventure(config);
 		};
 		reader.readAsText(file);
 	};
@@ -52,8 +52,8 @@ var ViewModel = function(editorWidth) {
 	
 	self.serializeAdventure = function() {
 		var state = {
-			basePath: self.adventure.basePath,
-			scenes: self.adventure.scenes.map(function(scene) {
+			basePath: self.adventure().basePath,
+			scenes: self.adventure().scenes.map(function(scene) {
 				return scene.copyState();
 			})
 		};
@@ -63,8 +63,8 @@ var ViewModel = function(editorWidth) {
 	
 	self.autosaveAdventure = function() {
 		var state = {
-			basePath: self.adventure.basePath,
-			scenes: self.adventure.scenes.map(function(scene) {
+			basePath: self.adventure().basePath,
+			scenes: self.adventure().scenes.map(function(scene) {
 				return scene.copyState();
 			})
 		};
@@ -73,13 +73,33 @@ var ViewModel = function(editorWidth) {
 	
 	window.addEventListener('beforeunload', self.autosaveAdventure);
 	
+	self.adventure = ko.observable();
+	self.createAdventure = function() {
+		self.adventure(new AdventureViewModel(self));
+		self.adventure().add();
+	};
+	
+	self.loadAdventure = function(config) {
+		self.adventure(new AdventureViewModel(self));
+		var adventure = self.adventure();
+		adventure.basePath = config.basePath;
+		
+		adventure.scenes.splice(0);
+		var newScenes = config.scenes;
+		newScenes.map(function(sceneConfig) {
+			var newScene = adventure.newScene();
+			Object.overlay(newScene, sceneConfig);
+			adventure.scenes.push(newScene);
+		});
+	};
+	
 	self.playScene = function(scene) {
-		converted = self.adventure.convertScene(scene);
+		converted = self.adventure().convertScene(scene);
 		ambience.play(converted);
 	};
 	
 	self.playSelected = function() {
-		self.playScene(self.adventure.current());
+		self.playScene(self.adventure().current());
 	};
 	
 	self.stopCurrent = function() {
@@ -107,8 +127,6 @@ var ViewModel = function(editorWidth) {
 		};
 		theaterForm.addEventListener('mousemove', showInterface);
 		theaterForm.addEventListener('mouseover', showInterface);
-		
-		self.adventure = new AdventureViewModel(self);
 	}
 	
 	self.message = ko.observable(null);
@@ -197,7 +215,7 @@ var ViewModel = function(editorWidth) {
 			event.preventDefault();
 			self.commands[key]();
 		} else {
-			var scene = self.adventure.keyedScene(key);
+			var scene = self.adventure().keyedScene(key);
 			if ( scene ) {
 				event.preventDefault();
 				self.playScene(scene);
@@ -210,7 +228,7 @@ var ViewModel = function(editorWidth) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
 		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
-			var scene = self.adventure.keyedScene(character.toUpperCase());
+			var scene = self.adventure().keyedScene(character.toUpperCase());
 			if ( scene ) {
 				self.playScene(scene);
 				self.sceneName('');
@@ -230,7 +248,7 @@ var ViewModel = function(editorWidth) {
 		if ( self.sceneName().length === 0 ) {
 			ambience.fadeOutTopmost();
 		} else {
-			var scene = self.adventure.namedScene(self.sceneName());
+			var scene = self.adventure().namedScene(self.sceneName());
 			if ( scene ) {
 				self.playScene(scene);
 			}
@@ -250,12 +268,17 @@ window.addEventListener('load', function() {
 	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 	viewModel = new ViewModel(0.6);
 	viewModel.start();
-	ko.applyBindings(viewModel);
 	
 	if ( localStorage.adventure ) {
 		var config = JSON.parse(localStorage.adventure);
-		viewModel.adventure.load(config);
+		viewModel.loadAdventure(config);
 	} else {
-		viewModel.adventure.add();
+		viewModel.createAdventure();
+	}
+	
+	ko.applyBindings(viewModel);
+	
+	if ( viewModel.adventure().scenes.length > 0 ) {
+		viewModel.adventure().select(viewModel.adventure().scenes[0]);
 	}
 });

@@ -32,6 +32,7 @@
 		<script src="source/layer.js"></script>
 		<script src="source/scene.js"></script>
 		<script src="source/immersive/adventure.js"></script>
+		<script src="source/immersive/adventure-view-model.js"></script>
 		<script src="source/immersive/immersive.js"></script>
 	</head>
 	<body>
@@ -59,12 +60,12 @@
 						<a
 							target="_blank"
 							data-bind="
-								click: saveAdventure,
+								click: serializeAdventure,
 								attr: {
 									href: adventureUrl,
 									download: adventureFileName
 								},
-								event: { mouseover: serializeAdventure }">Save Adventure</a>
+								event: { mouseover: serializeAdventure, focus: serializeAdventure }">Save Adventure</a>
 					</li>
 					<li class="action media-folder">
 						<label for="media-folder">Media folder</label>

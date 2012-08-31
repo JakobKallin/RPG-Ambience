@@ -172,7 +172,7 @@ body {
 		-moz-box-sizing: border-box;
 	}
 
-	.scene-view {
+	.view-list > .tab-content {
 		height: 100%;
 		width: 100%;
 		padding: 2em;
@@ -323,6 +323,7 @@ body {
 					font-weight: normal;
 					text-align: right;
 					vertical-align: top;
+					white-space: nowrap;
 				}
 
 				.options th label:after {

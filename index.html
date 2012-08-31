@@ -66,17 +66,6 @@
 								},
 								event: { mouseover: serializeAdventure, focus: serializeAdventure }">Save Adventure</a>
 					</li>
-					<li class="action media-folder">
-						<label for="media-folder">Media folder</label>
-						<input
-							id="media-folder"
-							type="text"
-							data-bind="
-								attr: { placeholder: pathPlaceholder },
-								value: adventure.basePath,
-								valueUpdate: 'afterkeydown'
-							">
-					</li>
 				</ul>
 				<ul class="action-list playback">
 					<li class="action play"><button data-bind="click: playSelected">Play</button></li>
@@ -89,7 +78,7 @@
 					<button data-bind="click: $root.clearMessage">Dismiss</button>
 				</div>
 			<!-- /ko -->
-			<div class="view-list">
+			<div class="view-list" id="view-list">
 				<ul class="tab-list">
 					<li class="tab">
 						<a href="#scene-tab">Scenes</a>
@@ -439,6 +428,27 @@
 						</div>
 						<!-- /ko -->
 					<!-- /ko -->
+				</div>
+				<div class="option-view tab-content" id="options-tab">
+					<div class="options">
+						<table>
+							<tr>
+								<th>
+									<label for="media-folder">Media folder</label>
+								</th>
+								<td>
+									<input
+										id="media-folder"
+										type="text"
+										data-bind="
+											attr: { placeholder: pathPlaceholder },
+											value: adventure.basePath,
+											valueUpdate: 'afterkeydown'
+										">
+								</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -258,4 +258,6 @@ window.addEventListener('load', function() {
 	} else {
 		viewModel.adventure.add();
 	}
+	
+	$(document.getElementById('view-list')).tabs();
 });

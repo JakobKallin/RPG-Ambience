@@ -55,7 +55,7 @@ var AdventureViewModel = function(editor) {
 				},
 				loop: true,
 				shuffle: false,
-				volume: 1,
+				volume: 100,
 				crossover: 0
 			},
 			
@@ -118,7 +118,7 @@ var AdventureViewModel = function(editor) {
 		
 		converted.soundOrder = (scene.sound.shuffle) ? 'random' : 'linear';
 		converted.loops = scene.sound.loop;
-		converted.volume = scene.sound.volume;
+		converted.volume = scene.sound.volume / 100;
 		converted.crossoverDuration = scene.sound.crossover;
 		
 		var text = scene.text;

@@ -74,11 +74,8 @@ var AdventureViewModel = function(editor) {
 				get weight() {
 					return (this.bold) ? 'bold' : 'normal';
 				},
-				get largePreviewSize() {
-					return (this.size / 100) * 10 + 'em';
-				},
-				get smallPreviewSize() {
-					return (this.size / 100) * 5 + 'em';
+				get previewSize() {
+					return (this.size / 100) + 'em';
 				},
 				get previewPadding() {
 					// The percentage is relative to the container's width, so the same property can be used for all previews.

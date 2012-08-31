@@ -38,6 +38,14 @@ input[type=number] {
 	width: 3em;
 }
 
+/* Border styles overridden in themes */
+
+div, li {
+	border-width: 0;
+	border-style: solid;
+	border-color: white;
+}
+
 /* Multi-purpose classes */
 
 .note {
@@ -47,7 +55,7 @@ input[type=number] {
 .tab {
 	display: block;
 	float: left;
-	border: 1px solid white;
+	border-width: 1px;
 	border-bottom-width: 0;
 }
 
@@ -66,7 +74,7 @@ input[type=number] {
 	}
 	
 	.tab-content {
-		border: 1px solid white;
+		border-width: 1px;
 	}
 
 .ui-sortable-helper {
@@ -158,6 +166,7 @@ body {
 		position: relative;
 		display: block;
 		margin-bottom: 1em;
+		border-width: 1px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -222,6 +231,7 @@ body {
 
 	.selected-item {
 		padding: 1em;
+		border-width: 1px;
 		overflow: hidden;
 	}
 
@@ -249,6 +259,7 @@ body {
 			height: 5.625em; /* Widescreen ratio */
 			margin-bottom: 1em;
 			margin-right: 1em;
+			border-width: 1px;
 		}
 		
 		.selected-item .tab-list {
@@ -459,8 +470,7 @@ body {
 	right: 0;
 	width: 0.25em;
 	height: 100%;
-	border: 1px solid white;
-	border-top-width: 0;
-	border-bottom-width: 0;
+	border-left-width: 1px;
+	border-right-width: 1px;
 	cursor: w-resize;
 }

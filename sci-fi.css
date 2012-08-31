@@ -1,3 +1,7 @@
+div, li {
+	border-color: hsl(190, 100%, 25%);
+}
+
 .editor {
 	background-image: url('scanline.png');
 	background-color: hsl(0, 0%, 10%);
@@ -14,14 +18,6 @@
 	border-color: hsl(190, 100%, 25%);
 }
 
-.list-item, .selected-item {
-	border: 1px solid hsl(190, 100%, 25%);
-}
-
-.options table {
-	border-left: 1px solid hsl(190, 100%, 25%);
-}
-
 input, select, textarea {
 	background-color: black;
 	color: white;
@@ -32,6 +28,14 @@ input, select, textarea {
 	opacity: 0.65;
 }
 
-.list-item:hover, .list-item.selected {
+.list-item.selected, .ui-tabs-selected {
+	background-color: hsl(190, 50%, 15%);
+}
+
+.list-item:hover:not(.selected), .tab:hover:not(.ui-tabs-selected) {
 	background-color: hsl(190, 50%, 10%);
+}
+
+a {
+	color: hsl(190, 100%, 50%);
 }

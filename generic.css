@@ -1,3 +1,7 @@
+div, li {
+	border-color: hsl(0, 0%, 25%);
+}
+
 .editor {
 	background-color: hsl(0, 0%, 10%);
 	color: hsl(0, 0%, 75%);
@@ -18,20 +22,12 @@
 	color: black;
 }
 
-.list-item.selected {
+.list-item.selected, .ui-tabs-selected {
 	background-color: hsl(0, 0%, 17.5%);
 }
 
-.list-item:hover:not(.selected) {
+.list-item:hover:not(.selected), .tab:hover:not(.ui-tabs-selected) {
 	background-color: hsl(0, 0%, 12.5%);
-}
-
-.list-item,
-.selected-item,
-.detail-view .preview,
-.tab,
-.tab-content {
-	border: 1px solid hsl(0, 0%, 25%);
 }
 
 .tab {
@@ -40,14 +36,6 @@
 
 .tab a {
 	color: hsl(0, 0%, 75%);
-}
-
-.ui-tabs-selected {
-	background-color: hsl(0, 0%, 17.5%);
-}
-
-.tab:hover:not(.ui-tabs-selected) {
-	background-color: hsl(0, 0%, 12.5%);
 }
 
 input[type=text], input[type=number], input[type=color], select, textarea {

@@ -4,22 +4,6 @@ var AdventureViewModel = function(editor) {
 	
 	var self = Object.create(model);
 	
-	self.load = function(config) {
-		self.basePath = config.basePath;
-		
-		self.scenes.splice(0);
-		var newScenes = config.scenes;
-		newScenes.map(function(sceneConfig) {
-			var newScene = self.newScene();
-			Object.overlay(newScene, sceneConfig);
-			self.scenes.push(newScene);
-		});
-		
-		if ( self.scenes.length > 0 ) {
-			self.select(self.scenes[0]);
-		}
-	};
-	
 	self.newScene = function() {
 		return {
 			name: '',

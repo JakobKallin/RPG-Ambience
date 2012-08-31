@@ -1,3 +1,5 @@
+/* Default styling */
+
 * {
 	margin: 0;
 	padding: 0;
@@ -36,11 +38,47 @@ input[type=number] {
 	width: 3em;
 }
 
+/* Multi-purpose classes */
+
+.note {
+	opacity: 0.5;
+}
+
+.tab {
+	display: block;
+	float: left;
+	border: 1px solid white;
+	border-bottom-width: 0;
+}
+
+.tab:not(:last-child) {
+	border-right-width: 0;
+}
+
+.ui-tabs-hide {
+	display: none;
+}
+
+	.tab a {
+		display: block;
+		padding: 0.25em 0.5em;
+		text-decoration: none;
+	}
+	
+	.tab-content {
+		border: 1px solid white;
+	}
+
+.ui-sortable-helper {
+	cursor: move !important;
+}
+
+/* Layout */
+
 html {
 	width: 100%;
 	height: 100%;
-	/* This is needed when browsers round percentage values down, creating a gap between the editor and the theater. */
-	background-color: black;
+	background-color: black; /* This is needed when browsers round percentage values down, creating a gap between the editor and the theater. */
 }
 
 body {
@@ -55,18 +93,6 @@ body {
 	height: 100%;
 }
 
-.splitter {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 0.25em;
-	height: 100%;
-	border: 1px solid white;
-	border-top-width: 0;
-	border-bottom-width: 0;
-	cursor: w-resize;
-}
-
 .editor {
 	left: 0;
 	line-height: 1.5;
@@ -74,38 +100,34 @@ body {
 	color: white;
 }
 
-.note {
-	opacity: 0.5;
-}
+	.editor > .menu-bar {
+		margin: 1em 2em;
+		overflow: auto;
+	}
 
-.editor > .menu-bar {
-	margin: 1em 2em;
-	overflow: auto;
-}
+		.editor > .menu-bar .action-list.adventure {
+			float: left;
+		}
 
-.menu-bar .action-list.adventure {
-	float: left;
-}
+		.editor > .menu-bar .action-list.playback {
+			float: right;
+		}
 
-.menu-bar .action-list.playback {
-	float: right;
-}
+		.editor > .menu-bar .action {
+			display: inline;
+		}
 
-.menu-bar .action {
-	display: inline;
-}
+		.editor > .menu-bar .action:not(:last-child) {
+			margin-right: 0.5em;
+		}
 
-.menu-bar .action:not(:last-child) {
-	margin-right: 0.5em;
-}
+		.editor > .menu-bar .action a {
+			white-space: nowrap;
+		}
 
-.menu-bar .action a {
-	white-space: nowrap;
-}
-
-.menu-bar label:after {
-	content: ": ";
-}
+		.editor > .menu-bar label:after {
+			content: ": ";
+		}
 
 .message {
 	clear: both;
@@ -115,34 +137,12 @@ body {
 	overflow: auto;
 }
 
-.message button {
-	float: right;
-}
+	.message button {
+		float: right;
+	}
 
-.message .text, .message button {
-	vertical-align: middle;
-}
-
-.preview {
-	background-position: center center;
-	background-repeat: no-repeat;
-	overflow: hidden;
-}
-
-.preview .text.outer {
-	display: table;
-	height: 100%;
-	margin: 0 auto;
-	font-family: serif;
-}
-
-.preview .text.inner {
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	color: white;
-	white-space: pre-line;
-	text-rendering: optimizeLegibility;
+	.message .text, .message button {
+		vertical-align: middle;
 }
 
 .list-view {
@@ -167,49 +167,49 @@ body {
 		cursor: pointer;
 	}
 	
-	.list-item .preview {
-		display: inline-block;
-		vertical-align: middle;
-		width: 5em;
-		height: 2.8125em; /* Widescreen ratio */
-		margin-right: 0.5em;
-	}
-	
-	.list-item .key {
-		opacity: 0.5;
-	}
-	
-	.list-item .key:before {
-		content: "(";
-	}
-	
-	.list-item .key:after {
-		content: ")";
-	}
-	
-	.list-item .icons {
-		position: absolute;
-		right: 0;
-		top: 0;
-		line-height: 2.8125em;
-		margin-right: 0.75em;
-	}
-	
-		.list-item .icons img {
-			opacity: 0.35;
+		.list-item .preview {
+			display: inline-block;
+			vertical-align: middle;
+			width: 5em;
+			height: 2.8125em; /* Widescreen ratio */
+			margin-right: 0.5em;
 		}
+		
+		.list-item .key {
+			opacity: 0.5;
+		}
+		
+		.list-item .key:before {
+			content: "(";
+		}
+		
+		.list-item .key:after {
+			content: ")";
+		}
+		
+		.list-item .icons {
+			position: absolute;
+			right: 0;
+			top: 0;
+			line-height: 2.8125em;
+			margin-right: 0.75em;
+		}
+		
+			.list-item .icons img {
+				opacity: 0.35;
+			}
 
-.add-item {
-	display: block;
-	margin-bottom: 1em;
-	padding: 0 1em;
-}
+	.add-item {
+		display: block;
+		margin-bottom: 1em;
+		padding: 0 1em;
+	}
 
-.add-item button{
-	width: 100%;
-	font-size: 1.5em;
-	padding: 0.25em;
-}
+	.add-item button {
+		width: 100%;
+		font-size: 1.5em;
+		padding: 0.25em;
+	}
 
 .detail-view {
 	float: right;
@@ -220,141 +220,121 @@ body {
 	padding: 0 2em 2em 0.5em;
 }
 
-.selected-item {
-	padding: 1em;
-	overflow: hidden;
-}
-
-.selected-item .action-list {
-	overflow: auto;
-	margin-bottom: 1em;
-}
-
-.selected-item .action {
-	display: block;
-	float: left;
-}
-
-.selected-item .action:not(:last-child) {
-	margin-right: 0.5em;
-}
-
-.selected-item .action.remove {
-	float: right;
-}
-
-.detail-view .preview {
-	float: left;
-	width: 10em;
-	height: 5.625em; /* Widescreen ratio */
-	margin-bottom: 1em;
-	margin-right: 1em;
-}
-
-.options.general table {
-	min-width: 8em;
-}
-
-.options table {
-	border-collapse: collapse;
-}
-
-.options td, .options th {
-	padding: 0.125em;
-}
-
-.options th {
-	font-weight: normal;
-	text-align: right;
-	vertical-align: top;
-}
-
-.options th label:after {
-	content: ":";
-}
-
-.options td {
-	width: 100%;
-}
-
-.options input[type=text],
-.options textarea,
-.options input[type=range] {
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	width: 100%;
-}
-
-.options.specific {
-	clear: both;
-}
-
-.tab-list {
-	overflow: auto;
-	margin-top: 0.5em;
-}
-
-.tab {
-	display: block;
-	float: left;
-	border: 1px solid white;
-	border-bottom-width: 0;
-}
-
-.tab:not(:last-child) {
-	border-right-width: 0;
-}
-
-.tab a {
-	display: block;
-	padding: 0.25em 0.5em;
-	text-decoration: none;
-}
-
-.tab-content {
-	border: 1px solid white;
-	padding: 1em;
-}
-
-.ui-tabs-hide {
-	display: none;
-}
-
-.item-list .item {
-	display: table;
-	width: 100%;
-	margin: 0.5em 0;
-}
-
-.item-list .item:first-child {
-	margin-top: 0;
-}
-
-	.item-list .item .content {
-		display: table-cell;
-		width: 100%;
+	.selected-item {
+		padding: 1em;
+		overflow: hidden;
 	}
-	
-	.item-list .item .move {
-		display: table-cell;
-		padding-right: 0.5em;
-	}
-	
-		.item-list .item .move img {
-			opacity: 0.35;
-			cursor: move;
+
+		.selected-item .action-list {
+			overflow: auto;
+			margin-bottom: 1em;
 		}
 
-	.item-list .item .remove {
-		display: table-cell;
-		padding-left: 0.5em;
-	}
+		.selected-item .action {
+			display: block;
+			float: left;
+		}
 
-.modifier-list .modifier {
-	display: block;
-	float: left;
-	margin-right: 1em;
-}
+		.selected-item .action:not(:last-child) {
+			margin-right: 0.5em;
+		}
+
+		.selected-item .action.remove {
+			float: right;
+		}
+		
+		.selected-item .preview {
+			float: left;
+			width: 10em;
+			height: 5.625em; /* Widescreen ratio */
+			margin-bottom: 1em;
+			margin-right: 1em;
+		}
+		
+		.selected-item .tab-list {
+			overflow: auto;
+			margin-top: 0.5em;
+		}
+		
+		.selected-item .tab-content {
+			padding: 1em;
+		}
+
+		.options.general table {
+			min-width: 8em;
+		}
+
+		.options table {
+			border-collapse: collapse;
+		}
+
+		.options td, .options th {
+			padding: 0.125em;
+		}
+
+		.options th {
+			font-weight: normal;
+			text-align: right;
+			vertical-align: top;
+		}
+
+		.options th label:after {
+			content: ":";
+		}
+
+		.options td {
+			width: 100%;
+		}
+
+		.options input[type=text],
+		.options textarea,
+		.options input[type=range] {
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			width: 100%;
+		}
+
+		.options.specific {
+			clear: both;
+		}
+		
+		.modifier-list .modifier {
+			display: block;
+			float: left;
+			margin-right: 1em;
+		}
+
+		.item-list .item {
+			display: table;
+			width: 100%;
+			margin: 0.5em 0;
+		}
+
+		.item-list .item:first-child {
+			margin-top: 0;
+		}
+
+			.item-list .item .content {
+				display: table-cell;
+				width: 100%;
+			}
+			
+			.item-list .item .move {
+				display: table-cell;
+				padding-right: 0.5em;
+			}
+			
+				.item-list .item .move img {
+					opacity: 0.35;
+					cursor: move;
+				}
+
+			.item-list .item .remove {
+				display: table-cell;
+				padding-left: 0.5em;
+			}
+
+/* Ambience styling */
 
 .theater {
 	right: 0;
@@ -362,83 +342,107 @@ body {
 	overflow: hidden;
 }
 
-.theater .instructions.outer {
-	position: absolute;
-	display: table;
-	width: 100%;
-	height: 100%;
-}
+	.theater .instructions.outer {
+		position: absolute;
+		display: table;
+		width: 100%;
+		height: 100%;
+	}
 
-.theater .instructions.inner {
-	display: table-cell;
-	vertical-align: middle;
-	padding: 2em;
-}
+		.theater .instructions.inner {
+			display: table-cell;
+			vertical-align: middle;
+			padding: 2em;
+		}
 
-.theater .instructions p {
-	text-align: center;
-	font-family: Georgia, serif;
-	color: white;
-	font-size: 1.25em;
-	margin: 1em 0;
-}
+		.theater .instructions p {
+			text-align: center;
+			font-family: Georgia, serif;
+			color: white;
+			font-size: 1.25em;
+			margin: 1em 0;
+		}
 
-.theater .action-form {
-	position: absolute;
-	top: 1em;
-	left: 1em;
-	z-index: 1;
-}
+	.theater .action-form {
+		position: absolute;
+		top: 1em;
+		left: 1em;
+		z-index: 1;
+	}
 
-.theater .action {
-	display: inline;
-}
+		.theater .action {
+			display: inline;
+		}
 
-.theater .action:not(:last-child) {
-	margin-right: 0.5em;
-}
+		.theater .action:not(:last-child) {
+			margin-right: 0.5em;
+		}
 
-.theater .layer {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	visibility: hidden;
-	opacity: 0;
-	cursor: inherit;
-}
+	.theater .layer {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		visibility: hidden;
+		opacity: 0;
+		cursor: inherit;
+	}
 
-.theater .layer .image {
-	position: absolute;
-	top: 0;
-	left: 0;
+		.theater .layer .image {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: contain;
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+
+		.theater .layer .video {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+
+		.theater .layer .text.outer {
+			position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
+			display: table;
+			height: 100%;
+			margin: 0 auto;
+			font-family: serif;
+		}
+
+		.theater .layer .text.inner {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			color: white;
+			white-space: pre-line;
+			text-rendering: optimizeLegibility;
+		}
+
+/* Scene previews, used in several places */
+
+.preview {
 	background-position: center center;
 	background-repeat: no-repeat;
-	background-size: contain;
-	display: block;
-	width: 100%;
-	height: 100%;
+	overflow: hidden;
 }
 
-.theater .layer .video {
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: block;
-	width: 100%;
-	height: 100%;
-}
-
-.theater .layer .text.outer {
-	position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
+.preview .text.outer {
 	display: table;
 	height: 100%;
 	margin: 0 auto;
 	font-family: serif;
 }
 
-.theater .layer .text.inner {
+.preview .text.inner {
 	display: table-cell;
 	vertical-align: middle;
 	text-align: center;
@@ -447,6 +451,16 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-.ui-sortable-helper {
-	cursor: move !important;
+/* Splitter */
+
+.splitter {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0.25em;
+	height: 100%;
+	border: 1px solid white;
+	border-top-width: 0;
+	border-bottom-width: 0;
+	cursor: w-resize;
 }

@@ -30,12 +30,16 @@ div, li {
 	background-color: hsl(0, 0%, 12.5%);
 }
 
-.tab {
-	border-bottom-width: 0;
+.tab:hover:not(.ui-tabs-selected) {
+	border-color: hsl(0, 0%, 17.5%);
 }
 
 .tab a {
 	color: hsl(0, 0%, 75%);
+}
+
+.selected-item .tab-content {
+	background-color: hsl(0, 0%, 12.5%);
 }
 
 input[type=text], input[type=number], input[type=color], select, textarea {

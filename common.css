@@ -55,8 +55,10 @@ div, li {
 .tab {
 	display: block;
 	float: left;
-	border-width: 1px;
-	border-bottom-width: 0;
+}
+
+.tab.ui-tabs-selected, .tab:hover {
+	border-bottom-width: 2px;
 }
 
 .tab:not(:last-child) {
@@ -71,10 +73,6 @@ div, li {
 		display: block;
 		padding: 0.25em 0.5em;
 		text-decoration: none;
-	}
-	
-	.tab-content {
-		border-width: 1px;
 	}
 
 .ui-sortable-helper {
@@ -109,7 +107,12 @@ body {
 }
 
 	.editor > .menu-bar {
-		margin: 1em 2em;
+		position: absolute;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		width: 100%;
+		line-height: 2em;
+		padding: 1em 2em 0 2em;
 		overflow: auto;
 	}
 
@@ -153,203 +156,230 @@ body {
 		vertical-align: middle;
 }
 
-.list-view {
-	float: left;
-	clear: left;
-	width: 40%;
+
+.view-list {
+	width: 100%;
+	height: 100%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	padding: 0 0.5em 2em 2em;
+	padding-top: 4em;
 }
-
-	.list-item {
-		position: relative;
-		display: block;
-		margin-bottom: 1em;
-		border-width: 1px;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
 	
-	.list-item:hover, .list-item.selected {
-		cursor: pointer;
-	}
-	
-		.list-item .preview {
-			display: inline-block;
-			vertical-align: middle;
-			width: 5em;
-			height: 2.8125em; /* Widescreen ratio */
-			margin-right: 0.5em;
-		}
-			.list-item .preview .text.outer {
-				font-size: 5em; /* Text inside will be scaled relative to the box's width. */
-			}	
-		
-		.list-item .key {
-			opacity: 0.5;
-		}
-		
-		.list-item .key:before {
-			content: "(";
-		}
-		
-		.list-item .key:after {
-			content: ")";
-		}
-		
-		.list-item .icons {
-			position: absolute;
-			right: 0;
-			top: 0;
-			line-height: 2.8125em;
-			margin-right: 0.75em;
-		}
-		
-			.list-item .icons img {
-				opacity: 0.35;
-			}
-
-	.add-item {
-		display: block;
-		margin-bottom: 1em;
-		padding: 0 1em;
+	.view-list > .tab-list {
+		position: absolute;
+		left: 2em;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
 	}
 
-	.add-item button {
+	.scene-view {
+		height: 100%;
 		width: 100%;
-		font-size: 1.5em;
-		padding: 0.25em;
+		padding: 2em;
+		padding-top: 3em;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
 	}
 
-.detail-view {
-	float: right;
-	clear: right;
-	width: 60%;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	padding: 0 2em 2em 0.5em;
-}
-
-	.selected-item {
-		padding: 1em;
-		border-width: 1px;
-		overflow: hidden;
-	}
-
-		.selected-item .action-list {
-			overflow: auto;
-			margin-bottom: 1em;
-		}
-
-		.selected-item .action {
-			display: block;
+		.list-view {
 			float: left;
-		}
-
-		.selected-item .action:not(:last-child) {
-			margin-right: 0.5em;
-		}
-
-		.selected-item .action.remove {
-			float: right;
-		}
-		
-		.selected-item .preview {
-			float: left;
-			width: 10em;
-			height: 5.625em; /* Widescreen ratio */
-			margin-bottom: 1em;
-			margin-right: 1em;
-			border-width: 1px;
-		}
-			.selected-item .preview .text.outer {
-				font-size: 10em; /* Text inside will be scaled relative to the box's width. */
-			}
-		
-		.selected-item .tab-list {
-			overflow: auto;
-			margin-top: 0.5em;
-		}
-		
-		.selected-item .tab-content {
-			padding: 1em;
-		}
-
-		.options.general table {
-			min-width: 8em;
-		}
-
-		.options table {
-			border-collapse: collapse;
-		}
-
-		.options td, .options th {
-			padding: 0.125em;
-		}
-
-		.options th {
-			font-weight: normal;
-			text-align: right;
-			vertical-align: top;
-		}
-
-		.options th label:after {
-			content: ":";
-		}
-
-		.options td {
-			width: 100%;
-		}
-
-		.options input[type=text],
-		.options textarea,
-		.options input[type=range] {
+			clear: left;
 			box-sizing: border-box;
 			-moz-box-sizing: border-box;
-			width: 100%;
+			width: 40%;
+			height: 100%;
+			overflow: auto;
 		}
 
-		.options.specific {
-			clear: both;
-		}
-		
-		.modifier-list .modifier {
-			display: block;
-			float: left;
-			margin-right: 1em;
-		}
+			.list-item {
+				position: relative;
+				display: block;
+				margin-bottom: 1em;
+				border-width: 1px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+			
+			.list-item:hover, .list-item.selected {
+				cursor: pointer;
+			}
+			
+				.list-item .preview {
+					display: inline-block;
+					vertical-align: middle;
+					width: 5em;
+					height: 2.8125em; /* Widescreen ratio */
+					margin-right: 0.5em;
+				}
+					.list-item .preview .text.outer {
+						font-size: 5em; /* Text inside will be scaled relative to the box's width. */
+					}	
+				
+				.list-item .key {
+					opacity: 0.5;
+				}
+				
+				.list-item .key:before {
+					content: "(";
+				}
+				
+				.list-item .key:after {
+					content: ")";
+				}
+				
+				.list-item .icons {
+					position: absolute;
+					right: 0;
+					top: 0;
+					line-height: 2.8125em;
+					margin-right: 0.75em;
+				}
+				
+					.list-item .icons img {
+						opacity: 0.35;
+					}
 
-		.item-list .item {
-			display: table;
-			width: 100%;
-			margin: 0.5em 0;
-		}
+			.add-item {
+				display: block;
+				padding: 0 1em;
+			}
 
-		.item-list .item:first-child {
-			margin-top: 0;
-		}
-
-			.item-list .item .content {
-				display: table-cell;
+			.add-item button {
 				width: 100%;
+				font-size: 1.5em;
+				padding: 0.25em;
 			}
-			
-			.item-list .item .move {
-				display: table-cell;
-				padding-right: 0.5em;
+
+		.detail-view {
+			float: right;
+			clear: right;
+			width: 60%;
+			height: 100%;
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			padding-left: 1em;
+			overflow: auto;
+		}
+
+			.selected-item {
+				padding: 1em;
+				border-width: 1px;
+				overflow: hidden;
 			}
-			
-				.item-list .item .move img {
-					opacity: 0.35;
-					cursor: move;
+
+				.selected-item .action-list {
+					overflow: auto;
+					margin-bottom: 1em;
 				}
 
-			.item-list .item .remove {
-				display: table-cell;
-				padding-left: 0.5em;
-			}
+				.selected-item .action {
+					display: block;
+					float: left;
+				}
+
+				.selected-item .action:not(:last-child) {
+					margin-right: 0.5em;
+				}
+
+				.selected-item .action.remove {
+					float: right;
+				}
+				
+				.selected-item .preview {
+					float: left;
+					width: 10em;
+					height: 5.625em; /* Widescreen ratio */
+					margin-bottom: 1em;
+					margin-right: 1em;
+					border-width: 1px;
+				}
+					.selected-item .preview .text.outer {
+						font-size: 10em; /* Text inside will be scaled relative to the box's width. */
+					}
+				
+				.selected-item .tab-list {
+					overflow: auto;
+					margin-top: 0.5em;
+				}
+				
+				.selected-item .tab-content {
+					padding: 1em;
+				}
+
+				.options.general table {
+					min-width: 8em;
+				}
+
+				.options table {
+					border-collapse: collapse;
+				}
+
+				.options td, .options th {
+					padding: 0.125em;
+				}
+
+				.options th {
+					font-weight: normal;
+					text-align: right;
+					vertical-align: top;
+				}
+
+				.options th label:after {
+					content: ":";
+				}
+
+				.options td {
+					width: 100%;
+				}
+
+				.options input[type=text],
+				.options textarea,
+				.options input[type=range] {
+					box-sizing: border-box;
+					-moz-box-sizing: border-box;
+					width: 100%;
+				}
+
+				.options.specific {
+					clear: both;
+				}
+				
+				.modifier-list .modifier {
+					display: block;
+					float: left;
+					margin-right: 1em;
+				}
+
+				.item-list .item {
+					display: table;
+					width: 100%;
+					margin: 0.5em 0;
+				}
+
+				.item-list .item:first-child {
+					margin-top: 0;
+				}
+
+					.item-list .item .content {
+						display: table-cell;
+						width: 100%;
+					}
+					
+					.item-list .item .move {
+						display: table-cell;
+						padding-right: 0.5em;
+					}
+					
+						.item-list .item .move img {
+							opacity: 0.35;
+							cursor: move;
+						}
+
+					.item-list .item .remove {
+						display: table-cell;
+						padding-left: 0.5em;
+					}
 
 /* Ambience styling */
 

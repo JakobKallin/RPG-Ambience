@@ -349,7 +349,7 @@
 									<tr>
 										<th><label for="font-size">Size</label></th>
 										<td>
-											<input id="font-size" type="range" min="3" max="30" step="0.5" data-bind="value: size">
+											<input id="font-size" type="number" min="3" max="30" step="0.5" data-bind="value: size">
 										</td>
 									</tr>
 									<tr>
@@ -369,7 +369,8 @@
 									<tr>
 										<th><label for="text-padding">Padding</label></th>
 										<td>
-											<input id="text-padding" type="range" min="0" max="40" step="2" data-bind="value: padding">
+											<input id="text-padding" type="number" min="0" max="40" step="2" data-bind="value: padding">
+											<span class="note">% of screen width</span>
 										</td>
 									</tr>
 								</table>

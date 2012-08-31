@@ -77,6 +77,7 @@ var ViewModel = function(editorWidth) {
 	self.createAdventure = function() {
 		self.adventure(new AdventureViewModel(self));
 		self.adventure().add();
+		self.adventure().select(self.adventure().scenes[0]);
 	};
 	
 	self.loadAdventure = function(config) {
@@ -91,6 +92,10 @@ var ViewModel = function(editorWidth) {
 			Object.overlay(newScene, sceneConfig);
 			adventure.scenes.push(newScene);
 		});
+		
+		if ( adventure.scenes.length > 0 ) {
+			adventure.select(adventure.scenes[0]);
+		}
 	};
 	
 	self.playScene = function(scene) {
@@ -268,18 +273,13 @@ window.addEventListener('load', function() {
 	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 	viewModel = new ViewModel(0.6);
 	viewModel.start();
+	ko.applyBindings(viewModel);
 	
 	if ( localStorage.adventure ) {
 		var config = JSON.parse(localStorage.adventure);
 		viewModel.loadAdventure(config);
 	} else {
 		viewModel.createAdventure();
-	}
-	
-	ko.applyBindings(viewModel);
-	
-	if ( viewModel.adventure().scenes.length > 0 ) {
-		viewModel.adventure().select(viewModel.adventure().scenes[0]);
 	}
 	
 	$(document.getElementById('view-list')).tabs();

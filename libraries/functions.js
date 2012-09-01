@@ -44,9 +44,21 @@ String.prototype.startsWith = function(prefix) {
 };
 
 String.prototype.endsWith = function(suffix) {
-	return this.indexOf(suffix) === this.length - suffix.length;
+	return this.lastIndexOf(suffix) === this.length - suffix.length;
 };
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
+
+Object.defineProperty(String.prototype, 'isAbsoluteUri', {
+	get: function() {
+		return Boolean(this.match(/^[a-z]([a-z]|\d|[+-.])*:\/\//i));
+	}
+});
+
+Object.defineProperty(String.prototype, 'isRelativeUri', {
+	get: function() {
+		return !this.isAbsoluteUri;
+	}
+});

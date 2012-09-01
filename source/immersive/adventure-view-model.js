@@ -22,10 +22,10 @@ var AdventureViewModel = function(editor) {
 				path: '',
 				size: 'contain',
 				get css() {
-					return 'url("' + encodeURI(this.absolutePath) + '")';						
+					return 'url("' + encodeURI(this.absoluteUri) + '")';						
 				},
-				get absolutePath() {
-					return self.absolutePath(this.path);
+				get absoluteUri() {
+					return self.absoluteUri(this.path);
 				}
 			},
 			
@@ -87,7 +87,7 @@ var AdventureViewModel = function(editor) {
 		converted.fadesOut = scene.fadeOut;
 		
 		if ( scene.image.path.length > 0 ) {
-			converted.image = scene.image.absolutePath;
+			converted.image = scene.image.absoluteUri;
 			converted.imageStyle = { backgroundSize: scene.image.size };
 		}
 		
@@ -96,7 +96,7 @@ var AdventureViewModel = function(editor) {
 		});
 		if ( actualSoundFiles.length > 0 ) {
 			converted.sounds = actualSoundFiles.map(function(file) {
-				return self.absolutePath(file.path);
+				return self.absoluteUri(file.path);
 			});
 		}
 		
@@ -250,14 +250,44 @@ var AdventureViewModel = function(editor) {
 		}
 	};
 	
-	self.absolutePath = function(path) {
-		var pathIsAbsolute = path.startsWith('file://') || path.startsWith('http://');
-		if ( !pathIsAbsolute ) {
-			return self.basePath + path;
+	self.absoluteUri = function(path) {
+		// If the path is already an absolute URI, respect that.
+		if ( path.isAbsoluteUri ) {
+			return path;
 		} else {
-			return path;			
+			if ( computerIsWindows ) {
+				path = path.replace(/\\/g, '/');
+			}
+			return self.baseUri + path;
 		}
 	};
+	
+	var computerIsWindows = navigator.platform.startsWith('Win');
+	Object.defineProperty(self, 'baseUri', {
+		get: function() {
+			var baseUri = self.basePath;
+			
+			// If no base path has been defined, leave it as relative to the document.
+			if ( baseUri.length === 0 ) {
+				return baseUri;
+			// If the base path has no URI protocol, treat it as a file path.
+			} else if ( self.basePath.isRelativeUri ) {
+				baseUri = self.basePath;
+				if ( computerIsWindows ) {
+					baseUri = baseUri.replace(/\\/g, '/');
+					baseUri = '/' + baseUri;
+				}
+				baseUri = 'file://' + baseUri;
+			}
+			
+			// The trailing slash makes path combination easier later on.
+			if ( !baseUri.endsWith('/') ) {
+				baseUri += '/';
+			}
+			
+			return baseUri;
+		}
+	});
 	
 	return self;
 };

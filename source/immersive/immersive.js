@@ -50,6 +50,11 @@ var ViewModel = function(editorWidth) {
 		return 'data:application/json;base64,' + self.adventureString();
 	});
 	
+	self.saveAdventure = function() {
+		self.serializeAdventure();
+		return true;
+	};
+	
 	self.serializeAdventure = function() {
 		var state = {
 			basePath: self.adventure().basePath,

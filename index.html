@@ -94,48 +94,50 @@
 					<!-- ko with: adventure -->
 						<div class="list-view">
 							<ul data-bind="foreach: scenes, sortable: true">
-								<li class="list-item" data-bind="click: $parent.select, css: { selected: isSelected }">
-									<div class="preview" data-bind="
-										style: {
-											backgroundColor: background,
-											backgroundImage: image.css,
-											backgroundSize: image.size
-										}
-									">
-										<div class="text outer">
-											<div
-												class="text inner"
-												data-bind="
-													text: text.string,
-													style: {
-														fontSize: text.previewSize,
-														fontFamily: text.font,
-														fontStyle: text.style,
-														fontWeight: text.weight,
-														color: text.color,
-														textAlign: text.alignment,
-														padding: text.previewPadding
-													}
-												"></div>
+								<li class="list-item" data-bind="css: { selected: isSelected }">
+									<a href="#" data-bind="click: $parent.select">
+										<div class="preview" data-bind="
+											style: {
+												backgroundColor: background,
+												backgroundImage: image.css,
+												backgroundSize: image.size
+											}
+										">
+											<div class="text outer">
+												<div
+													class="text inner"
+													data-bind="
+														text: text.string,
+														style: {
+															fontSize: text.previewSize,
+															fontFamily: text.font,
+															fontStyle: text.style,
+															fontWeight: text.weight,
+															color: text.color,
+															textAlign: text.alignment,
+															padding: text.previewPadding
+														}
+													"></div>
+											</div>
 										</div>
-									</div>
-									<!-- ko if: name -->
-										<span data-bind="text: name"></span>
-									<!-- /ko -->
-									<!-- ko ifnot: name -->
-										<span class="note">Untitled</span>
-									<!-- /ko -->
-									<!-- ko if: key -->
-										<span data-bind="text: key" class="key"></span>
-									<!-- /ko -->
-									<div class="icons">
-										<!-- ko if: mixin -->
-											<img src="images/mixin.svg" title="Mixin">
+										<!-- ko if: name -->
+											<span data-bind="text: name"></span>
 										<!-- /ko -->
-										<!-- ko if: isForeground -->
-											<img src="images/foreground.svg" title="Foreground">
+										<!-- ko ifnot: name -->
+											<span class="note">Untitled</span>
 										<!-- /ko -->
-									</div>
+										<!-- ko if: key -->
+											<span data-bind="text: key" class="key"></span>
+										<!-- /ko -->
+										<div class="icons">
+											<!-- ko if: mixin -->
+												<img src="images/mixin.svg" title="Mixin">
+											<!-- /ko -->
+											<!-- ko if: isForeground -->
+												<img src="images/foreground.svg" title="Foreground">
+											<!-- /ko -->
+										</div>
+									</a>
 								</li>
 							</ul>
 							<div class="add-item">

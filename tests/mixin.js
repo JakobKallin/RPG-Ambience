@@ -83,7 +83,7 @@ describe('Ambience mixin', function() {
 		});
 	});
 	
-	it('respects current fade level when mixed-in during fade', function() {
+	it('respects current visual fade level when mixed-in during fade', function() {
 		runs(function() {
 			var base = new Ambience.Scene();
 			base.image = 'test-image.jpg';
@@ -103,8 +103,35 @@ describe('Ambience mixin', function() {
 		waits(500);
 		
 		runs(function() {
-			expect(Number(backgroundNode.style.opacity)).toBeGreaterThan(0.25);
-			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.75);
+			var opacity = Number(backgroundNode.style.opacity);
+			expect(opacity).toBeGreaterThan(0.25);
+			expect(opacity).toBeLessThan(0.75);
+		});
+	});
+	
+	it('respects current audio fade level when mixed-in during fade', function() {
+		runs(function() {
+			var base = new Ambience.Scene();
+			base.sounds = ['test-audio.ogg'];
+			base.fadeDuration = 2000;
+			ambience.play(base);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			var mixin = new Ambience.Scene();
+			mixin.isMixin = true;
+			mixin.sounds = ['test-audio.ogg'];
+			ambience.play(mixin);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			var volume = backgroundNode.getElementsByTagName('audio')[0].volume;
+			expect(volume).toBeGreaterThan(0.25);
+			expect(volume).toBeLessThan(0.75);
 		});
 	});
 	

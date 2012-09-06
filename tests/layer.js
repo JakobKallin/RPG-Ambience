@@ -123,4 +123,21 @@ describe('Ambience layer', function() {
 			expect(backgroundNode.querySelectorAll('.video').length).toBe(0);
 		});
 	});
+	
+	it('plays new audio before complete fade duration of previous scene has passed', function() {
+		var scene = new Ambience.Scene();
+		
+		runs(function() {
+			scene.sounds = ['test-audio.ogg'];
+			scene.fadeDuration = 2000;
+			ambience.play(scene);
+		});
+		
+		waits(1000);
+		
+		runs(function() {
+			ambience.fadeOutBackground();
+			ambience.play(scene);
+		});
+	});
 });

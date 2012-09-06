@@ -13,16 +13,16 @@ Ambience = function(background, foreground) {
 		background.playScene(scene);
 	}
 	
-	function stopBackground(nextScene) {
-		background.stopScene(nextScene);
+	function stopBackground() {
+		background.stopScene();
 	}
 	
 	function playForeground(scene) {
 		foreground.playScene(scene);
 	}
 	
-	function stopForeground(nextScene) {
-		foreground.stopScene(nextScene);
+	function stopForeground() {
+		foreground.stopScene();
 	}
 	
 	function fadeOutForeground() {

@@ -35,7 +35,7 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 			var sound = new Ambience.Sound(trackPath, container);
 			var onEnded = function() { onTrackEnded(sound); };
 			
-			sound.play(fade.remaining, state.volume, fade.endValue, { onTimeUpdate: onTimeUpdate, onEnded: onEnded});
+			sound.play(fade.remaining, state.volume, fade.endValue, { onTimeUpdate: onTimeUpdate, onEnded: onEnded });
 			sounds.push(sound);
 		}
 	}
@@ -46,6 +46,7 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 	}
 	
 	function stop() {
+		fade.complete(); // This causes stop() to be run twice, which works but gives confusing stack traces.
 		sounds.map(function(sound) { sound.stop(); });
 		sounds = [];
 		scene = null;

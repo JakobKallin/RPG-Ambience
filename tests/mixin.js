@@ -149,7 +149,7 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('displays visual mixin even when previous scene was not visual', function() {
-		var scene = Ambience.Scene();
+		var scene = new Ambience.Scene();
 		scene.sounds = ['test-audio-2s.ogg'];
 		ambience.play(scene);
 		
@@ -159,5 +159,21 @@ describe('Ambience mixin', function() {
 		ambience.play(mixin);
 		
 		expect(backgroundNode.style.visibility).toBe('visible');
+	});
+	
+	it('respects volume of mixed-in scene', function() {
+		var scene = new Ambience.Scene();
+		scene.sounds = ['test-audio-2s.ogg'];
+		ambience.play(scene);
+		
+		var mixin = new Ambience.Scene();
+		mixin.isMixin = true;
+		mixin.sounds = ['test-audio-2s.ogg'];
+		mixin.volume = 0.5;
+		ambience.play(mixin);
+		
+		var volume = backgroundNode.getElementsByTagName('audio')[0].volume;
+		expect(volume).toBeGreaterThan(0.45);
+		expect(volume).toBeLessThan(0.55);
 	});
 });

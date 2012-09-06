@@ -129,4 +129,8 @@ function Animation(object, property) {
 	Object.defineProperty(this, 'direction', {
 		get: function() { return direction; }
 	});
+	
+	Object.defineProperty(this, 'endValue', {
+		get: function() { return endValue; }
+	});
 }

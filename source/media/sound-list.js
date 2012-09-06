@@ -35,12 +35,7 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 			var sound = new Ambience.Sound(trackPath, container);
 			var onEnded = function() { onTrackEnded(sound); };
 			
-			if ( fade.direction === 'increase' ) {
-				var endVolume = scene.volume;
-			} else {
-				var endVolume = 0;
-			}
-			sound.play(fade.remaining, state.volume, endVolume, { onTimeUpdate: onTimeUpdate, onEnded: onEnded});
+			sound.play(fade.remaining, state.volume, fade.endValue, { onTimeUpdate: onTimeUpdate, onEnded: onEnded});
 			sounds.push(sound);
 		}
 	}

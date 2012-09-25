@@ -96,7 +96,6 @@ describe('Ambience layer', function() {
 			scene.image = 'test-image.jpg';
 			scene.sounds = ['test-audio.ogg'];
 			scene.text = 'Test';
-			scene.video = 'test-video.webm';
 			
 			ambience.play(scene);
 			
@@ -104,7 +103,6 @@ describe('Ambience layer', function() {
 			expect(backgroundNode.querySelectorAll('.image').length).toBe(1);
 			expect(audioNodes.length).toBe(1);
 			expect(backgroundNode.querySelectorAll('.text.outer').length).toBe(1);
-			expect(backgroundNode.querySelectorAll('.video').length).toBe(1);
 		});
 		
 		waits(1500);
@@ -120,7 +118,6 @@ describe('Ambience layer', function() {
 			expect(backgroundNode.querySelectorAll('.image').length).toBe(0);
 			expect(audioNodes.length).toBe(0);
 			expect(backgroundNode.querySelectorAll('.text').length).toBe(0);
-			expect(backgroundNode.querySelectorAll('.video').length).toBe(0);
 		});
 	});
 	

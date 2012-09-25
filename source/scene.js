@@ -15,7 +15,6 @@ Ambience.Scene.base = {
 	get isVisual() {
 		return (
 			this.image ||
-			this.video ||
 			this.text
 		);
 	},

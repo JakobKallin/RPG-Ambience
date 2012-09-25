@@ -9,8 +9,7 @@ Ambience.Layer = function(node) {
 		'backgroundColor': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
 		'sounds': new Ambience.SoundList(node, stopSceneIfSoundOnly),
-		'text': new Ambience.Text(node),
-		'video': new Ambience.Video(node)
+		'text': new Ambience.Text(node)
 	};
 	
 	var playingMedia = [];

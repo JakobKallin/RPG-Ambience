@@ -2,20 +2,17 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 	var scene;
 	var trackIndex;
 	var sounds = [];
+	var fade;
 	
-	// Dummy animation object used for tracking what state sound objects should be in.
-	var state = { volume: 0 };
-	var fade = new Animation(state, 'volume');
-	
-	function play(newScene) {
+	function play(newScene, newFade) {
 		scene = newScene;
+		fade = newFade;
 		
-		fade.start(scene.volume, scene.fadeInDuration)
 		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
-		playNextTrack();
+		playNextTrack(fade);
 	}
 	
-	function playNextTrack() {
+	function playNextTrack(fade) {
 		// We need this so that we stop audio-only effects after they have actually played once.
 		var hasPlayedBefore = trackIndex !== -1;
 		
@@ -32,24 +29,19 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 			stopSceneIfSoundOnly();
 		} else if ( scene.loops || !allTracksHavePlayed ) {
 			var trackPath = scene.sounds[trackIndex];
-			var sound = new Ambience.Sound(trackPath, container);
+			var sound = new Ambience.Sound(trackPath, container, fade, scene.volume);
 			var onEnded = function() { onTrackEnded(sound); };
 			
-			sound.play(fade.remaining, state.volume, fade.endValue, { onTimeUpdate: onTimeUpdate, onEnded: onEnded });
+			sound.play({ onTimeUpdate: onTimeUpdate, onEnded: onEnded });
 			sounds.push(sound);
 		}
 	}
 	
-	function fadeOut() {
-		fade.start(0, scene.fadeOutDuration, { onEnded: stop });
-		sounds.map(function(sound) { sound.fadeOut(scene.fadeOutDuration); });
-	}
-	
 	function stop() {
-		fade.complete(); // This causes stop() to be run twice, which works but gives confusing stack traces.
 		sounds.map(function(sound) { sound.stop(); });
 		sounds = [];
 		scene = null;
+		fade = null;
 	}
 	
 	// Below, "this" refers to the <audio> element playing a sound.
@@ -74,12 +66,11 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 	function crossover() {
 		// New track starts early but does not fade in.
 		// Likewise, current track does not fade out but simply ends normally (with onTrackEnded eventually removing it).
-		playNextTrack();
+		playNextTrack(fade);
 	}
 	
 	return {
 		play: play,
-		fadeOut: fadeOut,
 		stop: stop
 	};
 };

@@ -2,7 +2,7 @@ Ambience.Layer = function(node) {
 	var isFadingIn;
 	var isFadingOut;
 	var fadeOutDuration;
-	var fadeAnimation = new Animation(node.style, 'opacity');
+	var fade;
 	var stopTimer;
 	
 	var mediaPlayers = {
@@ -55,7 +55,7 @@ Ambience.Layer = function(node) {
 		
 		for ( var mediaType in mediaPlayers ) {
 			if ( scene[mediaType] ) {
-				mediaPlayers[mediaType].play(scene);
+				mediaPlayers[mediaType].play(scene, fade);
 				playingMedia.push(mediaType);
 			}
 		}
@@ -75,7 +75,7 @@ Ambience.Layer = function(node) {
 		
 		for ( var mediaType in mediaPlayers ) {
 			if ( mixin[mediaType] ) {
-				mediaPlayers[mediaType].play(mixin);
+				mediaPlayers[mediaType].play(mixin, fade);
 				playingMedia.push(mediaType);
 			}
 		}
@@ -87,7 +87,7 @@ Ambience.Layer = function(node) {
 		}
 		
 		isFadingIn = true;
-		fadeAnimation.start(1, scene.fadeInDuration, {onEnded: onFadeInEnded});		
+		fade.play(scene.fadeInDuration, {onEnded: onFadeInEnded});		
 	}
 	
 	function onFadeInEnded() {
@@ -95,9 +95,16 @@ Ambience.Layer = function(node) {
 	}
 	
 	function stopFade() {
-		fadeAnimation.stop();
 		isFadingIn = false;
 		isFadingOut = false;
+		
+		if ( fade ) {
+			fade.stop();
+		}
+		
+		fade = new Manymation();
+		fade.track(node.style, 'opacity', 1);
+		fade.onRewindEnded(stopScene);
 		
 		window.clearTimeout(stopTimer);
 		stopTimer = null;
@@ -109,12 +116,7 @@ Ambience.Layer = function(node) {
 		} else {
 			isFadingOut = true;
 			
-			// Take the current opacity into account, if the scene has been halfway faded in.
-			var fadeDuration = fadeOutDuration * node.style.opacity;
-			fadeAnimation.start(0, fadeDuration);
-			
-			// Make sure the scene stops entirely after fading out.
-			stopTimer = window.setTimeout(stopScene, fadeDuration);
+			fade.rewind(fadeOutDuration);
 			
 			for ( var mediaType in mediaPlayers ) {
 				if ( playingMedia.contains(mediaType) && 'fadeOut' in mediaPlayers[mediaType] ) {

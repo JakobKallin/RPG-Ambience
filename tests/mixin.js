@@ -15,6 +15,17 @@ describe('Ambience mixin', function() {
 		ambience = new Ambience(background, foreground);
 	});
 	
+	beforeEach(function() {
+		this.addMatchers({
+			toBeBetween: function(first, second) {
+				var lowest = Math.min(first, second);
+				var highest = Math.max(first, second);
+				
+				return lowest <= this.actual && this.actual <= highest;
+			}
+		});
+	});
+	
 	afterEach(function() {
 		document.body.removeChild(backgroundNode);
 	});
@@ -78,8 +89,7 @@ describe('Ambience mixin', function() {
 		waits(1000);
 		
 		runs(function() {
-			expect(Number(backgroundNode.style.opacity)).toBeGreaterThan(0.25);
-			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.75);
+			expect(Number(backgroundNode.style.opacity)).toBeBetween(0.25, 0.75);
 		});
 	});
 	
@@ -104,8 +114,7 @@ describe('Ambience mixin', function() {
 		
 		runs(function() {
 			var opacity = Number(backgroundNode.style.opacity);
-			expect(opacity).toBeGreaterThan(0.25);
-			expect(opacity).toBeLessThan(0.75);
+			expect(opacity).toBeBetween(0.25, 0.75);
 		});
 	});
 	
@@ -130,8 +139,7 @@ describe('Ambience mixin', function() {
 		
 		runs(function() {
 			var volume = backgroundNode.getElementsByTagName('audio')[0].volume;
-			expect(volume).toBeGreaterThan(0.25);
-			expect(volume).toBeLessThan(0.75);
+			expect(volume).toBeBetween(0.25, 0.75);
 		});
 	});
 	
@@ -191,16 +199,21 @@ describe('Ambience mixin', function() {
 	it('respects volume of mixed-in scene', function() {
 		var scene = new Ambience.Scene();
 		scene.sounds = ['test-audio-2s.ogg'];
-		ambience.play(scene);
 		
-		var mixin = new Ambience.Scene();
-		mixin.isMixin = true;
-		mixin.sounds = ['test-audio-2s.ogg'];
-		mixin.volume = 0.5;
-		ambience.play(mixin);
+		runs(function() {
+			ambience.play(scene);
+			var mixin = new Ambience.Scene();
+			mixin.isMixin = true;
+			mixin.sounds = ['test-audio-2s.ogg'];
+			mixin.volume = 0.5;
+			ambience.play(mixin);
+		});
 		
-		var volume = backgroundNode.getElementsByTagName('audio')[0].volume;
-		expect(volume).toBeGreaterThan(0.45);
-		expect(volume).toBeLessThan(0.55);
+		waits(500);
+		
+		runs(function() {
+			var volume = backgroundNode.getElementsByTagName('audio')[0].volume;
+			expect(volume).toBeBetween(0.45, 0.55);
+		});
 	});
 });

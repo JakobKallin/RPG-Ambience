@@ -2,6 +2,8 @@
 [yaml]: http://en.wikipedia.org/wiki/YAML
 [effect]: #effect
 
+*Note: This project is currently undergoing major revisions, including the addition of a graphical user interface.*
+
 # RPG Ambience
 
 RPG Ambience enables you to play audio and show visuals in fullscreen during tabletop RPG sessions, using your monitor as the stage. The audio and visuals are grouped into **scenes**, which you define in an **adventure file**. You control the scenes using your keyboard, which lets you start and stop them at any time during the session.
@@ -150,7 +152,7 @@ scenes:
     [...]
 templates:
     intro:
-        text: A long time ago…
+        text: A long time agoï¿½
         text-style:
             font-family: Georgia
             font-size: 40px
@@ -165,7 +167,7 @@ The `text-style` property defines how the message defined in the `text` property
 
 #### Example
 ```yaml
-text: Once upon a time…
+text: Once upon a timeï¿½
 textStyle:
     font-family: Georgia
     font-size: 40px

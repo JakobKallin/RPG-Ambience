@@ -20,6 +20,7 @@ var AdventureViewModel = function(editor) {
 			
 			image: {
 				path: '',
+				name: '',
 				size: 'contain',
 				get css() {
 					return 'url("' + encodeURI(this.absoluteUri) + '")';						
@@ -31,6 +32,7 @@ var AdventureViewModel = function(editor) {
 					var image = this;
 					var file = changeEvent.target.files[0];
 					if ( file ) {
+						image.name = file.name;
 						var reader = new FileReader();
 						reader.readAsDataURL(file);
 						reader.onload = function(loadEvent) {

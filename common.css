@@ -341,6 +341,10 @@ body {
 				.options td {
 					width: 100%;
 				}
+				
+				.options td.remove {
+					vertical-align: top;
+				}
 
 				.options input[type=text],
 				.options textarea,

@@ -28,6 +28,10 @@ var AdventureViewModel = function(editor) {
 				get absoluteUri() {
 					return self.absoluteUri(this.path);
 				},
+				reset: function() {
+					this.path = '';
+					this.name = '';
+				},
 				onSelected: function(viewModel, changeEvent) {
 					var image = this;
 					var file = changeEvent.target.files[0];

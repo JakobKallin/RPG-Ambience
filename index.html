@@ -20,6 +20,7 @@
 		<script src="libraries/manymation.js"></script>
 		<script src="libraries/preloader.js"></script>
 		<script src="libraries/key.js"></script>
+		<script src="libraries/file-button.js"></script>
 		
 		<script src="source/ambience.js"></script>
 		<script src="source/media/image.js"></script>
@@ -216,16 +217,21 @@
 										<table>
 											<tr>
 												<th>
-													<label for="image-file">File</label>
+													<button
+														type="button"
+														data-bind="event: {
+															change: image.onSelected
+														}"
+														class="file"
+														>Choose Image</button>
 												</th>
 												<td>
-													<input
-														id="image-file"
-														type="text"
-														data-bind="
-															value: image.path,
-															valueUpdate: 'afterkeydown',
-															attr: { placeholder: $root.pathPlaceholder }">
+													<!-- ko if: image.path -->
+														<span data-bind="text: image.path"></span>
+													<!-- /ko -->
+													<!-- ko if: !image.path -->
+														<span class="note">No image selected</span>
+													<!-- /ko -->
 												</td>
 											</tr>
 											<tr>

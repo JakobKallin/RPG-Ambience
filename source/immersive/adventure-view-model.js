@@ -26,6 +26,17 @@ var AdventureViewModel = function(editor) {
 				},
 				get absoluteUri() {
 					return self.absoluteUri(this.path);
+				},
+				onSelected: function(viewModel, changeEvent) {
+					var image = this;
+					var file = changeEvent.target.files[0];
+					if ( file ) {
+						var reader = new FileReader();
+						reader.readAsDataURL(file);
+						reader.onload = function(loadEvent) {
+							image.path = loadEvent.target.result;
+						};
+					};
 				}
 			},
 			
@@ -136,6 +147,10 @@ var AdventureViewModel = function(editor) {
 			}
 		});
 		specificOptions.tabs('select', selectedTab());
+		
+		$('button.file').each(function() {
+			new FileButton(this);
+		});
 		
 		editor.splitter.update();
 	};

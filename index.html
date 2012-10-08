@@ -95,7 +95,15 @@
 					<!-- ko with: adventure -->
 						<div class="list-view">
 							<ul data-bind="foreach: scenes, sortable: true">
-								<li class="list-item" data-bind="css: { selected: isSelected }">
+								<li
+									class="list-item"
+									data-bind="
+										css: { selected: isSelected },
+										event: {
+											drop: onFilesDropped,
+											dragover: onDrag
+										}
+									">
 									<a href="#" data-bind="click: $parent.select">
 										<div class="preview" data-bind="
 											style: {
@@ -144,7 +152,14 @@
 						</div>
 						<!-- ko with: current -->
 						<div class="detail-view">
-							<div class="selected-item">
+							<div
+								class="selected-item"
+								data-bind="
+									event: {
+										drop: onFilesDropped,
+										dragover: onDrag
+									}"
+							>
 								<ul class="action-list">
 									<li class="action copy"><button data-bind="click: $parent.copySelected">Copy</button></li>
 									<li class="action remove"><button data-bind="click: $parent.removeSelected">Remove</button></li>

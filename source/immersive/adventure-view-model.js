@@ -33,17 +33,20 @@ var AdventureViewModel = function(editor) {
 					this.name = '';
 				},
 				onSelected: function(viewModel, changeEvent) {
-					var image = this;
 					var file = changeEvent.target.files[0];
 					if ( file ) {
-						image.name = file.name;
-						var reader = new FileReader();
-						reader.readAsDataURL(file);
-						reader.onload = function(loadEvent) {
-							var dataURL = loadEvent.target.result;
-							var objectURL = objectURLFromDataURL(dataURL);
-							image.path = objectURL;
-						};
+						this.load(file);
+					};
+				},
+				load: function(file) {
+					var image = this;
+					image.name = file.name;
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(loadEvent) {
+						var dataURL = loadEvent.target.result;
+						var objectURL = objectURLFromDataURL(dataURL);
+						image.path = objectURL;
 					};
 				}
 			},
@@ -89,6 +92,20 @@ var AdventureViewModel = function(editor) {
 			// State
 			get isSelected() {
 				return this === self.current();
+			},
+			
+			onFilesDropped: function(viewModel, dropEvent) {
+				dropEvent.preventDefault();
+				dropEvent.stopPropagation();
+				
+				var file = dropEvent.dataTransfer.files[0];
+				this.image.load(file);
+			},
+			
+			onDrag: function(viewModel, dragEvent) {
+				dragEvent.preventDefault();
+				dragEvent.stopPropagation();
+				dragEvent.dataTransfer.dropEffect = 'copy';
 			}
 		};
 	};

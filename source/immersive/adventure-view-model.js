@@ -23,10 +23,7 @@ var AdventureViewModel = function(editor) {
 				name: '',
 				size: 'contain',
 				get css() {
-					return 'url("' + encodeURI(this.absoluteUri) + '")';						
-				},
-				get absoluteUri() {
-					return self.absoluteUri(this.path);
+					return 'url("' + encodeURI(this.path) + '")';						
 				},
 				reset: function() {
 					this.path = '';
@@ -139,7 +136,7 @@ var AdventureViewModel = function(editor) {
 		converted.fadesOut = scene.fadeOut;
 		
 		if ( scene.image.path.length > 0 ) {
-			converted.image = scene.image.absoluteUri;
+			converted.image = scene.image.path;
 			converted.imageStyle = { backgroundSize: scene.image.size };
 		}
 		
@@ -148,7 +145,7 @@ var AdventureViewModel = function(editor) {
 		});
 		if ( actualSoundFiles.length > 0 ) {
 			converted.sounds = actualSoundFiles.map(function(file) {
-				return self.absoluteUri(file.path);
+				return file.path;
 			});
 		}
 		
@@ -304,45 +301,6 @@ var AdventureViewModel = function(editor) {
 			return null;
 		}
 	};
-	
-	self.absoluteUri = function(path) {
-		// If the path is already an absolute URI, respect that.
-		if ( path.isAbsoluteUri ) {
-			return path;
-		} else {
-			if ( computerIsWindows ) {
-				path = path.replace(/\\/g, '/');
-			}
-			return self.baseUri + path;
-		}
-	};
-	
-	var computerIsWindows = navigator.platform.startsWith('Win');
-	Object.defineProperty(self, 'baseUri', {
-		get: function() {
-			var baseUri = self.basePath;
-			
-			// If no base path has been defined, leave it as relative to the document.
-			if ( baseUri.length === 0 ) {
-				return baseUri;
-			// If the base path has no URI protocol, treat it as a file path.
-			} else if ( self.basePath.isRelativeUri ) {
-				baseUri = self.basePath;
-				if ( computerIsWindows ) {
-					baseUri = baseUri.replace(/\\/g, '/');
-					baseUri = '/' + baseUri;
-				}
-				baseUri = 'file://' + baseUri;
-			}
-			
-			// The trailing slash makes path combination easier later on.
-			if ( !baseUri.endsWith('/') ) {
-				baseUri += '/';
-			}
-			
-			return baseUri;
-		}
-	});
 	
 	return self;
 };

@@ -57,7 +57,6 @@ var ViewModel = function(editorWidth) {
 	
 	self.serializeAdventure = function() {
 		var state = {
-			basePath: self.adventure().basePath,
 			scenes: self.adventure().scenes.map(function(scene) {
 				return scene.copyState();
 			})
@@ -68,7 +67,6 @@ var ViewModel = function(editorWidth) {
 	
 	self.autosaveAdventure = function() {
 		var state = {
-			basePath: self.adventure().basePath,
 			scenes: self.adventure().scenes.map(function(scene) {
 				return scene.copyState();
 			})
@@ -88,7 +86,6 @@ var ViewModel = function(editorWidth) {
 	self.loadAdventure = function(config) {
 		self.adventure(new AdventureViewModel(self));
 		var adventure = self.adventure();
-		adventure.basePath = config.basePath;
 		
 		adventure.scenes.splice(0);
 		var newScenes = config.scenes;
@@ -118,14 +115,6 @@ var ViewModel = function(editorWidth) {
 	
 	function startInterface() {
 		self.splitter = new Splitter(document.body, editorWidth);
-		
-		self.appIsRunLocally = window.location.protocol === 'file:';
-		if ( self.appIsRunLocally ) {
-			self.pathPlaceholder = 'File path or URL';
-		} else {
-			self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
-			self.pathPlaceholder = 'URL';
-		}
 		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);

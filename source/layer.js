@@ -92,9 +92,8 @@ Ambience.Layer = function(node) {
 			fade.stop();
 		}
 		
-		fade = new Manymation();
+		fade = new Manymation(stopScene);
 		fade.track(node.style, 'opacity', 1);
-		fade.onRewindEnded(stopScene);
 		
 		window.clearTimeout(stopTimer);
 		stopTimer = null;
@@ -105,12 +104,6 @@ Ambience.Layer = function(node) {
 			stopScene();
 		} else {
 			fade.rewind(fadeOutDuration);
-			
-			for ( var mediaType in mediaPlayers ) {
-				if ( playingMedia.contains(mediaType) && 'fadeOut' in mediaPlayers[mediaType] ) {
-					mediaPlayers[mediaType].fadeOut();
-				}
-			}
 		}
 	}
 	

@@ -132,6 +132,23 @@ var AdventureViewModel = function(editor) {
 			}
 		};
 	};
+			
+	self.onFilesDropped = function(viewModel, dropEvent) {
+		dropEvent.preventDefault();
+		dropEvent.stopPropagation();
+		
+		var files = dropEvent.dataTransfer.files;
+		var newScene = self.add();
+		for ( var i = 0; i < files.length; ++i ) {
+			newScene.load(files[i]);
+		}
+	};
+	
+	self.onDrag = function(viewModel, dragEvent) {
+		dragEvent.preventDefault();
+		dragEvent.stopPropagation();
+		dragEvent.dataTransfer.dropEffect = 'copy';
+	};
 	
 	self.convertScene = function(scene) {
 		var converted = new Ambience.Scene();
@@ -207,6 +224,8 @@ var AdventureViewModel = function(editor) {
 		var newScene = self.newScene();
 		self.scenes.push(newScene);
 		self.select(newScene);
+		
+		return newScene;
 	};
 	
 	self.previous = function() {

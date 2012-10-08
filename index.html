@@ -89,17 +89,18 @@
 				</ul>
 				<div class="scene-view tab-content" id="scene-tab">
 					<!-- ko with: adventure -->
-						<div class="list-view">
+						<div
+							class="list-view"
+							data-bind="
+								event: {
+									drop: onFilesDropped,
+									dragover: onDrag
+								}"
+						>
 							<ul data-bind="foreach: scenes, sortable: true">
 								<li
 									class="list-item"
-									data-bind="
-										css: { selected: isSelected },
-										event: {
-											drop: onFilesDropped,
-											dragover: onDrag
-										}
-									">
+									data-bind="css: { selected: isSelected }">
 									<a href="#" data-bind="click: $parent.select">
 										<div class="preview" data-bind="
 											style: {

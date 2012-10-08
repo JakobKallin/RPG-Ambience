@@ -1,30 +1,18 @@
 describe('Ambience layer', function() {
 	var ambience;
 	
-	var background;
-	var backgroundNode;
-	var audioNodes;
-	
-	var foreground;
-	var foregroundNode;
+	var layer;
+	var layerNode;
 	
 	beforeEach(function() {
-		backgroundNode = document.createElement('div');
-		document.body.appendChild(backgroundNode);
-		background = new Ambience.Layer(backgroundNode);
-		
-		foregroundNode = document.createElement('div');
-		document.body.appendChild(foregroundNode);
-		foreground = new Ambience.Layer(foregroundNode);
-		
-		ambience = new Ambience(background, foreground);
-		
-		audioNodes = backgroundNode.getElementsByTagName('audio');
+		layerNode = document.createElement('div');
+		document.body.appendChild(layerNode);
+		layer = new Ambience.Layer(layerNode);
+		ambience = new Ambience(layer, new Ambience.Layer(document.createElement('div')));
 	});
 	
 	afterEach(function() {
-		document.body.removeChild(backgroundNode);
-		document.body.removeChild(foregroundNode);
+		document.body.removeChild(layerNode);
 	});
 	
 	it('stops any old scene when playing a new scene', function() {
@@ -36,29 +24,29 @@ describe('Ambience layer', function() {
 		scene.image = 'test-image.jpg';
 		ambience.play(scene);
 		
-		expect(backgroundNode.querySelectorAll('.image').length).toBe(1);
+		expect(layer.imageCount).toBe(1);
 	});
 	
 	it("fades an entire layer's opacity", function() {
 		runs(function() {
 			var scene = new Ambience.Scene();
-			scene.fadeDuration = 2000;
+			scene.fadeDuration = 1000;
 			ambience.play(scene);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			// If CSS transitions are used, this has to be changed to getComputedStyle.
+			// We're using a fairly generous interval for the opacity.
+			expect(layer.opacity).toBeGreaterThan(0.25);
+			expect(layer.opacity).toBeLessThan(0.75);
 		});
 		
 		waits(1000);
 		
 		runs(function() {
-			// If CSS transitions are used, this has to be changed to getComputedStyle.
-			// We're using a fairly generous interval for the opacity.
-			expect(Number(backgroundNode.style.opacity)).toBeGreaterThan(0.25);
-			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.75);
-		});
-		
-		waits(2000);
-		
-		runs(function() {
-			expect(Number(backgroundNode.style.opacity)).toBe(1);
+			expect(layer.opacity).toBe(1);
 		});
 	});
 	
@@ -78,13 +66,13 @@ describe('Ambience layer', function() {
 		waits(500);
 		
 		runs(function() {
-			expect(Number(backgroundNode.style.opacity)).toBeLessThan(0.5);
+			expect(layer.opacity).toBeLessThan(0.5);
 		});
 		
 		waits(1000);
 		
 		runs(function() {
-			expect(Number(backgroundNode.style.opacity)).toBe(0);
+			expect(layer.opacity).toBe(0);
 		});
 	});
 	
@@ -99,10 +87,10 @@ describe('Ambience layer', function() {
 			
 			ambience.play(scene);
 			
-			expect(backgroundNode.style.backgroundColor).toBe('red');
-			expect(backgroundNode.querySelectorAll('.image').length).toBe(1);
-			expect(audioNodes.length).toBe(1);
-			expect(backgroundNode.querySelectorAll('.text.outer').length).toBe(1);
+			expect(layer.backgroundColor).toBe('red');
+			expect(layer.imageCount).toBe(1);
+			expect(layer.soundCount).toBe(1);
+			expect(layer.textCount).toBe(1);
 		});
 		
 		waits(1500);
@@ -114,10 +102,10 @@ describe('Ambience layer', function() {
 		waits(1500);
 		
 		runs(function() {
-			expect(backgroundNode.style.backgroundColor).toBe(Ambience.Scene.base.backgroundColor);
-			expect(backgroundNode.querySelectorAll('.image').length).toBe(0);
-			expect(audioNodes.length).toBe(0);
-			expect(backgroundNode.querySelectorAll('.text').length).toBe(0);
+			expect(layer.backgroundColor).toBe(Ambience.Scene.base.backgroundColor);
+			expect(layer.imageCount).toBe(0);
+			expect(layer.soundCount).toBe(0);
+			expect(layer.textCount).toBe(0);
 		});
 	});
 	
@@ -126,11 +114,11 @@ describe('Ambience layer', function() {
 		
 		runs(function() {
 			scene.sounds = ['test-audio.ogg'];
-			scene.fadeDuration = 2000;
+			scene.fadeDuration = 1000;
 			ambience.play(scene);
 		});
 		
-		waits(1000);
+		waits(500);
 		
 		runs(function() {
 			ambience.fadeOutBackground();

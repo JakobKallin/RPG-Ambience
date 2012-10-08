@@ -1,6 +1,4 @@
 Ambience.Layer = function(node) {
-	var isFadingIn;
-	var isFadingOut;
 	var fadeOutDuration;
 	var fade;
 	var stopTimer;
@@ -86,43 +84,26 @@ Ambience.Layer = function(node) {
 			node.style.visibility = 'visible';
 		}
 		
-		isFadingIn = true;
-		fade.play(scene.fadeInDuration, {onEnded: onFadeInEnded});		
-	}
-	
-	function onFadeInEnded() {
-		isFadingIn = false;
+		fade.play(scene.fadeInDuration);		
 	}
 	
 	function stopFade() {
-		isFadingIn = false;
-		isFadingOut = false;
-		
 		if ( fade ) {
 			fade.stop();
 		}
 		
-		fade = new Manymation();
+		fade = new Manymation(stopScene);
 		fade.track(node.style, 'opacity', 1);
-		fade.onRewindEnded(stopScene);
 		
 		window.clearTimeout(stopTimer);
 		stopTimer = null;
 	}
 	
 	function fadeOutScene() {
-		if ( isFadingOut ) {
+		if ( fade.isRewinding ) {
 			stopScene();
 		} else {
-			isFadingOut = true;
-			
 			fade.rewind(fadeOutDuration);
-			
-			for ( var mediaType in mediaPlayers ) {
-				if ( playingMedia.contains(mediaType) && 'fadeOut' in mediaPlayers[mediaType] ) {
-					mediaPlayers[mediaType].fadeOut();
-				}
-			}
 		}
 	}
 	

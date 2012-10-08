@@ -1,4 +1,4 @@
-var Manymation = function() {
+var Manymation = function(onRewindEnded) {
 	var interval = 50;
 	var timer;
 	var animations = [];
@@ -9,12 +9,12 @@ var Manymation = function() {
 	
 	var hasStartedPlaying = false;
 	var hasStartedRewinding = false;
-	var hasBeenStopped = false;
+	var hasEnded = false
 	
 	var rewindListeners = [];
 	
 	var play = function(duration) {
-		if ( hasStartedPlaying || hasBeenStopped ) {
+		if ( hasStartedPlaying || hasEnded ) {
 			return;
 		}
 		
@@ -49,7 +49,7 @@ var Manymation = function() {
 	};
 	
 	var rewind = function(duration) {
-		if ( hasStartedRewinding || hasBeenStopped ) {
+		if ( hasStartedRewinding || hasEnded ) {
 			return;
 		}
 		
@@ -67,6 +67,10 @@ var Manymation = function() {
 			animations.map(function(anim) {
 				anim.value = 0;
 			});
+			hasEnded = true;
+			if ( onRewindEnded ) {
+				onRewindEnded();
+			}
 		} else {
 			var tick = function() {
 				tickIndex -= 1;
@@ -79,7 +83,10 @@ var Manymation = function() {
 				var animationIsOver = tickIndex === 0;
 				if ( animationIsOver ) {
 					window.clearInterval(timer);
-					rewindEnded();
+					hasEnded = true;
+					if ( onRewindEnded ) {
+						onRewindEnded();
+					}
 				}
 			};
 			
@@ -89,16 +96,8 @@ var Manymation = function() {
 	
 	var stop = function() {
 		window.clearInterval(timer);
-		hasBeenStopped = true;
+		hasEnded = true;
 	};
-	
-	var onRewindEnded = function(listener) {
-		rewindListeners.push(listener);
-	};
-	
-	var rewindEnded = function() {
-		rewindListeners.map(function(listener) { listener(); });
-	}
 	
 	var Animation = function(target, property, endValue) {
 		return {
@@ -139,6 +138,8 @@ var Manymation = function() {
 		rewind: rewind,
 		stop: stop,
 		track: track,
-		onRewindEnded: onRewindEnded
+		get isRewinding() {
+			return hasStartedRewinding && !hasEnded;
+		}
 	};
 };

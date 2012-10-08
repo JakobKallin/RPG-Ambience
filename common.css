@@ -368,6 +368,7 @@ body {
 					display: table;
 					width: 100%;
 					margin: 0.5em 0;
+					cursor: move;
 				}
 
 				.item-list .item:first-child {
@@ -386,7 +387,6 @@ body {
 					
 						.item-list .item .move img {
 							opacity: 0.35;
-							cursor: move;
 						}
 
 					.item-list .item .remove {

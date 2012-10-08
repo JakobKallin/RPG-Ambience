@@ -280,19 +280,14 @@
 																<img src="images/move.svg">
 															</div>
 															<div class="content">
-																<input
-																	type="text"
-																	data-bind="
-																		value: path,
-																		valueUpdate: 'afterkeydown',
-																		attr: { placeholder: $root.pathPlaceholder }">
+																<span data-bind="text: name">
 															</div>
 															<div class="remove">
 																<button data-bind="click: $parent.removeFile">Remove</button>
 															</div>
 														</li>
 													</ol>
-													<button data-bind="click: addFile">Add File</button>
+													<button type="button" class="file" data-bind="event: { change: onSelected }">Add Sound</button>
 												</td>
 											</tr>
 											<tr>

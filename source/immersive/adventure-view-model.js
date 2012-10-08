@@ -53,16 +53,32 @@ var AdventureViewModel = function(editor) {
 			
 			sound: {
 				files: [],
-				removeFile: function(file) {
-					this.files.remove(file);
-				},
-				addFile: function() {
-					this.files.push({ path: '' });
-				},
 				loop: true,
 				shuffle: false,
 				volume: 100,
-				crossover: 0
+				crossover: 0,
+				removeFile: function(file) {
+					this.files.remove(file);
+				},
+				onSelected: function(viewModel, selectEvent) {
+					var newFiles = selectEvent.target.files;
+					for ( var i = 0; i < newFiles.length; ++i ) {
+						this.load(newFiles[i]);
+					}
+				},
+				load: function(file) {
+					var fileList = this.files;
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(loadEvent) {
+						var dataURL = loadEvent.target.result;
+						var objectURL = objectURLFromDataURL(dataURL);
+						fileList.push({
+							name: file.name,
+							path: objectURL
+						});
+					};
+				}
 			},
 			
 			text: {
@@ -183,7 +199,6 @@ var AdventureViewModel = function(editor) {
 	self.add = function() {
 		var newScene = self.newScene();
 		self.scenes.push(newScene);
-		newScene.sound.addFile({ path: '' });
 		self.select(newScene);
 	};
 	

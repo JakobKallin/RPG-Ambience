@@ -41,8 +41,8 @@ var AdventureViewModel = function(editor) {
 					var reader = new FileReader();
 					reader.readAsDataURL(file);
 					reader.onload = function(loadEvent) {
-						var dataURL = loadEvent.target.result;
-						var objectURL = objectURLFromDataURL(dataURL);
+						image.dataURL = loadEvent.target.result;
+						var objectURL = objectURLFromDataURL(image.dataURL);
 						image.path = objectURL;
 					};
 				}
@@ -72,7 +72,8 @@ var AdventureViewModel = function(editor) {
 						var objectURL = objectURLFromDataURL(dataURL);
 						fileList.push({
 							name: file.name,
-							path: objectURL
+							path: objectURL,
+							dataURL: dataURL
 						});
 					};
 				}

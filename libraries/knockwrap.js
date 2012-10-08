@@ -209,6 +209,10 @@ knockwrap = function() {
 			} else if ( original[property] instanceof Object ) {
 				copy[property] = original[property].copyState();
 			} else if ( descriptor.get && descriptor.set ) {
+				// Wrapped property.
+				copy[property] = original[property];
+			} else if ( !descriptor.get && !descriptor.set ) {
+				// Unwrapped property.
 				copy[property] = original[property];
 			}
 		}

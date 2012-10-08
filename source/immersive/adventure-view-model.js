@@ -111,14 +111,24 @@ var AdventureViewModel = function(editor) {
 				dropEvent.preventDefault();
 				dropEvent.stopPropagation();
 				
-				var file = dropEvent.dataTransfer.files[0];
-				this.image.load(file);
+				var files = dropEvent.dataTransfer.files;
+				for ( var i = 0; i < files.length; ++i ) {
+					this.load(files[i]);
+				}
 			},
 			
 			onDrag: function(viewModel, dragEvent) {
 				dragEvent.preventDefault();
 				dragEvent.stopPropagation();
 				dragEvent.dataTransfer.dropEffect = 'copy';
+			},
+			
+			load: function(file) {
+				if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/) ) {
+					this.sound.load(file);
+				} else {
+					this.image.load(file);
+				}
 			}
 		};
 	};

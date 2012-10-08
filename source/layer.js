@@ -1,6 +1,4 @@
 Ambience.Layer = function(node) {
-	var isFadingIn;
-	var isFadingOut;
 	var fadeOutDuration;
 	var fade;
 	var stopTimer;
@@ -86,18 +84,10 @@ Ambience.Layer = function(node) {
 			node.style.visibility = 'visible';
 		}
 		
-		isFadingIn = true;
-		fade.play(scene.fadeInDuration, {onEnded: onFadeInEnded});		
-	}
-	
-	function onFadeInEnded() {
-		isFadingIn = false;
+		fade.play(scene.fadeInDuration);		
 	}
 	
 	function stopFade() {
-		isFadingIn = false;
-		isFadingOut = false;
-		
 		if ( fade ) {
 			fade.stop();
 		}
@@ -111,11 +101,9 @@ Ambience.Layer = function(node) {
 	}
 	
 	function fadeOutScene() {
-		if ( isFadingOut ) {
+		if ( fade.isRewinding ) {
 			stopScene();
 		} else {
-			isFadingOut = true;
-			
 			fade.rewind(fadeOutDuration);
 			
 			for ( var mediaType in mediaPlayers ) {

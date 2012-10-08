@@ -1,48 +1,42 @@
 describe('Ambience audio', function() {
 	var ambience;
 	
-	var background;
-	var backgroundNode;
-	var audioNodes;
+	var layer;
+	var layerNode;
 	
 	beforeEach(function() {
-		backgroundNode = document.createElement('div');
-		document.body.appendChild(backgroundNode);
-		background = new Ambience.Layer(backgroundNode);
+		layerNode = document.createElement('div');
+		document.body.appendChild(layerNode);
+		layer = new Ambience.Layer(layerNode);
 		
-		var foregroundNode = document.createElement('div');
-		var foreground = new Ambience.Layer(foregroundNode);
-		
-		ambience = new Ambience(background, foreground);
-		
-		audioNodes = backgroundNode.getElementsByTagName('audio');
+		ambience = new Ambience(layer, new Ambience.Layer(document.createElement('div')));
 	});
 	
 	afterEach(function() {
-		document.body.removeChild(backgroundNode);
+		document.body.removeChild(layerNode);
 	});
 	
 	it('fades audio volume', function() {
 		runs(function() {
 			var scene = new Ambience.Scene();
-			scene.fadeDuration = 2000;
+			scene.fadeDuration = 1000;
 			scene.sounds = ['test-audio.ogg'];
 			ambience.play(scene);
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			// If CSS transitions are used, this has to be changed to getComputedStyle.
+			// We're using a fairly generous range for the opacity.
+			expect(layer.soundNode.volume).toBeGreaterThan(0.25);
+			expect(layer.soundNode.volume).toBeLessThan(0.75);
 		});
 		
 		waits(1000);
 		
 		runs(function() {
-			// If CSS transitions are used, this has to be changed to getComputedStyle.
-			// We're using a fairly generous interval for the opacity.
-			expect(audioNodes[0].volume).toBeGreaterThan(0.25);
-			expect(audioNodes[0].volume).toBeLessThan(0.75);
-		});
-		
-		waits(2000);
-		
-		runs(function() {
-			expect(audioNodes[0].volume).toBe(1);
+			expect(layer.soundNode.volume).toBe(1);
 		});
 	});
 	
@@ -63,13 +57,13 @@ describe('Ambience audio', function() {
 		waits(500);
 		
 		runs(function() {
-			expect(audioNodes[0].volume).toBeLessThan(0.5);
+			expect(layer.soundNode.volume).toBeLessThan(0.5);
 		});
 		
 		waits(1000);
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(0);
+			expect(layer.soundCount).toBe(0);
 		});
 	});
 	
@@ -108,7 +102,7 @@ describe('Ambience audio', function() {
 		waits(3000);
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(0);
+			expect(layer.soundCount).toBe(0);
 		});
 	});
 	
@@ -123,13 +117,13 @@ describe('Ambience audio', function() {
 		waits(4000);
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(2);
+			expect(layer.soundCount).toBe(2);
 		});
 		
 		waits(2000);
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(1);
+			expect(layer.soundCount).toBe(1);
 		});
 	});
 	
@@ -152,19 +146,19 @@ describe('Ambience audio', function() {
 		waits(8500); // 8.5
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(2);
+			expect(layer.soundCount).toBe(2);
 		});
 		
 		waits(2500); // 11.0
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(2);
+			expect(layer.soundCount).toBe(2);
 		});
 		
 		waits(2500); // 13.5
 		
 		runs(function() {
-			expect(audioNodes.length).toBe(1);
+			expect(layer.soundCount).toBe(1);
 		});
 	});
 	*/
@@ -182,7 +176,7 @@ describe('Ambience audio', function() {
 		waits(6000);
 		
 		runs(function() {
-			expect(audioNodes[0].volume).toBeLessThan(0.5);
+			expect(layer.soundNode.volume).toBeLessThan(0.5);
 		});
 	});
 });

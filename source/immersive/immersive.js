@@ -134,8 +134,6 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	function startInterface() {
-		self.splitter = new Splitter(document.body, editorWidth);
-		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);
 		
@@ -170,13 +168,10 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.hideEditor = function() {
-		self.editorWidth = self.splitter.leftWidth;
 		self.editorIsVisible(false);
-		self.splitter.update(0);
 	};
 	
 	self.showEditor = function() {
-		self.splitter.update(self.editorWidth);
 		self.editorIsVisible(true);
 	};
 	

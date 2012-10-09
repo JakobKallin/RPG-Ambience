@@ -95,13 +95,12 @@ body {
 .editor, .theater {
 	position: absolute;
 	top: 0;
-	width: 100%;
 	height: 100%;
-	width: 50%;
 }
 
 .editor {
 	left: 0;
+	width: 60%;
 	line-height: 1.5;
 	overflow: auto;
 	color: white;
@@ -399,6 +398,7 @@ body {
 
 .theater {
 	right: 0;
+	width: 100%;
 	background-color: black;
 	overflow: hidden;
 }

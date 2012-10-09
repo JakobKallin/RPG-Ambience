@@ -34,6 +34,34 @@
 		<script src="source/immersive/immersive.js"></script>
 	</head>
 	<body>
+		<div id="theater" class="theater" data-bind="
+			event: {
+				mousemove: scheduleHiddenInterface,
+				mouseover: scheduleHiddenInterface,
+				mouseout: showInterface
+			}">
+			<form
+				id="theater-form"
+				class="action-form"
+				data-bind="
+					event: {
+						submit: playNamedScene,
+						keydown: stopPropagation,
+						keypress: stopPropagation
+					}">
+				<ul class="action-list" data-bind="visible: interfaceIsVisible">
+					<li class="action toggle">
+						<button
+							type="button"
+							data-bind="
+								click: toggleEditor,
+								text: toggleButtonText">Show Editor</button>
+					</li>
+				</ul>
+			</form>
+			<div id="background" class="layer"></div>
+			<div id="foreground" class="layer"></div>
+		</div>
 		<div
 			id="editor"
 			class="editor"
@@ -447,34 +475,6 @@
 					<!-- /ko -->
 				</div>
 			</div>
-		</div>
-		<div id="theater" class="theater" data-bind="
-			event: {
-				mousemove: scheduleHiddenInterface,
-				mouseover: scheduleHiddenInterface,
-				mouseout: showInterface
-			}">
-			<form
-				id="theater-form"
-				class="action-form"
-				data-bind="
-					event: {
-						submit: playNamedScene,
-						keydown: stopPropagation,
-						keypress: stopPropagation
-					}">
-				<ul class="action-list" data-bind="visible: interfaceIsVisible">
-					<li class="action toggle">
-						<button
-							type="button"
-							data-bind="
-								click: toggleEditor,
-								text: toggleButtonText">Show Editor</button>
-					</li>
-				</ul>
-			</form>
-			<div id="background" class="layer"></div>
-			<div id="foreground" class="layer"></div>
 		</div>
 	</body>
 </html>

@@ -342,8 +342,10 @@ body {
 					width: 100%;
 				}
 				
-				.options td.remove {
+				.options td.secondary  {
+					width: auto;
 					vertical-align: top;
+					white-space: nowrap;
 				}
 
 				.options input[type=text],

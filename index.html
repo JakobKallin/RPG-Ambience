@@ -238,15 +238,6 @@
 										<div class="tab-content" id="image-tab">
 											<table>
 												<tr>
-													<th>
-														<button
-															type="button"
-															data-bind="event: {
-																change: image.onSelected
-															}"
-															class="file"
-															>Choose Image</button>
-													</th>
 													<td>
 														<!-- ko if: image.path -->
 															<span data-bind="text: image.name"></span>
@@ -255,12 +246,24 @@
 															<span class="note">No image selected</span>
 														<!-- /ko -->
 													</td>
-													<td class="remove">
-														<button type="button" data-bind="click: image.reset">Remove</button>
-													</td>
+													<!-- ko if: !image.path -->
+														<td class="secondary">
+															<button
+																type="button"
+																data-bind="event: {
+																	change: image.onSelected
+																}"
+																class="file"
+																>Choose Image</button>
+														</td>
+													<!-- /ko -->
+													<!-- ko if: image.path -->
+														<td class="secondary">
+															<button type="button" data-bind="click: image.reset">Remove</button>
+														</td>
+													<!-- /ko -->
 												</tr>
 												<tr>
-													<th></th>
 													<td>
 														<ul class="modifier-list">
 															<li class="modifier">

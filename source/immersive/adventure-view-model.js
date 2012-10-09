@@ -20,6 +20,7 @@ var AdventureViewModel = function(editor) {
 			
 			image: {
 				path: '',
+				dataURL: '',
 				name: '',
 				size: 'contain',
 				get css() {
@@ -27,6 +28,7 @@ var AdventureViewModel = function(editor) {
 				},
 				reset: function() {
 					this.path = '';
+					this.dataURL = '';
 					this.name = '';
 				},
 				onSelected: function(viewModel, changeEvent) {

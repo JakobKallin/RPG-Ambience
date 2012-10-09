@@ -134,16 +134,18 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	function startInterface() {
+		self.splitter = new Splitter(document.getElementById('interface'), editorWidth);
+		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);
 		
-		var theaterForm = document.getElementById('theater-form');
+		var guiEditorForm = document.getElementById('gui-editor-form');
 		var showInterface = function(event) {
 			event.stopPropagation();
 			self.showInterface();
 		};
-		theaterForm.addEventListener('mousemove', showInterface);
-		theaterForm.addEventListener('mouseover', showInterface);
+		guiEditorForm.addEventListener('mousemove', showInterface);
+		guiEditorForm.addEventListener('mouseover', showInterface);
 	}
 	
 	self.message = ko.observable(null);
@@ -168,10 +170,13 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.hideEditor = function() {
+		self.editorWidth = self.splitter.leftWidth;
 		self.editorIsVisible(false);
+		self.splitter.update(0);
 	};
 	
 	self.showEditor = function() {
+		self.splitter.update(self.editorWidth);
 		self.editorIsVisible(true);
 	};
 	

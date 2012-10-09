@@ -92,7 +92,7 @@ body {
 	height: 100%;
 }
 
-.editor, .theater {
+.editor, .gui-editor, .theater {
 	position: absolute;
 	top: 0;
 	height: 100%;
@@ -394,6 +394,15 @@ body {
 						padding-left: 0.5em;
 					}
 
+.gui-editor {
+	right: 0;
+	width: 40%;
+}
+
+	.gui-editor-form {
+		padding: 1em;
+	}
+
 /* Ambience styling */
 
 .theater {
@@ -402,21 +411,6 @@ body {
 	background-color: black;
 	overflow: hidden;
 }
-
-	.theater .action-form {
-		position: absolute;
-		top: 1em;
-		left: 1em;
-		z-index: 1;
-	}
-
-		.theater .action {
-			display: inline;
-		}
-
-		.theater .action:not(:last-child) {
-			margin-right: 0.5em;
-		}
 
 	.theater .layer {
 		position: absolute;

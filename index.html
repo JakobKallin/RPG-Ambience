@@ -40,440 +40,444 @@
 				mouseover: scheduleHiddenInterface,
 				mouseout: showInterface
 			}">
-			<form
-				id="theater-form"
-				class="action-form"
-				data-bind="
-					event: {
-						submit: playNamedScene,
-						keydown: stopPropagation,
-						keypress: stopPropagation
-					}">
-				<ul class="action-list" data-bind="visible: interfaceIsVisible">
-					<li class="action toggle">
-						<button
-							type="button"
-							data-bind="
-								click: toggleEditor,
-								text: toggleButtonText">Show Editor</button>
-					</li>
-				</ul>
-			</form>
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
-		<div
-			id="editor"
-			class="editor"
-			data-bind="
-				event: {
-					drop: readDroppedAdventure,
-					dragover: handleDrag,
-					keydown: stopPropagation,
-					keypress: stopPropagation
-				}">
-			<div class="menu-bar">
-				<ul class="action-list adventure">
-					<li class="action new">
-						<button data-bind="click: createAdventure">New Adventure</button>
-					</li>
-					<li class="action load">
-						<button data-bind="click: showAdventureSelector">Load Adventure</button>
-						<input
-							type="file"
-							style="display: none"
-							id="adventure-file"
-							data-bind="event: { change: readSelectedAdventure }">
-					</li>
-					<li class="action save">
-						<a
-							target="_blank"
-							data-bind="
-								click: saveAdventure,
-								attr: {
-									href: adventureUrl,
-									download: adventureFileName
-								},
-								event: { mouseover: serializeAdventure, focus: serializeAdventure }">Save Adventure</a>
-					</li>
-				</ul>
-				<ul class="action-list playback">
-					<li class="action play"><button data-bind="click: playSelected">Play</button></li>
-					<li class="action stop"><button data-bind="click: stopCurrent">Stop</button></li>
-				</ul>
-			</div>
-			<!-- ko if: message -->
-				<div class="message">
-					<span class="text" data-bind="html: message"></span>
-					<button data-bind="click: $root.clearMessage">Dismiss</button>
+		<div id="interface" class="interface">
+			<div
+				id="editor"
+				class="editor"
+				data-bind="
+					event: {
+						drop: readDroppedAdventure,
+						dragover: handleDrag,
+						keydown: stopPropagation,
+						keypress: stopPropagation
+					}">
+				<div class="menu-bar">
+					<ul class="action-list adventure">
+						<li class="action new">
+							<button data-bind="click: createAdventure">New Adventure</button>
+						</li>
+						<li class="action load">
+							<button data-bind="click: showAdventureSelector">Load Adventure</button>
+							<input
+								type="file"
+								style="display: none"
+								id="adventure-file"
+								data-bind="event: { change: readSelectedAdventure }">
+						</li>
+						<li class="action save">
+							<a
+								target="_blank"
+								data-bind="
+									click: saveAdventure,
+									attr: {
+										href: adventureUrl,
+										download: adventureFileName
+									},
+									event: { mouseover: serializeAdventure, focus: serializeAdventure }">Save Adventure</a>
+						</li>
+					</ul>
+					<ul class="action-list playback">
+						<li class="action play"><button data-bind="click: playSelected">Play</button></li>
+						<li class="action stop"><button data-bind="click: stopCurrent">Stop</button></li>
+					</ul>
 				</div>
-			<!-- /ko -->
-			<div class="view-list" id="view-list">
-				<ul class="tab-list">
-					<li class="tab">
-						<a href="#scene-tab">Scenes</a>
-					</li>
-				</ul>
-				<div class="scene-view tab-content" id="scene-tab">
-					<!-- ko with: adventure -->
-						<div
-							class="list-view"
-							data-bind="
-								event: {
-									drop: onFilesDropped,
-									dragover: onDrag
-								}"
-						>
-							<ul data-bind="foreach: scenes, sortable: true">
-								<li
-									class="list-item"
-									data-bind="css: { selected: isSelected }">
-									<a href="#" data-bind="click: $parent.select">
-										<div class="preview" data-bind="
-											style: {
-												backgroundColor: background,
-												backgroundImage: image.css,
-												backgroundSize: image.size
-											}
-										">
-											<div class="text outer">
-												<div
-													class="text inner"
-													data-bind="
-														text: text.string,
-														style: {
-															fontSize: text.previewSize,
-															fontFamily: text.font,
-															fontStyle: text.style,
-															fontWeight: text.weight,
-															color: text.color,
-															textAlign: text.alignment,
-															padding: text.previewPadding
-														}
-													"></div>
-											</div>
-										</div>
-										<!-- ko if: name -->
-											<span data-bind="text: name"></span>
-										<!-- /ko -->
-										<!-- ko if: key -->
-											<span data-bind="text: key" class="key"></span>
-										<!-- /ko -->
-										<div class="icons">
-											<!-- ko if: mixin -->
-												<img src="images/mixin.svg" title="Mixin">
-											<!-- /ko -->
-											<!-- ko if: isForeground -->
-												<img src="images/foreground.svg" title="Foreground">
-											<!-- /ko -->
-										</div>
-									</a>
-								</li>
-							</ul>
-							<div class="add-item">
-								<button data-bind="click: add">Add Scene</button>
-							</div>
-						</div>
-						<!-- ko with: current -->
-						<div class="detail-view">
+				<!-- ko if: message -->
+					<div class="message">
+						<span class="text" data-bind="html: message"></span>
+						<button data-bind="click: $root.clearMessage">Dismiss</button>
+					</div>
+				<!-- /ko -->
+				<div class="view-list" id="view-list">
+					<ul class="tab-list">
+						<li class="tab">
+							<a href="#scene-tab">Scenes</a>
+						</li>
+					</ul>
+					<div class="scene-view tab-content" id="scene-tab">
+						<!-- ko with: adventure -->
 							<div
-								class="selected-item"
+								class="list-view"
 								data-bind="
 									event: {
 										drop: onFilesDropped,
 										dragover: onDrag
 									}"
 							>
-								<ul class="action-list">
-									<li class="action copy"><button data-bind="click: $parent.copySelected">Copy</button></li>
-									<li class="action remove"><button data-bind="click: $parent.removeSelected">Remove</button></li>
-								</ul>
-								<div class="preview" data-bind="
-									style: {
-										backgroundColor: background,
-										backgroundImage: image.css,
-										backgroundSize: image.size
-									}
-								">
-									<div class="text outer">
-										<div
-											class="text inner"
-											data-bind="
-												text: text.string,
+								<ul data-bind="foreach: scenes, sortable: true">
+									<li
+										class="list-item"
+										data-bind="css: { selected: isSelected }">
+										<a href="#" data-bind="click: $parent.select">
+											<div class="preview" data-bind="
 												style: {
-													fontSize: text.previewSize,
-													fontFamily: text.font,
-													fontStyle: text.style,
-													fontWeight: text.weight,
-													color: text.color,
-													textAlign: text.alignment,
-													padding: text.previewPadding
+													backgroundColor: background,
+													backgroundImage: image.css,
+													backgroundSize: image.size
 												}
-											"></div>
-									</div>
+											">
+												<div class="text outer">
+													<div
+														class="text inner"
+														data-bind="
+															text: text.string,
+															style: {
+																fontSize: text.previewSize,
+																fontFamily: text.font,
+																fontStyle: text.style,
+																fontWeight: text.weight,
+																color: text.color,
+																textAlign: text.alignment,
+																padding: text.previewPadding
+															}
+														"></div>
+												</div>
+											</div>
+											<!-- ko if: name -->
+												<span data-bind="text: name"></span>
+											<!-- /ko -->
+											<!-- ko if: key -->
+												<span data-bind="text: key" class="key"></span>
+											<!-- /ko -->
+											<div class="icons">
+												<!-- ko if: mixin -->
+													<img src="images/mixin.svg" title="Mixin">
+												<!-- /ko -->
+												<!-- ko if: isForeground -->
+													<img src="images/foreground.svg" title="Foreground">
+												<!-- /ko -->
+											</div>
+										</a>
+									</li>
+								</ul>
+								<div class="add-item">
+									<button data-bind="click: add">Add Scene</button>
 								</div>
-								<div class="options general">
-									<table>
-										<tr>
-											<th><label for="name">Name</label></th>
-											<td>
-												<input
-													id="name"
-													type="text"
-													placeholder="Untitled"
-													data-bind="
-														value: name,
-														valueUpdate: 'afterkeydown'
-													">
-											</td>
-										</tr>
-										<tr>
-											<th><label for="key">Hotkey</label></th>
-											<td>
-												<input
-													id="key"
-													type="text"
-													data-bind="
-														value: key,
-														valueUpdate: 'afterkeydown',
-														event: {
-															keydown: $parent.bindSpecialKey,
-															keypress: $parent.bindTextKey,
-															keyup: $parent.stopKeyBinding
-														}
-													">
-											</td>
-										</tr>
-									</table>
-								</div>
-								<div class="options specific">
-									<ul class="tab-list">
-										<li class="tab"><a href="#image-tab">Image</a></li>
-										<li class="tab"><a href="#sound-tab">Sound</a></li>
-										<li class="tab"><a href="#text-tab">Text</a></li>
-										<li class="tab"><a href="#other-tab">Other</a></li>
+							</div>
+							<!-- ko with: current -->
+							<div class="detail-view">
+								<div
+									class="selected-item"
+									data-bind="
+										event: {
+											drop: onFilesDropped,
+											dragover: onDrag
+										}"
+								>
+									<ul class="action-list">
+										<li class="action copy"><button data-bind="click: $parent.copySelected">Copy</button></li>
+										<li class="action remove"><button data-bind="click: $parent.removeSelected">Remove</button></li>
 									</ul>
-									<div class="tab-content" id="image-tab">
-										<table>
-											<tr>
-												<th>
-													<button
-														type="button"
-														data-bind="event: {
-															change: image.onSelected
-														}"
-														class="file"
-														>Choose Image</button>
-												</th>
-												<td>
-													<!-- ko if: image.path -->
-														<span data-bind="text: image.name"></span>
-													<!-- /ko -->
-													<!-- ko if: !image.path -->
-														<span class="note">No image selected</span>
-													<!-- /ko -->
-												</td>
-												<td class="remove">
-													<button type="button" data-bind="click: image.reset">Remove</button>
-												</td>
-											</tr>
-											<tr>
-												<th></th>
-												<td>
-													<ul class="modifier-list">
-														<li class="modifier">
-															<input id="size-contain" type="radio" name="image-size" value="contain" data-bind="checked: image.size">
-															<label for="size-contain">Fit</label>
-														</li>
-														<li class="modifier">
-															<input id="size-cover" type="radio" name="image-size" value="cover" data-bind="checked: image.size">
-															<label for="size-cover">Fill</label>
-														</li>
-													</ul>
-												</td>
-											</tr>
-										</table>
+									<div class="preview" data-bind="
+										style: {
+											backgroundColor: background,
+											backgroundImage: image.css,
+											backgroundSize: image.size
+										}
+									">
+										<div class="text outer">
+											<div
+												class="text inner"
+												data-bind="
+													text: text.string,
+													style: {
+														fontSize: text.previewSize,
+														fontFamily: text.font,
+														fontStyle: text.style,
+														fontWeight: text.weight,
+														color: text.color,
+														textAlign: text.alignment,
+														padding: text.previewPadding
+													}
+												"></div>
+										</div>
 									</div>
-									<div class="tab-content" id="sound-tab" data-bind="with: sound">
+									<div class="options general">
 										<table>
 											<tr>
-												<td colspan="2">
-													<ol data-bind="foreach: files, sortable: true" class="item-list">
-														<li class="item">
-															<div class="move">
-																<img src="images/move.svg">
-															</div>
-															<div class="content">
-																<span data-bind="text: name">
-															</div>
-															<div class="remove">
-																<button data-bind="click: $parent.removeFile">Remove</button>
-															</div>
-														</li>
-													</ol>
-													<button type="button" class="file" data-bind="event: { change: onSelected }">Add Sound</button>
-												</td>
-											</tr>
-											<tr>
-												<th><label>Playback</label></th>
-												<td>
-													<ul class="modifier-list">
-														<li class="modifier">
-															<input id="loop" type="checkbox" data-bind="checked: loop">
-															<label for="loop">Loop</label>
-														</li>
-														<li class="modifier">
-															<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
-															<label for="shuffle">Shuffle</label>
-														</li>
-													</ul>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="crossover">Crossover</label></th>
-												<td>
-													<input id="crossover" type="number" min="0" value="0" data-bind="value: crossover">
-													<span class="note">seconds</span>
-												</td>
-											</tr>
-											<tr>
-												<th>
-													<label for="volume">Volume</label>
-												</th>
+												<th><label for="name">Name</label></th>
 												<td>
 													<input
-														id="volume"
-														type="number"
-														min="0"
-														max="100"
-														step="10"
-														data-bind="value: volume">
-													<span class="note">%</span>
-												</td>
-											</tr>
-										</table>
-									</div>
-									<div class="tab-content" id="text-tab" data-bind="with: text">
-										<table>
-											<tr>
-												<th><label for="text">Text</label></th>
-												<td>
-													<textarea
-														id="text"
-														rows="3"
+														id="name"
+														type="text"
+														placeholder="Untitled"
 														data-bind="
-															value: string,
+															value: name,
 															valueUpdate: 'afterkeydown'
-														"></textarea>
+														">
 												</td>
 											</tr>
 											<tr>
-												<th>
-													<label for="font">Font</label>
-												</th>
+												<th><label for="key">Hotkey</label></th>
 												<td>
-													<input id="font" type="text" data-bind="value: font, valueUpdate: 'afterkeydown'">
-												</td>
-											</tr>
-											<tr>
-												<th></th>
-												<td>
-													<ul class="modifier-list">
-														<li class="modifier">
-															<input id="bold" type="checkbox" data-bind="checked: bold">
-															<label for="bold"><b>Bold</b></label>
-														</li>
-														<li class="modifier">
-															<input id="italic" type="checkbox" data-bind="checked: italic">
-															<label for="italic"><i>Italic</i></label>
-														</li>
-													</ul>
-												</td>
-											<tr>
-												<th><label for="font-size">Size</label></th>
-												<td>
-													<input id="font-size" type="number" min="3" max="30" step="0.5" data-bind="value: size">
-												</td>
-											</tr>
-											<tr>
-												<th><label for="font-color">Color</label></th>
-												<td><input id="font-color" type="color" data-bind="value: color"></td>
-											</tr>
-											<tr>
-												<th><label for="text-alignment">Align</label></th>
-												<td>
-													<select id="text-alignment" data-bind="value: alignment">
-														<option value="left">Left</option>
-														<option value="center">Center</option>
-														<option value="right">Right</option>
-													</select>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="text-padding">Padding</label></th>
-												<td>
-													<input id="text-padding" type="number" min="0" max="40" step="2" data-bind="value: padding">
-													<span class="note">% of screen width</span>
+													<input
+														id="key"
+														type="text"
+														data-bind="
+															value: key,
+															valueUpdate: 'afterkeydown',
+															event: {
+																keydown: $parent.bindSpecialKey,
+																keypress: $parent.bindTextKey,
+																keyup: $parent.stopKeyBinding
+															}
+														">
 												</td>
 											</tr>
 										</table>
 									</div>
-									<div class="tab-content" id="other-tab">
-										<table>
-											<tr>
-												<th><label for="background-color">Background</label></th>
-												<td><input id="background-color" type="color" data-bind="value: background"></td>
-											</tr>
-											<tr>
-												<th><label for="fade">Fade</label></th>
-												<td>
-													<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
-													<span class="note">seconds</span>
-												</td>
-											</tr>
-											<tr>
-												<th></th>
-												<td>
-													<ul class="modifier-list">
-														<li class="modifier">
-															<input id="fade-in" type="checkbox" data-bind="checked: fadeIn">
-															<label for="fade-in">In</label>
-														</li>
-														<li class="modifier">
-															<input id="fade-out" type="checkbox" data-bind="checked: fadeOut">
-															<label for="fade-out">Out</label>
-														</li>
-													</ul>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="layer">Layer</label></th>
-												<td>
-													<select id="layer" data-bind="value: layer">
-														<option value="background">Background</option>
-														<option value="foreground">Foreground</option>
-													</select>
-												</td>
-											</tr>
-											<tr>
-												<th></th>
-												<td>
-													<ul class="modifier-list">
-														<li class="modifier">
-															<input id="mixin" type="checkbox" data-bind="checked: mixin">
-															<label for="mixin">Mixin</label>
-														</li>
-													</ul>
-												</td>
-											</tr>
-										</table>
+									<div class="options specific">
+										<ul class="tab-list">
+											<li class="tab"><a href="#image-tab">Image</a></li>
+											<li class="tab"><a href="#sound-tab">Sound</a></li>
+											<li class="tab"><a href="#text-tab">Text</a></li>
+											<li class="tab"><a href="#other-tab">Other</a></li>
+										</ul>
+										<div class="tab-content" id="image-tab">
+											<table>
+												<tr>
+													<th>
+														<button
+															type="button"
+															data-bind="event: {
+																change: image.onSelected
+															}"
+															class="file"
+															>Choose Image</button>
+													</th>
+													<td>
+														<!-- ko if: image.path -->
+															<span data-bind="text: image.name"></span>
+														<!-- /ko -->
+														<!-- ko if: !image.path -->
+															<span class="note">No image selected</span>
+														<!-- /ko -->
+													</td>
+													<td class="remove">
+														<button type="button" data-bind="click: image.reset">Remove</button>
+													</td>
+												</tr>
+												<tr>
+													<th></th>
+													<td>
+														<ul class="modifier-list">
+															<li class="modifier">
+																<input id="size-contain" type="radio" name="image-size" value="contain" data-bind="checked: image.size">
+																<label for="size-contain">Fit</label>
+															</li>
+															<li class="modifier">
+																<input id="size-cover" type="radio" name="image-size" value="cover" data-bind="checked: image.size">
+																<label for="size-cover">Fill</label>
+															</li>
+														</ul>
+													</td>
+												</tr>
+											</table>
+										</div>
+										<div class="tab-content" id="sound-tab" data-bind="with: sound">
+											<table>
+												<tr>
+													<td colspan="2">
+														<ol data-bind="foreach: files, sortable: true" class="item-list">
+															<li class="item">
+																<div class="move">
+																	<img src="images/move.svg">
+																</div>
+																<div class="content">
+																	<span data-bind="text: name">
+																</div>
+																<div class="remove">
+																	<button data-bind="click: $parent.removeFile">Remove</button>
+																</div>
+															</li>
+														</ol>
+														<button type="button" class="file" data-bind="event: { change: onSelected }">Add Sound</button>
+													</td>
+												</tr>
+												<tr>
+													<th><label>Playback</label></th>
+													<td>
+														<ul class="modifier-list">
+															<li class="modifier">
+																<input id="loop" type="checkbox" data-bind="checked: loop">
+																<label for="loop">Loop</label>
+															</li>
+															<li class="modifier">
+																<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
+																<label for="shuffle">Shuffle</label>
+															</li>
+														</ul>
+													</td>
+												</tr>
+												<tr>
+													<th><label for="crossover">Crossover</label></th>
+													<td>
+														<input id="crossover" type="number" min="0" value="0" data-bind="value: crossover">
+														<span class="note">seconds</span>
+													</td>
+												</tr>
+												<tr>
+													<th>
+														<label for="volume">Volume</label>
+													</th>
+													<td>
+														<input
+															id="volume"
+															type="number"
+															min="0"
+															max="100"
+															step="10"
+															data-bind="value: volume">
+														<span class="note">%</span>
+													</td>
+												</tr>
+											</table>
+										</div>
+										<div class="tab-content" id="text-tab" data-bind="with: text">
+											<table>
+												<tr>
+													<th><label for="text">Text</label></th>
+													<td>
+														<textarea
+															id="text"
+															rows="3"
+															data-bind="
+																value: string,
+																valueUpdate: 'afterkeydown'
+															"></textarea>
+													</td>
+												</tr>
+												<tr>
+													<th>
+														<label for="font">Font</label>
+													</th>
+													<td>
+														<input id="font" type="text" data-bind="value: font, valueUpdate: 'afterkeydown'">
+													</td>
+												</tr>
+												<tr>
+													<th></th>
+													<td>
+														<ul class="modifier-list">
+															<li class="modifier">
+																<input id="bold" type="checkbox" data-bind="checked: bold">
+																<label for="bold"><b>Bold</b></label>
+															</li>
+															<li class="modifier">
+																<input id="italic" type="checkbox" data-bind="checked: italic">
+																<label for="italic"><i>Italic</i></label>
+															</li>
+														</ul>
+													</td>
+												<tr>
+													<th><label for="font-size">Size</label></th>
+													<td>
+														<input id="font-size" type="number" min="3" max="30" step="0.5" data-bind="value: size">
+													</td>
+												</tr>
+												<tr>
+													<th><label for="font-color">Color</label></th>
+													<td><input id="font-color" type="color" data-bind="value: color"></td>
+												</tr>
+												<tr>
+													<th><label for="text-alignment">Align</label></th>
+													<td>
+														<select id="text-alignment" data-bind="value: alignment">
+															<option value="left">Left</option>
+															<option value="center">Center</option>
+															<option value="right">Right</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<th><label for="text-padding">Padding</label></th>
+													<td>
+														<input id="text-padding" type="number" min="0" max="40" step="2" data-bind="value: padding">
+														<span class="note">% of screen width</span>
+													</td>
+												</tr>
+											</table>
+										</div>
+										<div class="tab-content" id="other-tab">
+											<table>
+												<tr>
+													<th><label for="background-color">Background</label></th>
+													<td><input id="background-color" type="color" data-bind="value: background"></td>
+												</tr>
+												<tr>
+													<th><label for="fade">Fade</label></th>
+													<td>
+														<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
+														<span class="note">seconds</span>
+													</td>
+												</tr>
+												<tr>
+													<th></th>
+													<td>
+														<ul class="modifier-list">
+															<li class="modifier">
+																<input id="fade-in" type="checkbox" data-bind="checked: fadeIn">
+																<label for="fade-in">In</label>
+															</li>
+															<li class="modifier">
+																<input id="fade-out" type="checkbox" data-bind="checked: fadeOut">
+																<label for="fade-out">Out</label>
+															</li>
+														</ul>
+													</td>
+												</tr>
+												<tr>
+													<th><label for="layer">Layer</label></th>
+													<td>
+														<select id="layer" data-bind="value: layer">
+															<option value="background">Background</option>
+															<option value="foreground">Foreground</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<th></th>
+													<td>
+														<ul class="modifier-list">
+															<li class="modifier">
+																<input id="mixin" type="checkbox" data-bind="checked: mixin">
+																<label for="mixin">Mixin</label>
+															</li>
+														</ul>
+													</td>
+												</tr>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+							<!-- /ko -->
 						<!-- /ko -->
-					<!-- /ko -->
+					</div>
 				</div>
+			</div>
+			<div
+				id="gui-editor"
+				class="gui-editor"
+				data-bind="
+					event: {
+						submit: playNamedScene,
+						keydown: stopPropagation,
+						keypress: stopPropagation
+					}">
+				<form id="gui-editor-form" class="gui-editor-form">
+					<ul class="action-list" data-bind="visible: interfaceIsVisible">
+						<li class="action toggle">
+							<button
+								type="button"
+								data-bind="
+									click: toggleEditor,
+									text: toggleButtonText">Show Editor</button>
+						</li>
+					</ul>
+				</form>
 			</div>
 		</div>
 	</body>

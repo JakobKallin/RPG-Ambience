@@ -219,6 +219,8 @@ var AdventureViewModel = function(editor) {
 		$('button.file').each(function() {
 			new FileButton(this);
 		});
+		
+		editor.splitter.update();
 	};
 	
 	self.add = function() {

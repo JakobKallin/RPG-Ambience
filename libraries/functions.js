@@ -62,3 +62,9 @@ Object.defineProperty(String.prototype, 'isRelativeUri', {
 		return !this.isAbsoluteUri;
 	}
 });
+
+Object.defineProperty(String.prototype, 'isCharacter', {
+	get: function() {
+		return this.match(/^[^\b\f\r\n\t\v\s\0]$/);
+	}
+});

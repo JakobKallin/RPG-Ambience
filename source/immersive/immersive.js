@@ -257,8 +257,7 @@ var ViewModel = function(editorWidth) {
 	
 	self.commands = {
 		'Enter': self.playNamedScene,
-		'Backspace': self.backspaceSceneName,
-		'Escape': function() {}
+		'Backspace': self.backspaceSceneName
 	};
 };
 

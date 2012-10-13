@@ -205,6 +205,10 @@ var AdventureViewModel = function(editor) {
 	var selectedTab = ko.observable(0);
 	self.select = function(scene) {
 		self.current(scene);
+		
+		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
+		$('input[type="number"]').inputNumber();
+		
 		var specificOptions = $('.selected-item .options.specific');
 		specificOptions.tabs({
 			select: function(event, ui) {
@@ -287,21 +291,27 @@ var AdventureViewModel = function(editor) {
 	var specialKeyFound = false;
 	self.bindSpecialKey = function(scene, event) {
 		var keyName = Key.name(event.keyCode);
-		if ( bindableKeys.contains(keyName) ) {
+		if ( keyName === 'Tab' ) {
+			specialKeyFound = true; // Prevent bindTextKey from triggering.
+			return true;
+		} else if ( ['Backspace', 'Delete'].contains(keyName) ) {
 			specialKeyFound = true;
-			var keyHasCommand = keyName in editor.commands;
-			if ( !keyHasCommand ) {
-				scene.key = keyName;
-			}
+			scene.key = '';
+			return true;
+		} else if ( bindableKeys.contains(keyName) ) {
+			specialKeyFound = true;
+			scene.key = keyName;
 		} else {
 			return true;
 		}
 	};
 	
 	self.bindTextKey = function(scene, event) {
-		if ( !specialKeyFound ) {
+		if ( specialKeyFound ) {
+			return true;
+		} else {
 			var keyText = String.fromCharCode(event.which);
-			if ( keyText ) {
+			if ( keyText.isCharacter ) {
 				scene.key = keyText.toUpperCase();
 			}
 		}

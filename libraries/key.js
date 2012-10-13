@@ -6,9 +6,11 @@ var Key = {
 	},
 	names: {
 		8: 'Backspace',
+		9: 'Tab',
 		13: 'Enter',
 		27: 'Escape',
 		32: 'Space',
+		46: 'Delete',
 		112: 'F1',
 		113: 'F2',
 		114: 'F3',

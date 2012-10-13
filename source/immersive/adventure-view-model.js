@@ -129,6 +129,10 @@ var AdventureViewModel = function(editor) {
 	var selectedTab = ko.observable(0);
 	self.select = function(scene) {
 		self.current(scene);
+		
+		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
+		$('input[type="number"]').inputNumber();
+		
 		var specificOptions = $('.selected-item .options.specific');
 		specificOptions.tabs({
 			select: function(event, ui) {

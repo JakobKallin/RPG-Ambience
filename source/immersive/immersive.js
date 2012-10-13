@@ -55,25 +55,32 @@ var ViewModel = function(editorWidth) {
 		return true;
 	};
 	
-	self.serializeAdventure = function() {
+	self.adventureJSON = function() {
 		var state = {
-			basePath: self.adventure().basePath,
 			scenes: self.adventure().scenes.map(function(scene) {
 				return scene.copyState();
 			})
 		};
+		state.scenes.map(function(scene) {
+			// Object URLs are only valid for the session, so do not serialize them.
+			// Data URLs are still serialized, so we use them later when deserializing.
+			delete scene.image.path;
+			scene.sound.files.map(function(file) {
+				delete file.path;
+			});
+		});
+		
 		var adventureJson = JSON.stringify(state);
-		self.adventureString(Base64.encode(adventureJson));
+		return adventureJson;
+	};
+	
+	self.serializeAdventure = function() {
+		var base64 = window.btoa(self.adventureJSON());
+		self.adventureString(base64);
 	};
 	
 	self.autosaveAdventure = function() {
-		var state = {
-			basePath: self.adventure().basePath,
-			scenes: self.adventure().scenes.map(function(scene) {
-				return scene.copyState();
-			})
-		};
-		localStorage.adventure = JSON.stringify(state);
+		localStorage.adventure = self.adventureJSON();
 	};
 	
 	window.addEventListener('beforeunload', self.autosaveAdventure);
@@ -88,13 +95,23 @@ var ViewModel = function(editorWidth) {
 	self.loadAdventure = function(config) {
 		self.adventure(new AdventureViewModel(self));
 		var adventure = self.adventure();
-		adventure.basePath = config.basePath;
 		
 		adventure.scenes.splice(0);
 		var newScenes = config.scenes;
 		newScenes.map(function(sceneConfig) {
 			var newScene = adventure.newScene();
 			Object.overlay(newScene, sceneConfig);
+			
+			if ( sceneConfig.image.dataURL ) {
+				// Only properties already in the base are overlaid, so explicitly add the data URL.
+				newScene.image.dataURL = sceneConfig.image.dataURL;
+				newScene.image.path = objectURLFromDataURL(newScene.image.dataURL);
+			}
+			
+			newScene.sound.files.map(function(file) {
+				file.path = objectURLFromDataURL(file.dataURL);
+			});
+			
 			adventure.scenes.push(newScene);
 		});
 		
@@ -118,14 +135,6 @@ var ViewModel = function(editorWidth) {
 	
 	function startInterface() {
 		self.splitter = new Splitter(document.body, editorWidth);
-		
-		self.appIsRunLocally = window.location.protocol === 'file:';
-		if ( self.appIsRunLocally ) {
-			self.pathPlaceholder = 'File path or URL';
-		} else {
-			self.message('To access local files, <a href="">download RPG Ambience</a> and run it from your hard drive.');
-			self.pathPlaceholder = 'URL';
-		}
 		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);

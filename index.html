@@ -13,15 +13,16 @@
 		<script src="libraries/knockout.js"></script>
 		<script src="libraries/knockout-sortable.js"></script>
 		<script src="libraries/knockwrap.js"></script>
-
+		
 		<link rel="stylesheet" href="libraries/number-polyfill.css">
 		<script src="libraries/number-polyfill.js"></script>
 		
 		<script src="libraries/functions.js"></script>
 		<script src="libraries/splitter.js"></script>
 		<script src="libraries/manymation.js"></script>
-		<script src="libraries/preloader.js"></script>
 		<script src="libraries/key.js"></script>
+		<script src="libraries/file-button.js"></script>
+		<script src="libraries/object-url-from-data-url.js"></script>
 		
 		<script src="source/ambience.js"></script>
 		<script src="source/media/image.js"></script>
@@ -87,15 +88,21 @@
 					<li class="tab">
 						<a href="#scene-tab">Scenes</a>
 					</li>
-					<li class="tab">
-						<a href="#options-tab">Options</a>
-					</li>
 				</ul>
 				<div class="scene-view tab-content" id="scene-tab">
 					<!-- ko with: adventure -->
-						<div class="list-view">
+						<div
+							class="list-view"
+							data-bind="
+								event: {
+									drop: onFilesDropped,
+									dragover: onDrag
+								}"
+						>
 							<ul data-bind="foreach: scenes, sortable: true">
-								<li class="list-item" data-bind="css: { selected: isSelected }">
+								<li
+									class="list-item"
+									data-bind="css: { selected: isSelected }">
 									<a href="#" data-bind="click: $parent.select">
 										<div class="preview" data-bind="
 											style: {
@@ -144,7 +151,14 @@
 						</div>
 						<!-- ko with: current -->
 						<div class="detail-view">
-							<div class="selected-item">
+							<div
+								class="selected-item"
+								data-bind="
+									event: {
+										drop: onFilesDropped,
+										dragover: onDrag
+									}"
+							>
 								<ul class="action-list">
 									<li class="action copy"><button data-bind="click: $parent.copySelected">Copy</button></li>
 									<li class="action remove"><button data-bind="click: $parent.removeSelected">Remove</button></li>
@@ -218,16 +232,24 @@
 										<table>
 											<tr>
 												<th>
-													<label for="image-file">File</label>
+													<button
+														type="button"
+														data-bind="event: {
+															change: image.onSelected
+														}"
+														class="file"
+														>Choose Image</button>
 												</th>
 												<td>
-													<input
-														id="image-file"
-														type="text"
-														data-bind="
-															value: image.path,
-															valueUpdate: 'afterkeydown',
-															attr: { placeholder: $root.pathPlaceholder }">
+													<!-- ko if: image.path -->
+														<span data-bind="text: image.name"></span>
+													<!-- /ko -->
+													<!-- ko if: !image.path -->
+														<span class="note">No image selected</span>
+													<!-- /ko -->
+												</td>
+												<td class="remove">
+													<button type="button" data-bind="click: image.reset">Remove</button>
 												</td>
 											</tr>
 											<tr>
@@ -257,19 +279,14 @@
 																<img src="images/move.svg">
 															</div>
 															<div class="content">
-																<input
-																	type="text"
-																	data-bind="
-																		value: path,
-																		valueUpdate: 'afterkeydown',
-																		attr: { placeholder: $root.pathPlaceholder }">
+																<span data-bind="text: name">
 															</div>
 															<div class="remove">
 																<button data-bind="click: $parent.removeFile">Remove</button>
 															</div>
 														</li>
 													</ol>
-													<button data-bind="click: addFile">Add File</button>
+													<button type="button" class="file" data-bind="event: { change: onSelected }">Add Sound</button>
 												</td>
 											</tr>
 											<tr>
@@ -431,29 +448,6 @@
 						</div>
 						<!-- /ko -->
 					<!-- /ko -->
-				</div>
-				<div class="option-view tab-content" id="options-tab">
-					<div class="options">
-						<table>
-							<tr>
-								<th>
-									<label for="media-folder">Media folder</label>
-								</th>
-								<td>
-									<!-- ko with: adventure -->
-										<input
-											id="media-folder"
-											type="text"
-											data-bind="
-												attr: { placeholder: $parent.pathPlaceholder },
-												value: basePath,
-												valueUpdate: 'afterkeydown'
-											">
-									<!-- /ko -->
-								</td>
-							</tr>
-						</table>
-					</div>
 				</div>
 			</div>
 		</div>

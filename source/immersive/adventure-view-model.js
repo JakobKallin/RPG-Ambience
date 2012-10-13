@@ -20,27 +20,63 @@ var AdventureViewModel = function(editor) {
 			
 			image: {
 				path: '',
+				name: '',
 				size: 'contain',
 				get css() {
-					return 'url("' + encodeURI(this.absoluteUri) + '")';						
+					return 'url("' + encodeURI(this.path) + '")';						
 				},
-				get absoluteUri() {
-					return self.absoluteUri(this.path);
+				reset: function() {
+					this.path = '';
+					this.name = '';
+				},
+				onSelected: function(viewModel, changeEvent) {
+					var file = changeEvent.target.files[0];
+					if ( file ) {
+						this.load(file);
+					};
+				},
+				load: function(file) {
+					var image = this;
+					image.name = file.name;
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(loadEvent) {
+						image.dataURL = loadEvent.target.result;
+						var objectURL = objectURLFromDataURL(image.dataURL);
+						image.path = objectURL;
+					};
 				}
 			},
 			
 			sound: {
 				files: [],
-				removeFile: function(file) {
-					this.files.remove(file);
-				},
-				addFile: function() {
-					this.files.push({ path: '' });
-				},
 				loop: true,
 				shuffle: false,
 				volume: 100,
-				crossover: 0
+				crossover: 0,
+				removeFile: function(file) {
+					this.files.remove(file);
+				},
+				onSelected: function(viewModel, selectEvent) {
+					var newFiles = selectEvent.target.files;
+					for ( var i = 0; i < newFiles.length; ++i ) {
+						this.load(newFiles[i]);
+					}
+				},
+				load: function(file) {
+					var fileList = this.files;
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(loadEvent) {
+						var dataURL = loadEvent.target.result;
+						var objectURL = objectURLFromDataURL(dataURL);
+						fileList.push({
+							name: file.name,
+							path: objectURL,
+							dataURL: dataURL
+						});
+					};
+				}
 			},
 			
 			text: {
@@ -70,8 +106,49 @@ var AdventureViewModel = function(editor) {
 			// State
 			get isSelected() {
 				return this === self.current();
+			},
+			
+			onFilesDropped: function(viewModel, dropEvent) {
+				dropEvent.preventDefault();
+				dropEvent.stopPropagation();
+				
+				var files = dropEvent.dataTransfer.files;
+				for ( var i = 0; i < files.length; ++i ) {
+					this.load(files[i]);
+				}
+			},
+			
+			onDrag: function(viewModel, dragEvent) {
+				dragEvent.preventDefault();
+				dragEvent.stopPropagation();
+				dragEvent.dataTransfer.dropEffect = 'copy';
+			},
+			
+			load: function(file) {
+				if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/) ) {
+					this.sound.load(file);
+				} else {
+					this.image.load(file);
+				}
 			}
 		};
+	};
+			
+	self.onFilesDropped = function(viewModel, dropEvent) {
+		dropEvent.preventDefault();
+		dropEvent.stopPropagation();
+		
+		var files = dropEvent.dataTransfer.files;
+		var newScene = self.add();
+		for ( var i = 0; i < files.length; ++i ) {
+			newScene.load(files[i]);
+		}
+	};
+	
+	self.onDrag = function(viewModel, dragEvent) {
+		dragEvent.preventDefault();
+		dragEvent.stopPropagation();
+		dragEvent.dataTransfer.dropEffect = 'copy';
 	};
 	
 	self.convertScene = function(scene) {
@@ -87,7 +164,7 @@ var AdventureViewModel = function(editor) {
 		converted.fadesOut = scene.fadeOut;
 		
 		if ( scene.image.path.length > 0 ) {
-			converted.image = scene.image.absoluteUri;
+			converted.image = scene.image.path;
 			converted.imageStyle = { backgroundSize: scene.image.size };
 		}
 		
@@ -96,7 +173,7 @@ var AdventureViewModel = function(editor) {
 		});
 		if ( actualSoundFiles.length > 0 ) {
 			converted.sounds = actualSoundFiles.map(function(file) {
-				return self.absoluteUri(file.path);
+				return file.path;
 			});
 		}
 		
@@ -141,14 +218,19 @@ var AdventureViewModel = function(editor) {
 		});
 		specificOptions.tabs('select', selectedTab());
 		
+		$('button.file').each(function() {
+			new FileButton(this);
+		});
+		
 		editor.splitter.update();
 	};
 	
 	self.add = function() {
 		var newScene = self.newScene();
 		self.scenes.push(newScene);
-		newScene.sound.addFile({ path: '' });
 		self.select(newScene);
+		
+		return newScene;
 	};
 	
 	self.previous = function() {
@@ -259,45 +341,6 @@ var AdventureViewModel = function(editor) {
 			return null;
 		}
 	};
-	
-	self.absoluteUri = function(path) {
-		// If the path is already an absolute URI, respect that.
-		if ( path.isAbsoluteUri ) {
-			return path;
-		} else {
-			if ( computerIsWindows ) {
-				path = path.replace(/\\/g, '/');
-			}
-			return self.baseUri + path;
-		}
-	};
-	
-	var computerIsWindows = navigator.platform.startsWith('Win');
-	Object.defineProperty(self, 'baseUri', {
-		get: function() {
-			var baseUri = self.basePath;
-			
-			// If no base path has been defined, leave it as relative to the document.
-			if ( baseUri.length === 0 ) {
-				return baseUri;
-			// If the base path has no URI protocol, treat it as a file path.
-			} else if ( self.basePath.isRelativeUri ) {
-				baseUri = self.basePath;
-				if ( computerIsWindows ) {
-					baseUri = baseUri.replace(/\\/g, '/');
-					baseUri = '/' + baseUri;
-				}
-				baseUri = 'file://' + baseUri;
-			}
-			
-			// The trailing slash makes path combination easier later on.
-			if ( !baseUri.endsWith('/') ) {
-				baseUri += '/';
-			}
-			
-			return baseUri;
-		}
-	});
 	
 	return self;
 };

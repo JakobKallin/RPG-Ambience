@@ -79,8 +79,6 @@ var ViewModel = function(editorWidth) {
 		self.adventureString(base64);
 	};
 	
-	window.addEventListener('beforeunload', self.autosaveAdventure);
-	
 	self.adventure = ko.observable();
 	self.createAdventure = function() {
 		self.adventure(new AdventureViewModel(self));

@@ -38,11 +38,11 @@ var ViewModel = function(editorWidth) {
 		self.adventureFileName(file.name);
 		
 		var reader = new FileReader();
+		reader.readAsText(file);
 		reader.onload = function(loadEvent) {
 			var config = JSON.parse(loadEvent.target.result);
 			self.loadAdventure(config);
 		};
-		reader.readAsText(file);
 	};
 	
 	self.adventureString = ko.observable('');
@@ -51,7 +51,7 @@ var ViewModel = function(editorWidth) {
 	});
 	
 	self.saveAdventure = function() {
-		self.serializeAdventure();
+		self.writeAdventure();
 		return true;
 	};
 	
@@ -74,7 +74,7 @@ var ViewModel = function(editorWidth) {
 		return adventureJson;
 	};
 	
-	self.serializeAdventure = function() {
+	self.writeAdventure = function() {
 		var base64 = window.btoa(self.adventureJSON());
 		self.adventureString(base64);
 	};

@@ -79,10 +79,6 @@ var ViewModel = function(editorWidth) {
 		self.adventureString(base64);
 	};
 	
-	self.autosaveAdventure = function() {
-		localStorage.adventure = self.adventureJSON();
-	};
-	
 	window.addEventListener('beforeunload', self.autosaveAdventure);
 	
 	self.adventure = ko.observable();
@@ -288,12 +284,7 @@ window.addEventListener('load', function() {
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	
-	if ( localStorage.adventure ) {
-		var config = JSON.parse(localStorage.adventure);
-		viewModel.loadAdventure(config);
-	} else {
-		viewModel.createAdventure();
-	}
+	viewModel.createAdventure();
 	
 	$(document.getElementById('view-list')).tabs();
 });

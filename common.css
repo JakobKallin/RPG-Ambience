@@ -92,15 +92,15 @@ body {
 	height: 100%;
 }
 
-.editor, .theater {
+.editor, .gui-editor, .theater {
 	position: absolute;
 	top: 0;
-	width: 100%;
 	height: 100%;
 }
 
 .editor {
 	left: 0;
+	width: 60%;
 	line-height: 1.5;
 	overflow: auto;
 	color: white;
@@ -342,8 +342,10 @@ body {
 					width: 100%;
 				}
 				
-				.options td.remove {
+				.options td.secondary  {
+					width: auto;
 					vertical-align: top;
+					white-space: nowrap;
 				}
 
 				.options input[type=text],
@@ -394,49 +396,23 @@ body {
 						padding-left: 0.5em;
 					}
 
+.gui-editor {
+	right: 0;
+	width: 40%;
+}
+
+	.gui-editor-form {
+		padding: 1em;
+	}
+
 /* Ambience styling */
 
 .theater {
 	right: 0;
+	width: 100%;
 	background-color: black;
 	overflow: hidden;
 }
-
-	.theater .instructions.outer {
-		position: absolute;
-		display: table;
-		width: 100%;
-		height: 100%;
-	}
-
-		.theater .instructions.inner {
-			display: table-cell;
-			vertical-align: middle;
-			padding: 2em;
-		}
-
-		.theater .instructions p {
-			text-align: center;
-			font-family: Georgia, serif;
-			color: white;
-			font-size: 1.25em;
-			margin: 1em 0;
-		}
-
-	.theater .action-form {
-		position: absolute;
-		top: 1em;
-		left: 1em;
-		z-index: 1;
-	}
-
-		.theater .action {
-			display: inline;
-		}
-
-		.theater .action:not(:last-child) {
-			margin-right: 0.5em;
-		}
 
 	.theater .layer {
 		position: absolute;

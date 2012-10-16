@@ -20,30 +20,21 @@ var ViewModel = function(editorWidth) {
 		adventureFileInput.click();
 	};
 	
-	self.readSelectedAdventure = function(viewModel, selectEvent) {
-		var file = selectEvent.target.files[0];
-		self.readAdventure(file);
-	};
-	
-	self.readDroppedAdventure = function(viewModel, dropEvent) {
-		var file = dropEvent.dataTransfer.files[0];
-		self.readAdventure(file);
-	};
-	
 	self.handleDrag = function(viewModel, dragEvent) {
 		dragEvent.dataTransfer.dropEffect = 'copy';
 	};
 	
-	self.readAdventure = function(file) {
-		self.adventureFileName(file.name);
-		
-		var reader = new FileReader();
-		reader.readAsText(file);
-		reader.onload = function(loadEvent) {
-			var config = JSON.parse(loadEvent.target.result);
-			self.loadAdventure(config);
-		};
+	self.readSelectedAdventure = function(viewModel, selectEvent) {
+		var file = selectEvent.target.files[0];
+		self.reader.read(file);
 	};
+	
+	self.readDroppedAdventure = function(viewModel, dropEvent) {
+		var file = dropEvent.dataTransfer.files[0];
+		self.reader.read(file);
+	};
+	
+	self.reader = new AdventureReader(self);
 	
 	self.adventureString = ko.observable('');
 	self.adventureUrl = ko.computed(function() {
@@ -84,34 +75,6 @@ var ViewModel = function(editorWidth) {
 		self.adventure(new AdventureViewModel(self));
 		self.adventure().add();
 		self.adventure().select(self.adventure().scenes[0]);
-	};
-	
-	self.loadAdventure = function(config) {
-		self.adventure(new AdventureViewModel(self));
-		var adventure = self.adventure();
-		
-		adventure.scenes.splice(0);
-		var newScenes = config.scenes;
-		newScenes.map(function(sceneConfig) {
-			var newScene = adventure.newScene();
-			Object.overlay(newScene, sceneConfig);
-			
-			if ( sceneConfig.image.dataURL ) {
-				// Only properties already in the base are overlaid, so explicitly add the data URL.
-				newScene.image.dataURL = sceneConfig.image.dataURL;
-				newScene.image.path = objectURLFromDataURL(newScene.image.dataURL);
-			}
-			
-			newScene.sound.files.map(function(file) {
-				file.path = objectURLFromDataURL(file.dataURL);
-			});
-			
-			adventure.scenes.push(newScene);
-		});
-		
-		if ( adventure.scenes.length > 0 ) {
-			adventure.select(adventure.scenes[0]);
-		}
 	};
 	
 	self.playScene = function(scene) {

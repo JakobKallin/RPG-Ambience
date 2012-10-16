@@ -14,6 +14,19 @@ var ViewModel = function(editorWidth) {
 		);
 	}
 	
+	self.playScene = function(scene) {
+		converted = self.adventure().convertScene(scene);
+		ambience.play(converted);
+	};
+	
+	self.playSelected = function() {
+		self.playScene(self.adventure().current());
+	};
+	
+	self.stopCurrent = function() {
+		ambience.fadeOutTopmost();
+	};
+	
 	var reader = new AdventureReader(self);
 	
 	var adventureFileInput = document.getElementById('adventure-file');
@@ -52,19 +65,6 @@ var ViewModel = function(editorWidth) {
 		self.adventure(new AdventureViewModel(self));
 		self.adventure().add();
 		self.adventure().select(self.adventure().scenes[0]);
-	};
-	
-	self.playScene = function(scene) {
-		converted = self.adventure().convertScene(scene);
-		ambience.play(converted);
-	};
-	
-	self.playSelected = function() {
-		self.playScene(self.adventure().current());
-	};
-	
-	self.stopCurrent = function() {
-		ambience.fadeOutTopmost();
 	};
 	
 	function startInterface() {

@@ -8,22 +8,22 @@ var AdventureWriter = function(editor) {
 			})
 		};
 		
-		state.scenes.map(function(scene) {
-			// Object URLs are only valid for the session, so do not serialize them.
-			// Data URLs are still serialized, so we use them later when deserializing.
-			delete scene.image.path;
-			scene.sound.files.map(function(file) {
-				delete file.path;
-			});
-		});
-		
 		return state;
+	};
+	
+	var writeToBrowser = function(json) {
+		localStorage.adventure = json;
+	};
+	
+	var writeToFile = function(json) {
+		var base64 = window.btoa(json);
+		editor.adventureString(base64);
 	};
 	
 	self.write = function(adventure) {
 		var state = adventureState(adventure);
 		var json = JSON.stringify(state);
-		var base64 = window.btoa(json);
-		editor.adventureString(base64);
+		writeToBrowser(json);
+		writeToFile(json);
 	};
 };

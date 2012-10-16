@@ -20,7 +20,6 @@ var AdventureViewModel = function(editor) {
 			
 			image: {
 				path: '',
-				dataURL: '',
 				name: '',
 				size: 'contain',
 				get css() {
@@ -28,7 +27,6 @@ var AdventureViewModel = function(editor) {
 				},
 				reset: function() {
 					this.path = '';
-					this.dataURL = '';
 					this.name = '';
 				},
 				onSelected: function(viewModel, changeEvent) {
@@ -40,13 +38,7 @@ var AdventureViewModel = function(editor) {
 				load: function(file) {
 					var image = this;
 					image.name = file.name;
-					var reader = new FileReader();
-					reader.readAsDataURL(file);
-					reader.onload = function(loadEvent) {
-						image.dataURL = loadEvent.target.result;
-						var objectURL = objectURLFromDataURL(image.dataURL);
-						image.path = objectURL;
-					};
+					image.path = window.URL.createObjectURL(file);
 				}
 			},
 			
@@ -67,17 +59,10 @@ var AdventureViewModel = function(editor) {
 				},
 				load: function(file) {
 					var fileList = this.files;
-					var reader = new FileReader();
-					reader.readAsDataURL(file);
-					reader.onload = function(loadEvent) {
-						var dataURL = loadEvent.target.result;
-						var objectURL = objectURLFromDataURL(dataURL);
-						fileList.push({
-							name: file.name,
-							path: objectURL,
-							dataURL: dataURL
-						});
-					};
+					fileList.push({
+						name: file.name,
+						path: window.URL.createObjectURL(file)
+					});
 				}
 			},
 			

@@ -1,7 +1,7 @@
 var AdventureReader = function(editor) {
 	var self = this;
 	
-	self.read = function(file) {
+	self.readFromFile = function(file) {
 		editor.adventureFileName(file.name);
 		
 		var reader = new FileReader();
@@ -12,6 +12,22 @@ var AdventureReader = function(editor) {
 		};
 	};
 	
+	self.readFromBrowser = function() {
+		if ( localStorage.adventure ) {
+			var config = JSON.parse(localStorage.adventure);
+			load(config);
+		}
+	};
+	
+	Object.defineProperty(self, 'browserHasAdventure', {
+		get: function() {
+			return (
+				'localStorage' in window &&
+				'adventure' in window.localStorage
+			);
+		}
+	});
+	
 	var load = function(config) {
 		var adventure = new AdventureViewModel(editor);
 		editor.adventure(adventure);
@@ -21,17 +37,6 @@ var AdventureReader = function(editor) {
 		newScenes.map(function(sceneConfig) {
 			var newScene = adventure.newScene();
 			Object.overlay(newScene, sceneConfig);
-			
-			if ( sceneConfig.image.dataURL ) {
-				// Only properties already in the base are overlaid, so explicitly add the data URL.
-				newScene.image.dataURL = sceneConfig.image.dataURL;
-				newScene.image.path = objectURLFromDataURL(newScene.image.dataURL);
-			}
-			
-			newScene.sound.files.map(function(file) {
-				file.path = objectURLFromDataURL(file.dataURL);
-			});
-			
 			adventure.scenes.push(newScene);
 		});
 		

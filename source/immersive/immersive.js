@@ -27,7 +27,7 @@ var ViewModel = function(editorWidth) {
 		ambience.fadeOutTopmost();
 	};
 	
-	var reader = new AdventureReader(self);
+	self.reader = new AdventureReader(self);
 	
 	var adventureFileInput = document.getElementById('adventure-file');
 	self.adventureFileName = ko.observable('adventure.json');
@@ -41,12 +41,12 @@ var ViewModel = function(editorWidth) {
 	
 	self.readSelectedAdventure = function(viewModel, selectEvent) {
 		var file = selectEvent.target.files[0];
-		reader.read(file);
+		self.reader.readFromFile(file);
 	};
 	
 	self.readDroppedAdventure = function(viewModel, dropEvent) {
 		var file = dropEvent.dataTransfer.files[0];
-		reader.read(file);
+		self.reader.readFromFile(file);
 	};	
 	
 	self.adventureString = ko.observable('');
@@ -59,6 +59,11 @@ var ViewModel = function(editorWidth) {
 		writer.write(self.adventure());
 		return true;
 	};
+	
+	// The function below is inside another function because we don't want a return value.
+	window.addEventListener('beforeunload', function() {
+		self.saveAdventure();
+	});
 	
 	self.adventure = ko.observable();
 	self.createAdventure = function() {
@@ -217,7 +222,11 @@ window.addEventListener('load', function() {
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	
-	viewModel.createAdventure();
+	if ( viewModel.reader.browserHasAdventure ) {
+		viewModel.reader.readFromBrowser();
+	} else {
+		viewModel.createAdventure();
+	}
 	
 	$(document.getElementById('view-list')).tabs();
 });

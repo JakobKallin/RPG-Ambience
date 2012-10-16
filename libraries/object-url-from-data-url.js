@@ -9,8 +9,5 @@ var objectURLFromDataURL = function(dataURL) {
 	}
 	var blob = new Blob([new Uint8Array(array)], { type: mimeType });
 	
-	var URL = window.URL || window.webkitURL;
-	var objectUrl = URL.createObjectURL(blob);
-	
-	return objectUrl;
+	return window.URL.createObjectURL(blob);
 };

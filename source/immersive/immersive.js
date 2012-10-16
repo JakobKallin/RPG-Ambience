@@ -14,6 +14,8 @@ var ViewModel = function(editorWidth) {
 		);
 	}
 	
+	var reader = new AdventureReader(self);
+	
 	var adventureFileInput = document.getElementById('adventure-file');
 	self.adventureFileName = ko.observable('adventure.json');
 	self.showAdventureSelector = function() {
@@ -26,48 +28,23 @@ var ViewModel = function(editorWidth) {
 	
 	self.readSelectedAdventure = function(viewModel, selectEvent) {
 		var file = selectEvent.target.files[0];
-		self.reader.read(file);
+		reader.read(file);
 	};
 	
 	self.readDroppedAdventure = function(viewModel, dropEvent) {
 		var file = dropEvent.dataTransfer.files[0];
-		self.reader.read(file);
-	};
-	
-	self.reader = new AdventureReader(self);
+		reader.read(file);
+	};	
 	
 	self.adventureString = ko.observable('');
 	self.adventureUrl = ko.computed(function() {
 		return 'data:application/json;base64,' + self.adventureString();
 	});
 	
+	var writer = new AdventureWriter(self);
 	self.saveAdventure = function() {
-		self.writeAdventure();
+		writer.write(self.adventure());
 		return true;
-	};
-	
-	self.adventureJSON = function() {
-		var state = {
-			scenes: self.adventure().scenes.map(function(scene) {
-				return scene.copyState();
-			})
-		};
-		state.scenes.map(function(scene) {
-			// Object URLs are only valid for the session, so do not serialize them.
-			// Data URLs are still serialized, so we use them later when deserializing.
-			delete scene.image.path;
-			scene.sound.files.map(function(file) {
-				delete file.path;
-			});
-		});
-		
-		var adventureJson = JSON.stringify(state);
-		return adventureJson;
-	};
-	
-	self.writeAdventure = function() {
-		var base64 = window.btoa(self.adventureJSON());
-		self.adventureString(base64);
 	};
 	
 	self.adventure = ko.observable();

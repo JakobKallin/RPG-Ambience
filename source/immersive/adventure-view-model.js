@@ -26,11 +26,6 @@ var AdventureViewModel = function(editor) {
 				get css() {
 					return 'url("' + encodeURI(this.path) + '")';						
 				},
-				reset: function() {
-					this.path = '';
-					this.name = '';
-					this.id = '';
-				},
 				onSelected: function(viewModel, changeEvent) {
 					var file = changeEvent.target.files[0];
 					if ( file ) {
@@ -44,6 +39,13 @@ var AdventureViewModel = function(editor) {
 					this.id = objectURL;
 					
 					editor.addMedia(file, objectURL);
+				},
+				unload: function() {
+					editor.removeMedia(this.id);
+					
+					this.path = '';
+					this.name = '';
+					this.id = '';
 				}
 			},
 			

@@ -232,6 +232,23 @@ var ViewModel = function(editorWidth) {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName
 	};
+	
+	self.listDatabase = function() {
+		var count = 0;
+		self.database
+		.transaction('media', 'readonly')
+		.objectStore('media')
+		.openCursor()
+		.onsuccess = function(event) {
+			var cursor = event.target.result;
+			if ( cursor ) {
+				count += 1;
+				cursor.continue();
+			} else {
+				console.log('Items in DB: ' + count);
+			}
+		};
+	};
 };
 
 var viewModel = new ViewModel(0.6);
@@ -250,10 +267,9 @@ var viewModel = new ViewModel(0.6);
 	};
 	
 	var onDatabaseLoaded = function() {
-		listDatabase();
-		
 		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 		viewModel.start();
+		viewModel.listDatabase();
 		ko.applyBindings(viewModel);
 		
 		if ( viewModel.reader.browserHasAdventure ) {
@@ -263,23 +279,6 @@ var viewModel = new ViewModel(0.6);
 		}
 		
 		$(document.getElementById('view-list')).tabs();
-	};
-	
-	var listDatabase = function() {
-		var count = 0;
-		viewModel.database
-		.transaction('media', 'readonly')
-		.objectStore('media')
-		.openCursor()
-		.onsuccess = function(event) {
-			var cursor = event.target.result;
-			if ( cursor ) {
-				count += 1;
-				cursor.continue();
-			} else {
-				console.log('Items in DB: ' + count);
-			}
-		};
 	};
 	
 	window.addEventListener('load', onWindowLoaded);

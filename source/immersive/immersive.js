@@ -217,6 +217,7 @@ var ViewModel = function(editorWidth) {
 			var cursor = event.target.result;
 			if ( cursor ) {
 				count += 1;
+				console.log(cursor.key);
 				cursor.continue();
 			} else {
 				console.log('Items in DB: ' + count);

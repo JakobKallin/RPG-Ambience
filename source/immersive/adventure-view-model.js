@@ -50,7 +50,7 @@ var AdventureViewModel = function(editor) {
 			},
 			
 			sound: {
-				files: [],
+				tracks: [],
 				loop: true,
 				shuffle: false,
 				volume: 100,
@@ -63,7 +63,7 @@ var AdventureViewModel = function(editor) {
 				},
 				load: function(file) {
 					var objectURL = window.URL.createObjectURL(file)
-					this.files.push({
+					this.tracks.push({
 						name: file.name,
 						path: objectURL,
 						id: objectURL
@@ -71,9 +71,9 @@ var AdventureViewModel = function(editor) {
 					
 					editor.addMedia(file, objectURL);
 				},
-				unload: function(file) {
-					editor.removeMedia(file.id);
-					this.files.remove(file);
+				unload: function(track) {
+					editor.removeMedia(track.id);
+					this.tracks.remove(track);
 				}
 			},
 			
@@ -166,12 +166,12 @@ var AdventureViewModel = function(editor) {
 			converted.imageStyle = { backgroundSize: scene.image.size };
 		}
 		
-		var actualSoundFiles = scene.sound.files.filter(function(file) {
-			return file.path.length > 0;
+		var actualTracks = scene.sound.tracks.filter(function(track) {
+			return track.path.length > 0;
 		});
-		if ( actualSoundFiles.length > 0 ) {
-			converted.sounds = actualSoundFiles.map(function(file) {
-				return file.path;
+		if ( actualTracks.length > 0 ) {
+			converted.sounds = actualTracks.map(function(track) {
+				return track.path;
 			});
 		}
 		

@@ -69,16 +69,16 @@ var AdventureReader = function(editor) {
 	};
 	
 	var loadSounds = function(scene) {
-		scene.sound.files.map(function(file) {
-			var id = file.id;
-			file.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
+		scene.sound.tracks.map(function(track) {
+			var id = track.id;
+			track.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
 			
 			editor.database
 			.transaction('media', 'readonly')
 			.objectStore('media')
 			.get(id).onsuccess = function(event) {
 				var dataURL = event.target.result;
-				file.path = objectURLFromDataURL(dataURL);
+				track.path = objectURLFromDataURL(dataURL);
 			};
 		});
 	};
@@ -109,8 +109,8 @@ var AdventureReader = function(editor) {
 	var sceneContainsMedia = function(scene, targetID) {
 		return (
 			scene.image.id === targetID ||
-			scene.sound.files.some(function(file) {
-				return file.id === targetID
+			scene.sound.tracks.some(function(track) {
+				return track.id === targetID
 			})
 		);
 	};

@@ -60,6 +60,20 @@ var ViewModel = function(editorWidth) {
 		return true;
 	};
 	
+	self.addMedia = function(file, objectURL) {
+		var reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = function(loadEvent) {
+			var dataURL = reader.result;
+			self.database
+			.transaction('media', 'readwrite')
+			.objectStore('media')
+			.put(dataURL, objectURL).onsuccess = function() {
+				console.log('Saved ' + objectURL);
+			};
+		};
+	};
+	
 	// The function below is inside another function because we don't want a return value.
 	window.addEventListener('beforeunload', function() {
 		self.saveAdventure();
@@ -215,18 +229,34 @@ var ViewModel = function(editorWidth) {
 	};
 };
 
-var viewModel;
-window.addEventListener('load', function() {
-	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
-	viewModel = new ViewModel(0.6);
-	viewModel.start();
-	ko.applyBindings(viewModel);
+var viewModel = new ViewModel(0.6);
+(function() {
+	var onWindowLoaded = function() {
+		window.indexedDB.open('ambience', '1').onsuccess = function(e) {
+			var db = e.target.result;
+			db.setVersion('1').onsuccess = function(versionEvent) {
+				if ( !db.objectStoreNames.contains('media') ) {
+					db.createObjectStore('media');
+				}
+				versionEvent.target.result.oncomplete = onDatabaseLoaded;
+			}
+			viewModel.database = db;
+		};
+	};
 	
-	if ( viewModel.reader.browserHasAdventure ) {
-		viewModel.reader.readFromBrowser();
-	} else {
-		viewModel.createAdventure();
-	}
+	var onDatabaseLoaded = function() {
+		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
+		viewModel.start();
+		ko.applyBindings(viewModel);
+		
+		if ( viewModel.reader.browserHasAdventure ) {
+			viewModel.reader.readFromBrowser();
+		} else {
+			viewModel.createAdventure();
+		}
+		
+		$(document.getElementById('view-list')).tabs();
+	};
 	
-	$(document.getElementById('view-list')).tabs();
-});
+	window.addEventListener('load', onWindowLoaded);
+})();

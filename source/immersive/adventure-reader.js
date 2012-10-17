@@ -37,11 +37,49 @@ var AdventureReader = function(editor) {
 		newScenes.map(function(sceneConfig) {
 			var newScene = adventure.newScene();
 			Object.overlay(newScene, sceneConfig);
+			loadMedia(newScene);
 			adventure.scenes.push(newScene);
 		});
 		
 		if ( adventure.scenes.length > 0 ) {
 			adventure.select(adventure.scenes[0]);
 		}
+	};
+	
+	var loadMedia = function(scene) {
+		loadImage(scene);
+		loadSounds(scene);
+	};
+	
+	var loadImage = function(scene) {
+		var oldObjectURL = scene.image.path;
+		if ( oldObjectURL.length > 0 ) {
+			scene.image.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
+			
+			editor.database
+			.transaction('media', 'readonly')
+			.objectStore('media')
+			.get(oldObjectURL).onsuccess = function(event) {
+				var dataURL = event.target.result;
+				var newObjectURL = objectURLFromDataURL(dataURL);
+				scene.image.path = newObjectURL;
+			};
+		}
+	};
+	
+	var loadSounds = function(scene) {
+		scene.sound.files.map(function(file) {
+			var oldObjectURL = file.path;
+			file.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
+			
+			editor.database
+			.transaction('media', 'readonly')
+			.objectStore('media')
+			.get(oldObjectURL).onsuccess = function(event) {
+				var dataURL = event.target.result;
+				var newObjectURL = objectURLFromDataURL(dataURL);
+				file.path = newObjectURL;
+			};
+		});
 	};
 };

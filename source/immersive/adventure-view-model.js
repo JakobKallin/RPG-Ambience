@@ -36,9 +36,11 @@ var AdventureViewModel = function(editor) {
 					};
 				},
 				load: function(file) {
-					var image = this;
-					image.name = file.name;
-					image.path = window.URL.createObjectURL(file);
+					var objectURL = window.URL.createObjectURL(file);
+					this.name = file.name;
+					this.path = objectURL;
+					
+					editor.addMedia(file, objectURL);
 				}
 			},
 			
@@ -58,11 +60,13 @@ var AdventureViewModel = function(editor) {
 					}
 				},
 				load: function(file) {
-					var fileList = this.files;
-					fileList.push({
+					var objectURL = window.URL.createObjectURL(file)
+					this.files.push({
 						name: file.name,
-						path: window.URL.createObjectURL(file)
+						path: objectURL
 					});
+					
+					editor.addMedia(file, objectURL);
 				}
 			},
 			

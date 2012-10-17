@@ -49,10 +49,7 @@ var ViewModel = function(editorWidth) {
 		self.reader.readFromFile(file);
 	};	
 	
-	self.adventureString = ko.observable('');
-	self.adventureUrl = ko.computed(function() {
-		return 'data:application/json;base64,' + self.adventureString();
-	});
+	self.adventureUrl = ko.observable('');
 	
 	var writer = new AdventureWriter(self);
 	self.saveAdventure = function() {
@@ -60,24 +57,7 @@ var ViewModel = function(editorWidth) {
 		return true;
 	};
 	
-	self.addMedia = function(file, id) {
-		var reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onload = function(loadEvent) {
-			var dataURL = reader.result;
-			self.database
-			.transaction('media', 'readwrite')
-			.objectStore('media')
-			.put(dataURL, id);
-		};
-	};
-	
-	self.removeMedia = function(id) {
-		self.database
-		.transaction('media', 'readwrite')
-		.objectStore('media')
-		.delete(id);
-	};
+	self.library = new MediaLibrary(self);
 	
 	// The function below is inside another function because we don't want a return value.
 	window.addEventListener('beforeunload', function() {
@@ -231,6 +211,23 @@ var ViewModel = function(editorWidth) {
 	self.commands = {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName
+	};
+	
+	self.listDatabase = function() {
+		var count = 0;
+		self.database
+		.transaction('media', 'readonly')
+		.objectStore('media')
+		.openCursor()
+		.onsuccess = function(event) {
+			var cursor = event.target.result;
+			if ( cursor ) {
+				count += 1;
+				cursor.continue();
+			} else {
+				console.log('Items in DB: ' + count);
+			}
+		};
 	};
 };
 

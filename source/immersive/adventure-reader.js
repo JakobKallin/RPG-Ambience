@@ -54,32 +54,50 @@ var AdventureReader = function(app) {
 	};
 	
 	var loadImage = function(scene) {
-		var id = scene.image.id;
-		if ( id.length > 0 ) {
+		if ( 'id' in scene.image && scene.image.id.length > 0 ) {
+			var id = scene.image.id;
 			scene.image.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
 			
 			app.database
-			.transaction('media', 'readonly')
-			.objectStore('media')
-			.get(id).onsuccess = function(event) {
-				var dataURL = event.target.result;
-				scene.image.path = objectURLFromDataURL(dataURL);
-			};
+				.transaction('media', 'readonly')
+				.objectStore('media')
+				.get(id).onsuccess = function(event) {
+					var dataURL = event.target.result;
+					var objectURL = objectURLFromDataURL(dataURL);
+					scene.image.path = objectURL;
+					app.library.addDataURL(objectURL, dataURL);
+				};
+		} else if ( 'path' in scene.image && scene.image.path.length > 0 ) {
+			var dataURL = scene.image.path;
+			var objectURL = objectURLFromDataURL(dataURL);
+			scene.image.path = objectURL;
+			scene.image.id = objectURL; // This image has not received an ID before, so it gets one now.
+			app.library.addDataURL(objectURL, dataURL);
 		}
 	};
 	
 	var loadSounds = function(scene) {
 		scene.sound.tracks.map(function(track) {
-			var id = track.id;
-			track.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
-			
-			app.database
-			.transaction('media', 'readonly')
-			.objectStore('media')
-			.get(id).onsuccess = function(event) {
-				var dataURL = event.target.result;
-				track.path = objectURLFromDataURL(dataURL);
-			};
+			if ( 'id' in track && track.id.length > 0 ) {
+				var id = track.id;
+				track.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
+				
+				app.database
+				.transaction('media', 'readonly')
+				.objectStore('media')
+				.get(id).onsuccess = function(event) {
+					var dataURL = event.target.result;
+					var objectURL = objectURLFromDataURL(dataURL);
+					track.path = objectURL;
+					app.library.addDataURL(objectURL, dataURL);		
+				};
+			} else {
+				var dataURL = track.path;
+				var objectURL = objectURLFromDataURL(dataURL);
+				track.path = objectURL;
+				track.id = objectURL; // This track has not received an ID before, so it gets one now.
+				app.library.addDataURL(objectURL, dataURL);		
+			}
 		});
 	};
 	
@@ -93,7 +111,7 @@ var AdventureReader = function(app) {
 			if ( cursor ) {
 				var id = cursor.key;
 				if ( !adventureContainsMedia(adventure, id) ) {
-					app.removeMedia(id);
+					app.library.remove(id);
 				}
 				cursor.continue();
 			}

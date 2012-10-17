@@ -38,10 +38,10 @@ var AdventureViewModel = function(app) {
 					this.path = objectURL;
 					this.id = objectURL;
 					
-					app.addMedia(file, objectURL);
+					app.library.addFile(objectURL, file);
 				},
 				unload: function() {
-					app.removeMedia(this.id);
+					app.library.remove(this.id);
 					
 					this.path = '';
 					this.name = '';
@@ -69,10 +69,10 @@ var AdventureViewModel = function(app) {
 						id: objectURL
 					});
 					
-					app.addMedia(file, objectURL);
+					app.library.addFile(objectURL, file);
 				},
 				unload: function(track) {
-					app.removeMedia(track.id);
+					app.library.remove(track.id);
 					this.tracks.remove(track);
 				}
 			},

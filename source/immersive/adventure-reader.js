@@ -1,8 +1,8 @@
-var AdventureReader = function(editor) {
+var AdventureReader = function(app) {
 	var self = this;
 	
 	self.readFromFile = function(file) {
-		editor.adventureFileName(file.name);
+		app.adventureFileName(file.name);
 		
 		var reader = new FileReader();
 		reader.readAsText(file);
@@ -29,8 +29,8 @@ var AdventureReader = function(editor) {
 	});
 	
 	var load = function(config) {
-		var adventure = new AdventureViewModel(editor);
-		editor.adventure(adventure);
+		var adventure = new AdventureViewModel(app);
+		app.adventure(adventure);
 		
 		adventure.scenes.splice(0);
 		var newScenes = config.scenes;
@@ -58,7 +58,7 @@ var AdventureReader = function(editor) {
 		if ( id.length > 0 ) {
 			scene.image.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
 			
-			editor.database
+			app.database
 			.transaction('media', 'readonly')
 			.objectStore('media')
 			.get(id).onsuccess = function(event) {
@@ -73,7 +73,7 @@ var AdventureReader = function(editor) {
 			var id = track.id;
 			track.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
 			
-			editor.database
+			app.database
 			.transaction('media', 'readonly')
 			.objectStore('media')
 			.get(id).onsuccess = function(event) {
@@ -84,7 +84,7 @@ var AdventureReader = function(editor) {
 	};
 	
 	var removeUnusedMedia = function(adventure) {
-		editor.database
+		app.database
 		.transaction('media', 'readonly')
 		.objectStore('media')
 		.openCursor()
@@ -93,7 +93,7 @@ var AdventureReader = function(editor) {
 			if ( cursor ) {
 				var id = cursor.key;
 				if ( !adventureContainsMedia(adventure, id) ) {
-					editor.removeMedia(id);
+					app.removeMedia(id);
 				}
 				cursor.continue();
 			}

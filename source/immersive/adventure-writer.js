@@ -1,4 +1,4 @@
-var AdventureWriter = function(editor) {
+var AdventureWriter = function(app) {
 	var self = this;
 	
 	var adventureState = function(adventure) {
@@ -17,7 +17,7 @@ var AdventureWriter = function(editor) {
 	
 	var writeToFile = function(json) {
 		var base64 = window.btoa(json);
-		editor.adventureString(base64);
+		app.adventureString(base64);
 	};
 	
 	self.write = function(adventure) {

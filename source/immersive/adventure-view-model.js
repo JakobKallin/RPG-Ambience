@@ -1,4 +1,4 @@
-var AdventureViewModel = function(editor) {
+var AdventureViewModel = function(app) {
 	var model = new Adventure();
 	knockwrap.wrap(model);
 	
@@ -38,10 +38,10 @@ var AdventureViewModel = function(editor) {
 					this.path = objectURL;
 					this.id = objectURL;
 					
-					editor.addMedia(file, objectURL);
+					app.addMedia(file, objectURL);
 				},
 				unload: function() {
-					editor.removeMedia(this.id);
+					app.removeMedia(this.id);
 					
 					this.path = '';
 					this.name = '';
@@ -69,10 +69,10 @@ var AdventureViewModel = function(editor) {
 						id: objectURL
 					});
 					
-					editor.addMedia(file, objectURL);
+					app.addMedia(file, objectURL);
 				},
 				unload: function(track) {
-					editor.removeMedia(track.id);
+					app.removeMedia(track.id);
 					this.tracks.remove(track);
 				}
 			},
@@ -220,7 +220,7 @@ var AdventureViewModel = function(editor) {
 			new FileButton(this);
 		});
 		
-		editor.splitter.update();
+		app.splitter.update();
 	};
 	
 	self.add = function() {

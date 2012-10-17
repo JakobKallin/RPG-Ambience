@@ -29,6 +29,7 @@ var AdventureViewModel = function(editor) {
 				reset: function() {
 					this.path = '';
 					this.name = '';
+					this.id = '';
 				},
 				onSelected: function(viewModel, changeEvent) {
 					var file = changeEvent.target.files[0];

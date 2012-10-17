@@ -68,9 +68,7 @@ var ViewModel = function(editorWidth) {
 			self.database
 			.transaction('media', 'readwrite')
 			.objectStore('media')
-			.put(dataURL, id).onsuccess = function() {
-				console.log('Saved ' + id);
-			};
+			.put(dataURL, id);
 		};
 	};
 	

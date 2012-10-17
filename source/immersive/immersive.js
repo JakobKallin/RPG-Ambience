@@ -72,6 +72,13 @@ var ViewModel = function(editorWidth) {
 		};
 	};
 	
+	self.removeMedia = function(id) {
+		self.database
+		.transaction('media', 'readwrite')
+		.objectStore('media')
+		.delete(id);
+	};
+	
 	// The function below is inside another function because we don't want a return value.
 	window.addEventListener('beforeunload', function() {
 		self.saveAdventure();
@@ -243,6 +250,8 @@ var viewModel = new ViewModel(0.6);
 	};
 	
 	var onDatabaseLoaded = function() {
+		listDatabase();
+		
 		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 		viewModel.start();
 		ko.applyBindings(viewModel);
@@ -254,6 +263,23 @@ var viewModel = new ViewModel(0.6);
 		}
 		
 		$(document.getElementById('view-list')).tabs();
+	};
+	
+	var listDatabase = function() {
+		var count = 0;
+		viewModel.database
+		.transaction('media', 'readonly')
+		.objectStore('media')
+		.openCursor()
+		.onsuccess = function(event) {
+			var cursor = event.target.result;
+			if ( cursor ) {
+				count += 1;
+				cursor.continue();
+			} else {
+				console.log('Items in DB: ' + count);
+			}
+		};
 	};
 	
 	window.addEventListener('load', onWindowLoaded);

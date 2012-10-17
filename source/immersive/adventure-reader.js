@@ -44,6 +44,8 @@ var AdventureReader = function(editor) {
 		if ( adventure.scenes.length > 0 ) {
 			adventure.select(adventure.scenes[0]);
 		}
+		
+		removeUnusedMedia(adventure);
 	};
 	
 	var loadMedia = function(scene) {
@@ -79,5 +81,37 @@ var AdventureReader = function(editor) {
 				file.path = objectURLFromDataURL(dataURL);
 			};
 		});
+	};
+	
+	var removeUnusedMedia = function(adventure) {
+		editor.database
+		.transaction('media', 'readonly')
+		.objectStore('media')
+		.openCursor()
+		.onsuccess = function(event) {
+			var cursor = event.target.result;
+			if ( cursor ) {
+				var id = cursor.key;
+				if ( !adventureContainsMedia(adventure, id) ) {
+					editor.removeMedia(id);
+				}
+				cursor.continue();
+			}
+		};
+	};
+	
+	var adventureContainsMedia = function(adventure, targetID) {
+		return adventure.scenes.some(function(scene) {
+			return sceneContainsMedia(scene, targetID);
+		});
+	};
+	
+	var sceneContainsMedia = function(scene, targetID) {
+		return (
+			scene.image.id === targetID ||
+			scene.sound.files.some(function(file) {
+				return file.id === targetID
+			})
+		);
 	};
 };

@@ -60,7 +60,7 @@ var ViewModel = function(editorWidth) {
 		return true;
 	};
 	
-	self.addMedia = function(file, objectURL) {
+	self.addMedia = function(file, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.onload = function(loadEvent) {
@@ -68,8 +68,8 @@ var ViewModel = function(editorWidth) {
 			self.database
 			.transaction('media', 'readwrite')
 			.objectStore('media')
-			.put(dataURL, objectURL).onsuccess = function() {
-				console.log('Saved ' + objectURL);
+			.put(dataURL, id).onsuccess = function() {
+				console.log('Saved ' + id);
 			};
 		};
 	};

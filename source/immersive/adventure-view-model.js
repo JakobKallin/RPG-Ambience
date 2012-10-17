@@ -21,6 +21,7 @@ var AdventureViewModel = function(editor) {
 			image: {
 				path: '',
 				name: '',
+				id: '',
 				size: 'contain',
 				get css() {
 					return 'url("' + encodeURI(this.path) + '")';						
@@ -39,6 +40,7 @@ var AdventureViewModel = function(editor) {
 					var objectURL = window.URL.createObjectURL(file);
 					this.name = file.name;
 					this.path = objectURL;
+					this.id = objectURL;
 					
 					editor.addMedia(file, objectURL);
 				}
@@ -63,7 +65,8 @@ var AdventureViewModel = function(editor) {
 					var objectURL = window.URL.createObjectURL(file)
 					this.files.push({
 						name: file.name,
-						path: objectURL
+						path: objectURL,
+						id: objectURL
 					});
 					
 					editor.addMedia(file, objectURL);

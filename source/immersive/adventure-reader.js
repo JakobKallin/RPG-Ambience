@@ -52,33 +52,31 @@ var AdventureReader = function(editor) {
 	};
 	
 	var loadImage = function(scene) {
-		var oldObjectURL = scene.image.path;
-		if ( oldObjectURL.length > 0 ) {
+		var id = scene.image.id;
+		if ( id.length > 0 ) {
 			scene.image.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
 			
 			editor.database
 			.transaction('media', 'readonly')
 			.objectStore('media')
-			.get(oldObjectURL).onsuccess = function(event) {
+			.get(id).onsuccess = function(event) {
 				var dataURL = event.target.result;
-				var newObjectURL = objectURLFromDataURL(dataURL);
-				scene.image.path = newObjectURL;
+				scene.image.path = objectURLFromDataURL(dataURL);
 			};
 		}
 	};
 	
 	var loadSounds = function(scene) {
 		scene.sound.files.map(function(file) {
-			var oldObjectURL = file.path;
+			var id = file.id;
 			file.path = ''; // We don't want to load an old object URL; a new one will be added from IndexedDB.
 			
 			editor.database
 			.transaction('media', 'readonly')
 			.objectStore('media')
-			.get(oldObjectURL).onsuccess = function(event) {
+			.get(id).onsuccess = function(event) {
 				var dataURL = event.target.result;
-				var newObjectURL = objectURLFromDataURL(dataURL);
-				file.path = newObjectURL;
+				file.path = objectURLFromDataURL(dataURL);
 			};
 		});
 	};

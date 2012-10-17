@@ -218,6 +218,7 @@ var AdventureViewModel = function(app) {
 		
 		$('button.file').each(function() {
 			new FileButton(this);
+			$(this).removeClass('file'); // Make sure the same button is not affected twice.
 		});
 		
 		app.splitter.update();

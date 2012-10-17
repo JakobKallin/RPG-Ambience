@@ -71,12 +71,10 @@
 							<button data-bind="click: createAdventure">New Adventure</button>
 						</li>
 						<li class="action load">
-							<button data-bind="click: showAdventureSelector">Load Adventure</button>
-							<input
-								type="file"
-								style="display: none"
-								id="adventure-file"
-								data-bind="event: { change: readSelectedAdventure }">
+							<button
+								type="button"
+								class="file"
+								data-bind="event: { change: readSelectedAdventure }">Load Adventure</button>
 						</li>
 						<li class="action save">
 							<a

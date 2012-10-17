@@ -28,16 +28,7 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.reader = new AdventureReader(self);
-	
-	var adventureFileInput = document.getElementById('adventure-file');
 	self.adventureFileName = ko.observable('adventure.json');
-	self.showAdventureSelector = function() {
-		adventureFileInput.click();
-	};
-	
-	self.handleDrag = function(viewModel, dragEvent) {
-		dragEvent.dataTransfer.dropEffect = 'copy';
-	};
 	
 	self.readSelectedAdventure = function(viewModel, selectEvent) {
 		var file = selectEvent.target.files[0];
@@ -47,10 +38,13 @@ var ViewModel = function(editorWidth) {
 	self.readDroppedAdventure = function(viewModel, dropEvent) {
 		var file = dropEvent.dataTransfer.files[0];
 		self.reader.readFromFile(file);
-	};	
+	};
+	
+	self.handleDrag = function(viewModel, dragEvent) {
+		dragEvent.dataTransfer.dropEffect = 'copy';
+	};
 	
 	self.adventureUrl = ko.observable('');
-	
 	var writer = new AdventureWriter(self);
 	self.saveAdventure = function() {
 		writer.write(self.adventure());

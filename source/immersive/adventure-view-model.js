@@ -55,9 +55,6 @@ var AdventureViewModel = function(editor) {
 				shuffle: false,
 				volume: 100,
 				crossover: 0,
-				removeFile: function(file) {
-					this.files.remove(file);
-				},
 				onSelected: function(viewModel, selectEvent) {
 					var newFiles = selectEvent.target.files;
 					for ( var i = 0; i < newFiles.length; ++i ) {
@@ -73,6 +70,10 @@ var AdventureViewModel = function(editor) {
 					});
 					
 					editor.addMedia(file, objectURL);
+				},
+				unload: function(file) {
+					editor.removeMedia(file.id);
+					this.files.remove(file);
 				}
 			},
 			

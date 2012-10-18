@@ -3,11 +3,12 @@ var objectURLFromDataURL = function(dataURL) {
 	var byteString = atob(base64);
 	var mimeType = dataURL.substring(dataURL.indexOf(':') + 1, dataURL.indexOf(';'));
 	
-	var array = [];
+	var buffer = new ArrayBuffer(byteString.length);
+	var integers = new Uint8Array(buffer);
 	for ( var i = 0; i < byteString.length; ++i ) {
-		array.push(byteString.charCodeAt(i));
+		integers[i] = byteString.charCodeAt(i);
 	}
-	var blob = new Blob([new Uint8Array(array)], { type: mimeType });
+	var blob = new Blob([integers], { type: mimeType });
 	
 	return window.URL.createObjectURL(blob);
 };

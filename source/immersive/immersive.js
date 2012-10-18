@@ -32,31 +32,23 @@ var ViewModel = function(editorWidth) {
 	
 	self.readSelectedAdventure = function(viewModel, selectEvent) {
 		var file = selectEvent.target.files[0];
-		self.reader.readFromFile(file);
+		self.reader.read(file);
 	};
 	
 	self.readDroppedAdventure = function(viewModel, dropEvent) {
 		var file = dropEvent.dataTransfer.files[0];
-		self.reader.readFromFile(file);
+		self.reader.read(file);
 	};
 	
 	self.handleDrag = function(viewModel, dragEvent) {
 		dragEvent.dataTransfer.dropEffect = 'copy';
 	};
 	
-	self.adventureUrl = ko.observable('');
 	var writer = new AdventureWriter(self);
 	self.saveAdventure = function() {
 		writer.write(self.adventure());
 		return true;
 	};
-	
-	self.library = new MediaLibrary(self);
-	
-	// The function below is inside another function because we don't want a return value.
-	window.addEventListener('beforeunload', function() {
-		self.saveAdventure();
-	});
 	
 	self.adventure = ko.observable();
 	self.createAdventure = function() {
@@ -206,54 +198,15 @@ var ViewModel = function(editorWidth) {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName
 	};
-	
-	self.listDatabase = function() {
-		var count = 0;
-		self.database
-		.transaction('media', 'readonly')
-		.objectStore('media')
-		.openCursor()
-		.onsuccess = function(event) {
-			var cursor = event.target.result;
-			if ( cursor ) {
-				count += 1;
-				console.log(cursor.key);
-				cursor.continue();
-			} else {
-				console.log('Items in DB: ' + count);
-			}
-		};
-	};
 };
 
 var viewModel = new ViewModel(0.6);
-(function() {
-	var onWindowLoaded = function() {
-		window.indexedDB.open('ambience', '1').onsuccess = function(e) {
-			var db = e.target.result;
-			db.setVersion('1').onsuccess = function(versionEvent) {
-				if ( !db.objectStoreNames.contains('media') ) {
-					db.createObjectStore('media');
-				}
-				versionEvent.target.result.oncomplete = onDatabaseLoaded;
-			}
-			viewModel.database = db;
-		};
-	};
+window.addEventListener('load', function() {
+	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
+	viewModel.start();
+	ko.applyBindings(viewModel);
 	
-	var onDatabaseLoaded = function() {
-		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
-		viewModel.start();
-		ko.applyBindings(viewModel);
-		
-		if ( viewModel.reader.browserHasAdventure ) {
-			viewModel.reader.readFromBrowser();
-		} else {
-			viewModel.createAdventure();
-		}
-		
-		$(document.getElementById('view-list')).tabs();
-	};
+	viewModel.createAdventure();
 	
-	window.addEventListener('load', onWindowLoaded);
-})();
+	$(document.getElementById('view-list')).tabs();
+});

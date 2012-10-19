@@ -44,12 +44,16 @@
 		<script src="source/immersive/immersive.js"></script>
 	</head>
 	<body>
-		<div id="theater" class="theater" data-bind="
-			event: {
-				mousemove: scheduleHiddenInterface,
-				mouseover: scheduleHiddenInterface,
-				mouseout: showInterface
-			}">
+		<div
+			id="theater"
+			class="theater"
+			data-bind="
+				event: {
+					mousemove: scheduleHiddenInterface,
+					mouseover: scheduleHiddenInterface,
+					mouseout: showInterface
+				}
+			">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
@@ -457,13 +461,20 @@
 				id="gui-editor"
 				class="gui-editor"
 				data-bind="
+					visible: guiEditorIsVisible,
 					event: {
-						submit: playNamedScene,
-						keydown: stopPropagation,
-						keypress: stopPropagation
+						mousemove: scheduleHiddenInterface,
+						mouseover: scheduleHiddenInterface
+					}
+				">
+				<form
+					id="gui-editor-form"
+					class="gui-editor-form"
+					data-bind="event: {
+						mousemove: showInterfaceIndef,
+						mouseover: showInterfaceIndef
 					}">
-				<form id="gui-editor-form" class="gui-editor-form">
-					<ul class="action-list" data-bind="visible: interfaceIsVisible">
+					<ul class="action-list">
 						<li class="action toggle">
 							<button
 								type="button"

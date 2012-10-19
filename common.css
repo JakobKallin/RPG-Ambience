@@ -398,6 +398,7 @@ body {
 }
 
 	.gui-editor-form {
+		float: left;
 		padding: 1em;
 	}
 

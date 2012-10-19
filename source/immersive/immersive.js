@@ -61,14 +61,6 @@ var ViewModel = function(editorWidth) {
 		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);
-		
-		var guiEditorForm = document.getElementById('gui-editor-form');
-		var showInterface = function(event) {
-			event.stopPropagation();
-			self.showInterface();
-		};
-		guiEditorForm.addEventListener('mousemove', showInterface);
-		guiEditorForm.addEventListener('mouseover', showInterface);
 	}
 	
 	self.editorWidth = editorWidth;
@@ -106,7 +98,7 @@ var ViewModel = function(editorWidth) {
 		}
 	});
 	
-	self.interfaceIsVisible = ko.observable(true);
+	self.mouseHasRecentlyMoved = ko.observable(true);
 	var theater = document.getElementById('theater');
 	var cursorTimer;
 	var cursorHideDelay = 1000;
@@ -115,14 +107,23 @@ var ViewModel = function(editorWidth) {
 	
 	self.hideInterface = function() {
 		theater.style.cursor = 'none';
-		self.interfaceIsVisible(false);
+		self.mouseHasRecentlyMoved(false);
 	};
 
 	self.showInterface = function() {
 		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
-		self.interfaceIsVisible(true);
+		self.mouseHasRecentlyMoved(true);
 	};
+	
+	self.showInterfaceIndef = function(viewModel, event) {
+		event.stopPropagation();
+		self.showInterface();
+	};
+	
+	self.guiEditorIsVisible = ko.computed(function() {
+		return self.editorIsVisible() || self.mouseHasRecentlyMoved();
+	});
 	
 	self.scheduleHiddenInterface = function(viewModel, event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
@@ -194,9 +195,11 @@ var ViewModel = function(editorWidth) {
 	};
 };
 
-var viewModel = new ViewModel(0.6);
+var viewModel;
 window.addEventListener('load', function() {
 	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
+	
+	viewModel = new ViewModel(0.6);
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	

@@ -71,11 +71,6 @@ var ViewModel = function(editorWidth) {
 		guiEditorForm.addEventListener('mouseover', showInterface);
 	}
 	
-	self.message = ko.observable(null);
-	self.clearMessage = function() {
-		self.message(null);
-	};
-	
 	self.editorWidth = editorWidth;
 	self.editorIsVisible = ko.observable(true);
 	self.editorIsHidden = ko.computed(function() {

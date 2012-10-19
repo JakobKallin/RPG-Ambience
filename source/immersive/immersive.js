@@ -47,7 +47,6 @@ var ViewModel = function(editorWidth) {
 	var writer = new AdventureWriter(self);
 	self.saveAdventure = function() {
 		writer.write(self.adventure());
-		return true;
 	};
 	
 	self.adventure = ko.observable();

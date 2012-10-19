@@ -57,6 +57,11 @@ var AdventureWriter = function(app) {
 				};
 			});
 		});
+		
+		// This happens when there is no media at all.
+		if ( mediaLeft === 0 ) {
+			createBlob(state);
+		}
 	};
 	
 	var createBlob = function(state) {

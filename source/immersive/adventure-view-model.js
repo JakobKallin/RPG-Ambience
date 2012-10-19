@@ -173,16 +173,18 @@ var AdventureViewModel = function(app) {
 		converted.volume = scene.sound.volume / 100;
 		converted.crossoverDuration = scene.sound.crossover;
 		
+		
+		
 		var text = scene.text;
 		converted.text = text.string;
 		converted.textStyle = {
-			fontSize: text.size + 'vw',
+			fontSize: (window.innerWidth * text.size / 100) + 'px',
 			fontFamily: text.font,
 			fontStyle: text.style,
 			fontWeight: text.weight,
 			color: text.color,
 			textAlign: text.alignment,
-			padding: '0 ' + text.padding + 'vw'
+			padding: '0 ' + (window.innerWidth * text.padding / 100) + 'px'
 		};
 		
 		return converted;

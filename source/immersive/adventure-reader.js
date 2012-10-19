@@ -19,11 +19,18 @@ var AdventureReader = function(app) {
 		newScenes.map(function(sceneConfig) {
 			var newScene = adventure.newScene();
 			Object.overlay(newScene, sceneConfig);
+			loadMedia(newScene);
 			adventure.scenes.push(newScene);
 		});
 
 		if ( adventure.scenes.length > 0 ) {
 			adventure.select(adventure.scenes[0]);
+		}
+	};
+	
+	var loadMedia = function(scene) {
+		if ( scene.image.path.length > 0 ) {
+			scene.image.path = objectURLFromDataURL(scene.image.path);
 		}
 	};
 };

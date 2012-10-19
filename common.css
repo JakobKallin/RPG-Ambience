@@ -132,10 +132,6 @@ body {
 			margin-right: 0.5em;
 		}
 
-		.editor > .menu-bar .action a {
-			white-space: nowrap;
-		}
-
 		.editor > .menu-bar label:after {
 			content: ": ";
 		}

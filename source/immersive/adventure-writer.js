@@ -2,20 +2,45 @@ var AdventureWriter = function(app) {
 	var self = this;
 	
 	self.write = function(adventure) {
-		var blob = createBlob(adventure);
-		download(blob);
-	};
-	
-	var createBlob = function(adventure) {
 		var state = {
 			scenes: adventure.scenes.map(function(scene) {
 				return scene.copyState();
 			})
 		};
+		
+		embedMedia(state);
+	};
+	
+	var embedMedia = function(state) {
+		var mediaLeft = 0;
+		state.scenes.forEach(function(scene) {
+			if ( scene.image.path.length > 0 ) {
+				mediaLeft += 1;
+				var request = new XMLHttpRequest();
+				request.open('GET', scene.image.path);
+				request.responseType = 'blob';
+				request.send();
+				request.onload = function(requestEvent) {
+					var blob = request.response;
+					var reader = new FileReader();
+					reader.readAsDataURL(blob);
+					reader.onload = function(readEvent) {
+						var url = reader.result;
+						scene.image.path = url;
+						mediaLeft -= 1;
+						if ( mediaLeft === 0 ) {
+							createBlob(state);
+						}
+					};
+				};
+			}
+		});
+	};
+	
+	var createBlob = function(state) {
 		var json = JSON.stringify(state);
 		var blob = new Blob([json], { type: 'application/json' });
-		
-		return blob;
+		download(blob);
 	};
 	
 	var download = function(blob) {

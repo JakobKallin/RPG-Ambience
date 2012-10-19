@@ -13,6 +13,7 @@ var AdventureWriter = function(app) {
 	
 	var embedMedia = function(state) {
 		var mediaLeft = 0;
+		
 		state.scenes.forEach(function(scene) {
 			if ( scene.image.path.length > 0 ) {
 				mediaLeft += 1;
@@ -34,6 +35,27 @@ var AdventureWriter = function(app) {
 					};
 				};
 			}
+			
+			scene.sound.tracks.forEach(function(track) {
+				mediaLeft += 1;
+				var request = new XMLHttpRequest();
+				request.open('GET', track.path);
+				request.responseType = 'blob';
+				request.send();
+				request.onload = function(requestEvent) {
+					var blob = request.response;
+					var reader = new FileReader();
+					reader.readAsDataURL(blob);
+					reader.onload = function(readEvent) {
+						var url = reader.result;
+						track.path = url;
+						mediaLeft -= 1;
+						if ( mediaLeft === 0 ) {
+							createBlob(state);
+						}
+					};
+				};
+			});
 		});
 	};
 	

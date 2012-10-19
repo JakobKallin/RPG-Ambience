@@ -29,8 +29,19 @@ var AdventureReader = function(app) {
 	};
 	
 	var loadMedia = function(scene) {
+		loadImage(scene);
+		loadSound(scene);
+	};
+	
+	var loadImage = function(scene) {
 		if ( scene.image.path.length > 0 ) {
 			scene.image.path = objectURLFromDataURL(scene.image.path);
 		}
+	};
+	
+	var loadSound = function(scene) {
+		scene.sound.tracks.forEach(function(track) {
+			track.path = objectURLFromDataURL(track.path);
+		});
 	};
 };

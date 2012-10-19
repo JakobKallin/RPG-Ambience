@@ -218,7 +218,9 @@ var AdventureViewModel = function(app) {
 			$('#' + id).spectrum({
 				change: onChange,
 				move: onChange,
-				clickoutFiresChange: true
+				clickoutFiresChange: true,
+				showAlpha: true,
+				showButtons: false
 			});			
 		};
 		activateColorInput(scene.text, 'color', 'font-color');

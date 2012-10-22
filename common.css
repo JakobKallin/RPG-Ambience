@@ -320,7 +320,7 @@ body {
 				}
 
 				.options td, .options th {
-					padding: 0.125em;
+					padding: 0.125em 0.25em;
 				}
 
 				.options th {
@@ -354,6 +354,14 @@ body {
 
 				.options.specific {
 					clear: both;
+				}
+				
+				.control-list, .control-list > * {
+					display: inline;
+				}
+				
+				.control-list > *{
+					margin-right: 0.5em;
 				}
 				
 				.modifier-list .modifier {

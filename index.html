@@ -229,6 +229,25 @@
 														">
 												</td>
 											</tr>
+											<tr>
+												<th><label for="layer">Layer</label></th>
+												<td>
+													<ul class="control-list">
+														<li>
+															<select id="layer" data-bind="value: layer">
+																<option value="background">Background</option>
+																<option value="foreground">Foreground</option>
+															</select>
+														</li>
+														<li>
+															<label for="mixin">
+																<input id="mixin" type="checkbox" data-bind="checked: mixin">
+																Mixin
+															</label>
+														</li>
+													</ul>
+												</td>
+											</tr>
 										</table>
 									</div>
 									<div class="options specific">
@@ -426,26 +445,6 @@
 															<li class="modifier">
 																<input id="fade-out" type="checkbox" data-bind="checked: fadeOut">
 																<label for="fade-out">Out</label>
-															</li>
-														</ul>
-													</td>
-												</tr>
-												<tr>
-													<th><label for="layer">Layer</label></th>
-													<td>
-														<select id="layer" data-bind="value: layer">
-															<option value="background">Background</option>
-															<option value="foreground">Foreground</option>
-														</select>
-													</td>
-												</tr>
-												<tr>
-													<th></th>
-													<td>
-														<ul class="modifier-list">
-															<li class="modifier">
-																<input id="mixin" type="checkbox" data-bind="checked: mixin">
-																<label for="mixin">Mixin</label>
 															</li>
 														</ul>
 													</td>

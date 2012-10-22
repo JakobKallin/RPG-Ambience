@@ -12,7 +12,7 @@ var AdventureReader = function(app) {
 	
 	var load = function(config) {
 		var adventure = new AdventureViewModel(app);
-		app.adventure(adventure);
+		app.adventure = adventure;
 
 		adventure.scenes.splice(0);
 		var newScenes = config.scenes;

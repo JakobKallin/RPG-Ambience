@@ -96,7 +96,7 @@ var AdventureViewModel = function(app) {
 			
 			// State
 			get isSelected() {
-				return this === self.current();
+				return this === self.current;
 			},
 			
 			onFilesDropped: function(viewModel, dropEvent) {
@@ -194,11 +194,11 @@ var AdventureViewModel = function(app) {
 		ambience.fadeOutTopmost();
 	};
 	
-	self.current = ko.observable();
+	self.current = undefined;
 	
-	var selectedTab = ko.observable(0);
+	var selectedTab = 0;
 	self.select = function(scene) {
-		self.current(scene);
+		self.current = scene;
 		self.updatePolyfills(scene);
 	};
 	
@@ -209,10 +209,10 @@ var AdventureViewModel = function(app) {
 		var specificOptions = $('.selected-item .options.specific');
 		specificOptions.tabs({
 			select: function(event, ui) {
-				selectedTab(ui.index);
+				selectedTab = ui.index;
 			}
 		});
-		specificOptions.tabs('select', selectedTab());
+		specificOptions.tabs('select', selectedTab);
 		
 		var activateColorInput = function(object, property, id) {
 			var onChange = function(color) {
@@ -245,38 +245,45 @@ var AdventureViewModel = function(app) {
 		return newScene;
 	};
 	
-	self.previous = function() {
-		var index = self.scenes.indexOf(self.current());
-		if ( index > 0 ) {
-			return self.scenes[index - 1];
-		} else {
-			return null;
+	Object.defineProperty(self, 'previous', {
+		get: function() {
+			var index = self.scenes.indexOf(self.current);
+			if ( index > 0 ) {
+				return self.scenes[index - 1];
+			} else {
+				return null;
+			}
 		}
-	};
+	});
 	
-	self.next = function() {
-		var index = self.scenes.indexOf(self.current());
-		if ( index < self.scenes.length - 1 ) {
-			return self.scenes[index + 1];
-		} else {
-			return null;
+	Object.defineProperty(self, 'next', {
+		get: function() {
+			var index = self.scenes.indexOf(self.current);
+			if ( index < self.scenes.length - 1 ) {
+				return self.scenes[index + 1];
+			} else {
+				return null;
+			}
 		}
-	};
+	});
 	
-	self.last = function() {
-		var index = self.scenes.length - 1;
-		if ( index !== -1 ) {
-			return self.scenes[index];
-		} else {
-			return null;
+	Object.defineProperty(self, 'last', {
+		get: function() {
+			var index = self.scenes.length - 1;
+			if ( index !== -1 ) {
+				return self.scenes[index];
+			} else {
+				return null;
+			}
 		}
-	};
+	});
 	
 	self.removeSelected = function() {
-		var previous = self.previous();
-		var next = self.next();
+		var previous = self.previous;
+		var current = self.current;
+		var next = self.next;
 		
-		if ( self.previous() ) {
+		if ( previous ) {
 			self.select(previous);
 		} else if ( next ) {
 			self.select(next);
@@ -284,7 +291,8 @@ var AdventureViewModel = function(app) {
 			self.add();
 		}
 		
-		var index = self.scenes.indexOf(this);
+		// Note that `current` is now different from `self.current`.
+		var index = self.scenes.indexOf(current);
 		self.scenes.splice(index, 1);
 	};
 	
@@ -293,9 +301,9 @@ var AdventureViewModel = function(app) {
 	};
 	
 	self.copySelected = function() {
-		var newScene = self.copyScene(this);
+		var newScene = self.copyScene(self.current);
 		
-		var index = self.scenes.indexOf(self.current()) + 1
+		var index = self.scenes.indexOf(self.current) + 1
 		self.scenes.splice(index, 0, newScene);
 		self.select(newScene);
 	};

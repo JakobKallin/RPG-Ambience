@@ -15,12 +15,12 @@ var ViewModel = function(editorWidth) {
 	}
 	
 	self.playScene = function(scene) {
-		converted = self.adventure().convertScene(scene);
+		converted = self.adventure.convertScene(scene);
 		ambience.play(converted);
 	};
 	
 	self.playSelected = function() {
-		self.playScene(self.adventure().current());
+		self.playScene(self.adventure.current);
 	};
 	
 	self.stopCurrent = function() {
@@ -28,8 +28,6 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.reader = new AdventureReader(self);
-	self.adventureFileName = ko.observable('adventure.json');
-	
 	self.readSelectedAdventure = function(viewModel, selectEvent) {
 		var file = selectEvent.target.files[0];
 		self.reader.read(file);
@@ -46,14 +44,14 @@ var ViewModel = function(editorWidth) {
 	
 	var writer = new AdventureWriter(self);
 	self.saveAdventure = function() {
-		writer.write(self.adventure());
+		writer.write(self.adventure);
 	};
 	
-	self.adventure = ko.observable();
+	self.adventure = undefined;
 	self.createAdventure = function() {
-		self.adventure(new AdventureViewModel(self));
-		self.adventure().add();
-		self.adventure().select(self.adventure().scenes[0]);
+		self.adventure = new AdventureViewModel(self);
+		self.adventure.add();
+		self.adventure.select(self.adventure.scenes[0]);
 	};
 	
 	function startInterface() {
@@ -64,13 +62,15 @@ var ViewModel = function(editorWidth) {
 	}
 	
 	self.editorWidth = editorWidth;
-	self.editorIsVisible = ko.observable(true);
-	self.editorIsHidden = ko.computed(function() {
-		return !self.editorIsVisible();
+	self.editorIsVisible = true;
+	Object.defineProperty(self, 'editorIsHidden', {
+		get: function() {
+			return !self.editorIsVisible;
+		}
 	});
 	
 	self.toggleEditor = function(viewModel, event) {
-		if ( self.editorIsVisible() ) {
+		if ( self.editorIsVisible ) {
 			self.hideEditor();
 		} else {
 			self.showEditor();
@@ -81,24 +81,26 @@ var ViewModel = function(editorWidth) {
 	
 	self.hideEditor = function() {
 		self.editorWidth = self.splitter.leftWidth;
-		self.editorIsVisible(false);
+		self.editorIsVisible = false;
 		self.splitter.update(0);
 	};
 	
 	self.showEditor = function() {
 		self.splitter.update(self.editorWidth);
-		self.editorIsVisible(true);
+		self.editorIsVisible = true;
 	};
 	
-	self.toggleButtonText = ko.computed(function() {
-		if ( self.editorIsVisible() ) {
-			return 'Hide Editor';
-		} else {
-			return 'Show Editor';
+	Object.defineProperty(self, 'toggleButtonText', {
+		get: function() {
+			if ( self.editorIsVisible ) {
+				return 'Hide Editor';
+			} else {
+				return 'Show Editor';
+			}
 		}
 	});
 	
-	self.mouseHasRecentlyMoved = ko.observable(true);
+	self.mouseHasRecentlyMoved = true;
 	var theater = document.getElementById('theater');
 	var cursorTimer;
 	var cursorHideDelay = 1000;
@@ -107,13 +109,13 @@ var ViewModel = function(editorWidth) {
 	
 	self.hideInterface = function() {
 		theater.style.cursor = 'none';
-		self.mouseHasRecentlyMoved(false);
+		self.mouseHasRecentlyMoved = false;
 	};
 
 	self.showInterface = function() {
 		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
-		self.mouseHasRecentlyMoved(true);
+		self.mouseHasRecentlyMoved = true;
 	};
 	
 	self.showInterfaceIndef = function(viewModel, event) {
@@ -121,8 +123,10 @@ var ViewModel = function(editorWidth) {
 		self.showInterface();
 	};
 	
-	self.guiEditorIsVisible = ko.computed(function() {
-		return self.editorIsVisible() || self.mouseHasRecentlyMoved();
+	Object.defineProperty(self, 'guiEditorIsVisible', {
+		get: function() {
+			return self.editorIsVisible || self.mouseHasRecentlyMoved;
+		}
 	});
 	
 	self.scheduleHiddenInterface = function(viewModel, event) {
@@ -148,7 +152,7 @@ var ViewModel = function(editorWidth) {
 			event.preventDefault();
 			self.commands[key]();
 		} else {
-			var scene = self.adventure().keyedScene(key);
+			var scene = self.adventure.keyedScene(key);
 			if ( scene ) {
 				event.preventDefault();
 				self.playScene(scene);
@@ -156,36 +160,36 @@ var ViewModel = function(editorWidth) {
 		}
 	};
 	
-	self.sceneName = ko.observable('');
+	self.sceneName = '';
 	self.onKeyPress = function(event) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
 		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
-			var scene = self.adventure().keyedScene(character.toUpperCase());
+			var scene = self.adventure.keyedScene(character.toUpperCase());
 			if ( scene ) {
 				self.playScene(scene);
-				self.sceneName('');
+				self.sceneName = '';
 			} else if ( character ) {
-				self.sceneName(self.sceneName() + character);
+				self.sceneName = self.sceneName + character;
 			}
 		}
 	};
 	
 	self.backspaceSceneName = function() {
-		if ( self.sceneName().length > 0 ) {
-			self.sceneName(self.sceneName().substring(0, self.sceneName().length - 1));
+		if ( self.sceneName.length > 0 ) {
+			self.sceneName = self.sceneName.substring(0, self.sceneName.length - 1);
 		}
 	};
 	
 	self.playNamedScene = function() {
-		if ( self.sceneName().length === 0 ) {
+		if ( self.sceneName.length === 0 ) {
 			ambience.fadeOutTopmost();
 		} else {
-			var scene = self.adventure().namedScene(self.sceneName());
+			var scene = self.adventure.namedScene(self.sceneName);
 			if ( scene ) {
 				self.playScene(scene);
 			}
-			self.sceneName('');
+			self.sceneName = '';
 		}
 	};
 	
@@ -200,6 +204,7 @@ window.addEventListener('load', function() {
 	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 	
 	viewModel = new ViewModel(0.6);
+	knockwrap.wrap(viewModel);
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	

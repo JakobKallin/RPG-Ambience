@@ -22,7 +22,7 @@ button, input, select, textarea {
 	font-size: 1em;
 }
 
-button, input[type=checkbox] {
+button, input[type=radio], input[type=checkbox] {
 	cursor: pointer;
 }
 
@@ -336,6 +336,7 @@ body {
 
 				.options td {
 					width: 100%;
+					white-space: nowrap;
 				}
 				
 				.options td.secondary  {
@@ -361,13 +362,7 @@ body {
 				}
 				
 				.control-list > *{
-					margin-right: 0.5em;
-				}
-				
-				.modifier-list .modifier {
-					display: block;
-					float: left;
-					margin-right: 1em;
+					padding-right: 0.5em;
 				}
 
 				.item-list .item {
@@ -494,4 +489,23 @@ body {
 	border-left-width: 1px;
 	border-right-width: 1px;
 	cursor: w-resize;
+}
+
+/* Number input polyfill */
+
+.sp-replacer {
+	padding: 0.25em;
+}
+
+.sp-preview {
+	width: 1.5em;
+	height: 1em;
+	margin-right: 0.25em;
+}
+
+.sp-dd {
+	height: 1em;
+	padding: 0.125em 0;
+	font-size: 0.625em;
+	line-height: inherit;
 }

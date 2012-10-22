@@ -4,6 +4,8 @@
 		<meta charset="utf-8">
 		
 		<title>Ambience</title>
+		<link rel="stylesheet" href="libraries/number-polyfill.css">
+		<link rel="stylesheet" href="libraries/spectrum.css">
 		
 		<link rel="stylesheet" href="common.css">
 		<link rel="stylesheet" href="generic.css" title="Generic">
@@ -19,10 +21,7 @@
 		<script src="libraries/knockout-sortable.js"></script>
 		<script src="libraries/knockwrap.js"></script>
 
-		<link rel="stylesheet" href="libraries/number-polyfill.css">
 		<script src="libraries/number-polyfill.js"></script>
-		
-		<link rel="stylesheet" href="libraries/spectrum.css">
 		<script src="libraries/spectrum.js"></script>
 		
 		<script src="libraries/functions.js"></script>
@@ -283,14 +282,18 @@
 												</tr>
 												<tr>
 													<td>
-														<ul class="modifier-list">
-															<li class="modifier">
-																<input id="size-contain" type="radio" name="image-size" value="contain" data-bind="checked: image.size">
-																<label for="size-contain">Fit</label>
+														<ul class="control-list">
+															<li>
+																<label for="size-contain">
+																	<input id="size-contain" type="radio" name="image-size" value="contain" data-bind="checked: image.size">
+																	<span>Fit</span>
+																</label>
 															</li>
-															<li class="modifier">
-																<input id="size-cover" type="radio" name="image-size" value="cover" data-bind="checked: image.size">
-																<label for="size-cover">Fill</label>
+															<li>
+																<label for="size-cover">
+																	<input id="size-cover" type="radio" name="image-size" value="cover" data-bind="checked: image.size">
+																	<span>Fill</span>
+																</label>
 															</li>
 														</ul>
 													</td>
@@ -320,14 +323,18 @@
 												<tr>
 													<th><label>Playback</label></th>
 													<td>
-														<ul class="modifier-list">
-															<li class="modifier">
-																<input id="loop" type="checkbox" data-bind="checked: loop">
-																<label for="loop">Loop</label>
+														<ul class="control-list">
+															<li>
+																<label for="loop">
+																	<input id="loop" type="checkbox" data-bind="checked: loop">
+																	<span>Loop</span>
+																</label>
 															</li>
-															<li class="modifier">
-																<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
-																<label for="shuffle">Shuffle</label>
+															<li>
+																<label for="shuffle">
+																	<input id="shuffle" type="checkbox" data-bind="checked: shuffle">
+																	<span>Shuffle</span>
+																</label>
 															</li>
 														</ul>
 													</td>
@@ -381,14 +388,18 @@
 												<tr>
 													<th></th>
 													<td>
-														<ul class="modifier-list">
-															<li class="modifier">
-																<input id="bold" type="checkbox" data-bind="checked: bold">
-																<label for="bold"><b>Bold</b></label>
+														<ul class="control-list">
+															<li>
+																<label for="bold">
+																	<input id="bold" type="checkbox" data-bind="checked: bold">
+																	<span><b>Bold</b></span>
+																</label>
 															</li>
-															<li class="modifier">
-																<input id="italic" type="checkbox" data-bind="checked: italic">
-																<label for="italic"><i>Italic</i></label>
+															<li>
+																<label for="italic">
+																	<input id="italic" type="checkbox" data-bind="checked: italic">
+																	<span><i>Italic</i></span>
+																</label>
 															</li>
 														</ul>
 													</td>
@@ -396,6 +407,7 @@
 													<th><label for="font-size">Size</label></th>
 													<td>
 														<input id="font-size" type="number" min="3" max="30" step="0.5" data-bind="value: size">
+														<span class="note">% of screen width</span>
 													</td>
 												</tr>
 												<tr>
@@ -430,19 +442,14 @@
 												<tr>
 													<th><label for="fade">Fade</label></th>
 													<td>
-														<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
-														<span class="note">seconds</span>
-													</td>
-												</tr>
-												<tr>
-													<th></th>
-													<td>
-														<ul class="modifier-list">
-															<li class="modifier">
+														<ul class="control-list">
+															<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
+															<span class="note">seconds</span>
+															<li>
 																<input id="fade-in" type="checkbox" data-bind="checked: fadeIn">
 																<label for="fade-in">In</label>
 															</li>
-															<li class="modifier">
+															<li>
 																<input id="fade-out" type="checkbox" data-bind="checked: fadeOut">
 																<label for="fade-out">Out</label>
 															</li>

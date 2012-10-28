@@ -11,8 +11,7 @@ var AdventureViewModel = function(app) {
 			mixin: false,
 			background: '#000000',
 			fade: 0,
-			fadeIn: true,
-			fadeOut: true,
+			fadeDirection: 'in out',
 			get isForeground() {
 				return this.layer === 'foreground'
 			},
@@ -150,8 +149,8 @@ var AdventureViewModel = function(app) {
 		converted.isMixin = scene.mixin;
 		converted.backgroundColor = scene.background;
 		converted.fadeDuration = scene.fade * 1000;
-		converted.fadesIn = scene.fadeIn;
-		converted.fadesOut = scene.fadeOut;
+		converted.fadesIn = scene.fadeDirection.contains('in');
+		converted.fadesOut = scene.fadeDirection.contains('out');
 		
 		if ( scene.image.path.length > 0 ) {
 			converted.image = scene.image.path;

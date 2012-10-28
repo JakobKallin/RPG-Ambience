@@ -39,6 +39,10 @@ Array.prototype.randomIndex = function() {
 	return Math.floor(Math.random() * this.length);
 };
 
+String.prototype.contains = function(substring) {
+	return this.indexOf(substring) !== -1;
+};
+
 String.prototype.startsWith = function(prefix) {
 	return this.indexOf(prefix) === 0;
 };

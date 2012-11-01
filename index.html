@@ -443,15 +443,16 @@
 													<th><label for="fade">Fade</label></th>
 													<td>
 														<ul class="control-list">
-															<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
-															<span class="note">seconds</span>
 															<li>
-																<input id="fade-in" type="checkbox" data-bind="checked: fadeIn">
-																<label for="fade-in">In</label>
+																<input id="fade" type="number" min="0" value="0" data-bind="value: fade">
+																<span class="note">seconds</span>
 															</li>
 															<li>
-																<input id="fade-out" type="checkbox" data-bind="checked: fadeOut">
-																<label for="fade-out">Out</label>
+																<select data-bind="value: fadeDirection">
+																	<option value="in out">In and out</option>
+																	<option value="in">In</option>
+																	<option value="out">Out</option>
+																</select>
 															</li>
 														</ul>
 													</td>

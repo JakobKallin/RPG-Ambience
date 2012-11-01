@@ -50,32 +50,6 @@ describe('Ambience layer', function() {
 		});
 	});
 	
-	it('interrupts a fade halfway through', function() {
-		runs(function() {
-			var scene = new Ambience.Scene();
-			scene.fadeDuration = 2000;
-			ambience.play(scene);
-		});
-		
-		waits(1000);
-		
-		runs(function() {
-			ambience.fadeOutBackground();
-		});
-		
-		waits(500);
-		
-		runs(function() {
-			expect(layer.opacity).toBeLessThan(0.5);
-		});
-		
-		waits(1000);
-		
-		runs(function() {
-			expect(layer.opacity).toBe(0);
-		});
-	});
-	
 	it('stops all layers after fading out', function() {
 		runs(function() {
 			var scene = new Ambience.Scene();

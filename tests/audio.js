@@ -40,33 +40,6 @@ describe('Ambience audio', function() {
 		});
 	});
 	
-	it('interrupts an audio fade halfway through', function() {
-		runs(function() {
-			var scene = new Ambience.Scene();
-			scene.fadeDuration = 2000;
-			scene.sounds = ['test-audio.ogg'];
-			ambience.play(scene);
-		});
-		
-		waits(1000);
-		
-		runs(function() {
-			ambience.fadeOutBackground();
-		});
-		
-		waits(500);
-		
-		runs(function() {
-			expect(layer.soundNode.volume).toBeLessThan(0.5);
-		});
-		
-		waits(1000);
-		
-		runs(function() {
-			expect(layer.soundCount).toBe(0);
-		});
-	});
-	
 	it('stops non-looping audio-only scenes when audio ends', function() {
 		runs(function() {
 			var scene = new Ambience.Scene();

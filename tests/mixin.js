@@ -192,11 +192,11 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('respects volume of mixed-in scene', function() {
-		var scene = new Ambience.Scene();
-		scene.sounds = ['test-audio-2s.ogg'];
-		
 		runs(function() {
+			var scene = new Ambience.Scene();
+			scene.sounds = ['test-audio-2s.ogg'];
 			ambience.play(scene);
+			
 			var mixin = new Ambience.Scene();
 			mixin.isMixin = true;
 			mixin.sounds = ['test-audio-2s.ogg'];

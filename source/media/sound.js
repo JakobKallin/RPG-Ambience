@@ -1,6 +1,7 @@
 Ambience.Sound = function(path, container, fade, maxVolume) {
 	var node = document.createElement('audio');
 	node.src = encodeURI(path);
+	node.volume = maxVolume;
 	fade.track(node, 'volume', maxVolume);
 	
 	var hasStopped = false;

@@ -1,7 +1,8 @@
 Ambience.Layer = function(node) {
 	var fadeOutDuration;
-	var fade;
-	var stopTimer;
+	var fade = new Manymation();
+	fade.track(node.style, 'opacity', 1);
+	var isFadingOut = false;
 	
 	var mediaPlayers = {
 		'backgroundColor': new Ambience.Background(node),
@@ -84,26 +85,20 @@ Ambience.Layer = function(node) {
 			node.style.visibility = 'visible';
 		}
 		
-		fade.play(scene.fadeInDuration);		
+		fade.play(scene.fadeInDuration);
 	}
 	
 	function stopFade() {
 		if ( fade ) {
-			fade.stop();
+			fade.complete();
 		}
-		
-		fade = new Manymation(stopScene);
-		fade.track(node.style, 'opacity', 1);
-		
-		window.clearTimeout(stopTimer);
-		stopTimer = null;
 	}
 	
 	function fadeOutScene() {
-		if ( fade.isRewinding ) {
+		if ( fade.isReversing ) {
 			stopScene();
 		} else {
-			fade.rewind(fadeOutDuration);
+			fade.reverse(fadeOutDuration, stopScene);
 		}
 	}
 	

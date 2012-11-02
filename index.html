@@ -303,25 +303,6 @@
 										<div class="tab-content" id="sound-tab" data-bind="with: sound">
 											<table>
 												<tr>
-													<td colspan="2">
-														<ol data-bind="foreach: tracks, sortable: true" class="item-list">
-															<li class="item">
-																<div class="move">
-																	<img src="images/move.svg">
-																</div>
-																<div class="content">
-																	<span data-bind="text: name"></span>
-																	<audio data-bind="attr: { src: path }" preload="auto"></audio>
-																</div>
-																<div class="remove">
-																	<button data-bind="click: $parent.unload">Remove</button>
-																</div>
-															</li>
-														</ol>
-														<button type="button" class="file" data-bind="event: { change: onSelected }">Add Sounds</button>
-													</td>
-												</tr>
-												<tr>
 													<th><label>Playback</label></th>
 													<td>
 														<ul class="control-list">
@@ -341,13 +322,6 @@
 													</td>
 												</tr>
 												<tr>
-													<th><label for="crossover">Crossover</label></th>
-													<td>
-														<input id="crossover" type="number" min="0" value="0" data-bind="value: crossover">
-														<span class="note">seconds</span>
-													</td>
-												</tr>
-												<tr>
 													<th>
 														<label for="volume">Volume</label>
 													</th>
@@ -360,6 +334,29 @@
 															step="10"
 															data-bind="value: volume">
 														<span class="note">%</span>
+													</td>
+												</tr>
+												<tr>
+													<th><label>Tracks</label></th>
+													<td>
+														<!-- ko if: tracks.length === 0 -->
+														<p class="note">No tracks selected</p>
+														<!-- /ko -->
+														<ol data-bind="foreach: tracks, sortable: true" class="item-list">
+															<li class="item">
+																<div class="move">
+																	<img src="images/move.svg">
+																</div>
+																<div class="content">
+																	<span data-bind="text: name"></span>
+																	<audio data-bind="attr: { src: path }" preload="auto"></audio>
+																</div>
+																<div class="remove">
+																	<button data-bind="click: $parent.unload">Remove</button>
+																</div>
+															</li>
+														</ol>
+														<button type="button" class="file" data-bind="event: { change: onSelected }">Add Tracks</button>
 													</td>
 												</tr>
 											</table>

@@ -14,6 +14,10 @@ li {
 	cursor: help;
 }
 
+label {
+	white-space: nowrap;
+}
+
 label[for] {
 	cursor: pointer;
 }
@@ -47,10 +51,6 @@ div, li {
 }
 
 /* Multi-purpose classes */
-
-.note {
-	opacity: 0.5;
-}
 
 .tab {
 	display: block;
@@ -320,7 +320,8 @@ body {
 				}
 
 				.options td, .options th {
-					padding: 0.125em 0.25em;
+					padding: 0 0.25em;
+					line-height: 2em;
 				}
 
 				.options th {
@@ -336,7 +337,6 @@ body {
 
 				.options td {
 					width: 100%;
-					white-space: nowrap;
 				}
 				
 				.options td.secondary  {
@@ -368,7 +368,6 @@ body {
 				.item-list .item {
 					display: table;
 					width: 100%;
-					margin: 0.5em 0;
 					cursor: move;
 				}
 

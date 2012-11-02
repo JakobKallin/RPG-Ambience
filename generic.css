@@ -45,3 +45,7 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 .splitter {
 	border-color: hsl(0, 0%, 25%);
 }
+
+.note {
+	color: hsl(0, 0%, 40%);
+}

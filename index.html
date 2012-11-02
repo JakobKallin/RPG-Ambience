@@ -310,7 +310,8 @@
 																	<img src="images/move.svg">
 																</div>
 																<div class="content">
-																	<span data-bind="text: name">
+																	<span data-bind="text: name"></span>
+																	<audio data-bind="attr: { src: path }" preload="auto"></audio>
 																</div>
 																<div class="remove">
 																	<button data-bind="click: $parent.unload">Remove</button>

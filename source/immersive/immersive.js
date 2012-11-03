@@ -245,6 +245,8 @@ var ViewModel = function(editorWidth) {
 		title.text.size = 9;
 		title.text.font = 'Constantia, Georgia, serif';
 		title.fade = 3.2;
+		
+		adventure.select(music);
 	};
 };
 

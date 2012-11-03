@@ -27,26 +27,6 @@ var ViewModel = function(editorWidth) {
 		ambience.fadeOutTopmost();
 	};
 	
-	self.reader = new AdventureReader(self);
-	self.readSelectedAdventure = function(viewModel, selectEvent) {
-		var file = selectEvent.target.files[0];
-		self.reader.read(file);
-	};
-	
-	self.readDroppedAdventure = function(viewModel, dropEvent) {
-		var file = dropEvent.dataTransfer.files[0];
-		self.reader.read(file);
-	};
-	
-	self.handleDrag = function(viewModel, dragEvent) {
-		dragEvent.dataTransfer.dropEffect = 'copy';
-	};
-	
-	var writer = new AdventureWriter(self);
-	self.saveAdventure = function() {
-		writer.write(self.adventure);
-	};
-	
 	self.adventure = undefined;
 	self.createAdventure = function() {
 		self.adventure = new AdventureViewModel(self);

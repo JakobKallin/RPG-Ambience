@@ -1,7 +1,7 @@
 Ambience.Layer = function(node) {
 	var fadeOutDuration;
 	var fade = new Manymation();
-	fade.track(node.style, 'opacity', 1);
+	fade.track(node.style, 'opacity', 0.999);
 	var isFadingOut = false;
 	
 	var mediaPlayers = {

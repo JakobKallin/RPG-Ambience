@@ -1,30 +1,31 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Ambience</title>
-		<script src="jquery.js"></script>
-		<script src="functions.js"></script>
-		<script src="js-yaml.js"></script>
-		<script src="ambience.js"></script>
-		<script src="stage.js"></script>
-		<script src="audiovisual.js"></script>
-		<script src="immersive.js"></script>
-		<link rel="stylesheet" type="text/css" href="ambience.css">
+		<meta charset="utf-8">
+		<title>RPG Ambience</title>
+		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-		<div id="menu">
-			<form>
-				<p>Choose or drop an adventure file here</p>
-				<p><input type="file" id="file-chooser"></p>
-			</form>
+		<h1>RPG Ambience</h1>
+		<h2>Bring your game to life with music and visuals</h2>
+		<div class="preview">
+			<div class="teaser">
+				<a href="teaser.html" class="action-container">
+					<span class="action play">Watch Teaser</span>
+				</a>
+			</div><!--
+			--><div class="information">
+				<ul class="features">
+					<li>Design scenes with music, images, and text</li>
+					<li>Bind scenes to keyboard shortcuts</li>
+					<li>Loop and shuffle music</li>
+					<li>Fade scenes in and out</li>
+					<li>Runs directly in your browser</li>
+				</ul>
+				<p><a class="action navigate" href="ambience.html">Try RPG Ambience</a></p>
+			</div>
 		</div>
-		<div id="scene-stage" class="stage">
-			<span id="scene-text"></span>
-			<audio id="scene-sound"></audio>
-		</div>
-		<div id="effect-stage" class="stage">
-			<span id="effect-text"></span>
-			<audio id="effect-sound"></audio>
-		</div>
+		<p class="github"><a href="https://github.com/JakobKallin/RPG-Ambience">Fork me on GitHub</a></p>
+		<p class="credits">Artwork © copyright Blender Foundation | <a href="http://www.sintel.org">www.sintel.org</a></p>
 	</body>
 </html>

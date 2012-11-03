@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>RPG Ambience Teaser</title>
+		
+		<script src="libraries/functions.js"></script>
+		<script src="libraries/manymation/source/manymation.js"></script>
+		
+		<script src="source/ambience.js"></script>
+		<script src="source/media/background.js"></script>
+		<script src="source/media/image.js"></script>
+		<script src="source/media/sound-list.js"></script>
+		<script src="source/media/sound.js"></script>
+		<script src="source/media/text.js"></script>
+		<script src="source/scene.js"></script>
+		<script src="source/layer.js"></script>
+		
+		<script>
+			['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
+				var url = 'example/' + filename;
+				var node = document.createElement('audio');
+				node.preload = 'auto';
+				node.src = url;
+			});
+			
+			['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
+				var url = 'example/' + filename;
+				var node = document.createElement('img');
+				node.src = url;
+			});
+			
+			window.addEventListener('load', function() {
+				document.getElementById('play').addEventListener('click', function(event) {
+					event.preventDefault();
+					start();
+				});
+			});
+			
+			var start = function() {
+				document.getElementById('pre-information').style.visibility = 'hidden';
+				var layers = ['background', 'foreground'].map(function(id) {
+					var node = document.getElementById(id);
+					return new Ambience.Layer(node);
+				});
+				var ambience = new Ambience(layers[0], layers[1]);
+				startTeaser(ambience);
+			};
+			
+			var startTeaser = function(ambience) {
+				var soundtrack = new Ambience.Scene();
+				soundtrack.sounds = ['example/9-Trailer_Music.ogg'];
+				soundtrack.loops = false;
+				
+				var imagine = new Ambience.Scene();
+				imagine.layer = 'foreground';
+				imagine.text = 'Don’t just imagine your world';
+				imagine.textStyle = {
+					fontSize: '4.5em',
+					fontFamily: 'Palatino Linotype, Georgia, serif',
+					fontStyle: 'italic'
+				};
+				imagine.fadeDuration = 1600;
+				
+				var life = new Ambience.Scene();
+				life.layer = 'foreground';
+				life.text = 'Bring it to life';
+				life.textStyle = {
+					fontSize: '9em',
+					fontFamily: 'Palatino Linotype, Georgia, serif',
+					fontStyle: 'italic'
+				};
+				life.fadeDuration = 1600;
+				life.fadesIn = false;
+				
+				var city = new Ambience.Scene();
+				city.layer = 'foreground';
+				city.image = 'example/ishtar_rooftop.jpg';
+				city.imageStyle = {
+					backgroundSize: 'cover'
+				};
+				city.fadeDuration = 4000;
+				
+				var dragon = new Ambience.Scene();
+				dragon.layer = 'foreground';
+				dragon.image = 'example/sintel-wallpaper-dragon.jpg';
+				dragon.imageStyle = {
+					backgroundSize: 'cover'
+				};
+				dragon.sounds = ['example/dragon.ogg'];
+				dragon.loops = false;
+				dragon.fadeDuration = 3200;
+				dragon.fadesIn = false;
+				
+				var title = new Ambience.Scene();
+				title.layer = 'foreground';
+				title.text = 'RPG Ambience';
+				title.textStyle = {
+					fontSize: '9em',
+					fontFamily: 'Constantia, Georgia, serif'
+				};
+				title.fadeDuration = 3200;
+				
+				window.setTimeout(function() {
+					ambience.play(soundtrack);
+					ambience.play(imagine);
+				}, 1000);
+				
+				window.setTimeout(function() {
+					ambience.fadeOutForeground();
+				}, 6500);
+				
+				window.setTimeout(function() {
+					ambience.stopForeground();
+					ambience.play(life);
+				}, 8500);
+				
+				window.setTimeout(function() {
+					ambience.fadeOutForeground();
+				}, 11500);
+				
+				window.setTimeout(function() {
+					ambience.stopForeground();
+					ambience.play(city);
+				}, 13500);
+				
+				window.setTimeout(function() {
+					ambience.play(dragon);
+				}, 18000);
+				
+				window.setTimeout(function() {
+					ambience.fadeOutForeground();
+				}, 24000);
+				
+				window.setTimeout(function() {
+					ambience.stopForeground();
+					ambience.play(title);
+				}, 28000);
+				
+				window.setTimeout(function() {
+					ambience.fadeOutForeground();
+				}, 33000);
+				
+				window.setTimeout(function() {
+					document.getElementById('post-information').style.visibility = 'visible';
+				}, 39500);
+			};
+		</script>
+		
+		<link rel="stylesheet" href="teaser.css">
+	</head>
+	<body>
+		<div class="ambience">
+			<div id="background" class="layer"></div>
+			<div id="foreground" class="layer"></div>
+		</div>
+		<div class="information" id="post-information" style="visibility: hidden">
+			<div class="primary">
+				<p style="font-size: 4em"><a href="ambience.html" class="action navigate">Try RPG Ambience</a></p>
+			</div>
+			<div class="secondary">
+				<p style="font-size: 2em">This trailer was made with RPG Ambience</p>
+				<p style="font-size: 1.5em">Artwork and music © copyright Blender Foundation | <a href="http://www.sintel.org/">www.sintel.org</a></p>
+			</div>
+		</div>
+		<div class="information" id="pre-information">
+			<div class="primary">
+				<p style="font-size: 4em"><a href="#play" class="action play" id="play">Play Teaser</a></p>
+			</div>
+		</div>
+	</body>
+</html>

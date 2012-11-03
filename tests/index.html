@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Jasmine Spec Runner</title>
+		
+		<link rel="stylesheet" href="jasmine/jasmine.css">
+		<script src="jasmine/jasmine.js"></script>
+		<script src="jasmine/jasmine-html.js"></script>
+		
+		<script src="../libraries/functions.js"></script>
+		<script src="../libraries/manymation/source/manymation.js"></script>
+		<script src="../source/ambience.js"></script>
+		<script src="../source/layer.js"></script>
+		<script src="../source/scene.js"></script>
+		<script src="../source/media/image.js"></script>
+		<script src="../source/media/sound-list.js"></script>
+		<script src="../source/media/sound.js"></script>
+		<script src="../source/media/background.js"></script>
+		<script src="../source/media/text.js"></script>
+		
+		<script src="wrapper.js"></script>
+		<script src="layer.js"></script>
+		<script src="audio.js"></script>
+		<script src="mixin.js"></script>
+
+		<script>
+			(function() {
+				var jasmineEnv = jasmine.getEnv();
+				jasmineEnv.updateInterval = 1000;
+
+				var htmlReporter = new jasmine.HtmlReporter();
+				jasmineEnv.addReporter(htmlReporter);
+
+				jasmineEnv.specFilter = function(spec) {
+					return htmlReporter.specFilter(spec);
+				};
+
+				window.addEventListener('load', execJasmine);
+
+				function execJasmine() {
+					jasmineEnv.execute();
+				}
+			})();
+		</script>
+	</head>
+
+<body>
+</body>
+</html>

@@ -22,7 +22,7 @@ var AdventureViewModel = function(app) {
 				id: '',
 				size: 'contain',
 				get css() {
-					return 'url("' + encodeURI(this.path) + '")';						
+					return 'url("' + this.path + '")';						
 				},
 				onSelected: function(viewModel, changeEvent) {
 					var file = changeEvent.target.files[0];

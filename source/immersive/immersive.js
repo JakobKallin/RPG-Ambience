@@ -32,6 +32,8 @@ var ViewModel = function(editorWidth) {
 		self.adventure = new AdventureViewModel(self);
 		self.adventure.add();
 		self.adventure.select(self.adventure.scenes[0]);
+		
+		return self.adventure;
 	};
 	
 	function startInterface() {
@@ -177,6 +179,73 @@ var ViewModel = function(editorWidth) {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName
 	};
+	
+	self.loadExampleAdventure = function() {
+		var adventure = self.createAdventure();
+		
+		var music = adventure.scenes[0];
+		music.name = 'Music';
+		music.key = 'M';
+		music.sound.tracks.push({
+			name: '9-Trailer_Music.ogg',
+			path: 'example/9-Trailer_Music.ogg'
+		});
+		music.sound.loop = false;
+		
+		var imagine = adventure.add();
+		imagine.name = 'Imagine';
+		imagine.key = '1';
+		imagine.layer = 'foreground';
+		imagine.fade = 1.6;
+		imagine.text.string = 'Don’t just imagine your world';
+		imagine.text.size = 4.5;
+		imagine.text.font = 'Palatino Linotype, Georgia, serif';
+		imagine.text.italic = true;
+		
+		var life = adventure.add();
+		life.name = 'Life';
+		life.key = '2';
+		life.layer = 'foreground';
+		life.text.string = 'Bring it to life';
+		life.text.size = 9;
+		life.text.font = 'Palatino Linotype, Georgia, serif';
+		life.text.italic = true;
+		life.fade = 1.6;
+		life.fadeDirection = 'out';
+		
+		var city = adventure.add();
+		city.name = 'City';
+		city.key = 'C';
+		city.layer = 'foreground';
+		city.image.name = 'ishtar_rooftop.jpg';
+		city.image.path = 'example/ishtar_rooftop.jpg';
+		city.image.size = 'cover';
+		city.fade = 4;
+		
+		var dragon = adventure.add();
+		dragon.name = 'Dragon';
+		dragon.key = 'D';
+		dragon.layer = 'foreground';
+		dragon.image.name = 'sintel-wallpaper-dragon.jpg';
+		dragon.image.path = 'example/sintel-wallpaper-dragon.jpg';
+		dragon.image.size = 'cover';
+		dragon.sound.tracks.push({
+			name: 'dragon.ogg',
+			path: 'example/dragon.ogg'
+		});
+		dragon.sound.loop = false;
+		dragon.fade = 3.2;
+		dragon.fadeDirection = 'out';
+		
+		var title = adventure.add();
+		title.name = 'Ambience';
+		title.key = 'A';
+		title.layer = 'foreground';
+		title.text.string = 'RPG Ambience';
+		title.text.size = 9;
+		title.text.font = 'Constantia, Georgia, serif';
+		title.fade = 3.2;
+	};
 };
 
 var viewModel;
@@ -188,7 +257,7 @@ window.addEventListener('load', function() {
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	
-	viewModel.createAdventure();
+	viewModel.loadExampleAdventure();
 	
 	$(document.getElementById('view-list')).tabs();
 });

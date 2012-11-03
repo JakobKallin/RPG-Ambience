@@ -1,0 +1,197 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	min-width: 60em;
+	min-height: 100%;
+}
+
+body {
+	background-color: black;
+	color: white;
+	font-family: Constantia, Georgia, serif;
+	background-image:
+		-webkit-linear-gradient(left, black 0%, hsla(0, 0%, 0%, 0) 31.5%, black 63%, black 100%),
+		-webkit-linear-gradient(top, hsla(0, 100%, 100%, 0) 0%, hsla(0, 100%, 100%, 0.15) 100%),
+		-webkit-linear-gradient(top, hsla(0, 100%, 100%, 0.35) 0%, hsla(0, 100%, 100%, 0.35) 100%),
+		-webkit-linear-gradient(top, hsla(0, 100%, 100%, 0.20) 0%, hsla(0, 100%, 100%, 0) 100%)
+	;
+	background-image:
+		-moz-linear-gradient(left, black 0%, hsla(0, 0%, 0%, 0) 31.5%, black 63%, black 100%),
+		-moz-linear-gradient(top, hsla(0, 100%, 100%, 0) 0%, hsla(0, 100%, 100%, 0.15) 100%),
+		-moz-linear-gradient(top, hsla(0, 100%, 100%, 0.35) 0%, hsla(0, 100%, 100%, 0.35) 100%),
+		-moz-linear-gradient(top, hsla(0, 100%, 100%, 0.20) 0%, hsla(0, 100%, 100%, 0) 100%)
+	;
+	background-image:
+		-o-linear-gradient(left, black 0%, hsla(0, 0%, 0%, 0) 31.5%, black 63%, black 100%),
+		-o-linear-gradient(top, hsla(0, 100%, 100%, 0) 0%, hsla(0, 100%, 100%, 0.15) 100%),
+		-o-linear-gradient(top, hsla(0, 100%, 100%, 0.35) 0%, hsla(0, 100%, 100%, 0.35) 100%),
+		-o-linear-gradient(top, hsla(0, 100%, 100%, 0.20) 0%, hsla(0, 100%, 100%, 0) 100%)
+	;
+	background-size:
+		95em 100%,
+		95em 10em,
+		95em 0.0625em,
+		95em 16em
+	;
+	background-position:
+		center center,
+		center 23.5em,
+		center 33.5em,
+		center 33.5675em
+	;
+	background-repeat: no-repeat;
+}
+
+h1 {
+	margin-top: 1em;
+	text-align: center;
+	font-size: 4em;
+	font-weight: normal;
+	line-height: 1.5em;
+}
+
+h2 {
+	text-align: center;
+	color: hsl(0, 0%, 75%);
+	font-size: 1.25em;
+	line-height: 1.5em;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.preview {
+	margin-top: 4em;
+	text-align: center;
+}
+
+.teaser {
+	position: relative;
+	display: inline-block;
+	width: 25em;
+	min-height: 21.625em;
+	line-height: 16.3125em;
+	padding-right: 5em;
+	text-align: center;
+	vertical-align: top;
+	
+	background-image: url('images/monitor.png');
+	background-size: 25em auto;
+	background-position: left top;
+	background-repeat: no-repeat;
+}
+
+.teaser .action-container {
+	display: block;
+	border: 0;
+}
+
+.teaser .action-container:hover {
+	box-shadow: 0 0 5em hsla(200, 100%, 50%, 0.25);
+}
+
+.information {
+	display: inline-block;
+	width: 30em;
+	vertical-align: top;
+	text-align: left;
+}
+
+.features {
+	font-size: 1.5em;
+	line-height: 1.5;
+}
+
+.information p {
+	margin: 1em 0;
+	font-size: 1.5em;
+	line-height: 2em;
+}
+
+.action {
+	font-style: italic;
+	padding: 0.35em;
+	color: white;
+	text-decoration: none;
+	border-radius: 0.1875rem;
+	border: 0.0625rem solid hsl(220, 50%, 50%);
+	background-color: hsl(220, 100%, 50%);
+	background-image: -webkit-linear-gradient(
+		top,
+		hsla(0, 0%, 0%, 0) 0%,
+		hsla(0, 0%, 0%, 0.5) 100%
+	);
+	background-image: -moz-linear-gradient(
+		top,
+		hsla(0, 0%, 0%, 0) 0%,
+		hsla(0, 0%, 0%, 0.5) 100%
+	);
+	background-image: -o-linear-gradient(
+		top,
+		hsla(0, 0%, 0%, 0) 0%,
+		hsla(0, 0%, 0%, 0.5) 100%
+	);
+	text-shadow: 0.0625rem 0.0625rem 0.0625rem black;
+	box-shadow: 0 0 0.5em black;
+}
+
+.action-container {
+	text-decoration: none;
+}
+
+.action-container:hover .action, .action:hover {
+	background-color: hsl(220, 100%, 45%);
+}
+
+.action.navigate:before {
+	content: "» ";
+}
+
+.action.play:before {
+	content: "► ";
+}
+
+.github {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 9.3125em;
+	height: 9.3125em;
+	margin: 0;
+	font-size: 1em;
+	background-image: url('images/github.png');
+	background-repeat: no-repeat;
+}
+
+.github:hover {
+	background-image: url('images/github-active.png');
+}
+
+.github a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: hsla(0, 0%, 100%, 0);
+	border: 0;
+}
+
+.credits {
+	margin: 1.5em;
+	margin-top: 7.5em;
+	text-align: center;
+	font-size: 0.75em;
+	color: hsl(0, 0%, 25%);
+}
+
+.credits a {
+	color: hsl(220, 100%, 35%);
+	border-bottom: 0.0625rem solid hsl(220, 100%, 35%);
+	text-decoration: none;
+}
+
+.credits a:hover {
+	color: hsl(220, 100%, 60%);
+	border-bottom-color: hsl(220, 100%, 60%);
+}

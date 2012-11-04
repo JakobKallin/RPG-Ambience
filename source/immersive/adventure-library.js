@@ -2,8 +2,8 @@ var AdventureLibrary = function(app) {
 	this.load = function() {
 		var state = JSON.parse(localStorage.getItem('adventure'));
 		if ( state ) {
-			var adventure = new AdventureViewModel(app);
-			app.adventure = adventure; // Needs to be called before select(), for some unknown reason.
+			var adventure = app.adventure;
+			adventure.scenes.clear();
 			
 			state.scenes.forEach(function(sceneState) {
 				var scene = adventure.newScene();

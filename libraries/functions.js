@@ -25,6 +25,10 @@ Array.prototype.remove = function(value) {
 	}
 };
 
+Array.prototype.clear = function() {
+	this.splice(0);
+};
+
 Array.prototype.first = function(predicate) {
 	for ( var i = 0; i < this.length; i++ ) {
 		var value = this[i];

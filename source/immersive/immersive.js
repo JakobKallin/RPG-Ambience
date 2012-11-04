@@ -27,17 +27,17 @@ var ViewModel = function(editorWidth) {
 		ambience.fadeOutTopmost();
 	};
 	
-	self.adventure = undefined;
+	self.adventure = new AdventureViewModel(self);
 	self.createAdventure = function() {
-		self.adventure = new AdventureViewModel(self);
+		self.adventure.scenes.clear();
 		self.adventure.add();
 		self.adventure.select(self.adventure.scenes[0]);
-		
-		return self.adventure;
 	};
 	
 	self.library = new AdventureLibrary(self);
 	self.loadAdventure = function() {
+		self.createAdventure()
+		
 		var loaded = self.library.load();
 		if ( !loaded ) {
 			self.loadExampleAdventure();
@@ -193,9 +193,10 @@ var ViewModel = function(editorWidth) {
 	};
 	
 	self.loadExampleAdventure = function() {
-		var adventure = self.createAdventure();
+		var adventure = self.adventure;
+		adventure.scenes.clear();
 		
-		var music = adventure.scenes[0];
+		var music = adventure.add();
 		music.name = 'Music';
 		music.key = 'M';
 		music.sound.tracks.push({

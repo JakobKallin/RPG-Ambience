@@ -55,22 +55,6 @@ String.prototype.endsWith = function(suffix) {
 	return this.lastIndexOf(suffix) === this.length - suffix.length;
 };
 
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
-Object.defineProperty(String.prototype, 'isAbsoluteUri', {
-	get: function() {
-		return Boolean(this.match(/^[a-z]([a-z]|\d|[+-.])*:\/\//i));
-	}
-});
-
-Object.defineProperty(String.prototype, 'isRelativeUri', {
-	get: function() {
-		return !this.isAbsoluteUri;
-	}
-});
-
 Object.defineProperty(String.prototype, 'isCharacter', {
 	get: function() {
 		return this.match(/^[^\b\f\r\n\t\v\s\0]$/);

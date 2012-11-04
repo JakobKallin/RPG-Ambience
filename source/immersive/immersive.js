@@ -36,6 +36,18 @@ var ViewModel = function(editorWidth) {
 		return self.adventure;
 	};
 	
+	self.library = new AdventureLibrary(self);
+	self.loadAdventure = function() {
+		var loaded = self.library.load();
+		if ( !loaded ) {
+			self.loadExampleAdventure();
+		}
+		
+		window.addEventListener('beforeunload', function() {
+			self.library.save(self.adventure);
+		});
+	};
+	
 	function startInterface() {
 		self.splitter = new Splitter(document.getElementById('interface'), editorWidth);
 		
@@ -259,7 +271,8 @@ window.addEventListener('load', function() {
 	viewModel.start();
 	ko.applyBindings(viewModel);
 	
-	viewModel.loadExampleAdventure();
+	// This needs to be done after applying the bindings, for some unknown reason.
+	viewModel.loadAdventure();
 	
 	$(document.getElementById('view-list')).tabs();
 });

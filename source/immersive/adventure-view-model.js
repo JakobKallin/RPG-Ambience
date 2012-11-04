@@ -171,8 +171,6 @@ var AdventureViewModel = function(app) {
 		converted.volume = scene.sound.volume / 100;
 		converted.crossoverDuration = scene.sound.crossover;
 		
-		
-		
 		var text = scene.text;
 		converted.text = text.string;
 		converted.textStyle = {

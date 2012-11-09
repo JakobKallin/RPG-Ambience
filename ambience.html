@@ -458,6 +458,7 @@
 				data-bind="
 					visible: guiEditorIsVisible,
 					event: {
+						keydown: stopPropagation,
 						mousemove: scheduleHiddenInterface,
 						mouseover: scheduleHiddenInterface
 					}

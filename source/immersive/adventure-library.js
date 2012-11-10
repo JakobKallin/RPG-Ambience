@@ -9,6 +9,20 @@ var AdventureLibrary = function(app) {
 				var scene = adventure.newScene();
 				Object.overlay(scene, sceneState);
 				adventure.scenes.push(scene);
+				
+				if ( scene.image.id ) {
+					app.media.load(scene.image.id, function(url) {
+						scene.image.path = url;
+					});
+				}
+				
+				scene.sound.tracks.forEach(function(track) {
+					if ( track.id ) {
+						app.media.load(track.id, function(url) {
+							track.path = url;
+						});
+					}
+				});
 			});
 			
 			if ( adventure.scenes.length > 0 ) {
@@ -27,6 +41,20 @@ var AdventureLibrary = function(app) {
 				return scene.copyState();
 			})
 		};
+		
+		// Keep temporary object URLs from being saved.
+		state.scenes.forEach(function(scene) {
+			if ( scene.image.id ) {
+				scene.image.path = '';
+			}
+			
+			scene.sound.tracks.forEach(function(track) {
+				if ( track.id ) {
+					track.path = '';
+				}
+			});
+		});
+		
 		localStorage.setItem('adventure', JSON.stringify(state));
 	};
 };

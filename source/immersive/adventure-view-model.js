@@ -32,9 +32,13 @@ var AdventureViewModel = function(app) {
 				},
 				load: function(file) {
 					var objectURL = window.URL.createObjectURL(file);
+					var id = objectURL.replace(/^blob:/, '');
+					
 					this.name = file.name;
 					this.path = objectURL;
-					this.id = objectURL;
+					this.id = id;
+					
+					app.media.save(id, file);
 				},
 				unload: function() {
 					this.path = '';
@@ -57,11 +61,15 @@ var AdventureViewModel = function(app) {
 				},
 				load: function(file) {
 					var objectURL = window.URL.createObjectURL(file)
+					var id = objectURL.replace(/^blob:/, '');
+					
 					this.tracks.push({
 						name: file.name,
 						path: objectURL,
-						id: objectURL
+						id: id
 					});
+					
+					app.media.save(id, file);
 				},
 				unload: function(track) {
 					this.tracks.remove(track);

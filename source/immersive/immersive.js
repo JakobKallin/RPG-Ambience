@@ -1,4 +1,4 @@
-var ViewModel = function(editorWidth) {
+var ViewModel = function(db, editorWidth) {
 	var self = this;
 	
 	self.start = function() {
@@ -47,6 +47,8 @@ var ViewModel = function(editorWidth) {
 			self.library.save(self.adventure);
 		});
 	};
+	
+	self.media = new MediaLibrary(db);
 	
 	function startInterface() {
 		self.splitter = new Splitter(document.getElementById('interface'), editorWidth);
@@ -265,15 +267,43 @@ var ViewModel = function(editorWidth) {
 
 var viewModel;
 window.addEventListener('load', function() {
-	delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
+	var dbRequest = indexedDB.open('media');
 	
-	viewModel = new ViewModel(0.6);
-	knockwrap.wrap(viewModel);
-	viewModel.start();
-	ko.applyBindings(viewModel);
+	dbRequest.onupgradeneeded = function(event) {
+		createDatabase(event.target.result);
+	};
 	
-	// This needs to be done after applying the bindings, for some unknown reason.
-	viewModel.loadAdventure();
+	dbRequest.onsuccess = function(successEvent) {
+		var db = successEvent.target.result;
+		if ( db.setVersion ) {
+			db.setVersion('1').onsuccess = function(versionEvent) {
+				createDatabase(db)
+				versionEvent.target.result.oncomplete = function() {
+					onDatabaseLoaded(db);
+				};
+			}
+		} else {
+			onDatabaseLoaded(db);
+		}
+	};
 	
-	$(document.getElementById('view-list')).tabs();
+	var createDatabase = function(db) {
+		if ( !db.objectStoreNames.contains('media') ) {
+			db.createObjectStore('media');
+		}
+	};
+	
+	var onDatabaseLoaded = function(db) {
+		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
+		
+		viewModel = new ViewModel(db, 0.6);
+		knockwrap.wrap(viewModel);
+		viewModel.start();
+		ko.applyBindings(viewModel);
+		
+		// This needs to be done after applying the bindings, for some unknown reason.
+		viewModel.loadAdventure();
+		
+		$(document.getElementById('view-list')).tabs();
+	};
 });

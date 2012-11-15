@@ -46,7 +46,7 @@ describe('Ambience layer', function() {
 		waits(1000);
 		
 		runs(function() {
-			expect(layer.opacity).toBe(1);
+			expect(layer.opacity).toBeGreaterThan(0.9);
 		});
 	});
 	

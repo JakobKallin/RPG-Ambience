@@ -84,6 +84,7 @@ describe('Ambience audio', function() {
 			var scene = new Ambience.Scene();
 			scene.crossoverDuration = 2;
 			scene.sounds = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
+			scene.loops = false;
 			ambience.play(scene);
 		});
 		

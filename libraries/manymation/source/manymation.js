@@ -35,7 +35,19 @@ var Manymation = function() {
 		
 		elapsed = 0;
 		duration = newDuration;
-		onEnded = newOnEnded;
+		
+		if ( onEnded && !newOnEnded ) {
+			// Do nothing.
+		} else if ( onEnded && newOnEnded ) {
+			var oldOnEnded = onEnded;
+			onEnded = function() {
+				oldOnEnded();
+				newOnEnded();
+			};
+		} else {
+			onEnded = newOnEnded;
+		}
+		
 		reverse = newReverse;
 		start = window.mozAnimationStartTime || Number(new Date());
 		

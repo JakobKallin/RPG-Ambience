@@ -57,14 +57,6 @@ div, li {
 	float: left;
 }
 
-.tab.ui-tabs-selected, .tab:hover {
-	border-bottom-width: 2px;
-}
-
-.tab:not(:last-child) {
-	border-right-width: 0;
-}
-
 .ui-tabs-hide {
 	display: none;
 }

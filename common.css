@@ -375,11 +375,6 @@ body {
 				.control-list > *{
 					padding-right: 0.5em;
 				}
-				
-				.track-list > * {
-					display: list-item;
-					list-style: decimal inside;	
-				}
 
 .gui-editor {
 	right: 0;

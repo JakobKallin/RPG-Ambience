@@ -52,6 +52,17 @@ div, li {
 
 /* Multi-purpose classes */
 
+.primary {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.secondary {
+	float: right;
+}
+
 .tab {
 	display: block;
 	float: left;
@@ -66,6 +77,10 @@ div, li {
 		padding: 0.25em 0.5em;
 		text-decoration: none;
 	}
+
+.ui-sortable > * {
+cursor: move;
+}
 
 .ui-sortable-helper {
 	cursor: move !important;
@@ -349,6 +364,10 @@ body {
 					clear: both;
 				}
 				
+					.options.specific table {
+						width: 100%;
+					}
+				
 				.control-list, .control-list > * {
 					display: inline;
 				}
@@ -356,21 +375,11 @@ body {
 				.control-list > *{
 					padding-right: 0.5em;
 				}
-
-				.item-list .item {
-					cursor: move;
+				
+				.track-list > * {
+					display: list-item;
+					list-style: decimal inside;	
 				}
-					.item-list .item .remove {
-						float: right;
-					}
-					
-					.item-list .item .title {
-						display: list-item;
-						list-style: decimal inside;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-					}
 
 .gui-editor {
 	right: 0;

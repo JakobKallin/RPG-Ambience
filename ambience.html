@@ -248,24 +248,28 @@
 											<table>
 												<tr>
 													<td>
-														<!-- ko if: image.path -->
-															<span data-bind="text: image.name"></span>
-														<!-- /ko -->
-														<!-- ko if: !image.path -->
-															<span class="note">No image selected</span>
-														<!-- /ko -->
-													</td>
-													<td class="secondary" data-bind="visible: !image.path">
 														<button
 															type="button"
-															data-bind="event: {
-																change: image.onSelected
-															}"
-															class="file"
+															class="file secondary"
+															data-bind="
+																visible: !image.path,
+																event: {
+																	change: image.onSelected
+																}"
 															>Choose Image</button>
-													</td>
-													<td class="secondary" data-bind="visible: image.path">
-														<button type="button" data-bind="click: image.unload">Remove</button>
+														<button
+															type="button"
+															class="secondary"
+															data-bind="
+																visible: image.path,
+																click: image.unload
+															">Remove</button>
+														<!-- ko if: image.path -->
+															<span class="primary" data-bind="text: image.name"></span>
+														<!-- /ko -->
+														<!-- ko if: !image.path -->
+															<span class="primary note">No image selected</span>
+														<!-- /ko -->
 													</td>
 												</tr>
 												<tr>
@@ -330,10 +334,10 @@
 														<!-- ko if: tracks.length === 0 -->
 														<p class="note">No tracks selected</p>
 														<!-- /ko -->
-														<ol data-bind="foreach: tracks, sortable: true" class="item-list">
-															<li class="item">
-																<button class="remove" data-bind="click: $parent.unload">Remove</button>
-																<span class="title" data-bind="text: name"></span>
+														<ol data-bind="foreach: tracks, sortable: true" class="track-list">
+															<li>
+																<button class="secondary" data-bind="click: $parent.unload">Remove</button>
+																<span class="primary" data-bind="text: name"></span>
 																<audio data-bind="attr: { src: path }" preload="auto"></audio>
 															</li>
 														</ol>

@@ -332,16 +332,9 @@
 														<!-- /ko -->
 														<ol data-bind="foreach: tracks, sortable: true" class="item-list">
 															<li class="item">
-																<div class="move">
-																	<img src="images/move.svg">
-																</div>
-																<div class="content">
-																	<span data-bind="text: name"></span>
-																	<audio data-bind="attr: { src: path }" preload="auto"></audio>
-																</div>
-																<div class="remove">
-																	<button data-bind="click: $parent.unload">Remove</button>
-																</div>
+																<button class="remove" data-bind="click: $parent.unload">Remove</button>
+																<span class="title" data-bind="text: name"></span>
+																<audio data-bind="attr: { src: path }" preload="auto"></audio>
 															</li>
 														</ol>
 														<button type="button" class="file" data-bind="event: { change: onSelected }">Add Tracks</button>

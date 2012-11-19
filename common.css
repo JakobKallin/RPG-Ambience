@@ -358,32 +358,18 @@ body {
 				}
 
 				.item-list .item {
-					display: table;
-					width: 100%;
 					cursor: move;
 				}
-
-				.item-list .item:first-child {
-					margin-top: 0;
-				}
-
-					.item-list .item .content {
-						display: table-cell;
-						width: 100%;
-					}
-					
-					.item-list .item .move {
-						display: table-cell;
-						padding-right: 0.5em;
-					}
-					
-						.item-list .item .move img {
-							opacity: 0.35;
-						}
-
 					.item-list .item .remove {
-						display: table-cell;
-						padding-left: 0.5em;
+						float: right;
+					}
+					
+					.item-list .item .title {
+						display: list-item;
+						list-style: decimal inside;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
 					}
 
 .gui-editor {

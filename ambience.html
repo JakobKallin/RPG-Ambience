@@ -99,7 +99,7 @@
 								<ul data-bind="foreach: scenes, sortable: true">
 									<li
 										class="list-item"
-										data-bind="css: { selected: isSelected }">
+										data-bind="css: { selected: $parent.current === $data }">
 										<a href="#" data-bind="click: $parent.select">
 											<div class="preview" data-bind="
 												style: {

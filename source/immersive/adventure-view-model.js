@@ -1,7 +1,6 @@
 var AdventureViewModel = function(app) {
 	var model = new Adventure();
 	var self = Object.create(model);
-	self.model = model; // This is so that Knockwrap can access the model.
 	
 	self.newScene = function() {
 		return {
@@ -365,6 +364,9 @@ var AdventureViewModel = function(app) {
 			return null;
 		}
 	};
+
+	// This is so that Knockwrap can access the model.
+	self.model = model;
 	
 	return self;
 };

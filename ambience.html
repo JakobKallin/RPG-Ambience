@@ -71,6 +71,9 @@
 					}">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
+						<li class="action">
+							<select data-bind="options: adventures, optionsText: 'title', value: adventure"></select>
+						</li>
 						<li class="action new">
 							<button data-bind="click: createAdventure">New Adventure</button>
 						</li>

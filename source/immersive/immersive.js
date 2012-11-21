@@ -27,27 +27,31 @@ var ViewModel = function(db, editorWidth) {
 		ambience.fadeOutTopmost();
 	};
 	
-	self.adventure = new AdventureViewModel(self);
+	self.adventure = undefined
+	self.adventures = [];
 	self.createAdventure = function() {
-		self.adventure = new AdventureViewModel(self);
-		self.adventure.add();
-		self.adventure.select(self.adventure.scenes[0]);
+		var adventure = new AdventureViewModel(self);
+		adventure.title = 'Untitled adventure';
+		adventure.add();
+		
+		self.addAdventure(adventure);
+	};
+	
+	self.addAdventure = function(adventure) {
+		self.adventures.push(adventure);
+		self.adventure = adventure;
+		self.adventure.select(adventure.scenes[0]);
 	};
 	
 	self.library = new AdventureLibrary(self);
 	self.loadAdventure = function() {
-		var adventure = self.library.load();
-		if ( adventure ) {
-			self.adventure = adventure;
-			self.adventure.select(self.adventure.scenes[0]);
-		} else {
-			self.adventure = self.library.loadExample();
-		}
+		//var adventure = self.library.load();
+		//if ( adventure ) {
+		//	self.addAdventure(adventure);
+		//} else {
+			self.addAdventure(self.library.loadExample());
+		//}
 	};
-	
-	window.addEventListener('beforeunload', function() {
-		self.library.save(self.adventure);
-	});
 	
 	self.media = new MediaLibrary(db);
 	

@@ -59,6 +59,7 @@ var AdventureLibrary = function(app) {
 	
 	this.loadExample = function() {
 		var adventure = new AdventureViewModel(app);
+		adventure.title = 'Example adventure';
 		
 		var music = adventure.add();
 		music.name = 'Music';
@@ -122,8 +123,6 @@ var AdventureLibrary = function(app) {
 		title.text.size = 9;
 		title.text.font = 'Constantia, Georgia, serif';
 		title.fade = 3.2;
-		
-		adventure.select(music);
 		
 		return adventure;
 	};

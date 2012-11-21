@@ -53,6 +53,16 @@ var ViewModel = function(db, editorWidth) {
 		//}
 	};
 	
+	self.renameInProgress = false;
+	self.startRename = function() {
+		self.renameInProgress = true;
+		document.getElementById('rename').focus();
+		document.getElementById('rename').select();
+	};
+	self.stopRename = function() {
+		self.renameInProgress = false;
+	};
+	
 	self.media = new MediaLibrary(db);
 	
 	function startInterface() {
@@ -234,10 +244,9 @@ window.addEventListener('load', function() {
 		viewModel = new ViewModel(db, 0.6);
 		knockwrap.wrap(viewModel);
 		viewModel.start();
-		ko.applyBindings(viewModel);
+		viewModel.loadAdventure(); // Previously, this had to be done after applying the bindings. This does not seem to apply anymore.
 		
-		// This needs to be done after applying the bindings, for some unknown reason.
-		viewModel.loadAdventure();
+		ko.applyBindings(viewModel);
 		
 		$(document.getElementById('view-list')).tabs();
 	};

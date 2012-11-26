@@ -1,8 +1,8 @@
-Ambience.Sound = function(path, container, fade, maxVolume) {
+Ambience.Sound = function(path, container, maxVolume, includeInFade, removeFromFade) {
 	var node = document.createElement('audio');
 	node.src = path;
 	node.volume = maxVolume;
-	fade.track(node, 'volume', maxVolume);
+	includeInFade(node, 'volume', 0, maxVolume);
 	
 	var hasStopped = false;
 	
@@ -45,6 +45,7 @@ Ambience.Sound = function(path, container, fade, maxVolume) {
 				node.pause();
 			}
 			container.removeChild(node);
+			removeFromFade(node);
 		}
 	}
 	

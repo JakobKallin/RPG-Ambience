@@ -1,12 +1,10 @@
-Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
+Ambience.SoundList = function(container, stopSceneIfSoundOnly, includeInFade, removeFromFade) {
 	var scene;
 	var trackIndex;
 	var sounds = [];
-	var fade;
 	
-	function play(newScene, newFade) {
+	function play(newScene) {
 		scene = newScene;
-		fade = newFade;
 		
 		trackIndex = -1; // -1 because the index is either incremented or randomized in the playNextTrack method.
 		playNextTrack();
@@ -29,7 +27,7 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 			stopSceneIfSoundOnly();
 		} else if ( scene.loops || !allTracksHavePlayed ) {
 			var trackPath = scene.sounds[trackIndex];
-			var sound = new Ambience.Sound(trackPath, container, fade, scene.volume);
+			var sound = new Ambience.Sound(trackPath, container, scene.volume, includeInFade, removeFromFade);
 			var onEnded = [function() { removeSound(sound); }, playNextTrack];
 			
 			sound.play({ onTimeUpdate: onTimeUpdate, onEnded: onEnded });
@@ -41,7 +39,6 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly) {
 		sounds.map(function(sound) { sound.stop(); });
 		sounds = [];
 		scene = null;
-		fade = null;
 	}
 	
 	// Below, "this" refers to the <audio> element playing a sound.

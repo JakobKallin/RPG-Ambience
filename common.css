@@ -134,6 +134,10 @@ body {
 		.editor > .menu-bar .action {
 			display: inline;
 		}
+		
+		.editor > .menu-bar select, input {
+			width: 12em;
+		}
 
 		.editor > .menu-bar .action:not(:last-child) {
 			margin-right: 0.5em;

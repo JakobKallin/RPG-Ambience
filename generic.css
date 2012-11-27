@@ -51,3 +51,11 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 .note {
 	color: hsl(0, 0%, 40%);
 }
+
+.unsupported {
+	color: hsl(0, 75%, 50%);
+}
+
+.unsupported:before {
+	content: "Unsupported format: ";
+}

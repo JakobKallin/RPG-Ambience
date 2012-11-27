@@ -208,6 +208,8 @@ var ViewModel = function(db, editorWidth) {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName
 	};
+	
+	self.isBound = false;
 };
 
 var viewModel;
@@ -247,6 +249,8 @@ window.addEventListener('load', function() {
 		viewModel.loadAdventure(); // Previously, this had to be done after applying the bindings. This does not seem to apply anymore.
 		
 		ko.applyBindings(viewModel);
+		viewModel.isBound = true; // From now on polyfills will be updated.
+		viewModel.adventure.select(viewModel.adventure.scenes[0]); // Make sure the first polyfills are updated.
 		
 		$(document.getElementById('view-list')).tabs();
 	};

@@ -65,7 +65,10 @@ var AdventureViewModel = function(app) {
 					this.tracks.push({
 						name: file.name,
 						path: objectURL,
-						id: id
+						id: id,
+						isPlayable: Boolean(
+							document.createElement('audio').canPlayType(file.type)
+						)
 					});
 					
 					app.media.save(id, file);
@@ -165,7 +168,7 @@ var AdventureViewModel = function(app) {
 		}
 		
 		var actualTracks = scene.sound.tracks.filter(function(track) {
-			return track.path.length > 0;
+			return track.path.length > 0 && track.isPlayable;
 		});
 		if ( actualTracks.length > 0 ) {
 			converted.sounds = actualTracks.map(function(track) {
@@ -206,6 +209,11 @@ var AdventureViewModel = function(app) {
 	};
 	
 	self.updatePolyfills = function(scene) {
+		if ( !app.isBound ) {
+			// Make sure the templates are not modified by polyfills until the bindings have been applied.
+			return; 
+		}
+		
 		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
 		$('input[type="number"]').inputNumber();
 		

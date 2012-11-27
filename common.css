@@ -135,7 +135,7 @@ body {
 			display: inline;
 		}
 		
-		.editor > .menu-bar select, input {
+		.editor > .menu-bar select, .editor > .menu-bar input {
 			width: 12em;
 		}
 

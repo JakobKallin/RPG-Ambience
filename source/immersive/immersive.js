@@ -208,6 +208,11 @@ var ViewModel = function(db, editorWidth) {
 		'Enter': self.playNamedScene,
 		'Backspace': self.backspaceSceneName
 	};
+	
+	self.help = {
+		mixin: "When you play this scene, you retain the media of the previous scene that is not redefined in this scene.",
+		overlap: "The next track will start this many seconds before the current track ends."
+	};
 };
 
 var viewModel;

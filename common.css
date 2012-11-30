@@ -11,7 +11,7 @@ li {
 }
 
 *[title] {
-	cursor: help;
+	cursor: help !important;
 }
 
 label {
@@ -183,7 +183,6 @@ body {
 		height: 100%;
 		width: 100%;
 		padding: 2em;
-		padding-top: 3em;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 	}
@@ -195,6 +194,7 @@ body {
 			-moz-box-sizing: border-box;
 			width: 40%;
 			height: 100%;
+			padding-top: 1em;
 			overflow: auto;
 		}
 
@@ -273,6 +273,7 @@ body {
 			height: 100%;
 			box-sizing: border-box;
 			-moz-box-sizing: border-box;
+			padding-top: 1em;
 			padding-left: 1em;
 			overflow: auto;
 		}
@@ -379,6 +380,66 @@ body {
 				.control-list > *{
 					padding-right: 0.5em;
 				}
+	
+	.help-document {
+		height: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		border: 1px solid hsl(0, 0%, 25%);
+		padding: 1.5em;
+		overflow: auto;
+	}
+		
+		.help-document h2 {
+			font-weight: normal;
+			font-size: 1.5em;
+		}
+		
+		.help-document p, .help-document ul {
+			margin-bottom: 1em;
+		}
+		
+		.help-document ul {
+			margin-left: 2em;
+			margin-right: 2em;
+		}
+		
+		.help-document li {
+			display: list-item;
+		}
+		
+		.help-document ul li {
+			list-style-type: square;
+		}
+		
+		.help-document a:link {
+			color: hsl(220, 50%, 50%);
+		}
+		
+		.help-document a:visited {
+			color: hsl(280, 50%, 35%);
+		}
+		
+		.help-document a:hover {
+			color: hsl(220, 100%, 60%);
+		}
+		
+		.help-document dfn {
+			font-weight: bold;
+			font-style: normal;
+		}
+		
+		.help-document kbd {
+			font-family: Corbel, sans-serif;
+			background-color: hsl(0, 0%, 65%);
+			color: hsl(0, 0%, 10%);
+			border: 1px solid hsl(0, 0%, 20%);
+			border-radius: 0.25em;
+			padding: 0.0625em 0.25em;
+			box-shadow: 0.0625em 0.0625em hsl(0, 0%, 20%);
+			-webkit-box-shadow: 0.0625em 0.0625em hsl(0, 0%, 20%);
+			-moz-box-shadow: 0.0625em 0.0625em hsl(0, 0%, 20%);
+		}
 
 .gui-editor {
 	right: 0;

@@ -103,6 +103,9 @@
 						<li class="tab">
 							<a href="#scene-tab">Scenes</a>
 						</li>
+						<li class="tab">
+							<a href="#help-tab">Help</a>
+						</li>
 					</ul>
 					<div class="scene-view tab-content" id="scene-tab">
 						<!-- ko with: adventure -->
@@ -245,8 +248,11 @@
 															</select>
 														</li>
 														<li>
-															<label for="mixin">
-																<input id="mixin" type="checkbox" data-bind="checked: mixin">
+															<label for="mixin" data-bind="attr: { title: $root.help.mixin }">
+																<input
+																	id="mixin"
+																	type="checkbox"
+																	data-bind="checked: mixin">
 																Mixin
 															</label>
 														</li>
@@ -347,7 +353,7 @@
 													</td>
 												</tr>
 												<tr>
-													<th><label for="crossover">Overlap</label></th>
+													<th><label for="crossover" data-bind="attr: { title: $root.help.overlap }">Overlap</label></th>
 													<td>
 														<input id="crossover" type="number" min="0" value="0" data-bind="value: crossover">
 														<span class="note">seconds</span>
@@ -472,6 +478,17 @@
 							</div>
 							<!-- /ko -->
 						<!-- /ko -->
+					</div>
+					<div class="help-view tab-content" id="help-tab">
+						<div class="help-document">
+							<h2>Playing scenes</h2>
+							<p>There are three ways to play a scene:</p>
+							<ul>
+								<li>Press the hotkey associated with the scene.</li>
+								<li>Type the scene's name and press Enter.</li>
+								<li>Press the Play button in the editor.</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

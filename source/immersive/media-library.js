@@ -54,4 +54,21 @@ var MediaLibrary = function(db) {
 		.objectStore('media')
 		.put(dataURL, id);
 	};
+	
+	self.removeUnusedMedia = function(usedIds) {
+		var store = db.transaction('media', 'readwrite').objectStore('media');
+		store.openCursor().onsuccess = function(event) {
+			var cursor = event.target.result;
+			if ( cursor ) {
+				var id = cursor.key;
+				if ( !usedIds.contains(id) ) {
+					console.log('removing id ' + id);
+					store.delete(id);
+				} else {
+					console.log('keeping id ' + id);
+				}
+				cursor.continue();
+			}
+		};
+	};
 };

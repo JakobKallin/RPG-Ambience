@@ -303,6 +303,7 @@ window.addEventListener('load', function() {
 		
 		// This needs to be done after applying the bindings, for some unknown reason.
 		viewModel.loadAdventure();
+		viewModel.media.removeUnusedMedia(viewModel.adventure.media.map(get('id')));
 		
 		$(document.getElementById('view-list')).tabs();
 	};

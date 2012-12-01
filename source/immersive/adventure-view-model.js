@@ -100,6 +100,15 @@ var AdventureViewModel = function(app) {
 				}
 			},
 			
+			get media() {
+				// We use this convoluted code because concat does not work as expected on array-like objects.
+				var tracks = this.sound.tracks.map(function(track) { return track; });
+				if ( this.image.path ) {
+					tracks.push(this.image);
+				}
+				return tracks;
+			},
+			
 			// State
 			get isSelected() {
 				return this === self.current;

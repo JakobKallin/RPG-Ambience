@@ -43,6 +43,11 @@ Array.prototype.randomIndex = function() {
 	return Math.floor(Math.random() * this.length);
 };
 
+Array.prototype.flatten = function() {
+	var array = [];
+	return array.concat.apply(array, this);
+};
+
 String.prototype.contains = function(substring) {
 	return this.indexOf(substring) !== -1;
 };
@@ -60,3 +65,9 @@ Object.defineProperty(String.prototype, 'isCharacter', {
 		return this.match(/^[^\b\f\r\n\t\v\s\0]$/);
 	}
 });
+
+window.get = function(property) {
+	return function(object) {
+		return object[property];
+	};
+};

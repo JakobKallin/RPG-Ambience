@@ -24,6 +24,7 @@
 
 		<script src="libraries/number-polyfill.js"></script>
 		<script src="libraries/spectrum.js"></script>
+		<script src="libraries/knockout-spectrum.js"></script>
 		
 		<script src="libraries/functions.js"></script>
 		<script src="libraries/splitter.js"></script>
@@ -402,7 +403,7 @@
 												</tr>
 												<tr>
 													<th><label for="font-color">Color</label></th>
-													<td><input id="font-color" type="color" data-bind="value: color"></td>
+													<td><input id="font-color" type="color"  data-bind="spectrum: 'color'"></td>
 												</tr>
 												<tr>
 													<th><label for="text-alignment">Align</label></th>
@@ -427,7 +428,7 @@
 											<table>
 												<tr>
 													<th><label for="background-color">Background</label></th>
-													<td><input id="background-color" type="color" data-bind="value: background"></td>
+													<td><input id="background-color" type="color" data-bind="spectrum: 'background'"></td>
 												</tr>
 												<tr>
 													<th><label for="fade">Fade</label></th>

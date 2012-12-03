@@ -55,8 +55,7 @@ div, li {
 .primary {
 	display: block;
 	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	height: 2em;
 }
 
 .secondary {

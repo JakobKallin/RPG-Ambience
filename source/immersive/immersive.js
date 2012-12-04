@@ -4,6 +4,8 @@ var ViewModel = function(db, editorWidth) {
 	self.start = function() {
 		startAmbience();
 		startInterface();
+		loadAdventure();
+		self.media.removeUnusedMedia(self.adventure.media.map(get('id')));
 	}
 	
 	var ambience;
@@ -35,7 +37,7 @@ var ViewModel = function(db, editorWidth) {
 	};
 	
 	self.library = new AdventureLibrary(self);
-	self.loadAdventure = function() {
+	var loadAdventure = function() {
 		self.createAdventure()
 		
 		var loaded = self.library.load();
@@ -348,10 +350,6 @@ window.addEventListener('load', function() {
 		knockwrap.wrap(viewModel);
 		viewModel.start();
 		ko.applyBindings(viewModel);
-		
-		// This needs to be done after applying the bindings, for some unknown reason.
-		viewModel.loadAdventure();
-		viewModel.media.removeUnusedMedia(viewModel.adventure.media.map(get('id')));
 		
 		$(document.getElementById('view-list')).tabs();
 	};

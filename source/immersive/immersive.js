@@ -302,7 +302,7 @@ window.addEventListener('load', function() {
 		var colorInputs = container.querySelectorAll('input[type=color]');
 		Array.prototype.forEach.call(colorInputs, function(input) {
 			var onChange = function(color) {
-				input.value = color.toHslString();
+				input.value = color.toHexString();
 				input.dispatchEvent(new Event('change'));
 			};
 			$(input).spectrum({

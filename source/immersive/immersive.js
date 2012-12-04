@@ -293,6 +293,9 @@ window.addEventListener('load', function() {
 			button.classList.remove('file'); // Make sure the same button is not affected twice.
 		});
 		
+		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
+		$('input[type="number"]', container).inputNumber();
+		
 		var options = container.querySelector('.options.specific');
 		$(options).tabs({
 			select: function(event, ui) {

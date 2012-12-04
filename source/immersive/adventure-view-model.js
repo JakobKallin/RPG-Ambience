@@ -215,9 +215,6 @@ var AdventureViewModel = function(app) {
 	};
 	
 	self.updatePolyfills = function(scene) {
-		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
-		$('input[type="number"]').inputNumber();
-		
 		app.splitter.update();
 	};
 	

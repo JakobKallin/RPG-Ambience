@@ -1,13 +1,27 @@
 Ambience.Layer = function(node) {
 	var fadeOutDuration;
-	var fade = new Manymation();
-	fade.track(node.style, 'opacity', 0.999);
+	var fade = null;
 	var isFadingOut = false;
+	
+	var includeInFade = function(object, property, startValue, endValue) {
+		if ( isFadingOut ) {
+			fade.track(object, property, endValue, startValue);			
+		} else {
+			fade.track(object, property, startValue, endValue);			
+		}
+	};
+	
+	var removeFromFade = function(object) {
+		var matchingTarget = fade.targets.first(function(target) {
+			return target.object === object;
+		});
+		fade.targets.remove(matchingTarget);
+	};
 	
 	var mediaPlayers = {
 		'backgroundColor': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
-		'sounds': new Ambience.SoundList(node, stopSceneIfSoundOnly),
+		'sounds': new Ambience.SoundList(node, stopSceneIfSoundOnly, includeInFade, removeFromFade),
 		'text': new Ambience.Text(node)
 	};
 	
@@ -54,7 +68,7 @@ Ambience.Layer = function(node) {
 		
 		for ( var mediaType in mediaPlayers ) {
 			if ( scene[mediaType] ) {
-				mediaPlayers[mediaType].play(scene, fade);
+				mediaPlayers[mediaType].play(scene);
 				playingMedia.push(mediaType);
 			}
 		}
@@ -74,7 +88,7 @@ Ambience.Layer = function(node) {
 		
 		for ( var mediaType in mediaPlayers ) {
 			if ( mixin[mediaType] ) {
-				mediaPlayers[mediaType].play(mixin, fade);
+				mediaPlayers[mediaType].play(mixin);
 				playingMedia.push(mediaType);
 			}
 		}
@@ -85,21 +99,40 @@ Ambience.Layer = function(node) {
 			node.style.visibility = 'visible';
 		}
 		
-		fade.play(scene.fadeInDuration);
+		var targets = (fade) ? fade.targets : undefined;
+		fade = new Manymation.Animation(scene.fadeInDuration, undefined, targets);
+		includeInFade(node.style, 'opacity', 0, 0.999)
+		fade.start();
 	}
 	
 	function stopFade() {
+		isFadingOut = false;
 		if ( fade ) {
 			fade.complete();
+			fade = null;
 		}
 	}
 	
 	function fadeOutScene() {
-		if ( fade.isReversing ) {
+		if ( isFadingOut ) {
 			stopScene();
 		} else {
-			fade.reverse(fadeOutDuration, stopScene);
+			isFadingOut = true;
+			
+			fade.complete();
+			reverseTargets(fade.targets);
+			fade = new Manymation.Animation(fadeOutDuration, stopScene, fade.targets);
+			fade.start();
 		}
+	}
+	
+	function reverseTargets(targets) {
+		targets.forEach(function(target) {
+			var start = target.startValue;
+			var end = target.endValue;
+			target.startValue = end;
+			target.endValue = start;
+		});
 	}
 	
 	return {

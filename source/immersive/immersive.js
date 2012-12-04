@@ -284,8 +284,15 @@ window.addEventListener('load', function() {
 		});
 	};
 	
+	var stopPolyfills = function(event) {
+		var inputs = document.querySelectorAll('input[type=color]');
+		Array.prototype.forEach.call(inputs, function(input) {
+			$(input).spectrum('destroy');
+		});
+	};
+	
 	document.body.addEventListener('added', startPolyfills);
-	document.body.addEventListener('removed', function() { console.log('something was removed'); });
+	document.body.addEventListener('removed', stopPolyfills);
 	
 	var dbRequest = indexedDB.open('media');
 	

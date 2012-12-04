@@ -268,8 +268,10 @@ var ViewModel = function(db, editorWidth) {
 var viewModel;
 window.addEventListener('load', function() {
 	var startPolyfills = function(event) {
-		var inputs = document.querySelectorAll('input[type=color]');
-		Array.prototype.forEach.call(inputs, function(input) {
+		var container = event.target;
+		
+		var colorInputs = container.querySelectorAll('input[type=color]');
+		Array.prototype.forEach.call(colorInputs, function(input) {
 			var onChange = function(color) {
 				input.value = color.toHslString();
 				input.dispatchEvent(new Event('change'));
@@ -281,6 +283,12 @@ window.addEventListener('load', function() {
 				showAlpha: true,
 				showButtons: false
 			});
+		});
+		
+		var buttons = container.querySelectorAll('button.file');
+		Array.prototype.forEach.call(buttons, function(button) {
+			new FileButton(button);
+			button.classList.remove('file'); // Make sure the same button is not affected twice.
 		});
 	};
 	

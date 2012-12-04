@@ -434,6 +434,38 @@ body {
 			text-rendering: optimizeLegibility;
 		}
 
+/* Splash screen styling */
+
+.splash {
+	display: table;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: hsl(0, 0%, 10%);
+	color: white;
+	font-family: Constantia, Georgia, serif;
+	font-size: 1em;
+	line-height: 2;
+}
+
+	.splash > * {
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+	}
+	
+	.splash p {
+		font-weight: normal;
+		font-size: 2em;
+		line-height: 2;
+	}
+	
+	.splash ul {
+		font-size: 1.5em;
+	}
+
 /* Scene previews, used in several places */
 
 .preview {

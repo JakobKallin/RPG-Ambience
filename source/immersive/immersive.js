@@ -269,6 +269,27 @@ var ViewModel = function(db, editorWidth) {
 
 var viewModel;
 window.addEventListener('load', function() {
+	var browserIsSupported = function() {
+		return Boolean(window.indexedDB && window.URL && !document.fireEvent);
+	};
+	
+	var removeSplashScreen = function() {
+		var splash = document.getElementById('splash');
+		splash.parentNode.removeChild(splash);
+	};
+	
+	var showSupportInfo = function() {
+		var loadingMessage = document.getElementById('splash-loading');
+		var unsupportedMessage = document.getElementById('splash-unsupported');
+		loadingMessage.style.display = 'none';
+		unsupportedMessage.style.display = '';
+	};
+	
+	if ( !browserIsSupported() ) {
+		showSupportInfo();
+		return;
+	}
+	
 	var selectedTab = 0;
 	
 	var startPolyfills = function(event) {
@@ -352,5 +373,7 @@ window.addEventListener('load', function() {
 		ko.applyBindings(viewModel);
 		
 		$(document.getElementById('view-list')).tabs();
+		
+		removeSplashScreen();
 	};
 });

@@ -209,7 +209,6 @@ var AdventureViewModel = function(app) {
 	
 	self.current = undefined;
 	
-	var selectedTab = 0;
 	self.select = function(scene) {
 		self.current = scene;
 		self.updatePolyfills(scene);
@@ -218,14 +217,6 @@ var AdventureViewModel = function(app) {
 	self.updatePolyfills = function(scene) {
 		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
 		$('input[type="number"]').inputNumber();
-		
-		var specificOptions = $('.selected-item .options.specific');
-		specificOptions.tabs({
-			select: function(event, ui) {
-				selectedTab = ui.index;
-			}
-		});
-		specificOptions.tabs('select', selectedTab);
 		
 		app.splitter.update();
 	};

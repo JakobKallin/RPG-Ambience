@@ -267,6 +267,8 @@ var ViewModel = function(db, editorWidth) {
 
 var viewModel;
 window.addEventListener('load', function() {
+	var selectedTab = 0;
+	
 	var startPolyfills = function(event) {
 		var container = event.target;
 		
@@ -290,6 +292,14 @@ window.addEventListener('load', function() {
 			new FileButton(button);
 			button.classList.remove('file'); // Make sure the same button is not affected twice.
 		});
+		
+		var options = container.querySelector('.options.specific');
+		$(options).tabs({
+			select: function(event, ui) {
+				selectedTab = ui.index;
+			}
+		});
+		$(options).tabs('select', selectedTab);
 	};
 	
 	var stopPolyfills = function(event) {

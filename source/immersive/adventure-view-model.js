@@ -211,11 +211,6 @@ var AdventureViewModel = function(app) {
 	
 	self.select = function(scene) {
 		self.current = scene;
-		self.updatePolyfills(scene);
-	};
-	
-	self.updatePolyfills = function(scene) {
-		app.splitter.update();
 	};
 	
 	self.add = function() {

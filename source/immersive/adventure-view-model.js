@@ -227,21 +227,6 @@ var AdventureViewModel = function(app) {
 		});
 		specificOptions.tabs('select', selectedTab);
 		
-		var activateColorInput = function(object, property, id) {
-			var onChange = function(color) {
-				object[property] = color.toHslString();
-			};
-			$('#' + id).spectrum({
-				change: onChange,
-				move: onChange,
-				clickoutFiresChange: true,
-				showAlpha: true,
-				showButtons: false
-			});			
-		};
-		activateColorInput(scene.text, 'color', 'font-color');
-		activateColorInput(scene, 'background', 'background-color');
-		
 		$('button.file').each(function() {
 			new FileButton(this);
 			$(this).removeClass('file'); // Make sure the same button is not affected twice.

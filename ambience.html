@@ -22,6 +22,7 @@
 		<script src="libraries/knockout-sortable.js"></script>
 		<script src="libraries/knockwrap.js"></script>
 
+		<script src="libraries/knockout-polyfill.js"></script>
 		<script src="libraries/number-polyfill.js"></script>
 		<script src="libraries/spectrum.js"></script>
 		
@@ -146,7 +147,7 @@
 									<button data-bind="click: add">Add Scene</button>
 								</div>
 							</div>
-							<!-- ko with: current -->
+							<!-- ko with: current, polyfill: true -->
 							<div class="detail-view">
 								<div
 									class="selected-item"

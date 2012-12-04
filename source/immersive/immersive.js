@@ -267,6 +267,26 @@ var ViewModel = function(db, editorWidth) {
 
 var viewModel;
 window.addEventListener('load', function() {
+	var startPolyfills = function(event) {
+		var inputs = document.querySelectorAll('input[type=color]');
+		Array.prototype.forEach.call(inputs, function(input) {
+			var onChange = function(color) {
+				input.value = color.toHslString();
+				input.dispatchEvent(new Event('change'));
+			};
+			$(input).spectrum({
+				change: onChange,
+				move: onChange,
+				clickoutFiresChange: true,
+				showAlpha: true,
+				showButtons: false
+			});
+		});
+	};
+	
+	document.body.addEventListener('added', startPolyfills);
+	document.body.addEventListener('removed', function() { console.log('something was removed'); });
+	
 	var dbRequest = indexedDB.open('media');
 	
 	dbRequest.onupgradeneeded = function(event) {

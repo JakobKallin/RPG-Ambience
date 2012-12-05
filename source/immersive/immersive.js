@@ -5,7 +5,7 @@ var ViewModel = function(db, editorWidth) {
 		startAmbience();
 		startInterface();
 		loadAdventures();
-		self.media.removeUnusedMedia(self.adventure.media.map(get('id')));
+		removeUnusedMedia();
 	}
 	
 	var ambience;
@@ -70,6 +70,11 @@ var ViewModel = function(db, editorWidth) {
 	};
 	
 	self.media = new MediaLibrary(db);
+	var removeUnusedMedia = function() {
+		var items = self.adventures.map(get('media')).flatten();
+		var usedIds = items.map(get('id'));
+		self.media.removeUnusedMedia(usedIds);
+	};
 	
 	function startInterface() {
 		self.splitter = new Splitter(document.getElementById('interface'), editorWidth);

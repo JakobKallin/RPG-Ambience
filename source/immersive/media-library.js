@@ -25,6 +25,8 @@ var MediaLibrary = function(db) {
 			
 			onSuccess(objectURL, mimeType);
 		};
+		
+		debug('Loading media: ' + id);
 	};
 	
 	loadWorker.onmessage = function(messageEvent) {
@@ -43,6 +45,8 @@ var MediaLibrary = function(db) {
 			id: id,
 			file: file
 		});
+		
+		debug('Saving media: ' + id);
 	};
 	
 	saveWorker.onmessage = function(messageEvent) {
@@ -57,17 +61,24 @@ var MediaLibrary = function(db) {
 	
 	self.removeUnusedMedia = function(usedIds) {
 		var store = db.transaction('media', 'readwrite').objectStore('media');
+		var mediaCount = 0;
+		var removedCount = 0;
+		
 		store.openCursor().onsuccess = function(event) {
 			var cursor = event.target.result;
 			if ( cursor ) {
+				++mediaCount;
 				var id = cursor.key;
 				if ( !usedIds.contains(id) ) {
-					debug('Removing media:  ' + id);
+					debug('Removing media: ' + id);
 					store.delete(id);
+					++removedCount;
 				} else {
 					debug('Retaining media: ' + id);
 				}
 				cursor.continue();
+			} else {
+				debug('Removed ' + removedCount + ' of ' + mediaCount + ' media');
 			}
 		};
 	};

@@ -129,6 +129,16 @@ var ViewModel = function(db, editorWidth) {
 		}
 	});
 	
+	Object.defineProperty(self, 'removalButtonText', {
+		get: function() {
+			if ( self.adventure.willBeRemoved ) {
+				return 'Recover Adventure';
+			} else {
+				return 'Delete Adventure';
+			}
+		}
+	});
+	
 	self.mouseHasRecentlyMoved = true;
 	var theater = document.getElementById('theater');
 	var cursorTimer;

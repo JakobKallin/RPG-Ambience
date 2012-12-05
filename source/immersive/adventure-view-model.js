@@ -339,6 +339,20 @@ var AdventureViewModel = function(app) {
 			return null;
 		}
 	};
+	
+	self.willBeRemoved = false;
+	self.toggleRemoval = function() {
+		self.willBeRemoved = !self.willBeRemoved;
+	};
+	Object.defineProperty(self, 'dropdownTitle', {
+		get: function() {
+			if ( self.willBeRemoved ) {
+				return self.title + ' (deleted)';
+			} else {
+				return self.title;
+			}
+		}
+	});
 
 	// This is so that Knockwrap can access the model.
 	self.model = model;

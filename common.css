@@ -187,6 +187,11 @@ body {
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 	}
+		
+		.list-view, .detail-view {
+			/* Simulate a border below the tabs. */
+			border-top: 1px solid hsl(0, 0%, 25%);
+		}
 
 		.list-view {
 			float: left;

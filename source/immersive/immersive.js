@@ -54,9 +54,7 @@ var ViewModel = function(db, editorWidth) {
 		
 		adventures.forEach(self.addAdventure);
 		
-		window.addEventListener('beforeunload', function() {
-			self.library.save(self.adventures);
-		});
+		window.addEventListener('beforeunload', self.onExit);
 	};
 	
 	self.renameInProgress = false;
@@ -240,6 +238,18 @@ var ViewModel = function(db, editorWidth) {
 	self.help = {
 		mixin: "When you play this scene, you retain the media of the previous scene that is not redefined in this scene.",
 		overlap: "The next track will start this many seconds before the current track ends."
+	};
+	
+	self.onExit = function() {
+		self.permanentlyRemoveAdventures();
+		self.library.save(self.adventures);
+	};
+	
+	self.permanentlyRemoveAdventures = function() {
+		var removed = self.adventures.filter(get('willBeRemoved'));
+		removed.forEach(function(adventure) {
+			self.adventures.remove(adventure);
+		});
 	};
 };
 

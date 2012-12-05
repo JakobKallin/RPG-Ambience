@@ -1,10 +1,6 @@
 var ViewModel = function(db, editorWidth) {
 	var self = this;
 	
-	self.log = function() {
-		console.log('stuff happened');
-	};
-	
 	self.start = function() {
 		startAmbience();
 		startInterface();

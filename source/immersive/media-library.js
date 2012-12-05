@@ -62,10 +62,10 @@ var MediaLibrary = function(db) {
 			if ( cursor ) {
 				var id = cursor.key;
 				if ( !usedIds.contains(id) ) {
-					console.log('removing id ' + id);
+					debug('Removing media:  ' + id);
 					store.delete(id);
 				} else {
-					console.log('keeping id ' + id);
+					debug('Retaining media: ' + id);
 				}
 				cursor.continue();
 			}

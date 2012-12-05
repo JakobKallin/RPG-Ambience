@@ -47,7 +47,7 @@ input, textarea {
 }
 
 input[type=number] {
-	width: 3em;
+	width: 3.5em;
 }
 
 /* Border styles overridden in themes */

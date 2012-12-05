@@ -26,9 +26,15 @@ var AdventureLibrary = function(app) {
 			}
 			
 			scene.sound.tracks.forEach(function(track) {
+				// At first assume the track is playable.
+				// This may be invalidated after loading the file.
+				track.isPlayable = true;
 				if ( track.id ) {
-					app.media.load(track.id, function(url) {
+					app.media.load(track.id, function(url, mimeType) {
 						track.path = url;
+						track.isPlayable = Boolean(
+							document.createElement('audio').canPlayType(mimeType)
+						);
 					});
 				}
 			});
@@ -85,7 +91,8 @@ var AdventureLibrary = function(app) {
 		music.key = 'M';
 		music.sound.tracks.push({
 			name: '9-Trailer_Music.ogg',
-			path: 'example/9-Trailer_Music.ogg'
+			path: 'example/9-Trailer_Music.ogg',
+			isPlayable: true
 		});
 		music.sound.loop = false;
 		
@@ -128,7 +135,8 @@ var AdventureLibrary = function(app) {
 		dragon.image.size = 'cover';
 		dragon.sound.tracks.push({
 			name: 'dragon.ogg',
-			path: 'example/dragon.ogg'
+			path: 'example/dragon.ogg',
+			isPlayable: true
 		});
 		dragon.sound.loop = false;
 		dragon.fade = 3.2;

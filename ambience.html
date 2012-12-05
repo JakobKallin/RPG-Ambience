@@ -370,7 +370,7 @@
 														<ol data-bind="foreach: tracks, sortable: true" class="track-list">
 															<li>
 																<button class="secondary" data-bind="click: $parent.unload">Remove</button>
-																<span class="primary" data-bind="text: name"></span>
+																<span data-bind="text: name, css: { primary: true, unsupported: !isPlayable }"></span>
 																<audio data-bind="attr: { src: path }" preload="auto"></audio>
 															</li>
 														</ol>

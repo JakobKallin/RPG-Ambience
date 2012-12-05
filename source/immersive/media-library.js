@@ -23,7 +23,7 @@ var MediaLibrary = function(db) {
 			var blob = new Blob([integers], { type: mimeType });
 			var objectURL = window.URL.createObjectURL(blob);
 			
-			onSuccess(objectURL);
+			onSuccess(objectURL, mimeType);
 		};
 	};
 	

@@ -65,7 +65,10 @@ var AdventureViewModel = function(app) {
 					this.tracks.push({
 						name: file.name,
 						path: objectURL,
-						id: id
+						id: id,
+						isPlayable: Boolean(
+							document.createElement('audio').canPlayType(file.type)
+						)
 					});
 					
 					app.media.save(id, file);
@@ -174,7 +177,7 @@ var AdventureViewModel = function(app) {
 		}
 		
 		var actualTracks = scene.sound.tracks.filter(function(track) {
-			return track.path.length > 0;
+			return track.path.length > 0 && track.isPlayable;
 		});
 		if ( actualTracks.length > 0 ) {
 			converted.sounds = actualTracks.map(function(track) {

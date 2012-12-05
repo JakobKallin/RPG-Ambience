@@ -83,11 +83,12 @@
 						</li>
 						<li class="action rename">
 							<button
+								id="rename-button"
 								data-bind="
 									visible: !renameInProgress,
 									event: { click: startRename}">Rename Adventure</button>
 							<input
-								id="rename"
+								id="rename-input"
 								type="text"
 								data-bind="
 									event: { blur: stopRename },

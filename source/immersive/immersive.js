@@ -62,11 +62,16 @@ var ViewModel = function(db, editorWidth) {
 	self.renameInProgress = false;
 	self.startRename = function() {
 		self.renameInProgress = true;
-		document.getElementById('rename').focus();
-		document.getElementById('rename').select();
+		document.getElementById('rename-input').focus();
+		document.getElementById('rename-input').select();
 	};
 	self.stopRename = function() {
 		self.renameInProgress = false;
+	};
+	self.equalizeRenameFieldWidth = function() {
+		var button = document.getElementById('rename-button');
+		var input = document.getElementById('rename-input');
+		input.style.width = button.offsetWidth + 'px';
 	};
 	
 	self.media = new MediaLibrary(db);
@@ -81,6 +86,8 @@ var ViewModel = function(db, editorWidth) {
 		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);
+		
+		self.equalizeRenameFieldWidth();
 	}
 	
 	self.editorWidth = editorWidth;

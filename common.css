@@ -34,10 +34,16 @@ button {
 	height: 2em;
 	padding-left: 0.25em;
 	padding-right: 0.25em;
+	/* box-sizing is needed to make buttons and inputs equally wide. */
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 
 input, textarea {
 	padding: 0.125em 0.25em;
+	/* box-sizing is needed to make buttons and inputs equally wide. */
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 
 input[type=number] {

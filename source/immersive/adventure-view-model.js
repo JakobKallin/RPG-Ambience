@@ -341,15 +341,23 @@ var AdventureViewModel = function(app) {
 	};
 	
 	self.willBeRemoved = false;
-	self.toggleRemoval = function() {
-		self.willBeRemoved = !self.willBeRemoved;
-	};
+	
 	Object.defineProperty(self, 'dropdownTitle', {
 		get: function() {
 			if ( self.willBeRemoved ) {
 				return self.title + ' (deleted)';
 			} else {
 				return self.title;
+			}
+		}
+	});
+	
+	Object.defineProperty(self, 'removalButtonText', {
+		get: function() {
+			if ( self.willBeRemoved ) {
+				return 'Recover Adventure';
+			} else {
+				return 'Delete Adventure';
 			}
 		}
 	});

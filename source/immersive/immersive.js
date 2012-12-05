@@ -45,6 +45,20 @@ var ViewModel = function(db, editorWidth) {
 		self.adventure.select(adventure.scenes[0]);
 	};
 	
+	self.toggleSelectedRemoval = function() {
+		self.adventure.willBeRemoved = !self.adventure.willBeRemoved;
+		if ( self.adventure.willBeRemoved ) {
+			var index = self.adventures.indexOf(self.adventure);
+			if ( self.adventures.length === 1 ) {
+				self.createAdventure();
+			} else if ( index === 0 ) {
+				self.adventure = self.adventures[1];
+			} else {
+				self.adventure = self.adventures[index - 1];
+			}
+		}
+	};
+	
 	self.library = new AdventureLibrary(self);
 	var loadAdventures = function() {
 		var adventures = self.library.load();
@@ -123,16 +137,6 @@ var ViewModel = function(db, editorWidth) {
 				return 'Hide Editor';
 			} else {
 				return 'Show Editor';
-			}
-		}
-	});
-	
-	Object.defineProperty(self, 'removalButtonText', {
-		get: function() {
-			if ( self.adventure.willBeRemoved ) {
-				return 'Recover Adventure';
-			} else {
-				return 'Delete Adventure';
 			}
 		}
 	});

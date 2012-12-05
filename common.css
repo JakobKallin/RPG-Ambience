@@ -11,7 +11,7 @@ li {
 }
 
 *[title] {
-	cursor: help;
+	cursor: help !important;
 }
 
 label {
@@ -31,7 +31,9 @@ button, input[type=radio], input[type=checkbox] {
 }
 
 button {
-	padding: 0.25em;
+	height: 2em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
 }
 
 input, textarea {
@@ -133,6 +135,10 @@ body {
 		.editor > .menu-bar .action {
 			display: inline;
 		}
+		
+		.editor > .menu-bar select, .editor > .menu-bar input {
+			width: 12em;
+		}
 
 		.editor > .menu-bar .action:not(:last-child) {
 			margin-right: 0.5em;
@@ -178,7 +184,6 @@ body {
 		height: 100%;
 		width: 100%;
 		padding: 2em;
-		padding-top: 3em;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 	}
@@ -190,6 +195,7 @@ body {
 			-moz-box-sizing: border-box;
 			width: 40%;
 			height: 100%;
+			padding-top: 1em;
 			overflow: auto;
 		}
 
@@ -268,6 +274,7 @@ body {
 			height: 100%;
 			box-sizing: border-box;
 			-moz-box-sizing: border-box;
+			padding-top: 1em;
 			padding-left: 1em;
 			overflow: auto;
 		}
@@ -374,6 +381,58 @@ body {
 				.control-list > *{
 					padding-right: 0.5em;
 				}
+	
+	.help-document {
+		height: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		border: 1px solid hsl(0, 0%, 25%);
+		padding: 1.5em;
+		overflow: auto;
+	}
+		
+		.help-document h2 {
+			font-weight: normal;
+			font-size: 1.5em;
+		}
+		
+		.help-document p, .help-document ul {
+			margin-bottom: 1em;
+		}
+		
+		.help-document ul {
+			margin-left: 2em;
+			margin-right: 2em;
+		}
+		
+		.help-document li {
+			display: list-item;
+		}
+		
+		.help-document ul li {
+			list-style-type: square;
+		}
+		
+		.help-document a:link {
+			color: hsl(210, 100%, 50%);
+		}
+		
+		.help-document a:visited {
+			color: hsl(210, 100%, 35%);
+		}
+		
+		.help-document a:hover {
+			color: hsl(210, 100%, 65%);
+		}
+		
+		.help-document dfn {
+			font-weight: bold;
+			font-style: normal;
+		}
+		
+		.help-document button {
+			height: 1.5em;
+		}
 
 .gui-editor {
 	right: 0;

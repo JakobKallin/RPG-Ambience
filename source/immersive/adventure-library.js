@@ -1,6 +1,6 @@
 var AdventureLibrary = function(app) {
 	this.load = function() {
-		var state = JSON.parse(localStorage.getItem('adventure'));
+		var state = JSON.parse(localStorage.getItem(0));
 		if ( state ) {
 			var adventure = app.adventure;
 			adventure.scenes.clear();
@@ -35,7 +35,7 @@ var AdventureLibrary = function(app) {
 		}
 	};
 	
-	this.save = function(adventure) {
+	this.serialize = function(adventure) {
 		var state = {
 			scenes: adventure.scenes.map(function(scene) {
 				return scene.copyState();
@@ -55,6 +55,17 @@ var AdventureLibrary = function(app) {
 			});
 		});
 		
-		localStorage.setItem('adventure', JSON.stringify(state));
+		return state;
+	};
+	
+	this.save = function(adventures) {
+		localStorage.clear();
+		
+		var states = adventures.map(this.serialize);
+		states.forEach(function(state) {
+			var json = JSON.stringify(state);
+			var index = localStorage.length;
+			localStorage.setItem(index, json);
+		});
 	};
 };

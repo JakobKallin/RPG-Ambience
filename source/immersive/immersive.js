@@ -50,7 +50,7 @@ var ViewModel = function(db, editorWidth) {
 		}
 		
 		window.addEventListener('beforeunload', function() {
-			self.library.save(self.adventure);
+			self.library.save([self.adventure]);
 		});
 	};
 	

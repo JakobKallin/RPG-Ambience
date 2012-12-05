@@ -394,6 +394,7 @@ body {
 		.help-document h2 {
 			font-weight: normal;
 			font-size: 1.5em;
+			color: hsl(60, 75%, 50%);
 		}
 		
 		.help-document p, .help-document ul {
@@ -414,15 +415,15 @@ body {
 		}
 		
 		.help-document a:link {
-			color: hsl(210, 100%, 50%);
+			color: hsl(60, 75%, 50%);
 		}
 		
 		.help-document a:visited {
-			color: hsl(210, 100%, 35%);
+			color: hsl(60, 50%, 40%);
 		}
 		
 		.help-document a:hover {
-			color: hsl(210, 100%, 65%);
+			color: hsl(60, 100%, 50%);
 		}
 		
 		.help-document dfn {

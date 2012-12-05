@@ -11,7 +11,7 @@ li {
 }
 
 *[title] {
-	cursor: help;
+	cursor: help !important;
 }
 
 label {
@@ -31,15 +31,23 @@ button, input[type=radio], input[type=checkbox] {
 }
 
 button {
-	padding: 0.25em;
+	height: 2em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+	/* box-sizing is needed to make buttons and inputs equally wide. */
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 
 input, textarea {
 	padding: 0.125em 0.25em;
+	/* box-sizing is needed to make buttons and inputs equally wide. */
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 
 input[type=number] {
-	width: 3em;
+	width: 3.5em;
 }
 
 /* Border styles overridden in themes */
@@ -52,17 +60,19 @@ div, li {
 
 /* Multi-purpose classes */
 
+.primary {
+	display: block;
+	overflow: hidden;
+	height: 2em;
+}
+
+.secondary {
+	float: right;
+}
+
 .tab {
 	display: block;
 	float: left;
-}
-
-.tab.ui-tabs-selected, .tab:hover {
-	border-bottom-width: 2px;
-}
-
-.tab:not(:last-child) {
-	border-right-width: 0;
 }
 
 .ui-tabs-hide {
@@ -74,6 +84,10 @@ div, li {
 		padding: 0.25em 0.5em;
 		text-decoration: none;
 	}
+
+.ui-sortable > * {
+cursor: move;
+}
 
 .ui-sortable-helper {
 	cursor: move !important;
@@ -127,6 +141,10 @@ body {
 		.editor > .menu-bar .action {
 			display: inline;
 		}
+		
+		.editor > .menu-bar select, .editor > .menu-bar input {
+			width: 12em;
+		}
 
 		.editor > .menu-bar .action:not(:last-child) {
 			margin-right: 0.5em;
@@ -134,6 +152,10 @@ body {
 
 		.editor > .menu-bar label:after {
 			content: ": ";
+		}
+		
+		.editor > .menu-bar form {
+			display: inline;
 		}
 
 .message {
@@ -172,10 +194,14 @@ body {
 		height: 100%;
 		width: 100%;
 		padding: 2em;
-		padding-top: 3em;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 	}
+		
+		.list-view, .detail-view {
+			/* Simulate a border below the tabs. */
+			border-top: 1px solid hsl(0, 0%, 25%);
+		}
 
 		.list-view {
 			float: left;
@@ -184,6 +210,7 @@ body {
 			-moz-box-sizing: border-box;
 			width: 40%;
 			height: 100%;
+			padding-top: 1em;
 			overflow: auto;
 		}
 
@@ -262,6 +289,7 @@ body {
 			height: 100%;
 			box-sizing: border-box;
 			-moz-box-sizing: border-box;
+			padding-top: 1em;
 			padding-left: 1em;
 			overflow: auto;
 		}
@@ -357,6 +385,10 @@ body {
 					clear: both;
 				}
 				
+					.options.specific table {
+						width: 100%;
+					}
+				
 				.control-list, .control-list > * {
 					display: inline;
 				}
@@ -364,35 +396,59 @@ body {
 				.control-list > *{
 					padding-right: 0.5em;
 				}
-
-				.item-list .item {
-					display: table;
-					width: 100%;
-					cursor: move;
-				}
-
-				.item-list .item:first-child {
-					margin-top: 0;
-				}
-
-					.item-list .item .content {
-						display: table-cell;
-						width: 100%;
-					}
-					
-					.item-list .item .move {
-						display: table-cell;
-						padding-right: 0.5em;
-					}
-					
-						.item-list .item .move img {
-							opacity: 0.35;
-						}
-
-					.item-list .item .remove {
-						display: table-cell;
-						padding-left: 0.5em;
-					}
+	
+	.help-document {
+		height: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		border: 1px solid hsl(0, 0%, 25%);
+		padding: 1.5em;
+		overflow: auto;
+	}
+		
+		.help-document h2 {
+			font-weight: normal;
+			font-size: 1.5em;
+			color: hsl(60, 75%, 50%);
+		}
+		
+		.help-document p, .help-document ul {
+			margin-bottom: 1em;
+		}
+		
+		.help-document ul {
+			margin-left: 2em;
+			margin-right: 2em;
+		}
+		
+		.help-document li {
+			display: list-item;
+		}
+		
+		.help-document ul li {
+			list-style-type: square;
+		}
+		
+		.help-document a:link {
+			color: hsl(60, 75%, 50%);
+		}
+		
+		.help-document a:visited {
+			color: hsl(60, 50%, 40%);
+		}
+		
+		.help-document a:hover {
+			color: hsl(60, 100%, 50%);
+		}
+		
+		.help-document dfn {
+			font-weight: bold;
+			font-style: normal;
+		}
+		
+		.help-document button {
+			height: 1.5em;
+		}
 
 .gui-editor {
 	right: 0;
@@ -453,6 +509,38 @@ body {
 			text-rendering: optimizeLegibility;
 		}
 
+/* Splash screen styling */
+
+.splash {
+	display: table;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: hsl(0, 0%, 10%);
+	color: white;
+	font-family: Constantia, Georgia, serif;
+	font-size: 1em;
+	line-height: 2;
+}
+
+	.splash > * {
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+	}
+	
+	.splash p {
+		font-weight: normal;
+		font-size: 2em;
+		line-height: 2;
+	}
+	
+	.splash ul {
+		font-size: 1.5em;
+	}
+
 /* Scene previews, used in several places */
 
 .preview {
@@ -506,5 +594,4 @@ body {
 	height: 1em;
 	padding: 0.125em 0;
 	font-size: 0.625em;
-	line-height: inherit;
 }

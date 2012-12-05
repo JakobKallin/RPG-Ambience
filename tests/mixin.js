@@ -70,7 +70,7 @@ describe('Ambience mixin', function() {
 		waits(1000);
 		
 		runs(function() {
-			expect(layer.opacity).toBe(1);
+			expect(layer.opacity).toBeGreaterThan(0.9);
 		});
 	});
 	
@@ -181,6 +181,7 @@ describe('Ambience mixin', function() {
 	it('displays visual mixin even when previous scene was not visual', function() {
 		var scene = new Ambience.Scene();
 		scene.sounds = ['test-audio-2s.ogg'];
+		scene.loops = false;
 		ambience.play(scene);
 		
 		var mixin = new Ambience.Scene();
@@ -195,12 +196,14 @@ describe('Ambience mixin', function() {
 		runs(function() {
 			var scene = new Ambience.Scene();
 			scene.sounds = ['test-audio-2s.ogg'];
+			scene.loops = false;
 			ambience.play(scene);
 			
 			var mixin = new Ambience.Scene();
 			mixin.isMixin = true;
 			mixin.sounds = ['test-audio-2s.ogg'];
 			mixin.volume = 0.5;
+			mixin.loops = false;
 			ambience.play(mixin);
 		});
 		

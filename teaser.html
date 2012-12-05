@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<title>RPG Ambience Teaser</title>
 		
+		<script src="libraries/debug.js"></script>
 		<script src="libraries/functions.js"></script>
 		<script src="libraries/manymation/source/manymation.js"></script>
 		
@@ -17,28 +18,47 @@
 		<script src="source/layer.js"></script>
 		
 		<script>
-			['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
-				var url = 'example/' + filename;
-				var node = document.createElement('audio');
-				node.preload = 'auto';
-				node.src = url;
-			});
-			
-			['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
-				var url = 'example/' + filename;
-				var node = document.createElement('img');
-				node.src = url;
-			});
-			
+			// Some fairly complex preloading logic.
+			// This is only needed because everything has to sync perfectly.
 			window.addEventListener('load', function() {
-				document.getElementById('play').addEventListener('click', function(event) {
-					event.preventDefault();
+				var hasStarted = false;
+				
+				var otherOneHasLoaded = false;
+				var startIfLoaded = function() {
+					if ( hasStarted ) {
+						return;
+					} else if ( otherOneHasLoaded ) {
+						hasStarted = true;
+						start();
+					} else {
+						otherOneHasLoaded = true;
+					}
+				};
+				
+				var nodes = [];
+				['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
+					var url = 'example/' + filename;
+					var node = document.createElement('audio');
+					node.preload = 'auto';
+					node.src = url;
+					nodes.push(node);
+					
+					node.addEventListener('canplaythrough', startIfLoaded);
+				});
+				
+				if ( nodes[0].readyState === 4 && nodes[1].readyState === 4 ) {
+					hasStarted = true;
 					start();
+				}
+				
+				['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
+					var url = 'example/' + filename;
+					var node = document.createElement('img');
+					node.src = url;
 				});
 			});
 			
 			var start = function() {
-				document.getElementById('pre-information').style.visibility = 'hidden';
 				var layers = ['background', 'foreground'].map(function(id) {
 					var node = document.getElementById(id);
 					return new Ambience.Layer(node);
@@ -142,7 +162,7 @@
 				}, 33000);
 				
 				window.setTimeout(function() {
-					document.getElementById('post-information').style.visibility = 'visible';
+					document.getElementById('information').style.visibility = 'visible';
 				}, 39500);
 			};
 		</script>
@@ -155,18 +175,13 @@
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
-		<div class="information" id="post-information" style="visibility: hidden">
+		<div class="information" id="information" style="visibility: hidden">
 			<div class="primary">
 				<p style="font-size: 4em"><a href="ambience.html" class="action navigate">Try RPG Ambience</a></p>
 			</div>
 			<div class="secondary">
 				<p style="font-size: 2em">This trailer was made with RPG Ambience</p>
 				<p style="font-size: 1.5em">Artwork and music © copyright Blender Foundation | <a href="http://www.sintel.org/">www.sintel.org</a></p>
-			</div>
-		</div>
-		<div class="information" id="pre-information">
-			<div class="primary">
-				<p style="font-size: 4em"><a href="#play" class="action play" id="play">Play Teaser</a></p>
 			</div>
 		</div>
 	</body>

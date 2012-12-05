@@ -1,5 +1,5 @@
 <!doctype html>
-<html manifest="manifest.appcache">
+<html>
 	<head>
 		<meta charset="utf-8">
 		<title>RPG Ambience</title>
@@ -16,14 +16,18 @@
 			window.indexedDB = window.indexedDB || window.webkitIndexedDB;
 		</script>
 		
+		<script src="libraries/debug.js"></script>
+		
 		<script src="libraries/jquery.js"></script>
 		<script src="libraries/jquery-ui.js"></script>
 		<script src="libraries/knockout.js"></script>
 		<script src="libraries/knockout-sortable.js"></script>
 		<script src="libraries/knockwrap.js"></script>
 
+		<script src="libraries/knockout-polyfill.js"></script>
 		<script src="libraries/number-polyfill.js"></script>
 		<script src="libraries/spectrum.js"></script>
+		<script src="libraries/knockout-spectrum.js"></script>
 		
 		<script src="libraries/functions.js"></script>
 		<script src="libraries/splitter.js"></script>
@@ -71,8 +75,32 @@
 					}">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
+						<li class="action">
+							<select data-bind="options: adventures, optionsText: 'dropdownTitle', value: adventure"></select>
+						</li>
 						<li class="action new">
 							<button data-bind="click: createAdventure">New Adventure</button>
+						</li>
+						<li class="action rename">
+							<form data-bind="event: { submit: stopRename }">
+								<button
+									id="rename-button"
+									data-bind="
+										visible: !renameInProgress,
+										event: { click: startRename}">Rename Adventure</button>
+								<input
+									id="rename-input"
+									type="text"
+									data-bind="
+										event: { blur: stopRename },
+										visible: renameInProgress,
+										value: adventure.title,
+										valueUpdate: 'afterkeydown'
+									">
+							</form>
+						</li>
+						<li class="action delete">
+							<button data-bind="click: toggleSelectedRemoval, text: adventure.removalButtonText"></button>
 						</li>
 					</ul>
 					<ul class="action-list playback">
@@ -84,6 +112,9 @@
 					<ul class="tab-list">
 						<li class="tab">
 							<a href="#scene-tab">Scenes</a>
+						</li>
+						<li class="tab">
+							<a href="#help-tab">Help</a>
 						</li>
 					</ul>
 					<div class="scene-view tab-content" id="scene-tab">
@@ -99,7 +130,7 @@
 								<ul data-bind="foreach: scenes, sortable: true">
 									<li
 										class="list-item"
-										data-bind="css: { selected: isSelected }">
+										data-bind="css: { selected: $parent.current === $data }">
 										<a href="#" data-bind="click: $parent.select">
 											<div class="preview" data-bind="
 												style: {
@@ -146,7 +177,7 @@
 									<button data-bind="click: add">Add Scene</button>
 								</div>
 							</div>
-							<!-- ko with: current -->
+							<!-- ko with: current, polyfill: true -->
 							<div class="detail-view">
 								<div
 									class="selected-item"
@@ -227,8 +258,11 @@
 															</select>
 														</li>
 														<li>
-															<label for="mixin">
-																<input id="mixin" type="checkbox" data-bind="checked: mixin">
+															<label for="mixin" data-bind="attr: { title: $root.help.mixin }">
+																<input
+																	id="mixin"
+																	type="checkbox"
+																	data-bind="checked: mixin">
 																Mixin
 															</label>
 														</li>
@@ -248,24 +282,28 @@
 											<table>
 												<tr>
 													<td>
-														<!-- ko if: image.path -->
-															<span data-bind="text: image.name"></span>
-														<!-- /ko -->
-														<!-- ko if: !image.path -->
-															<span class="note">No image selected</span>
-														<!-- /ko -->
-													</td>
-													<td class="secondary" data-bind="visible: !image.path">
 														<button
 															type="button"
-															data-bind="event: {
-																change: image.onSelected
-															}"
-															class="file"
+															class="file secondary"
+															data-bind="
+																visible: !image.path,
+																event: {
+																	change: image.onSelected
+																}"
 															>Choose Image</button>
-													</td>
-													<td class="secondary" data-bind="visible: image.path">
-														<button type="button" data-bind="click: image.unload">Remove</button>
+														<button
+															type="button"
+															class="secondary"
+															data-bind="
+																visible: image.path,
+																click: image.unload
+															">Remove</button>
+														<!-- ko if: image.path -->
+															<span class="primary" data-bind="text: image.name"></span>
+														<!-- /ko -->
+														<!-- ko if: !image.path -->
+															<span class="primary note">No image selected</span>
+														<!-- /ko -->
 													</td>
 												</tr>
 												<tr>
@@ -325,23 +363,23 @@
 													</td>
 												</tr>
 												<tr>
+													<th><label for="crossover" data-bind="attr: { title: $root.help.overlap }">Overlap</label></th>
+													<td>
+														<input id="crossover" type="number" min="0" value="0" data-bind="value: crossover">
+														<span class="note">seconds</span>
+													</td>
+												</tr>
+												<tr>
 													<th><label>Tracks</label></th>
 													<td>
 														<!-- ko if: tracks.length === 0 -->
 														<p class="note">No tracks selected</p>
 														<!-- /ko -->
-														<ol data-bind="foreach: tracks, sortable: true" class="item-list">
-															<li class="item">
-																<div class="move">
-																	<img src="images/move.svg">
-																</div>
-																<div class="content">
-																	<span data-bind="text: name"></span>
-																	<audio data-bind="attr: { src: path }" preload="auto"></audio>
-																</div>
-																<div class="remove">
-																	<button data-bind="click: $parent.unload">Remove</button>
-																</div>
+														<ol data-bind="foreach: tracks, sortable: true" class="track-list">
+															<li>
+																<button class="secondary" data-bind="click: $parent.unload">Remove</button>
+																<span data-bind="text: name, css: { primary: true, unsupported: !isPlayable }"></span>
+																<audio data-bind="attr: { src: path }" preload="auto"></audio>
 															</li>
 														</ol>
 														<button type="button" class="file" data-bind="event: { change: onSelected }">Add Tracks</button>
@@ -398,7 +436,7 @@
 												</tr>
 												<tr>
 													<th><label for="font-color">Color</label></th>
-													<td><input id="font-color" type="color" data-bind="value: color"></td>
+													<td><input id="font-color" type="color"  data-bind="spectrum: 'color'"></td>
 												</tr>
 												<tr>
 													<th><label for="text-alignment">Align</label></th>
@@ -451,6 +489,49 @@
 							<!-- /ko -->
 						<!-- /ko -->
 					</div>
+					<div class="help-view tab-content" id="help-tab">
+						<div class="help-document">
+							<ul class="table-of-contents">
+								<li><a href="#help-introduction">What RPG Ambience is</a></li>
+								<li><a href="#help-overview">How RPG Ambience works</a></li>
+								<li><a href="#help-playing-scenes">Playing scenes</a></li>
+								<li><a href="#help-stopping-scenes">Stopping scenes</a></li>
+								<li><a href="#help-data">Your data</a></li>
+							</ul>
+							
+							<h2 id="help-introduction">What RPG Ambience is</h2>
+							<p>RPG Ambience is a media player that enables roleplayers to bring their sessions to life using sound and visuals.</p>
+							
+							<h2 id="help-overview">How RPG Ambience works</h2>
+							<p>RPG Ambience is built around <dfn>scenes</dfn>. Scenes are made up of images, sounds, and text grouped together in any combination. Scenes are played and stopped using keyboard shortcuts. Scenes are organized under <dfn>adventures</dfn>.</p>
+							
+							<p>The interface of RPG Ambience consists of two parts: the editor and the stage.</p>
+							<ul>
+								<li><dfn>The editor</dfn> (the left half of the screen) contains your adventures and the scenes in them, including controls to edit them.</li>
+								<li><dfn>The stage</dfn> (the right half of the screen) is where the scenes in your adventures are played.</li>
+							</ul>
+							
+							<h2 id="help-playing-scenes">Playing scenes</h2>
+							<p>There are three ways to play a scene:</p>
+							<ul>
+								<li>Press the hotkey associated with the scene.</li>
+								<li>Type the scene's name and press <button>Enter</button>.</li>
+								<li>Press the <button>Play</button> button in the top-right corner of the editor.</li>
+							</ul>
+							<p>When starting a scene by typing its name, it's enough to type only the first few letters of the name.</p>
+							
+							<h2 id="help-stopping-scenes">Stopping scenes</h2>
+							<p>There are two ways to stop a scene:</p>
+							<ul>
+								<li>Press <button>Enter</button>.</li>
+								<li>Press the <button>Stop</button> button in the top-right corner of the editor.</li>
+							</ul>
+							<p>Using either of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
+							
+							<h2 id="help-data">Your data</h2>
+							<p>RPG Ambience runs entirely within your browser; once the application has loaded, no more data is transferred between your computer and the server. All media that you use is saved inside your browser. This means that you are in complete control of your adventures and everything in them, including sound and image files.</p>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div
@@ -481,6 +562,19 @@
 						</li>
 					</ul>
 				</form>
+			</div>
+		</div>
+		<div id="splash" class="splash">
+			<div id="splash-loading">
+				<p>Loading RPG Ambience…</p>
+			</div>
+			<div id="splash-unsupported" style="display: none">
+				<p>Unfortunately, your browser does not support RPG Ambience.</p>
+				<p>RPG Ambience is known to work in the following browsers:</p>
+				<ul>
+					<li>Google Chrome 23</li>
+					<li>Mozilla Firefox 16</li>
+				</ul>
 			</div>
 		</div>
 	</body>

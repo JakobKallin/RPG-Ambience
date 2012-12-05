@@ -46,7 +46,7 @@ describe('Ambience layer', function() {
 		waits(1000);
 		
 		runs(function() {
-			expect(layer.opacity).toBe(1);
+			expect(layer.opacity).toBeGreaterThan(0.9);
 		});
 	});
 	
@@ -80,23 +80,6 @@ describe('Ambience layer', function() {
 			expect(layer.imageCount).toBe(0);
 			expect(layer.soundCount).toBe(0);
 			expect(layer.textCount).toBe(0);
-		});
-	});
-	
-	it('plays new audio before complete fade duration of previous scene has passed', function() {
-		var scene = new Ambience.Scene();
-		
-		runs(function() {
-			scene.sounds = ['test-audio.ogg'];
-			scene.fadeDuration = 1000;
-			ambience.play(scene);
-		});
-		
-		waits(500);
-		
-		runs(function() {
-			ambience.fadeOutBackground();
-			ambience.play(scene);
 		});
 	});
 });

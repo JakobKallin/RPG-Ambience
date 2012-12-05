@@ -4,6 +4,8 @@ var ViewModel = function(db, editorWidth) {
 	self.start = function() {
 		startAmbience();
 		startInterface();
+		loadAdventures();
+		removeUnusedMedia();
 	}
 	
 	var ambience;
@@ -27,34 +29,77 @@ var ViewModel = function(db, editorWidth) {
 		ambience.fadeOutTopmost();
 	};
 	
-	self.adventure = new AdventureViewModel(self);
+	self.adventure = undefined;
+	self.adventures = [];
 	self.createAdventure = function() {
-		self.adventure.scenes.clear();
-		self.adventure.add();
-		self.adventure.select(self.adventure.scenes[0]);
+		var adventure = new AdventureViewModel(self);
+		adventure.title = 'Untitled adventure';
+		adventure.add();
+		
+		self.addAdventure(adventure);
+	};
+	
+	self.addAdventure = function(adventure) {
+		self.adventures.push(adventure);
+		self.adventure = adventure;
+		self.adventure.select(adventure.scenes[0]);
+	};
+	
+	self.toggleSelectedRemoval = function() {
+		self.adventure.willBeRemoved = !self.adventure.willBeRemoved;
+		if ( self.adventure.willBeRemoved ) {
+			var index = self.adventures.indexOf(self.adventure);
+			if ( self.adventures.length === 1 ) {
+				self.createAdventure();
+			} else if ( index === 0 ) {
+				self.adventure = self.adventures[1];
+			} else {
+				self.adventure = self.adventures[index - 1];
+			}
+		}
 	};
 	
 	self.library = new AdventureLibrary(self);
-	self.loadAdventure = function() {
-		self.createAdventure()
-		
-		var loaded = self.library.load();
-		if ( !loaded ) {
-			self.loadExampleAdventure();
+	var loadAdventures = function() {
+		var adventures = self.library.load();
+		if ( adventures.length === 0 ) {
+			adventures = [self.library.loadExample()];
 		}
 		
-		window.addEventListener('beforeunload', function() {
-			self.library.save(self.adventure);
-		});
+		adventures.forEach(self.addAdventure);
+		
+		window.addEventListener('beforeunload', self.onExit);
+	};
+	
+	self.renameInProgress = false;
+	self.startRename = function() {
+		self.renameInProgress = true;
+		document.getElementById('rename-input').focus();
+		document.getElementById('rename-input').select();
+	};
+	self.stopRename = function() {
+		self.renameInProgress = false;
+	};
+	self.equalizeRenameFieldWidth = function() {
+		var button = document.getElementById('rename-button');
+		var input = document.getElementById('rename-input');
+		input.style.width = button.offsetWidth + 'px';
 	};
 	
 	self.media = new MediaLibrary(db);
+	var removeUnusedMedia = function() {
+		var items = self.adventures.map(get('media')).flatten();
+		var usedIds = items.map(get('id'));
+		self.media.removeUnusedMedia(usedIds);
+	};
 	
 	function startInterface() {
 		self.splitter = new Splitter(document.getElementById('interface'), editorWidth);
 		
 		document.addEventListener('keypress', self.onKeyPress);
 		document.addEventListener('keydown', self.onKeyDown);
+		
+		self.equalizeRenameFieldWidth();
 	}
 	
 	self.editorWidth = editorWidth;
@@ -194,79 +239,95 @@ var ViewModel = function(db, editorWidth) {
 		'Backspace': self.backspaceSceneName
 	};
 	
-	self.loadExampleAdventure = function() {
-		var adventure = self.adventure;
-		adventure.scenes.clear();
-		
-		var music = adventure.add();
-		music.name = 'Music';
-		music.key = 'M';
-		music.sound.tracks.push({
-			name: '9-Trailer_Music.ogg',
-			path: 'example/9-Trailer_Music.ogg'
+	self.help = {
+		mixin: "When you play this scene, you retain the media of the previous scene that is not redefined in this scene.",
+		overlap: "The next track will start this many seconds before the current track ends."
+	};
+	
+	self.onExit = function() {
+		self.permanentlyRemoveAdventures();
+		self.library.save(self.adventures);
+	};
+	
+	self.permanentlyRemoveAdventures = function() {
+		var removed = self.adventures.filter(get('willBeRemoved'));
+		removed.forEach(function(adventure) {
+			self.adventures.remove(adventure);
 		});
-		music.sound.loop = false;
-		
-		var imagine = adventure.add();
-		imagine.name = 'Imagine';
-		imagine.key = '1';
-		imagine.layer = 'foreground';
-		imagine.fade = 1.6;
-		imagine.text.string = 'Don’t just imagine your world';
-		imagine.text.size = 4.5;
-		imagine.text.font = 'Palatino Linotype, Georgia, serif';
-		imagine.text.italic = true;
-		
-		var life = adventure.add();
-		life.name = 'Life';
-		life.key = '2';
-		life.layer = 'foreground';
-		life.text.string = 'Bring it to life';
-		life.text.size = 9;
-		life.text.font = 'Palatino Linotype, Georgia, serif';
-		life.text.italic = true;
-		life.fade = 1.6;
-		life.fadeDirection = 'out';
-		
-		var city = adventure.add();
-		city.name = 'City';
-		city.key = 'C';
-		city.layer = 'foreground';
-		city.image.name = 'ishtar_rooftop.jpg';
-		city.image.path = 'example/ishtar_rooftop.jpg';
-		city.image.size = 'cover';
-		city.fade = 4;
-		
-		var dragon = adventure.add();
-		dragon.name = 'Dragon';
-		dragon.key = 'D';
-		dragon.layer = 'foreground';
-		dragon.image.name = 'sintel-wallpaper-dragon.jpg';
-		dragon.image.path = 'example/sintel-wallpaper-dragon.jpg';
-		dragon.image.size = 'cover';
-		dragon.sound.tracks.push({
-			name: 'dragon.ogg',
-			path: 'example/dragon.ogg'
-		});
-		dragon.sound.loop = false;
-		dragon.fade = 3.2;
-		dragon.fadeDirection = 'out';
-		
-		var title = adventure.add();
-		title.name = 'Ambience';
-		title.key = 'A';
-		title.layer = 'foreground';
-		title.text.string = 'RPG Ambience';
-		title.text.size = 9;
-		title.text.font = 'Constantia, Georgia, serif';
-		title.fade = 3.2;
-		
-		adventure.select(music);
 	};
 };
 
 var viewModel;
 window.addEventListener('load', function() {
+	var browserIsSupported = function() {
+		return Boolean(window.indexedDB && window.URL && !document.fireEvent);
+	};
+	
+	var removeSplashScreen = function() {
+		var splash = document.getElementById('splash');
+		splash.parentNode.removeChild(splash);
+	};
+	
+	var showSupportInfo = function() {
+		var loadingMessage = document.getElementById('splash-loading');
+		var unsupportedMessage = document.getElementById('splash-unsupported');
+		loadingMessage.style.display = 'none';
+		unsupportedMessage.style.display = '';
+	};
+	
+	if ( !browserIsSupported() ) {
+		showSupportInfo();
+		return;
+	}
+	
+	var selectedTab = 0;
+	
+	var startPolyfills = function(event) {
+		var container = event.target;
+		
+		var colorInputs = container.querySelectorAll('input[type=color]');
+		Array.prototype.forEach.call(colorInputs, function(input) {
+			var onChange = function(color) {
+				input.value = color.toHexString();
+				input.dispatchEvent(new Event('change'));
+			};
+			$(input).spectrum({
+				change: onChange,
+				move: onChange,
+				clickoutFiresChange: true,
+				showAlpha: true,
+				showButtons: false
+			});
+		});
+		
+		var buttons = container.querySelectorAll('button.file');
+		Array.prototype.forEach.call(buttons, function(button) {
+			new FileButton(button);
+			button.classList.remove('file'); // Make sure the same button is not affected twice.
+		});
+		
+		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
+		$('input[type="number"]', container).inputNumber();
+		
+		var options = container.querySelector('.options.specific');
+		$(options).tabs({
+			select: function(event, ui) {
+				selectedTab = ui.index;
+			}
+		});
+		$(options).tabs('select', selectedTab);
+	};
+	
+	var stopPolyfills = function(event) {
+		var inputs = document.querySelectorAll('input[type=color]');
+		Array.prototype.forEach.call(inputs, function(input) {
+			$(input).spectrum('destroy');
+		});
+	};
+	
+	document.body.addEventListener('added', startPolyfills);
+	document.body.addEventListener('removed', stopPolyfills);
+	
 	var dbRequest = indexedDB.open('media');
 	
 	dbRequest.onupgradeneeded = function(event) {
@@ -298,12 +359,11 @@ window.addEventListener('load', function() {
 		
 		viewModel = new ViewModel(db, 0.6);
 		knockwrap.wrap(viewModel);
-		viewModel.start();
+		viewModel.start();		
 		ko.applyBindings(viewModel);
 		
-		// This needs to be done after applying the bindings, for some unknown reason.
-		viewModel.loadAdventure();
-		
 		$(document.getElementById('view-list')).tabs();
+		
+		removeSplashScreen();
 	};
 });

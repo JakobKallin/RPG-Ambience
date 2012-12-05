@@ -1,7 +1,6 @@
 var AdventureViewModel = function(app) {
 	var model = new Adventure();
 	var self = Object.create(model);
-	self.model = model; // This is so that Knockwrap can access the model.
 	
 	self.newScene = function() {
 		return {
@@ -66,7 +65,10 @@ var AdventureViewModel = function(app) {
 					this.tracks.push({
 						name: file.name,
 						path: objectURL,
-						id: id
+						id: id,
+						isPlayable: Boolean(
+							document.createElement('audio').canPlayType(file.type)
+						)
 					});
 					
 					app.media.save(id, file);
@@ -98,6 +100,15 @@ var AdventureViewModel = function(app) {
 					// The percentage is relative to the container's width, so the same property can be used for all previews.
 					return '0 ' + this.padding + '%';
 				}
+			},
+			
+			get media() {
+				// We use this convoluted code because concat does not work as expected on array-like objects.
+				var tracks = this.sound.tracks.map(function(track) { return track; });
+				if ( this.image.id || this.image.path ) {
+					tracks.push(this.image);
+				}
+				return tracks;
 			},
 			
 			// State
@@ -166,7 +177,7 @@ var AdventureViewModel = function(app) {
 		}
 		
 		var actualTracks = scene.sound.tracks.filter(function(track) {
-			return track.path.length > 0;
+			return track.path.length > 0 && track.isPlayable;
 		});
 		if ( actualTracks.length > 0 ) {
 			converted.sounds = actualTracks.map(function(track) {
@@ -200,45 +211,8 @@ var AdventureViewModel = function(app) {
 	
 	self.current = undefined;
 	
-	var selectedTab = 0;
 	self.select = function(scene) {
 		self.current = scene;
-		self.updatePolyfills(scene);
-	};
-	
-	self.updatePolyfills = function(scene) {
-		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
-		$('input[type="number"]').inputNumber();
-		
-		var specificOptions = $('.selected-item .options.specific');
-		specificOptions.tabs({
-			select: function(event, ui) {
-				selectedTab = ui.index;
-			}
-		});
-		specificOptions.tabs('select', selectedTab);
-		
-		var activateColorInput = function(object, property, id) {
-			var onChange = function(color) {
-				object[property] = color.toHslString();
-			};
-			$('#' + id).spectrum({
-				change: onChange,
-				move: onChange,
-				clickoutFiresChange: true,
-				showAlpha: true,
-				showButtons: false
-			});			
-		};
-		activateColorInput(scene.text, 'color', 'font-color');
-		activateColorInput(scene, 'background', 'background-color');
-		
-		$('button.file').each(function() {
-			new FileButton(this);
-			$(this).removeClass('file'); // Make sure the same button is not affected twice.
-		});
-		
-		app.splitter.update();
 	};
 	
 	self.add = function() {
@@ -365,6 +339,31 @@ var AdventureViewModel = function(app) {
 			return null;
 		}
 	};
+	
+	self.willBeRemoved = false;
+	
+	Object.defineProperty(self, 'dropdownTitle', {
+		get: function() {
+			if ( self.willBeRemoved ) {
+				return self.title + ' (deleted)';
+			} else {
+				return self.title;
+			}
+		}
+	});
+	
+	Object.defineProperty(self, 'removalButtonText', {
+		get: function() {
+			if ( self.willBeRemoved ) {
+				return 'Recover Adventure';
+			} else {
+				return 'Delete Adventure';
+			}
+		}
+	});
+
+	// This is so that Knockwrap can access the model.
+	self.model = model;
 	
 	return self;
 };

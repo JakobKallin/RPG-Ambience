@@ -153,6 +153,10 @@ body {
 		.editor > .menu-bar label:after {
 			content: ": ";
 		}
+		
+		.editor > .menu-bar form {
+			display: inline;
+		}
 
 .message {
 	clear: both;

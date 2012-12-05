@@ -82,20 +82,22 @@
 							<button data-bind="click: createAdventure">New Adventure</button>
 						</li>
 						<li class="action rename">
-							<button
-								id="rename-button"
-								data-bind="
-									visible: !renameInProgress,
-									event: { click: startRename}">Rename Adventure</button>
-							<input
-								id="rename-input"
-								type="text"
-								data-bind="
-									event: { blur: stopRename },
-									visible: renameInProgress,
-									value: adventure.title,
-									valueUpdate: 'afterkeydown'
-								">
+							<form data-bind="event: { submit: stopRename }">
+								<button
+									id="rename-button"
+									data-bind="
+										visible: !renameInProgress,
+										event: { click: startRename}">Rename Adventure</button>
+								<input
+									id="rename-input"
+									type="text"
+									data-bind="
+										event: { blur: stopRename },
+										visible: renameInProgress,
+										value: adventure.title,
+										valueUpdate: 'afterkeydown'
+									">
+							</form>
 						</li>
 					</ul>
 					<ul class="action-list playback">

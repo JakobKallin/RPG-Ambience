@@ -31,7 +31,9 @@ button, input[type=radio], input[type=checkbox] {
 }
 
 button {
-	padding: 0.25em;
+	height: 2em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
 }
 
 input, textarea {
@@ -413,15 +415,15 @@ body {
 		}
 		
 		.help-document a:link {
-			color: hsl(220, 50%, 50%);
+			color: hsl(210, 100%, 50%);
 		}
 		
 		.help-document a:visited {
-			color: hsl(280, 50%, 35%);
+			color: hsl(210, 100%, 35%);
 		}
 		
 		.help-document a:hover {
-			color: hsl(220, 100%, 60%);
+			color: hsl(210, 100%, 65%);
 		}
 		
 		.help-document dfn {
@@ -429,16 +431,8 @@ body {
 			font-style: normal;
 		}
 		
-		.help-document kbd {
-			font-family: Corbel, sans-serif;
-			background-color: hsl(0, 0%, 65%);
-			color: hsl(0, 0%, 10%);
-			border: 1px solid hsl(0, 0%, 20%);
-			border-radius: 0.25em;
-			padding: 0.0625em 0.25em;
-			box-shadow: 0.0625em 0.0625em hsl(0, 0%, 20%);
-			-webkit-box-shadow: 0.0625em 0.0625em hsl(0, 0%, 20%);
-			-moz-box-shadow: 0.0625em 0.0625em hsl(0, 0%, 20%);
+		.help-document button {
+			height: 1.5em;
 		}
 
 .gui-editor {

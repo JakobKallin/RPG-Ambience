@@ -37,6 +37,8 @@ var ViewModel = function(db, editorWidth) {
 		adventure.add();
 		
 		self.addAdventure(adventure);
+		
+		self.startRename();
 	};
 	
 	self.addAdventure = function(adventure) {

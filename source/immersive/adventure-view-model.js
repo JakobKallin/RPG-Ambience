@@ -345,7 +345,7 @@ var AdventureViewModel = function(app) {
 	Object.defineProperty(self, 'dropdownTitle', {
 		get: function() {
 			if ( self.willBeRemoved ) {
-				return self.title + ' (deleted)';
+				return self.title + ' (will be deleted)';
 			} else {
 				return self.title;
 			}

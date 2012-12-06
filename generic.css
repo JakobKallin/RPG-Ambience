@@ -16,7 +16,12 @@ div, li {
 	color: black;
 }
 
-.list-item.selected, .ui-tabs-selected {
+.list-item.selected {
+	background-color: hsl(220, 50%, 20%);
+	border-color: hsl(220, 50%, 50%);
+}
+
+.ui-tabs-selected {
 	background-color: hsl(0, 0%, 17.5%);
 }
 

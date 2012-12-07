@@ -34,13 +34,19 @@
 					document.body.appendChild(node);
 					
 					if ( filename === '9-Trailer_Music.ogg' ) {
-						node.addEventListener('timeupdate', function() {
-							if ( !hasStarted && node.currentTime > 0 ) {
-								debug('First time update');
+						node.addEventListener('canplaythrough', function() {
+							if ( !hasStarted ) {
 								hasStarted = true;
 								start();
 							}
 						});
+						
+						if ( node.readyState === 4 ) {
+							if ( !hasStarted ) {
+								hasStarted = true;
+								start();
+							}
+						}
 					}
 				});
 				

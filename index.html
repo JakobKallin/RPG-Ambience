@@ -7,12 +7,13 @@
 		<link rel="icon" type="image/png" href="images/icon.png">
 		<script>
 			// "Cheat" by loading the media for the trailer already.
-			['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
-				var path = 'example/' + filename;
-				var node = document.createElement('audio');
-				node.src = path;
-				node.volume = 0;
-				window.addEventListener('load', function() {
+			window.addEventListener('load', function() {
+				['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
+					var path = 'example/' + filename;
+					var node = document.createElement('audio');
+					document.body.appendChild(node);
+					node.src = path;
+					node.volume = 0;
 					node.play();
 				});
 			});

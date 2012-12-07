@@ -249,7 +249,7 @@ var ViewModel = function(db, editorWidth) {
 	};
 	
 	self.help = {
-		mixin: "When you play this scene, you retain the media of the previous scene that is not redefined in this scene.",
+		mixin: "When you play this scene, you retain the elements of the previous scene that are not redefined in this scene.",
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	

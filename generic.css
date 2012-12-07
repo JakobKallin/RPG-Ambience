@@ -16,6 +16,17 @@ div, li {
 	color: black;
 }
 
+.tab {
+	background-color: hsl(0, 0%, 10%);
+	border: 1px solid hsl(0, 0%, 25%);
+	border-bottom-width: 0;
+	margin-right: 0.5em;
+}
+
+.tab a {
+	color: hsl(0, 0%, 75%);
+}
+
 .list-item.selected {
 	background-color: hsl(220, 50%, 20%);
 	border-color: hsl(220, 50%, 50%);
@@ -27,16 +38,6 @@ div, li {
 
 .list-item:hover:not(.selected), .tab:hover:not(.ui-tabs-selected) {
 	background-color: hsl(0, 0%, 12.5%);
-}
-
-.tab {
-	border: 1px solid hsl(0, 0%, 25%);
-	border-bottom-width: 0;
-	margin-right: 0.5em;
-}
-
-.tab a {
-	color: hsl(0, 0%, 75%);
 }
 
 .selected-item .tab-content {

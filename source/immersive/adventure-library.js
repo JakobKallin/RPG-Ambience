@@ -89,8 +89,8 @@ var AdventureLibrary = function(app) {
 		adventure.title = 'Example adventure';
 		
 		var music = adventure.add();
-		music.name = 'Music';
-		music.key = 'M';
+		music.name = 'Theme';
+		music.key = 'T';
 		music.sound.tracks.push({
 			name: '9-Trailer_Music.ogg',
 			path: 'example/9-Trailer_Music.ogg',

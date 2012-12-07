@@ -37,6 +37,8 @@ var ViewModel = function(db, editorWidth) {
 		adventure.add();
 		
 		self.addAdventure(adventure);
+		
+		self.startRename();
 	};
 	
 	self.addAdventure = function(adventure) {
@@ -153,7 +155,14 @@ var ViewModel = function(db, editorWidth) {
 		self.mouseHasRecentlyMoved = false;
 	};
 
-	self.showInterface = function() {
+	self.showInterface = function(viewModel, event) {
+		// In Firefox, the mouseout event is triggered when a scene with an image is started, because the mouse leaves the theater for the image.
+		// This code only shows the interface when the mouse leaves for another part of the document.
+		// There should be a better way to do this but it seems to fix the problem for now.
+		if ( event && event.currentTarget.contains(event.target) ) {
+			return;
+		}
+		
 		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
 		self.mouseHasRecentlyMoved = true;

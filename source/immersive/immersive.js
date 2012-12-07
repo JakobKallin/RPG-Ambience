@@ -366,7 +366,7 @@ window.addEventListener('load', function() {
 	var onDatabaseLoaded = function(db) {
 		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 		
-		viewModel = new ViewModel(db, 0.6);
+		viewModel = new ViewModel(db, 0.75);
 		knockwrap.wrap(viewModel);
 		viewModel.start();		
 		ko.applyBindings(viewModel);

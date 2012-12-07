@@ -5,6 +5,18 @@
 		<title>RPG Ambience - Bring your game to life</title>
 		<link rel="stylesheet" href="style.css">
 		<link rel="icon" type="image/png" href="images/icon.png">
+		<script>
+			// "Cheat" by loading the media for the trailer already.
+			['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
+				var path = 'example/' + filename;
+				var node = document.createElement('audio');
+				node.src = path;
+				node.volume = 0;
+				window.addEventListener('load', function() {
+					node.play();
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<h1>RPG Ambience</h1>

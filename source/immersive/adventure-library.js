@@ -13,6 +13,7 @@ var AdventureLibrary = function(app) {
 		var adventure = new AdventureViewModel(app);
 		
 		adventure.title = state.title;
+		adventure.version = state.version;
 		
 		state.scenes.forEach(function(sceneState) {
 			var scene = adventure.newScene();
@@ -50,6 +51,7 @@ var AdventureLibrary = function(app) {
 	this.serialize = function(adventure) {
 		var state = {
 			title: adventure.title,
+			version: adventure.version,
 			scenes: adventure.scenes.map(function(scene) {
 				return scene.copyState();
 			})

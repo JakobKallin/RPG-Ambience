@@ -29,7 +29,8 @@ ko.bindingHandlers.sortable = {
 		$(element).sortable({
 			axis: 'y',
 			start: onSortStarted,
-			stop: onSortEnded
+			stop: onSortEnded,
+			distance: 10
 		});
 	}
 };

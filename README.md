@@ -10,6 +10,7 @@
 - [Deleting adventures](#deleting-adventures)
 - [Privacy](#privacy)
 - [For developers](#for-developers)
+- [Contact](#contact)
 
 ## What RPG Ambience is
 RPG Ambience is a media player that enables roleplayers to bring their sessions to life using sound and visuals. It is free software that runs directly in your browser.
@@ -52,3 +53,6 @@ RPG Ambience runs entirely within your browser; once the application has loaded,
 
 ## For developers
 RPG Ambience is licensed under the [GNU General Public License](http://www.gnu.org/licenses/gpl.html).
+
+## Contact
+To leave feedback about RPG Ambience, either send an email to [rpg.ambience@gmail.com](mailto:rpg.ambience@gmail.com) or create an issue on [the project's GitHub page](https://github.com/JakobKallin/RPG-Ambience/issues) (for bug reports).

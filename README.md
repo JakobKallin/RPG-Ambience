@@ -55,4 +55,4 @@ RPG Ambience runs entirely within your browser; once the application has loaded,
 RPG Ambience is licensed under the [GNU General Public License](http://www.gnu.org/licenses/gpl.html).
 
 ## Contact
-To leave feedback about RPG Ambience, either send an email to [rpg.ambience@gmail.com](mailto:rpg.ambience@gmail.com) or create an issue on [the project's GitHub page](https://github.com/JakobKallin/RPG-Ambience/issues) (for bug reports).
+To leave feedback about RPG Ambience, either send an email to [rpg.ambience@gmail.com](mailto:rpg.ambience@gmail.com) or [create an issue](https://github.com/JakobKallin/RPG-Ambience/issues) (for bug reports).

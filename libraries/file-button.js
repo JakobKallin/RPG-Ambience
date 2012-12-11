@@ -4,13 +4,21 @@ var FileButton = function(button) {
 		var input = document.createElement('input');
 		input.type = 'file';
 		input.multiple = true;
-		input.click();
 		
+		// We need to actually insert the node for IE10 to accept the click() call below.
+		input.style.display = 'none';
+		button.parentNode.insertBefore(input, button);
+		
+		// This should be before the call to click.
+		// It makes more sense semantically, and IE10 seems to require it.
 		input.addEventListener('change', function(inputEvent) {
 			button.files = inputEvent.target.files;
-			var buttonEvent = new CustomEvent('change');
+			var buttonEvent = document.createEvent('CustomEvent');
+			buttonEvent.initCustomEvent('change', true, true, null);
 			button.dispatchEvent(buttonEvent);
 		});
+		
+		input.click();
 	});
 	
 	return button;

@@ -4,9 +4,13 @@ ko.bindingHandlers.polyfill = function() {
 			if ( ko.virtualElements.firstChild(element) ) {
 				ko.virtualElements.childNodes(element).forEach(function(child) {
 					if (child.nodeType === 1) {
-						child.dispatchEvent(new CustomEvent('added', { bubbles: true }));
+						var addedEvent = document.createEvent('CustomEvent');
+						addedEvent.initCustomEvent('added', true, true, null)
+						child.dispatchEvent(addedEvent);
 						ko.utils.domNodeDisposal.addDisposeCallback(child, function() {
-							child.dispatchEvent(new CustomEvent('removed', { bubbles: true }));
+							var removedEvent = document.createEvent('CustomEvent');
+							removedEvent.initCustomEvent('added', true, true, null)
+							child.dispatchEvent(removedEvent);
 						});
 					}
 				});

@@ -269,7 +269,7 @@ var ViewModel = function(db, editorWidth) {
 var viewModel;
 window.addEventListener('load', function() {
 	var browserIsSupported = function() {
-		return Boolean(window.indexedDB && window.URL && !document.fireEvent);
+		return Boolean(window.indexedDB && window.URL);
 	};
 	
 	var removeSplashScreen = function() {

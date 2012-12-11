@@ -50,7 +50,12 @@
 		<script src="source/immersive/media-library.js"></script>
 		<script src="source/immersive/immersive.js"></script>
 	</head>
-	<body>
+	<body
+		data-bind="
+			event: {
+				keydown: stopPropagation,
+				keypress: stopPropagation
+			}">
 		<div
 			id="theater"
 			class="theater"
@@ -67,12 +72,7 @@
 		<div id="interface" class="interface">
 			<div
 				id="editor"
-				class="editor"
-				data-bind="
-					event: {
-						keydown: stopPropagation,
-						keypress: stopPropagation
-					}">
+				class="editor">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -556,7 +556,6 @@
 				data-bind="
 					visible: guiEditorIsVisible,
 					event: {
-						keydown: stopPropagation,
 						mousemove: scheduleHiddenInterface,
 						mouseover: scheduleHiddenInterface
 					}

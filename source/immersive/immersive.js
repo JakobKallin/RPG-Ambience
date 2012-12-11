@@ -192,7 +192,12 @@ var ViewModel = function(db, editorWidth) {
 	};
 	
 	self.stopPropagation = function(viewModel, event) {
-		event.stopPropagation();
+		var interactiveTagNames = ['input', 'select', 'option', 'optgroup', 'button', 'a', 'textarea'];
+		var targetTagName = event.target.tagName.toLowerCase();
+		if ( interactiveTagNames.contains(targetTagName) ) {
+			event.stopPropagation();
+		}
+		
 		return true;
 	}
 	

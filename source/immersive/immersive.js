@@ -202,10 +202,10 @@ var ViewModel = function(db, editorWidth) {
 			event.preventDefault();
 			self.commands[key]();
 		} else {
-			var scene = self.adventure.keyedScene(key);
-			if ( scene ) {
+			var scenes = self.adventure.keyedScenes(key);
+			if ( scenes.length > 0 ) {
 				event.preventDefault();
-				self.playScene(scene);
+				scenes.forEach(self.playScene);
 			}
 		}
 	};
@@ -215,9 +215,9 @@ var ViewModel = function(db, editorWidth) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
 		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
-			var scene = self.adventure.keyedScene(character.toUpperCase());
-			if ( scene ) {
-				self.playScene(scene);
+			var scenes = self.adventure.keyedScenes(character.toUpperCase());
+			if ( scenes.length > 0 ) {
+				scenes.forEach(self.playScene);
 				self.sceneName = '';
 			} else if ( character ) {
 				self.sceneName = self.sceneName + character;

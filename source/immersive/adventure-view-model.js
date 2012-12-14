@@ -330,13 +330,13 @@ var AdventureViewModel = function(app) {
 		}
 	};
 	
-	self.keyedScene = function(targetKey) {
+	self.keyedScenes = function(targetKey) {
 		if ( targetKey ) {
-			return self.scenes.first(function(scene) {
+			return self.scenes.filter(function(scene) {
 				return scene.key && scene.key === targetKey;
 			});
 		} else {
-			return null;
+			return [];
 		}
 	};
 	

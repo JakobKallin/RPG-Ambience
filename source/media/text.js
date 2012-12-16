@@ -1,3 +1,7 @@
+// This file is part of RPG Ambience
+// Copyright 2012 Jakob Kallin
+// License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
+
 Ambience.Text = function(container) {
 	var outerNode; // This one is needed to have left-aligned text in the center, without filling the entire width.
 	var innerNode;

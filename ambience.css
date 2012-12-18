@@ -235,9 +235,6 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			
 			.list-item:hover {
 				cursor: pointer;
-			}
-			
-			.list-item:hover:not(.selected) {
 				background-color: hsl(0, 0%, 12.5%);
 			}
 			

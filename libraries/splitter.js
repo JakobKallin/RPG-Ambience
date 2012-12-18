@@ -29,6 +29,7 @@ var Splitter = function(container, initialLeftWidth) {
 		if ( newLeftWidth === undefined ) {
 			newLeftWidth = latestLeftWidth;
 		}
+		newLeftWidth = Math.max(0.10, Math.min(newLeftWidth, 0.90));
 		
 		var newRightWidth = 1 - newLeftWidth;
 		left().style.width = (newLeftWidth * 100) + '%';

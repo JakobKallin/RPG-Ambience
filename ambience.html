@@ -50,7 +50,12 @@
 		<script src="source/immersive/media-library.js"></script>
 		<script src="source/immersive/immersive.js"></script>
 	</head>
-	<body>
+	<body
+		data-bind="
+			event: {
+				keydown: stopPropagation,
+				keypress: stopPropagation
+			}">
 		<div
 			id="theater"
 			class="theater"
@@ -68,22 +73,19 @@
 			<div
 				id="editor"
 				class="editor"
-				data-bind="
-					event: {
-						keydown: stopPropagation,
-						keypress: stopPropagation
-					}">
+				data-bind="visible: editorIsVisible">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
 							<select data-bind="options: adventures, optionsText: 'dropdownTitle', value: adventure"></select>
 						</li>
 						<li class="action new">
-							<button data-bind="click: createAdventure">New Adventure</button>
+							<button type="button" data-bind="click: createAdventure">New Adventure</button>
 						</li>
 						<li class="action rename">
 							<form data-bind="event: { submit: stopRename }">
 								<button
+									type="button" 
 									id="rename-button"
 									data-bind="
 										visible: !renameInProgress,
@@ -100,12 +102,12 @@
 							</form>
 						</li>
 						<li class="action delete">
-							<button data-bind="click: toggleSelectedRemoval, text: adventure.removalButtonText"></button>
+							<button type="button" data-bind="click: toggleSelectedRemoval, text: adventure.removalButtonText"></button>
 						</li>
 					</ul>
 					<ul class="action-list playback">
-						<li class="action play"><button data-bind="click: playSelected">Play</button></li>
-						<li class="action stop"><button data-bind="click: stopCurrent">Stop</button></li>
+						<li class="action play"><button type="button" data-bind="click: playSelected">Play</button></li>
+						<li class="action stop"><button type="button" data-bind="click: stopCurrent">Stop</button></li>
 					</ul>
 				</div>
 				<div class="view-list" id="view-list">
@@ -174,7 +176,7 @@
 									</li>
 								</ul>
 								<div class="add-item">
-									<button data-bind="click: add">Add Scene</button>
+									<button type="button" data-bind="click: add">Add Scene</button>
 								</div>
 							</div>
 							<!-- ko with: current, polyfill: true -->
@@ -188,8 +190,8 @@
 										}"
 								>
 									<ul class="action-list">
-										<li class="action copy"><button data-bind="click: $parent.copySelected">Copy</button></li>
-										<li class="action remove"><button data-bind="click: $parent.removeSelected">Remove</button></li>
+										<li class="action copy"><button type="button" data-bind="click: $parent.copySelected">Copy</button></li>
+										<li class="action remove"><button type="button" data-bind="click: $parent.removeSelected">Remove</button></li>
 									</ul>
 									<div class="preview" data-bind="
 										style: {
@@ -377,7 +379,7 @@
 														<!-- /ko -->
 														<ol data-bind="foreach: tracks, sortable: true" class="track-list">
 															<li>
-																<button class="secondary" data-bind="click: $parent.unload">Remove</button>
+																<button type="button" class="secondary" data-bind="click: $parent.unload">Remove</button>
 																<span data-bind="text: name, css: { primary: true, unsupported: !isPlayable }"></span>
 																<audio data-bind="attr: { src: path }" preload="auto"></audio>
 															</li>
@@ -519,16 +521,16 @@
 							<p>There are three ways to play a scene:</p>
 							<ul>
 								<li>Press the hotkey associated with the scene.</li>
-								<li>Type the scene's name and press <button>Enter</button> on your keyboard.</li>
-								<li>Press the <button>Play</button> button in the top-right corner of the editor.</li>
+								<li>Type the scene's name and press <button type="button">Enter</button> on your keyboard.</li>
+								<li>Press the <button type="button">Play</button> button in the top-right corner of the editor.</li>
 							</ul>
 							<p>When starting a scene by typing its name, it's enough to type only the first few letters of the name.</p>
 							
 							<h2 id="help-stopping-scenes">Stopping scenes</h2>
 							<p>There are two ways to stop a scene:</p>
 							<ul>
-								<li>Press <button>Enter</button> on your keyboard.</li>
-								<li>Press the <button>Stop</button> button in the top-right corner of the editor.</li>
+								<li>Press <button type="button">Enter</button> on your keyboard.</li>
+								<li>Press the <button type="button">Stop</button> button in the top-right corner of the editor.</li>
 							</ul>
 							<p>Using either of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
 							
@@ -536,7 +538,7 @@
 							<p>All of the adventures that you create, including the sound and image files that you add to them, are automatically saved whenever you exit RPG Ambience and will appear the next time that you start the application.</p>
 							
 							<h2 id="help-deleting-adventures">Deleting adventures</h2>
-							<p>To delete an adventure, select the adventure in the drop-down menu and then press <button>Delete Adventure</button>. The adventure will be deleted when you exit RPG Ambience. Until then, you can recover the adventure by selecting it again and pressing <button>Recover Adventure</button> (which has now replaced <button>Delete Adventure</button>).</p>
+							<p>To delete an adventure, select the adventure in the drop-down menu and then press <button type="button">Delete Adventure</button>. The adventure will be deleted when you exit RPG Ambience. Until then, you can recover the adventure by selecting it again and pressing <button type="button">Recover Adventure</button> (which has now replaced <button type="button">Delete Adventure</button>).</p>
 							
 							<h2 id="help-privacy">Privacy</h2>
 							<p>RPG Ambience runs entirely within your browser; once the application has loaded, no more data is transferred between your computer and the server. All of your adventures are saved right inside your browser. This means that you are in complete control of everything in them, including sound and image files.</p>
@@ -556,7 +558,6 @@
 				data-bind="
 					visible: guiEditorIsVisible,
 					event: {
-						keydown: stopPropagation,
 						mousemove: scheduleHiddenInterface,
 						mouseover: scheduleHiddenInterface
 					}

@@ -1,6 +1,7 @@
 window.requestAnimationFrame =
 	window.webkitRequestAnimationFrame ||
-	window.mozRequestAnimationFrame;
+	window.mozRequestAnimationFrame ||
+	window.msRequestAnimationFrame;
 
 var Manymation = {};
 

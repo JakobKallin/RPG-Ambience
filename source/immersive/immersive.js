@@ -196,7 +196,12 @@ var ViewModel = function(db, editorWidth) {
 	};
 	
 	self.stopPropagation = function(viewModel, event) {
-		event.stopPropagation();
+		var interactiveTagNames = ['input', 'select', 'option', 'optgroup', 'button', 'a', 'textarea'];
+		var targetTagName = event.target.tagName.toLowerCase();
+		if ( interactiveTagNames.contains(targetTagName) ) {
+			event.stopPropagation();
+		}
+		
 		return true;
 	}
 	
@@ -273,7 +278,7 @@ var ViewModel = function(db, editorWidth) {
 var viewModel;
 window.addEventListener('load', function() {
 	var browserIsSupported = function() {
-		return Boolean(window.indexedDB && window.URL && !document.fireEvent);
+		return Boolean(window.indexedDB && window.URL);
 	};
 	
 	var removeSplashScreen = function() {
@@ -302,7 +307,9 @@ window.addEventListener('load', function() {
 		Array.prototype.forEach.call(colorInputs, function(input) {
 			var onChange = function(color) {
 				input.value = color.toHexString();
-				input.dispatchEvent(new Event('change'));
+				var changeEvent = document.createEvent('CustomEvent');
+				changeEvent.initCustomEvent('change', true, true, null);
+				input.dispatchEvent(changeEvent);
 			};
 			$(input).spectrum({
 				change: onChange,

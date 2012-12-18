@@ -30,6 +30,12 @@ body {
 		-o-linear-gradient(top, hsla(0, 100%, 100%, 0.35) 0%, hsla(0, 100%, 100%, 0.35) 100%),
 		-o-linear-gradient(top, hsla(0, 100%, 100%, 0.20) 0%, hsla(0, 100%, 100%, 0) 100%)
 	;
+	background-image:
+		-ms-linear-gradient(left, black 0%, hsla(0, 0%, 0%, 0) 31.5%, black 63%, black 100%),
+		-ms-linear-gradient(top, hsla(0, 100%, 100%, 0) 0%, hsla(0, 100%, 100%, 0.15) 100%),
+		-ms-linear-gradient(top, hsla(0, 100%, 100%, 0.35) 0%, hsla(0, 100%, 100%, 0.35) 100%),
+		-ms-linear-gradient(top, hsla(0, 100%, 100%, 0.20) 0%, hsla(0, 100%, 100%, 0) 100%)
+	;
 	background-size:
 		95em 100%,
 		95em 10em,
@@ -129,6 +135,11 @@ h2 {
 		hsla(0, 0%, 0%, 0.5) 100%
 	);
 	background-image: -o-linear-gradient(
+		top,
+		hsla(0, 0%, 0%, 0) 0%,
+		hsla(0, 0%, 0%, 0.5) 100%
+	);
+	background-image: -ms-linear-gradient(
 		top,
 		hsla(0, 0%, 0%, 0) 0%,
 		hsla(0, 0%, 0%, 0.5) 100%

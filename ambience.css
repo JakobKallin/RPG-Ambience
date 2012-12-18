@@ -50,15 +50,17 @@ input[type=number] {
 	width: 3.5em;
 }
 
-/* Border styles overridden in themes */
-
 div, li {
 	border-width: 0;
 	border-style: solid;
-	border-color: white;
+	border-color: hsl(0, 0%, 25%);
 }
 
 /* Multi-purpose classes */
+
+.note {
+	color: hsl(0, 0%, 40%);
+}
 
 .primary {
 	display: block;
@@ -73,6 +75,18 @@ div, li {
 .tab {
 	display: block;
 	float: left;
+	background-color: hsl(0, 0%, 10%);
+	border: 1px solid hsl(0, 0%, 25%);
+	border-bottom-width: 0;
+	margin-right: 0.5em;
+}
+
+.ui-tabs-selected {
+	background-color: hsl(0, 0%, 17.5%);
+}
+
+.tab:hover:not(.ui-tabs-selected) {
+	background-color: hsl(0, 0%, 12.5%);
 }
 
 .ui-tabs-hide {
@@ -83,6 +97,7 @@ div, li {
 		display: block;
 		padding: 0.25em 0.5em;
 		text-decoration: none;
+		color: hsl(0, 0%, 75%);
 	}
 
 .ui-sortable > * {
@@ -112,12 +127,23 @@ body {
 	height: 100%;
 }
 
+.editor, button, select, input, textarea {
+	font-family: Georgia, serif;
+}
+
+input[type=text], input[type=number], input[type=color], select, textarea {
+	background-color: black;
+	color: hsl(0, 0%, 90%);
+	border: 1px solid hsl(0, 0%, 25%);
+}
+
 .editor {
 	left: 0;
 	width: 75%;
 	line-height: 1.5;
 	overflow: auto;
-	color: white;
+	background-color: hsl(0, 0%, 10%);
+	color: hsl(0, 0%, 75%);
 }
 
 	.editor > .menu-bar {
@@ -164,6 +190,8 @@ body {
 	padding: 0.5em;
 	text-align: center;
 	overflow: auto;
+	background-color: hsl(60, 75%, 50%);
+	color: black;
 }
 
 	.message button {
@@ -226,6 +254,15 @@ body {
 			
 			.list-item:hover {
 				cursor: pointer;
+			}
+			
+			.list-item:hover:not(.selected) {
+				background-color: hsl(0, 0%, 12.5%);
+			}
+			
+			.list-item.selected {
+				background-color: hsl(220, 50%, 20%);
+				border-color: hsl(220, 50%, 50%);
 			}
 			
 				.list-item a {
@@ -337,8 +374,9 @@ body {
 				
 				.selected-item .tab-content {
 					padding: 1em;
+					border: 1px solid hsl(0, 0%, 25%);
 				}
-
+				
 				.options.general table {
 					min-width: 8em;
 				}
@@ -396,6 +434,19 @@ body {
 				.control-list > *{
 					padding-right: 0.5em;
 				}
+				
+				.unsupported {
+					color: hsl(0, 75%, 50%);
+				}
+
+				.unsupported:before {
+					content: "Unsupported format: ";
+				}
+}
+
+.unsupported:before {
+	content: "Unsupported format: ";
+}
 	
 	.help-document {
 		height: 100%;
@@ -573,9 +624,11 @@ body {
 	right: 0;
 	width: 0.25em;
 	height: 100%;
+	cursor: w-resize;
 	border-left-width: 1px;
 	border-right-width: 1px;
-	cursor: w-resize;
+	background-color: hsl(0, 0%, 10%);
+	border-color: hsl(0, 0%, 25%);
 }
 
 /* Number input polyfill */

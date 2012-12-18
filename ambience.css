@@ -81,12 +81,12 @@ div, li {
 	margin-right: 0.5em;
 }
 
-.ui-tabs-selected {
-	background-color: hsl(0, 0%, 17.5%);
+.tab:hover {
+	background-color: hsl(0, 0%, 12.5%);
 }
 
-.tab:hover:not(.ui-tabs-selected) {
-	background-color: hsl(0, 0%, 12.5%);
+.tab.ui-tabs-selected {
+	background-color: hsl(0, 0%, 17.5%);
 }
 
 .ui-tabs-hide {

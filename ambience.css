@@ -184,25 +184,6 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			display: inline;
 		}
 
-.message {
-	clear: both;
-	margin: 1em 2em;
-	padding: 0.5em;
-	text-align: center;
-	overflow: auto;
-	background-color: hsl(60, 75%, 50%);
-	color: black;
-}
-
-	.message button {
-		float: right;
-	}
-
-	.message .text, .message button {
-		vertical-align: middle;
-}
-
-
 .view-list {
 	width: 100%;
 	height: 100%;

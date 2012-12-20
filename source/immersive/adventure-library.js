@@ -3,6 +3,8 @@
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
 var AdventureLibrary = function(app) {
+	var self = this;
+	
 	this.load = function() {
 		var adventures = [];
 		for ( var i = 0; i < localStorage.length; ++i ) {
@@ -10,6 +12,17 @@ var AdventureLibrary = function(app) {
 			adventures.push(this.deserialize(json));
 		}
 		return adventures;
+	};
+	
+	this.loadFile = function(file) {
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = function() {
+			var json = reader.result;
+			var loadedAdventure = self.deserialize(json);
+			app.adventures.push(loadedAdventure);
+			app.adventure = loadedAdventure;
+		};
 	};
 	
 	this.deserialize = function(json) {

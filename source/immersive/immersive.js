@@ -273,6 +273,20 @@ var ViewModel = function(db, editorWidth) {
 			self.adventures.remove(adventure);
 		});
 	};
+	
+	self.onFilesDropped = function(viewModel, dropEvent) {
+		dropEvent.preventDefault();
+		Array.prototype.forEach.call(dropEvent.dataTransfer.files, function(file) {
+			if ( file.name.match(/\.(json)$/i) ) {
+				self.library.loadFile(file);
+			}
+		});
+	};
+	
+	self.onDrag = function(viewModel, dragEvent) {
+		dragEvent.preventDefault();
+		dragEvent.dataTransfer.dropEffect = 'copy';
+	};
 };
 
 var viewModel;

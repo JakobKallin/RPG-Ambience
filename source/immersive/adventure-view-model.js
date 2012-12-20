@@ -122,7 +122,6 @@ var AdventureViewModel = function(app) {
 			
 			onFilesDropped: function(viewModel, dropEvent) {
 				dropEvent.preventDefault();
-				dropEvent.stopPropagation();
 				
 				var files = dropEvent.dataTransfer.files;
 				for ( var i = 0; i < files.length; ++i ) {
@@ -132,29 +131,17 @@ var AdventureViewModel = function(app) {
 			
 			onDrag: function(viewModel, dragEvent) {
 				dragEvent.preventDefault();
-				dragEvent.stopPropagation();
 				dragEvent.dataTransfer.dropEffect = 'copy';
 			},
 			
 			load: function(file) {
-				if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/) ) {
+				if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/i) ) {
 					this.sound.load(file);
-				} else {
+				} else if ( file.name.match(/\.(jpg|jpeg|gif|png|bmp|svg)$/i) ) {
 					this.image.load(file);
 				}
 			}
 		};
-	};
-			
-	self.onFilesDropped = function(viewModel, dropEvent) {
-		dropEvent.preventDefault();
-		dropEvent.stopPropagation();
-		
-		var files = dropEvent.dataTransfer.files;
-		var newScene = self.add();
-		for ( var i = 0; i < files.length; ++i ) {
-			newScene.load(files[i]);
-		}
 	};
 	
 	self.onDrag = function(viewModel, dragEvent) {

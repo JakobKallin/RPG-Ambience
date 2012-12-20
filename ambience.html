@@ -73,7 +73,7 @@
 			<div
 				id="editor"
 				class="editor"
-				data-bind="visible: editorIsVisible">
+				data-bind="visible: editorIsVisible, event: { drop: onFilesDropped, dragover: onDrag }">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -121,14 +121,7 @@
 					</ul>
 					<div class="scene-view tab-content" id="scene-tab">
 						<!-- ko with: adventure -->
-							<div
-								class="list-view"
-								data-bind="
-									event: {
-										drop: onFilesDropped,
-										dragover: onDrag
-									}"
-							>
+							<div class="list-view">
 								<ul data-bind="foreach: scenes, sortable: true">
 									<li
 										class="list-item"

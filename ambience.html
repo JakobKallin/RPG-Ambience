@@ -54,7 +54,9 @@
 		data-bind="
 			event: {
 				keydown: stopPropagation,
-				keypress: stopPropagation
+				keypress: stopPropagation,
+				drop: onFilesDropped,
+				dragover: onDrag
 			}">
 		<div
 			id="theater"
@@ -73,7 +75,7 @@
 			<div
 				id="editor"
 				class="editor"
-				data-bind="visible: editorIsVisible, event: { drop: onFilesDropped, dragover: onDrag }">
+				data-bind="visible: editorIsVisible">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">

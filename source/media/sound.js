@@ -16,7 +16,11 @@ Ambience.Sound = function(path, container, maxVolume, includeInFade, removeFromF
 		
 		if ( node.readyState === 0 ) {
 			node.addEventListener('loadedmetadata', function() {
-				play(callbacks);
+				// Because this is asynchronous, check to make sure that the sound has not been stopped already.
+				// Otherwise, several sounds might be playing at once if started between this function call and the loadedmetadata event.
+				if ( !hasStopped ) {
+					play(callbacks);
+				}
 			});
 		} else {
 			play(callbacks);

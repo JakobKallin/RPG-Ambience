@@ -9,7 +9,7 @@ ko.bindingHandlers.polyfill = function() {
 						child.dispatchEvent(addedEvent);
 						ko.utils.domNodeDisposal.addDisposeCallback(child, function() {
 							var removedEvent = document.createEvent('CustomEvent');
-							removedEvent.initCustomEvent('added', true, true, null)
+							removedEvent.initCustomEvent('removed', true, true, null)
 							child.dispatchEvent(removedEvent);
 						});
 					}

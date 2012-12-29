@@ -361,6 +361,8 @@ window.addEventListener('load', function() {
 	
 	document.body.addEventListener('added', startPolyfills);
 	document.body.addEventListener('removed', stopPolyfills);
+
+	attributeBindings.processDocument();
 	
 	var dbRequest = indexedDB.open('media');
 	

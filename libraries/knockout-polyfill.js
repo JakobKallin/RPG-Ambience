@@ -2,7 +2,7 @@ ko.bindingHandlers.polyfill = function() {
 	return {
 		update: function(element, valueAccessor, allBindingsAccessor, viewModel, context) {
 			if ( ko.virtualElements.firstChild(element) ) {
-				ko.virtualElements.childNodes(element).forEach(function(child) {
+				Array.prototype.forEach.call(ko.virtualElements.childNodes(element), function(child) {
 					if (child.nodeType === 1) {
 						var addedEvent = document.createEvent('CustomEvent');
 						addedEvent.initCustomEvent('added', true, true, null)

@@ -60,6 +60,10 @@ String.prototype.endsWith = function(suffix) {
 	return this.lastIndexOf(suffix) === this.length - suffix.length;
 };
 
+String.prototype.firstToLowerCase = function() {
+	return this.charAt(0).toLowerCase() + this.substring(1);
+};
+
 Object.defineProperty(String.prototype, 'isCharacter', {
 	get: function() {
 		return this.match(/^[^\b\f\r\n\t\v\s\0]$/);

@@ -26,7 +26,7 @@ ko.bindingHandlers.sortable = {
 			// Apparently, the Knockout templating engine takes care of the rest.
 		};
 		
-		$(element).sortable({
+		$(element.parentNode).sortable({
 			axis: 'y',
 			start: onSortStarted,
 			stop: onSortEnded,
@@ -34,3 +34,5 @@ ko.bindingHandlers.sortable = {
 		});
 	}
 };
+
+ko.virtualElements.allowedBindings.sortable = true;

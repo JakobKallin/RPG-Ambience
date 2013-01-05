@@ -1,11 +1,13 @@
-// This file is part of RPG Ambience
+// This file is part of Ambience Stage
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Layer = function(node) {
-	var fadeOutDuration;
+var Ambience = {};
+
+Ambience.Stage = function(node) {
 	var fade = null;
 	var isFadingOut = false;
+	var scene = null
 	
 	var includeInFade = function(object, property, startValue, endValue) {
 		if ( isFadingOut ) {
@@ -23,110 +25,110 @@ Ambience.Layer = function(node) {
 	};
 	
 	var mediaPlayers = {
-		'backgroundColor': new Ambience.Background(node),
+		'background': new Ambience.Background(node),
 		'image': new Ambience.Image(node),
-		'sounds': new Ambience.SoundList(node, stopSceneIfSoundOnly, includeInFade, removeFromFade),
+		'sound': new Ambience.Sound(node, stopSceneIfSoundOnly, includeInFade, removeFromFade),
 		'text': new Ambience.Text(node)
 	};
+
+	stop();
 	
-	var playingMedia = [];
-	
-	stopScene();
-	
-	function stopScene() {
+	function stop() {
+		if ( scene === null ) {
+			return;
+		}
+
 		for ( var mediaType in mediaPlayers ) {
-			if ( playingMedia.contains(mediaType) ) {
+			if ( mediaType in scene ) {
 				mediaPlayers[mediaType].stop();
-				playingMedia.remove(mediaType);
 			}
 		}
 		
-		stopFade();
+		if ( fade ) {
+			fade.cancel();
+			fade = null;
+		}
+		isFadingOut = false;
 		
 		node.style.visibility = 'hidden';
 		node.style.opacity = 0;
-		fadeOutDuration = 0;
+		scene = null;
 	}
 	
 	function stopSceneIfSoundOnly() {
-		// The 2 below is because there might be a background color as well.
-		if ( playingMedia.contains('sounds') && playingMedia.length <= 2 ) {
-			stopScene();
+		if ( scene.hasOnlySound ) {
+			stop();
 		}
 	}
 	
-	function playScene(scene) {
-		var alreadyPlaying = playingMedia.length > 0;
-		if ( alreadyPlaying && scene.isMixin ) {
-			playMixin(scene);
+	function play(newScene) {
+		var alreadyPlaying = scene !== null;
+		if ( alreadyPlaying && newScene.isMixin ) {
+			playMixin(newScene);
 		} else {
-			playRegularScene(scene);
+			playRegularScene(newScene);
 		}
 	}
-	
-	function playRegularScene(scene) {
-		stopScene();
-		
-		fadeOutDuration = scene.fadeOutDuration;
+
+	function playRegularScene(newScene) {
+		stop();
+
+		scene = newScene;
 		playFadeIn(scene);
 		
 		for ( var mediaType in mediaPlayers ) {
-			if ( scene[mediaType] ) {
+			if ( mediaType in scene ) {
 				mediaPlayers[mediaType].play(scene);
-				playingMedia.push(mediaType);
 			}
 		}
 	}
-	
+
+
 	function playMixin(mixin) {
+		var newScene = Object.create(scene);
+		for ( var property in mixin ) {
+			newScene[property] = mixin[property];
+		}
+
+		for ( var mediaType in mediaPlayers ) {
+			if ( mediaType in scene && mediaType in mixin ) {
+				mediaPlayers[mediaType].stop();
+			}
+		}
+
+		for ( var mediaType in mediaPlayers ) {
+			if ( mediaType in mixin ) {
+				mediaPlayers[mediaType].play(newScene);
+			}
+		}
+
 		if ( mixin.isVisual ) {
 			node.style.visibility = 'visible';
 		}
-		
-		for ( var mediaType in mediaPlayers ) {
-			if ( playingMedia.contains(mediaType) && mixin[mediaType] ) {
-				mediaPlayers[mediaType].stop();
-				playingMedia.remove(mediaType);
-			}
-		}
-		
-		for ( var mediaType in mediaPlayers ) {
-			if ( mixin[mediaType] ) {
-				mediaPlayers[mediaType].play(mixin);
-				playingMedia.push(mediaType);
-			}
-		}
+
+		scene = newScene;
 	}
-	
+
 	function playFadeIn(scene) {
 		if ( scene.isVisual ) {
 			node.style.visibility = 'visible';
 		}
-		
 		var targets = (fade) ? fade.targets : undefined;
-		fade = new Manymation.Animation(scene.fadeInDuration, undefined, targets);
+		fade = new Manymation.Animation(scene.fade.in, undefined, targets);
 		includeInFade(node.style, 'opacity', 0, 0.999)
 		fade.start();
 	}
 	
-	function stopFade() {
-		isFadingOut = false;
-		if ( fade ) {
-			fade.complete();
-			fade = null;
-		}
-	}
-	
-	function fadeOutScene() {
+	function fadeOut() {
 		if ( isFadingOut ) {
-			stopScene();
+			stop();
 		} else {
-			isFadingOut = true;
-			
-			fade.complete();
+			fade.cancel();
 			reverseTargets(fade.targets);
-			fade = new Manymation.Animation(fadeOutDuration, stopScene, fade.targets);
+			fade = new Manymation.Animation(scene.fade.out, stop, fade.targets);
 			fade.start();
+
+			isFadingOut = true;
 		}
 	}
 	
@@ -140,11 +142,11 @@ Ambience.Layer = function(node) {
 	}
 	
 	return {
-		playScene: playScene,
-		stopScene: stopScene,
-		fadeOutScene: fadeOutScene,
-		get isPlaying() {
-			return playingMedia.length > 0;
+		play: play,
+		stop: stop,
+		fadeOut: fadeOut,
+		get sceneIsPlaying() {
+			return scene !== null;
 		}
 	};
 };

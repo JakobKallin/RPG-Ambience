@@ -205,9 +205,10 @@ describe('Manymation', function() {
 		
 		runs(function() {
 			animation.complete();
+			expect(target.property).toBe(2);
 		});
-		
-		waits(500);
+
+		waits(250);
 		
 		runs(function() {
 			expect(target.property).toBe(2);
@@ -245,6 +246,31 @@ describe('Manymation', function() {
 		
 		runs(function() {
 			expect(onEndedCalledCount).toBe(2);
+		});
+	});
+
+	it('cancels animation when playing', function() {
+		var target = {
+			property: undefined
+		};
+		var animation = new Manymation.Animation(1000);
+		animation.track(target, 'property', 0, 2);
+		
+		runs(function() {
+			animation.start();
+		});
+		
+		waits(500);
+		
+		runs(function() {
+			animation.cancel();
+			expect(target.property).toBeBetween(0.8, 1.2);
+		});
+
+		waits(500);
+
+		runs(function() {
+			expect(target.property).toBeBetween(0.8, 1.2);
 		});
 	});
 	

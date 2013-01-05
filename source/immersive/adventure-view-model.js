@@ -153,44 +153,47 @@ var AdventureViewModel = function(app) {
 	self.convertScene = function(scene) {
 		var converted = new Ambience.Scene();
 		
-		converted.name = scene.name;
-		converted.key = scene.key;
-		converted.layer = scene.layer;
 		converted.isMixin = scene.mixin;
-		converted.backgroundColor = scene.background;
-		converted.fadeDuration = scene.fade * 1000;
-		converted.fadesIn = scene.fadeDirection.contains('in');
-		converted.fadesOut = scene.fadeDirection.contains('out');
+
+		var fadeDuration = scene.fade * 1000;
+		converted.fade = {
+			in: scene.fadeDirection.contains('in') ? fadeDuration : 0,
+			out: scene.fadeDirection.contains('out') ? fadeDuration : 0,
+		};
+
+		converted.background = { color: scene.background };
 		
 		if ( scene.image.path.length > 0 ) {
-			converted.image = scene.image.path;
-			converted.imageStyle = { backgroundSize: scene.image.size };
+			converted.image = {
+				url: scene.image.path,
+				style: { backgroundSize: scene.image.size }
+			};
 		}
 		
 		var actualTracks = scene.sound.tracks.filter(function(track) {
 			return track.path.length > 0 && track.isPlayable;
 		});
 		if ( actualTracks.length > 0 ) {
-			converted.sounds = actualTracks.map(function(track) {
-				return track.path;
-			});
+			converted.sound = {
+				tracks: actualTracks.map(get('path')),
+				overlap: scene.sound.crossover,
+				shuffle: scene.sound.shuffle,
+				loop: scene.sound.loop,
+				volume: scene.sound.volume / 100
+			}
 		}
 		
-		converted.soundOrder = (scene.sound.shuffle) ? 'random' : 'linear';
-		converted.loops = scene.sound.loop;
-		converted.volume = scene.sound.volume / 100;
-		converted.crossoverDuration = scene.sound.crossover;
-		
-		var text = scene.text;
-		converted.text = text.string;
-		converted.textStyle = {
-			fontSize: (window.innerWidth * text.size / 100) + 'px',
-			fontFamily: text.font,
-			fontStyle: text.style,
-			fontWeight: text.weight,
-			color: text.color,
-			textAlign: text.alignment,
-			padding: '0 ' + (window.innerWidth * text.padding / 100) + 'px'
+		converted.text = {
+			string: scene.text.string,
+			style: {
+				fontSize: (window.innerWidth * scene.text.size / 100) + 'px',
+				fontFamily: scene.text.font,
+				fontStyle: scene.text.style,
+				fontWeight: scene.text.weight,
+				color: scene.text.color,
+				textAlign: scene.text.alignment,
+				padding: '0 ' + (window.innerWidth * scene.text.padding / 100) + 'px'
+			}
 		};
 		
 		return converted;

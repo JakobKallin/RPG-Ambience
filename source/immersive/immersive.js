@@ -14,15 +14,19 @@ var ViewModel = function(db, editorWidth) {
 	
 	var ambience;
 	function startAmbience() {
-		ambience = new Ambience(
-			new Ambience.Layer(document.getElementById('background')),
-			new Ambience.Layer(document.getElementById('foreground'))
+		ambience = new AmbienceController(
+			new Ambience.Stage(document.getElementById('background')),
+			new Ambience.Stage(document.getElementById('foreground'))
 		);
 	}
 	
 	self.playScene = function(scene) {
 		converted = self.adventure.convertScene(scene);
-		ambience.play(converted);
+		if ( scene.layer === 'background' ) {
+			ambience.playBackground(converted);
+		} else {
+			ambience.playForeground(converted);
+		}
 	};
 	
 	self.playSelected = function() {
@@ -209,6 +213,7 @@ var ViewModel = function(db, editorWidth) {
 		var key = Key.name(event.keyCode);
 		if ( self.commands[key]  ) {
 			event.preventDefault();
+			console.log('Executing command');
 			self.commands[key]();
 		} else {
 			var scenes = self.adventure.keyedScenes(key);

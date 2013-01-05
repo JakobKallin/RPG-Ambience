@@ -1,11 +1,11 @@
-// This file is part of RPG Ambience
+// This file is part of Ambience Stage
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.SoundList = function(container, stopSceneIfSoundOnly, includeInFade, removeFromFade) {
+Ambience.Sound = function(container, stopSceneIfSoundOnly, includeInFade, removeFromFade) {
 	var scene;
 	var trackIndex;
-	var sounds = [];
+	var tracks = [];
 	
 	function play(newScene) {
 		scene = newScene;
@@ -18,30 +18,32 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly, includeInFade, re
 		// We need this so that we stop audio-only effects after they have actually played once.
 		var hasPlayedBefore = trackIndex !== -1;
 		
-		if ( scene.soundOrder === 'random' ) {
-			trackIndex = scene.sounds.randomIndex();
+		if ( scene.sound.shuffle ) {
+			trackIndex = scene.sound.tracks.randomIndex();
 		} else {
-			trackIndex = (trackIndex + 1) % scene.sounds.length;
+			trackIndex = (trackIndex + 1) % scene.sound.tracks.length;
 		}
 		
 		var allTracksHavePlayed = hasPlayedBefore && trackIndex === 0;
-		var oneShot = !scene.loops && scene.hasOnlySound;
+		// Below, <scene> might be old (if another scene has been mixed-in).
+		// This doesn't matter here, however, because <stopSceneIfSoundOnly> checks whether the scene actually has sound right now.
+		var oneShot = !scene.sound.loop && scene.hasOnlySound;
 		
 		if ( oneShot && allTracksHavePlayed ) {
 			stopSceneIfSoundOnly();
-		} else if ( scene.loops || !allTracksHavePlayed ) {
-			var trackPath = scene.sounds[trackIndex];
-			var sound = new Ambience.Sound(trackPath, container, scene.volume, includeInFade, removeFromFade);
-			var onEnded = [function() { removeSound(sound); }, playNextTrack];
+		} else if ( scene.sound.loop || !allTracksHavePlayed ) {
+			var trackPath = scene.sound.tracks[trackIndex];
+			var track = new Ambience.Track(trackPath, container, scene.sound.volume, includeInFade, removeFromFade);
+			var onEnded = [function() { removeTrack(track); }, playNextTrack];
 			
-			sound.play({ onTimeUpdate: onTimeUpdate, onEnded: onEnded });
-			sounds.push(sound);
+			track.play({ onTimeUpdate: onTimeUpdate, onEnded: onEnded });
+			tracks.push(track);
 		}
 	}
 	
 	function stop() {
-		sounds.map(function(sound) { sound.stop(); });
-		sounds = [];
+		tracks.map(function(track) { track.stop(); });
+		tracks = [];
 		scene = null;
 	}
 	
@@ -51,7 +53,7 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly, includeInFade, re
 		if ( scene ) {
 			var duration = this.actualDuration || this.duration;
 			var timeLeft = duration - this.currentTime;
-			if ( timeLeft <= scene.crossoverDuration ) {
+			if ( timeLeft <= scene.sound.overlap ) {
 				this.removeEventListener('timeupdate', onTimeUpdate);
 				this.removeEventListener('ended', playNextTrack)
 				playNextTrack();
@@ -60,10 +62,10 @@ Ambience.SoundList = function(container, stopSceneIfSoundOnly, includeInFade, re
 	}
 	
 	// We should remove tracks from the list once they are done, so they don't take up space.
-	function removeSound(sound) {
-		sound.stop(); // This is important because it removes the <audio> element.
-		var index = sounds.indexOf(sound);
-		sounds.splice(index, 1);
+	function removeTrack(track) {
+		track.stop(); // This is important because it removes the <audio> element.
+		var index = tracks.indexOf(track);
+		tracks.splice(index, 1);
 	}
 	
 	return {

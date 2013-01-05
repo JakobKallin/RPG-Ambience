@@ -75,6 +75,14 @@ Manymation.Animation = function(duration, onEnded, targets) {
 			update(target, 1);
 		});
 	};
+
+	var cancel = function() {
+		if ( hasEnded ) {
+			return;
+		};
+
+		hasEnded = true;
+	};
 	
 	var Target = function(object, property, startValue, endValue) {
 		this.object = object;
@@ -143,6 +151,7 @@ Manymation.Animation = function(duration, onEnded, targets) {
 		track: track,
 		targets: targets,
 		start: start,
-		complete: complete
+		complete: complete,
+		cancel: cancel
 	};
 };

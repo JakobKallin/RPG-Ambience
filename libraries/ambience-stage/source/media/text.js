@@ -1,4 +1,4 @@
-// This file is part of RPG Ambience
+// This file is part of Ambience Stage
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -13,9 +13,9 @@ Ambience.Text = function(container) {
 		innerNode.className = 'text inner';
 		outerNode.appendChild(innerNode);
 		
-		innerNode.textContent = scene.text;
-		for ( var property in scene.textStyle ) {
-			var value = scene.textStyle[property];
+		innerNode.textContent = scene.text.string;
+		for ( var property in scene.text.style ) {
+			var value = scene.text.style[property];
 			innerNode.style[property] = value;
 		}
 		

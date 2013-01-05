@@ -2,51 +2,46 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience = function(background, foreground) {
-	function play(scene) {
+var AmbienceController = function(background, foreground) {
+	function playBackground(scene) {
 		if ( scene ) {
-			if ( scene.layer === 'background' ) {
-				playBackground(scene);
-			} else {
-				playForeground(scene);
-			}
+			background.play(scene);
 		}
 	}
-	
-	function playBackground(scene) {
-		background.playScene(scene);
+
+	function playForeground(scene) {
+		if ( scene ) {
+			foreground.play(scene);
+		}
 	}
 	
 	function stopBackground() {
 		background.stopScene();
 	}
-	
-	function playForeground(scene) {
-		foreground.playScene(scene);
-	}
-	
+
 	function stopForeground() {
 		foreground.stopScene();
 	}
 	
 	function fadeOutForeground() {
-		foreground.fadeOutScene();
+		foreground.fadeOut();
 	}
 	
 	function fadeOutBackground() {
-		background.fadeOutScene();
+		background.fadeOut();
 	}
 	
 	function fadeOutTopmost() {
-		if ( foreground.isPlaying ) {
+		if ( foreground.sceneIsPlaying ) {
 			fadeOutForeground();
-		} else if ( background.isPlaying ) {
+		} else if ( background.sceneIsPlaying ) {
 			fadeOutBackground();
 		}
 	}
 	
 	return {
-		play: play,
+		playForeground: playForeground,
+		playBackground: playBackground,
 		stopBackground: stopBackground,
 		stopForeground: stopForeground,
 		fadeOutForeground: fadeOutForeground,
@@ -54,8 +49,8 @@ Ambience = function(background, foreground) {
 		fadeOutTopmost: fadeOutTopmost,
 		get sceneIsPlaying() {
 				return Boolean(
-				background.isPlaying ||
-				foreground.isPlaying
+				background.sceneIsPlaying ||
+				foreground.sceneIsPlaying
 			);
 		}
 	};

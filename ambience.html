@@ -95,7 +95,8 @@
 									type="text"
 									data-handle-blur="stopRename"
 									data-bind-visible="renameInProgress"
-									data-bind-value="adventure.title">
+									data-bind-value="adventure.title"
+									data-bind-value-update="'afterkeydown'">
 							</form>
 						</li>
 						<li class="action delete">
@@ -212,7 +213,8 @@
 													id="name"
 													type="text"
 													placeholder="Untitled"
-													data-bind-value="name">
+													data-bind-value="name"
+													data-bind-value-update="'afterkeydown'">
 											</td>
 										</tr>
 										<tr>
@@ -222,6 +224,7 @@
 													id="key"
 													type="text"
 													data-bind-value="key"
+													data-bind-value-update="'afterkeydown'"
 													data-handle-keydown="$parent.bindSpecialKey"
 													data-handle-keypress="$parent.bindTextKey"
 													data-handle-keyup="$parent.stopKeyBinding">
@@ -404,7 +407,8 @@
 													<textarea
 														id="text"
 														rows="5"
-														data-bind-value="text.string"></textarea>
+														data-bind-value="text.string"
+														data-bind-value-update="'afterkeydown'"></textarea>
 												</td>
 											</tr>
 											<tr>
@@ -415,7 +419,8 @@
 													<input
 														id="font"
 														type="text"
-														data-bind-value="text.font">
+														data-bind-value="text.font"
+														data-bind-value-update="'afterkeydown'">
 												</td>
 											</tr>
 											<tr>

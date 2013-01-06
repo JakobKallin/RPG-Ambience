@@ -271,7 +271,7 @@
 														type="button"
 														class="secondary"
 														data-bind-visible="image.path"
-														data-handl-click="image.unload">Remove</button>
+														data-handle-click="image.unload">Remove</button>
 													<span
 														class="primary"
 														data-if="image.path"
@@ -311,7 +311,7 @@
 											</tr>
 										</table>
 									</div>
-									<div class="tab-content" id="sound-tab" data-context="sound">
+									<div class="tab-content" id="sound-tab">
 										<table>
 											<tr>
 												<th><label>Playback</label></th>
@@ -322,7 +322,7 @@
 																<input
 																	id="loop"
 																	type="checkbox"
-																	data-bind-checked="loop">
+																	data-bind-checked="sound.loop">
 																<span>Loop</span>
 															</label>
 														</li>
@@ -331,7 +331,7 @@
 																<input
 																	id="shuffle"
 																	type="checkbox"
-																	data-bind-checked="shuffle">
+																	data-bind-checked="sound.shuffle">
 																<span>Shuffle</span>
 															</label>
 														</li>
@@ -349,7 +349,7 @@
 														min="0"
 														max="100"
 														step="10"
-														data-bind-value="volume">
+														data-bind-value="sound.volume">
 													<span class="note">%</span>
 												</td>
 											</tr>
@@ -365,20 +365,20 @@
 														type="number"
 														min="0"
 														value="0"
-														data-bind-value="crossover">
+														data-bind-value="sound.crossover">
 													<span class="note">seconds</span>
 												</td>
 											</tr>
 											<tr>
 												<th><label>Tracks</label></th>
 												<td>
-													<p class="note" data-if="tracks.length === 0">No tracks selected</p>
+													<p class="note" data-if="sound.tracks.length === 0">No tracks selected</p>
 													<ol class="track-list">
-														<li data-forall-sortable="tracks">
+														<li data-forall-sortable="sound.tracks">
 															<button
 																type="button"
 																class="secondary"
-																data-bind-click="$parent.unload">Remove</button>
+																data-bind-click="$parent.sound.unload">Remove</button>
 															<span
 																data-bind-text="name"
 																data-class-primary="true"
@@ -391,12 +391,12 @@
 													<button
 														type="button"
 														class="file"
-														data-handle-change="onSelected">Add Tracks</button>
+														data-handle-change="sound.onSelected">Add Tracks</button>
 												</td>
 											</tr>
 										</table>
 									</div>
-									<div class="tab-content" id="text-tab" data-context="text">
+									<div class="tab-content" id="text-tab">
 										<table>
 											<tr>
 												<th><label for="text">Text</label></th>
@@ -404,7 +404,7 @@
 													<textarea
 														id="text"
 														rows="5"
-														data-bind-value="string"></textarea>
+														data-bind-value="text.string"></textarea>
 												</td>
 											</tr>
 											<tr>
@@ -415,7 +415,7 @@
 													<input
 														id="font"
 														type="text"
-														data-bind-value="font">
+														data-bind-value="text.font">
 												</td>
 											</tr>
 											<tr>
@@ -427,7 +427,7 @@
 																<input
 																	id="bold"
 																	type="checkbox"
-																	data-bind-checked="bold">
+																	data-bind-checked="text.bold">
 																<span><b>Bold</b></span>
 															</label>
 														</li>
@@ -436,7 +436,7 @@
 																<input
 																	id="italic"
 																	type="checkbox"
-																	data-bind-checked="italic">
+																	data-bind-checked="text.italic">
 																<span><i>Italic</i></span>
 															</label>
 														</li>
@@ -451,7 +451,7 @@
 														min="3"
 														max="30"
 														step="0.5"
-														data-bind-value="size">
+														data-bind-value="text.size">
 													<span class="note">% of screen width</span>
 												</td>
 											</tr>
@@ -461,13 +461,13 @@
 													<input
 													id="font-color"
 													type="color"
-													data-bind-value="color">
+													data-bind-value="text.color">
 												</td>
 											</tr>
 											<tr>
 												<th><label for="text-alignment">Align</label></th>
 												<td>
-													<select id="text-alignment" data-bind-value="alignment">
+													<select id="text-alignment" data-bind-value="text.alignment">
 														<option value="left">Left</option>
 														<option value="center">Center</option>
 														<option value="right">Right</option>
@@ -483,7 +483,7 @@
 														min="0"
 														max="40"
 														step="2"
-														data-bind-value="padding">
+														data-bind-value="text.padding">
 													<span class="note">% of screen width</span>
 												</td>
 											</tr>

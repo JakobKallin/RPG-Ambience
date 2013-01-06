@@ -1,15 +1,22 @@
 var attributeBindings = new function() {
 	var processDocument = function() {
-		var nodes = document.getElementsByTagName('*');
-		Array.prototype.forEach.call(nodes, processNode);
+		processNode(document.body);
 	};
 
 	var processNode = function(node) {
+		if ( node.dataset.isAttributeBound ) {
+			return;
+		}
+		
 		convertContext(node);
 		convertLoop(node);
 		convertSortableLoop(node);
 		convertConditional(node);
 		convertOtherBindings(node);
+		
+		node.dataset.isAttributeBound = true;
+		
+		Array.prototype.forEach.call(node.children, processNode);
 	};
 
 	var convertContext = function(node) {
@@ -79,13 +86,16 @@ var attributeBindings = new function() {
 						bindings[knockoutGroupName] = bindings[knockoutGroupName] || {};
 						bindings[knockoutGroupName][bindingName] = expression;
 					}
+					
+					delete node.dataset[property];
 				}
 			}
-			delete node.dataset[property];
 		}
-
+		
 		var bindingString = serializeBindings(bindings);
-		node.dataset.bind = bindingString;
+		if ( bindingString !== '' ) {
+			node.dataset.bind = bindingString;
+		}
 	};
 
 	var serializeBindings = function(bindings) {
@@ -106,6 +116,7 @@ var attributeBindings = new function() {
 	};
 
 	return {
-		processDocument: processDocument
+		processDocument: processDocument,
+		processNode: processNode
 	};
 }();

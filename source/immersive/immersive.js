@@ -321,6 +321,13 @@ window.addEventListener('load', function() {
 	var startPolyfills = function(event) {
 		var container = event.target;
 		
+		if ( container.dataset.isPolyfilled ) {
+			return;
+		}
+		
+		// Make sure that attribute bindings are converted to Knockout bindings for the new node.
+		attributeBindings.processNode(container);
+		
 		var colorInputs = container.querySelectorAll('input[type=color]');
 		Array.prototype.forEach.call(colorInputs, function(input) {
 			var onChange = function(color) {
@@ -354,6 +361,8 @@ window.addEventListener('load', function() {
 			}
 		});
 		$(options).tabs('select', selectedTab);
+		
+		container.dataset.isPolyfilled = true;
 	};
 	
 	var stopPolyfills = function(event) {

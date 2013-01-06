@@ -213,7 +213,6 @@ var ViewModel = function(db, editorWidth) {
 		var key = Key.name(event.keyCode);
 		if ( self.commands[key]  ) {
 			event.preventDefault();
-			console.log('Executing command');
 			self.commands[key]();
 		} else {
 			var scenes = self.adventure.keyedScenes(key);

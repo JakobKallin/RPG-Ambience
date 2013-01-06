@@ -227,7 +227,11 @@ knockwrap = function() {
 		}
 		
 		var descriptor = Object.getOwnPropertyDescriptor(original, property);
-		if ( original[property] instanceof Array ) {
+		var propertyIsGetter = descriptor.get && !descriptor.set;
+		
+		if ( propertyIsGetter ) {
+			// Do nothing.
+		} else if ( original[property] instanceof Array ) {
 			copy[property] = [];
 			original[property].map(function(value) {
 				if (value instanceof Object) {

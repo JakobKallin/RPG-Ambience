@@ -355,12 +355,11 @@ window.addEventListener('load', function() {
 		$('input[type="number"]', container).inputNumber();
 		
 		var options = container.querySelector('.options.specific');
-		$(options).tabs({
-			select: function(event, ui) {
-				selectedTab = ui.index;
-			}
-		});
-		$(options).tabs('select', selectedTab);
+		var tabs = new Tabs(options);
+		tabs.select(selectedTab);
+		tabs.onSelected = function(index) {
+			selectedTab = index;
+		};
 		
 		container.dataset.isPolyfilled = true;
 	};
@@ -411,7 +410,7 @@ window.addEventListener('load', function() {
 		viewModel.start();		
 		ko.applyBindings(viewModel);
 		
-		$(document.getElementById('view-list')).tabs();
+		new Tabs(document.getElementById('view-list'));
 		
 		removeSplashScreen();
 	};

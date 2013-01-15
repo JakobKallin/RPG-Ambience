@@ -28,6 +28,7 @@
 		<script src="libraries/number-polyfill.js"></script>
 		<script src="libraries/spectrum.js"></script>
 		<script src="libraries/knockout-spectrum.js"></script>
+		<script src="libraries/tabs.js"></script>
 		
 		<script src="libraries/functions.js"></script>
 		<script src="libraries/splitter.js"></script>
@@ -52,16 +53,16 @@
 		<script src="source/immersive/immersive.js"></script>
 	</head>
 	<body
-		data-handle-keydown="stopPropagation"
-		data-handle-keypress="stopPropagation"
-		data-handle-drop="onFilesDropped"
-		data-handle-dragover="onDrag">
+		data-event-keydown="stopPropagation"
+		data-event-keypress="stopPropagation"
+		data-event-drop="onFilesDropped"
+		data-event-dragover="onDrag">
 		<div
 			id="theater"
 			class="theater"
-			data-handle-mousemove="scheduleHiddenInterface"
-			data-handle-mouseover="scheduleHiddenInterface"
-			data-handle-mouseout="showInterface">
+			data-event-mousemove="scheduleHiddenInterface"
+			data-event-mouseover="scheduleHiddenInterface"
+			data-event-mouseout="showInterface">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
@@ -81,19 +82,19 @@
 						<li class="action new">
 							<button
 								type="button"
-								data-handle-click="createAdventure">New Adventure</button>
+								data-event-click="createAdventure">New Adventure</button>
 						</li>
 						<li class="action rename">
-							<form data-handle-submit="stopRename">
+							<form data-event-submit="stopRename">
 								<button
 									type="button"
 									id="rename-button"
 									data-bind-visible="!renameInProgress"
-									data-handle-click="startRename">Rename Adventure</button>
+									data-event-click="startRename">Rename Adventure</button>
 								<input
 									id="rename-input"
 									type="text"
-									data-handle-blur="stopRename"
+									data-event-blur="stopRename"
 									data-bind-visible="renameInProgress"
 									data-bind-value="adventure.title"
 									data-bind-value-update="'afterkeydown'">
@@ -102,13 +103,13 @@
 						<li class="action delete">
 							<button
 								type="button"
-								data-handle-click="toggleSelectedRemoval"
+								data-event-click="toggleSelectedRemoval"
 								data-bind-text="adventure.removalButtonText"></button>
 						</li>
 					</ul>
 					<ul class="action-list playback">
-						<li class="action play"><button type="button" data-handle-click="playSelected">Play</button></li>
-						<li class="action stop"><button type="button" data-handle-click="stopCurrent">Stop</button></li>
+						<li class="action play"><button type="button" data-event-click="playSelected">Play</button></li>
+						<li class="action stop"><button type="button" data-event-click="stopCurrent">Stop</button></li>
 					</ul>
 				</div>
 				<div class="view-list" id="view-list">
@@ -120,14 +121,13 @@
 							<a href="#help-tab">Help</a>
 						</li>
 					</ul>
-					<div class="scene-view tab-content" id="scene-tab" data-context="adventure">
+					<div class="scene-view tab-content" id="scene-tab" data-bind-with="adventure">
 						<div class="list-view">
-							<ul>
+							<ul data-bind-foreach="scenes" data-bind-sortable="true">
 								<li
 									class="list-item"
-									data-forall-sortable="scenes"
-									data-class-selected="$parent.current === $data">
-									<a href="#" data-handle-click="$parent.select">
+									data-css-selected="$parent.current === $data">
+									<a href="#" data-event-click="$parent.select">
 										<div
 											class="preview"
 											data-style-background-color="background"
@@ -146,44 +146,41 @@
 													data-style-padding="text.previewPadding"></div>
 											</div>
 										</div>
-										<span
-											data-if="name"
-											data-bind-text="name"></span>
-										<span
-											data-if="key"
-											data-bind-text="key"
-											class="key"></span>
+										<!-- ko if: name -->
+										<span data-bind-text="name"></span>
+										<!-- /ko -->
+										<!-- ko if: key -->
+										<span data-bind-text="key" class="key"></span>
+										<!-- /ko -->
 										<div class="icons">
-											<img
-												data-if="mixin"
-												src="images/mixin.svg"
-												title="Mixin">
-											<img
-												data-if="isForeground"
-												src="images/foreground.svg"
-												title="Foreground">
+											<!-- ko if: mixin -->
+											<img src="images/mixin.svg" title="Mixin">
+											<!-- /ko -->
+											<!-- ko if: isForeground -->
+											<img src="images/foreground.svg" title="Foreground">
+											<!-- /ko -->
 										</div>
 									</a>
 								</li>
 							</ul>
 							<div class="add-item">
-								<button type="button" data-handle-click="add">Add Scene</button>
+								<button type="button" data-event-click="add">Add Scene</button>
 							</div>
 						</div>
 						<div
 							class="detail-view"
-							data-context="current"
+							data-bind-with="current"
 							data-bind-polyfill="true">
 							<div
 								class="selected-item"
-								data-handle-drop="onFilesDropped"
-								data-handle-dragover="onDrag">
+								data-event-drop="onFilesDropped"
+								data-event-dragover="onDrag">
 								<ul class="action-list">
 									<li class="action copy">
-										<button type="button" data-handle-click="$parent.copySelected">Copy</button>
+										<button type="button" data-event-click="$parent.copySelected">Copy</button>
 									</li>
 									<li class="action remove">
-										<button type="button" data-handle-click="$parent.removeSelected">Remove</button>
+										<button type="button" data-event-click="$parent.removeSelected">Remove</button>
 									</li>
 								</ul>
 								<div
@@ -225,9 +222,9 @@
 													type="text"
 													data-bind-value="key"
 													data-bind-value-update="'afterkeydown'"
-													data-handle-keydown="$parent.bindSpecialKey"
-													data-handle-keypress="$parent.bindTextKey"
-													data-handle-keyup="$parent.stopKeyBinding">
+													data-event-keydown="$parent.bindSpecialKey"
+													data-event-keypress="$parent.bindTextKey"
+													data-event-keyup="$parent.stopKeyBinding">
 											</td>
 										</tr>
 										<tr>
@@ -261,27 +258,28 @@
 										<li class="tab"><a href="#text-tab">Text</a></li>
 										<li class="tab"><a href="#other-tab">Other</a></li>
 									</ul>
-									<div class="tab-content" id="image-tab">
+									<div class="tab-content" id="image-tab" data-bind-with="image">
 										<table>
 											<tr>
 												<td>
 													<button
 														type="button"
 														class="file secondary"
-														data-bind-visible="!image.path"
-														data-handle-change="image.onSelected">Select Image</button>
+														data-bind-visible="!path"
+														data-event-change="onSelected">Select Image</button>
 													<button
 														type="button"
 														class="secondary"
-														data-bind-visible="image.path"
-														data-handle-click="image.unload">Remove</button>
-													<span
-														class="primary"
-														data-if="image.path"
-														data-bind-text="image.name"></span>
-													<span
-														class="primary note"
-														data-if="!image.path">No image selected</span>
+														data-bind-visible="path"
+														data-event-click="unload">Remove</button>
+													<!-- ko if: path -->
+														<span
+															class="primary"
+															data-bind-text="name"></span>
+													<!-- /ko -->
+													<!-- ko if: !path -->
+														<span class="primary note">No image selected</span>
+													<!-- /ko -->
 												</td>
 											</tr>
 											<tr>
@@ -294,7 +292,7 @@
 																	type="radio"
 																	name="image-size"
 																	value="contain"
-																	data-bind-checked="image.size">
+																	data-bind-checked="size">
 																<span>Fit</span>
 															</label>
 														</li>
@@ -305,7 +303,7 @@
 																	type="radio"
 																	name="image-size"
 																	value="cover"
-																	data-bind-checked="image.size">
+																	data-bind-checked="size">
 																<span>Fill</span>
 															</label>
 														</li>
@@ -314,7 +312,7 @@
 											</tr>
 										</table>
 									</div>
-									<div class="tab-content" id="sound-tab">
+									<div class="tab-content" id="sound-tab" data-bind-with="sound">
 										<table>
 											<tr>
 												<th><label>Playback</label></th>
@@ -325,7 +323,7 @@
 																<input
 																	id="loop"
 																	type="checkbox"
-																	data-bind-checked="sound.loop">
+																	data-bind-checked="loop">
 																<span>Loop</span>
 															</label>
 														</li>
@@ -334,7 +332,7 @@
 																<input
 																	id="shuffle"
 																	type="checkbox"
-																	data-bind-checked="sound.shuffle">
+																	data-bind-checked="shuffle">
 																<span>Shuffle</span>
 															</label>
 														</li>
@@ -352,7 +350,7 @@
 														min="0"
 														max="100"
 														step="10"
-														data-bind-value="sound.volume">
+														data-bind-value="volume">
 													<span class="note">%</span>
 												</td>
 											</tr>
@@ -368,24 +366,26 @@
 														type="number"
 														min="0"
 														value="0"
-														data-bind-value="sound.crossover">
+														data-bind-value="crossover">
 													<span class="note">seconds</span>
 												</td>
 											</tr>
 											<tr>
 												<th><label>Tracks</label></th>
 												<td>
-													<p class="note" data-if="sound.tracks.length === 0">No tracks selected</p>
-													<ol class="track-list">
-														<li data-forall-sortable="sound.tracks">
+													<!-- ko if: tracks.length === 0 -->
+														<p class="note">No tracks selected</p>
+													<!-- /ko -->
+													<ol class="track-list" data-bind-foreach="tracks" data-bind-sortable="true">
+														<li>
 															<button
 																type="button"
 																class="secondary"
-																data-bind-click="$parent.sound.unload">Remove</button>
+																data-bind-click="$parent.unload">Remove</button>
 															<span
 																data-bind-text="name"
-																data-class-primary="true"
-																data-class-unsupported="!isPlayable"></span>
+																data-css-primary="true"
+																data-css-unsupported="!isPlayable"></span>
 															<audio
 																data-attr-src="path"
 																preload="auto"></audio>
@@ -394,12 +394,12 @@
 													<button
 														type="button"
 														class="file"
-														data-handle-change="sound.onSelected">Add Tracks</button>
+														data-event-change="onSelected">Add Tracks</button>
 												</td>
 											</tr>
 										</table>
 									</div>
-									<div class="tab-content" id="text-tab">
+									<div class="tab-content" id="text-tab" data-bind-with="text">
 										<table>
 											<tr>
 												<th><label for="text">Text</label></th>
@@ -407,7 +407,7 @@
 													<textarea
 														id="text"
 														rows="5"
-														data-bind-value="text.string"
+														data-bind-value="string"
 														data-bind-value-update="'afterkeydown'"></textarea>
 												</td>
 											</tr>
@@ -419,7 +419,7 @@
 													<input
 														id="font"
 														type="text"
-														data-bind-value="text.font"
+														data-bind-value="font"
 														data-bind-value-update="'afterkeydown'">
 												</td>
 											</tr>
@@ -432,7 +432,7 @@
 																<input
 																	id="bold"
 																	type="checkbox"
-																	data-bind-checked="text.bold">
+																	data-bind-checked="bold">
 																<span><b>Bold</b></span>
 															</label>
 														</li>
@@ -441,7 +441,7 @@
 																<input
 																	id="italic"
 																	type="checkbox"
-																	data-bind-checked="text.italic">
+																	data-bind-checked="italic">
 																<span><i>Italic</i></span>
 															</label>
 														</li>
@@ -456,7 +456,7 @@
 														min="3"
 														max="30"
 														step="0.5"
-														data-bind-value="text.size">
+														data-bind-value="size">
 													<span class="note">% of screen width</span>
 												</td>
 											</tr>
@@ -466,13 +466,13 @@
 													<input
 													id="font-color"
 													type="color"
-													data-bind-value="text.color">
+													data-bind-value="color">
 												</td>
 											</tr>
 											<tr>
 												<th><label for="text-alignment">Align</label></th>
 												<td>
-													<select id="text-alignment" data-bind-value="text.alignment">
+													<select id="text-alignment" data-bind-value="alignment">
 														<option value="left">Left</option>
 														<option value="center">Center</option>
 														<option value="right">Right</option>
@@ -488,7 +488,7 @@
 														min="0"
 														max="40"
 														step="2"
-														data-bind-value="text.padding">
+														data-bind-value="padding">
 													<span class="note">% of screen width</span>
 												</td>
 											</tr>
@@ -599,18 +599,18 @@
 				id="gui-editor"
 				class="gui-editor"
 				data-bind-visible="guiEditorIsVisible"
-				data-handle-mousemove="scheduleHiddenInterface"
-				data-handle-mouseover="scheduleHiddenInterface">
+				data-event-mousemove="scheduleHiddenInterface"
+				data-event-mouseover="scheduleHiddenInterface">
 				<form
 					id="gui-editor-form"
 					class="gui-editor-form"
-					data-handle-mousemove="showInterfaceIndef"
-					data-handle-mouseover="showInterfaceIndef">
+					data-event-mousemove="showInterfaceIndef"
+					data-event-mouseover="showInterfaceIndef">
 					<ul class="action-list">
 						<li class="action toggle">
 							<button
 								type="button"
-								data-handle-click="toggleEditor"
+								data-event-click="toggleEditor"
 								data-bind-text="toggleButtonText">Show Editor</button>
 						</li>
 					</ul>

@@ -8,87 +8,33 @@ var attributeBindings = new function() {
 			return;
 		}
 		
-		convertContext(node);
-		convertLoop(node);
-		convertSortableLoop(node);
-		convertConditional(node);
-		convertOtherBindings(node);
-		
+		convertBindings(node);
 		node.dataset.isAttributeBound = true;
 		
 		Array.prototype.forEach.call(node.children, processNode);
 	};
-
-	var convertContext = function(node) {
-		convertToVirtualElement(node, 'context', 'with');
-	};
-
-	var convertLoop = function(node) {
-		convertToVirtualElement(node, 'forall', 'foreach');
-	};
-
-	var convertSortableLoop = function(node) {
-		var startComment = convertToVirtualElement(node, 'forallSortable', 'foreach');
-
-		if ( startComment ) {
-			var startComment = node.previousSibling;
-			startComment.textContent =
-				startComment.textContent.substring(0, startComment.textContent.length - 1) +
-					', sortable: true ';
-		}
-	};
-
-	var convertConditional = function(node) {
-		convertToVirtualElement(node, 'if');
-	};
-
-	var convertToVirtualElement = function(node, customBinding, knockoutBinding) {
-		if ( !node.dataset[customBinding] ) {
-			return null;
-		}
-
-		knockoutBinding = knockoutBinding || customBinding;
-
-		var expression = node.dataset[customBinding];
-		var startCommentString = ' ko ' + knockoutBinding + ': ' + expression + ' ';
-		var startComment = document.createComment(startCommentString);
-		node.parentNode.insertBefore(startComment, node);
-
-		var endCommentString = ' /ko ';
-		var endComment = document.createComment(endCommentString);
-		node.parentNode.insertBefore(endComment, node.nextSibling);
-
-		delete node.dataset[customBinding];
-
-		return startComment;
-	};
-
-	var bindingGroups = {
-		attr: 'attr',
-		bind: 'bind',
-		class: 'css',
-		handle: 'event',
-		style: 'style'
-	};
-	var convertOtherBindings = function(node) {
+	
+	var bindingGroups = ['attr', 'bind', 'css', 'event', 'style']
+	var convertBindings = function(node) {
 		var bindings = {};
 
 		for ( var property in node.dataset ) {
 			var expression = node.dataset[property];
-			for ( var groupName in bindingGroups ) {
-				var knockoutGroupName = bindingGroups[groupName];
-				if ( property.startsWith(groupName) ) {
-					var bindingName = property.substring(groupName.length).firstToLowerCase();
-
-					if ( groupName === 'bind' ) {
-						bindings[bindingName] = expression;
-					} else {
-						bindings[knockoutGroupName] = bindings[knockoutGroupName] || {};
-						bindings[knockoutGroupName][bindingName] = expression;
-					}
-					
-					delete node.dataset[property];
+			var matchesExpression = function(groupName) { return property.startsWith(groupName); };
+			var groupName = bindingGroups.first(matchesExpression);
+			if ( groupName ) {
+				var bindingName = property.substring(groupName.length).firstToLowerCase();
+				
+				if ( groupName === 'bind' ) {
+					bindings[bindingName] = expression;
+				} else {
+					bindings[groupName] = bindings[groupName] || {};
+					bindings[groupName][bindingName] = expression;
 				}
+				
+				delete node.dataset[property];
+			} else {
+				throw new Error("'" + groupName + "' in node data '" + property + "' is not a valid binding group.");
 			}
 		}
 		

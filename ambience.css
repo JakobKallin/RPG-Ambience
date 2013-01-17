@@ -280,6 +280,7 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 					
 						.list-item .icons img {
 							opacity: 0.35;
+							border: 0;
 						}
 
 			.add-item {
@@ -621,4 +622,11 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 	height: 1em;
 	padding: 0.125em 0;
 	font-size: 0.625em;
+}
+
+/* Special cases */
+
+/* IE10 gives all links a background color when active. This might be a good idea, but it's disabled entirely for now. */
+a {
+	background-color: transparent !important;
 }

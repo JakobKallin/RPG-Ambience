@@ -30,7 +30,7 @@ var MediaLibrary = function(db) {
 			onSuccess(objectURL, mimeType);
 		};
 		
-		debug('Loading media: ' + id);
+		console.log('Loading media: ' + id);
 	};
 	
 	loadWorker.onmessage = function(messageEvent) {
@@ -50,7 +50,7 @@ var MediaLibrary = function(db) {
 			file: file
 		});
 		
-		debug('Saving media: ' + id);
+		console.log('Saving media: ' + id);
 	};
 	
 	saveWorker.onmessage = function(messageEvent) {
@@ -74,15 +74,15 @@ var MediaLibrary = function(db) {
 				++mediaCount;
 				var id = cursor.key;
 				if ( !usedIds.contains(id) ) {
-					debug('Removing media: ' + id);
+					console.log('Removing media: ' + id);
 					store.delete(id);
 					++removedCount;
 				} else {
-					debug('Retaining media: ' + id);
+					console.log('Retaining media: ' + id);
 				}
 				cursor.continue();
 			} else {
-				debug('Removed ' + removedCount + ' of ' + mediaCount + ' media');
+				console.log('Removed ' + removedCount + ' of ' + mediaCount + ' media');
 			}
 		};
 	};

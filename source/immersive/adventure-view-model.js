@@ -355,6 +355,37 @@ var AdventureViewModel = function(app) {
 			}
 		}
 	});
+	
+	var mediaLoaded = false;
+	self.loadMedia = function() {
+		if ( mediaLoaded ) {
+			return;
+		}
+		
+		mediaLoaded = true;
+		
+		self.scenes.forEach(function(scene) {
+			if ( scene.image.id ) {
+				app.media.load(scene.image.id, function(url) {
+					scene.image.path = url;
+				});
+			}
+			
+			scene.sound.tracks.forEach(function(track) {
+				// At first assume the track is playable.
+				// This may be invalidated after loading the file.
+				track.isPlayable = true;
+				if ( track.id ) {
+					app.media.load(track.id, function(url, mimeType) {
+						track.path = url;
+						track.isPlayable = Boolean(
+							document.createElement('audio').canPlayType(mimeType)
+						);
+					});
+				}
+			});
+		});
+	};
 
 	// This is so that Knockwrap can access the model.
 	self.model = model;

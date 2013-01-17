@@ -76,7 +76,11 @@ var ViewModel = function(db, editorWidth) {
 			adventures = [self.library.loadExample()];
 		}
 		
-		adventures.forEach(self.addAdventure);
+		adventures.forEach(function(adventure) {
+			self.adventures.push(adventure);
+		});
+		self.adventure = self.adventures[self.adventures.length - 1];
+		self.adventure.loadMedia(); // There is no change event for the first adventure seleted, so load the media manually.
 		
 		window.addEventListener('beforeunload', self.onExit);
 	};

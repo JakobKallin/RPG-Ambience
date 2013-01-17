@@ -36,26 +36,6 @@ var AdventureLibrary = function(app) {
 			var scene = adventure.newScene();
 			Object.overlay(scene, sceneState);
 			adventure.scenes.push(scene);
-			
-			if ( scene.image.id ) {
-				app.media.load(scene.image.id, function(url) {
-					scene.image.path = url;
-				});
-			}
-			
-			scene.sound.tracks.forEach(function(track) {
-				// At first assume the track is playable.
-				// This may be invalidated after loading the file.
-				track.isPlayable = true;
-				if ( track.id ) {
-					app.media.load(track.id, function(url, mimeType) {
-						track.path = url;
-						track.isPlayable = Boolean(
-							document.createElement('audio').canPlayType(mimeType)
-						);
-					});
-				}
-			});
 		});
 		
 		if ( adventure.scenes.length > 0 ) {

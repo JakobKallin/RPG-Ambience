@@ -4,22 +4,41 @@ var attributeBindings = new function() {
 	};
 
 	var processNode = function(node) {
-		if ( node.dataset.isAttributeBound ) {
+		if ( node.getAttribute('is-attribute-bound') ) {
 			return;
 		}
 		
 		convertBindings(node);
-		node.dataset.isAttributeBound = true;
-		
+		node.setAttribute('is-attribute-bound', true);
+	
 		Array.prototype.forEach.call(node.children, processNode);
+	};
+	
+	var propertyFromDataAttribute = function(attribute) {
+		var words = attribute.name.split('-');
+		var relevantWords = words.slice(1); // Remove "data".
+		var capitalizedWords = relevantWords.slice(0, 1).concat(relevantWords.slice(1).map(capitalize));
+		return capitalizedWords.join('');
+	};
+	
+	var capitalize = function(string) {
+		return string.charAt(0).toUpperCase() + string.substring(1);
 	};
 	
 	var bindingGroups = ['attr', 'bind', 'css', 'event', 'style']
 	var convertBindings = function(node) {
 		var bindings = {};
-
-		for ( var property in node.dataset ) {
-			var expression = node.dataset[property];
+		
+		var dataAttributes = [];
+		for ( var i = 0; i < node.attributes.length; ++i ) {
+			if ( node.attributes.item(i).name.startsWith('data-') ) {
+				dataAttributes.push(node.attributes.item(i));
+			}
+		}
+		
+		dataAttributes.forEach(function(attribute) {
+			var property = propertyFromDataAttribute(attribute);
+			var expression = attribute.value;
 			var matchesExpression = function(groupName) { return property.startsWith(groupName); };
 			var groupName = bindingGroups.first(matchesExpression);
 			if ( groupName ) {
@@ -32,15 +51,15 @@ var attributeBindings = new function() {
 					bindings[groupName][bindingName] = expression;
 				}
 				
-				delete node.dataset[property];
+				node.removeAttribute(attribute.name);
 			} else {
 				throw new Error("'" + groupName + "' in node data '" + property + "' is not a valid binding group.");
 			}
-		}
+		});
 		
 		var bindingString = serializeBindings(bindings);
 		if ( bindingString !== '' ) {
-			node.dataset.bind = bindingString;
+			node.setAttribute('data-bind', bindingString);
 		}
 	};
 

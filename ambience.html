@@ -16,6 +16,7 @@
 		</script>
 		
 		<script src="libraries/debug.js"></script>
+		<script src="libraries/functions.js"></script>
 		
 		<script src="libraries/jquery.js"></script>
 		<script src="libraries/jquery-ui.js"></script>
@@ -30,7 +31,6 @@
 		<script src="libraries/knockout-spectrum.js"></script>
 		<script src="libraries/tabs.js"></script>
 		
-		<script src="libraries/functions.js"></script>
 		<script src="libraries/splitter.js"></script>
 		<script src="libraries/key.js"></script>
 		<script src="libraries/file-button.js"></script>
@@ -169,12 +169,12 @@
 						</div>
 						<div
 							class="detail-view"
-							data-bind-with="current"
-							data-bind-polyfill="true">
+							data-bind-foreach="{ data: scenes, afterRender: $root.processSceneNodes, beforeRemove: $root.removeSceneNode }">
 							<div
 								class="selected-item"
 								data-event-drop="onFilesDropped"
-								data-event-dragover="onDrag">
+								data-event-dragover="onDrag"
+								data-bind-visible="$data === $parent.current">
 								<ul class="action-list">
 									<li class="action copy">
 										<button type="button" data-event-click="$parent.copySelected">Copy</button>

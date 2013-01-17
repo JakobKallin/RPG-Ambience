@@ -126,9 +126,11 @@ Ambience.Stage = function(node) {
 			fade.cancel();
 			reverseTargets(fade.targets);
 			fade = new Manymation.Animation(scene.fade.out, stop, fade.targets);
-			fade.start();
-
+			
+			// This needs to be set before starting the fade, because it might be instantaneous.
+			// If it is, isFadingOut will be true even though the stage is not fading out.
 			isFadingOut = true;
+			fade.start();
 		}
 	}
 	

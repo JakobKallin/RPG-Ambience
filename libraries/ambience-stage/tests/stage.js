@@ -102,4 +102,18 @@ describe('Ambience stage', function() {
 			expect(stage.sceneIsPlaying).toBe(false);
 		});
 	});
+	
+	// This test guards against possible leftover state.
+	// In particular, a previous bug made a stopped stage appear to be fading out even though it was not.
+	it('plays scene again after immediate fade-out', function() {
+		var scene = new Ambience.Scene(['Image']);
+		scene.image.url = 'test-image.jpg';
+		
+		stage.play(scene);
+		stage.fadeOut();
+		stage.play(scene);
+		
+		expect(stage.opacity).toNotBe(0);
+		expect(stage.sceneIsPlaying).toBe(true);
+	});
 });

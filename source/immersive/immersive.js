@@ -270,9 +270,23 @@ var ViewModel = function(db, editorWidth) {
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	
-	self.onExit = function() {
+	Object.defineProperty(self, 'exitMessage', {
+		get: function() {
+			if ( self.media.transactionCount > 0 ) {
+				return 'There are currently media files being saved. If you exit now, you risk losing data.';
+			} else {
+				return undefined;
+			}
+		}
+	});
+	
+	self.onExit = function(event) {
 		self.permanentlyRemoveAdventures();
 		self.library.save(self.adventures);
+		
+		if ( self.exitMessage ) {
+			return event.returnValue = self.exitMessage;
+		}
 	};
 	
 	self.permanentlyRemoveAdventures = function() {

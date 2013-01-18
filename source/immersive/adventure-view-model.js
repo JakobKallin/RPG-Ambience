@@ -37,11 +37,15 @@ var AdventureViewModel = function(app) {
 					var objectURL = window.URL.createObjectURL(file);
 					var id = objectURL.replace(/^blob:/, '');
 					
-					this.name = file.name;
-					this.path = objectURL;
-					this.id = id;
+					var scene = this;
+					var fileName = file.name; // This is to make sure the file object isn't removed.
+					var onSaved = function() {
+						scene.name = fileName;
+						scene.path = objectURL;
+						scene.id = id;
+					};
 					
-					app.media.save(id, file);
+					app.media.save(id, file, onSaved);
 				},
 				unload: function() {
 					this.path = '';
@@ -66,16 +70,23 @@ var AdventureViewModel = function(app) {
 					var objectURL = window.URL.createObjectURL(file)
 					var id = objectURL.replace(/^blob:/, '');
 					
-					this.tracks.push({
-						name: file.name,
-						path: objectURL,
-						id: id,
-						isPlayable: Boolean(
-							document.createElement('audio').canPlayType(file.type)
-						)
-					});
+					var sound = this;
+					// This is to make sure the file object isn't removed.
+					var fileName = file.name;
+					var fileType = file.type;
 					
-					app.media.save(id, file);
+					var onSaved = function() {
+						sound.tracks.push({
+							name: fileName,
+							path: objectURL,
+							id: id,
+							isPlayable: Boolean(
+								document.createElement('audio').canPlayType(fileType)
+							)
+						});
+					};
+					
+					app.media.save(id, file, onSaved);
 				},
 				unload: function(track) {
 					this.tracks.remove(track);

@@ -5,8 +5,7 @@
 var MediaLibrary = function(db) {
 	var self = this;
 	
-	var loadWorker = new Worker('source/immersive/media-loader.js');
-	var loadListeners = {};
+	self.transactionCount = 0;
 	
 	self.load = function(id, onSuccess) {
 		db.transaction('media', 'readonly')
@@ -33,18 +32,14 @@ var MediaLibrary = function(db) {
 		console.log('Loading media: ' + id);
 	};
 	
-	loadWorker.onmessage = function(messageEvent) {
-		var message = messageEvent.data;
-		var id = message.id;
-		var blob = message.blob;
-		var objectURL = window.URL.createObjectURL(blob);
-		
-		loadListeners[id](objectURL);
-		delete loadListeners[id];
-	};
-	
 	var saveWorker = new Worker('source/immersive/media-saver.js');
-	self.save = function(id, file) {
+	var saveListeners = {};
+	self.save = function(id, file, onSuccess) {
+		saveListeners[id] = onSuccess;
+		
+		self.transactionCount += 1;
+		console.log('Transaction starting; ' + self.transactionCount + ' in progress');
+		
 		saveWorker.postMessage({
 			id: id,
 			file: file
@@ -58,9 +53,18 @@ var MediaLibrary = function(db) {
 		var id = message.id;
 		var dataURL = message.dataURL;
 		
-		db.transaction('media', 'readwrite')
-		.objectStore('media')
-		.put(dataURL, id);
+		var request =
+			db.transaction('media', 'readwrite')
+			.objectStore('media')
+			.put(dataURL, id);
+		
+		request.onsuccess = request.onerror = function() {
+			saveListeners[id]();
+			delete saveListeners[id];
+			
+			self.transactionCount -= 1;
+			console.log('Transaction finished; ' + self.transactionCount + ' remaining');
+		};
 	};
 	
 	self.removeUnusedMedia = function(usedIds) {

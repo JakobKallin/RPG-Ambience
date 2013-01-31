@@ -40,7 +40,7 @@ var ViewModel = function(db, editorWidth) {
 	self.adventure = undefined;
 	self.adventures = [];
 	self.createAdventure = function() {
-		var adventure = new AdventureViewModel(self);
+		var adventure = new Adventure(self);
 		adventure.title = 'Untitled adventure';
 		adventure.add();
 		

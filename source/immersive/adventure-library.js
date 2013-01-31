@@ -27,7 +27,7 @@ var AdventureLibrary = function(app) {
 	
 	this.deserialize = function(json) {
 		var state = JSON.parse(json)
-		var adventure = new AdventureViewModel(app);
+		var adventure = new Adventure(app);
 		
 		adventure.title = state.title;
 		adventure.version = state.version;
@@ -82,7 +82,7 @@ var AdventureLibrary = function(app) {
 	};
 	
 	this.loadExample = function() {
-		var adventure = new AdventureViewModel(app);
+		var adventure = new Adventure(app);
 		adventure.title = 'Example adventure';
 		
 		var music = adventure.add();

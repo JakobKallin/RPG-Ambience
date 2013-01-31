@@ -410,3 +410,5 @@ var Adventure = function(app) {
 		});
 	};
 };
+
+Adventure.version = 1;

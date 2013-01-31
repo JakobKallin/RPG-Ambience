@@ -9,7 +9,11 @@ var AdventureLibrary = function(app) {
 		var adventures = [];
 		for ( var i = 0; i < localStorage.length; ++i ) {
 			var json = localStorage.getItem(i);
-			adventures.push(this.deserialize(json));
+			var adventure = this.deserialize(json);
+			if ( adventure.isObsolete ) {
+				adventure.upgrade();
+			}
+			adventures.push(adventure);
 		}
 		return adventures;
 	};

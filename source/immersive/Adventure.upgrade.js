@@ -2,6 +2,12 @@ Adventure.prototype.upgrade = function() {
 	Adventure.upgraders[this.version].call(this);
 };
 
+Object.defineProperty(Adventure.prototype, 'isObsolete', {
+	get: function() {
+		return this.version < Adventure.version;
+	}
+});
+
 Adventure.upgraders = {
 	1: function() {
 		delete this.media;

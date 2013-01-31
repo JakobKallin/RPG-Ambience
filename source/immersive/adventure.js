@@ -409,6 +409,4 @@ var Adventure = function(app) {
 			});
 		});
 	};
-
-	return self;
 };

@@ -13,6 +13,14 @@ var MediaLibrary = function(db) {
 		.get(id)
 		.onsuccess = function(successEvent) {
 			var dataURL = successEvent.target.result;
+			if ( !dataURL ) {
+				// IndexedDB fires a success event even if the key does not exist.
+				// In such a situation, the value itself will just be undefined.
+				// If a file does not exist, we simply exit; the onSuccess handler will not run and thus not add it to the scene.
+				// This should not normally happen, but it could happen if the browser's IndexedDB data is cleared or corrupted.
+				console.log("Media not found in database: " + id);
+				return;
+			}
 			
 			var base64 = dataURL.substring(dataURL.indexOf(',') + 1);
 			var byteString = atob(base64);

@@ -26,7 +26,8 @@
 					node.play();
 				});
 				
-				['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(path) {
+				['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
+					var path = 'example/' + filename;
 					var node = document.createElement('img');
 					node.src = path;
 				});

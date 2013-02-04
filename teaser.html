@@ -18,57 +18,31 @@
 		<script src="source/layer.js"></script>
 		
 		<script>
-			// Some fairly complex preloading logic.
-			// This is only needed because everything has to sync perfectly.
-			window.addEventListener('load', function() {
-				var hasStarted = false;
-				['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
-					var url = 'example/' + filename;
-					var node = document.createElement('audio');
-					node.preload = 'auto';
-					node.src = url;
-					node.volume = 0;
-					node.play();
-					
-					// This seems be needed in order to prevent the node from being garbage-collected and its request canceled.
-					document.body.appendChild(node);
-					
-					if ( filename === '9-Trailer_Music.ogg' ) {
-						node.addEventListener('canplaythrough', function() {
-							if ( !hasStarted ) {
-								hasStarted = true;
-								start();
-							}
-						});
-						
-						if ( node.readyState === 4 ) {
-							if ( !hasStarted ) {
-								hasStarted = true;
-								start();
-							}
-						}
-					}
+			var supportedFormat = function(path) {
+				var audio = document.createElement('audio');
+				if ( audio.canPlayType('audio/ogg') ) {
+					return path + '.ogg';
+				} else {
+					return path + '.mp3';
+				}
+			};
+			
+			var preload = function() {
+				var images = ['example/sintel-wallpaper-dragon.jpg', 'example/ishtar_rooftop.jpg'];
+				images.forEach(function(path) {
+					var element = document.createElement('img');
+					element.src = path;
 				});
 				
-				['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
-					var url = 'example/' + filename;
-					var node = document.createElement('img');
-					node.src = url;
-				});
-			});
-			
-			var start = function() {
-				var layers = ['background', 'foreground'].map(function(id) {
-					var node = document.getElementById(id);
-					return new Ambience.Layer(node);
-				});
-				var ambience = new Ambience(layers[0], layers[1]);
-				startTeaser(ambience);
+				var audio = document.createElement('audio');
+				audio.src = supportedFormat('example/dragon');
+				audio.volume = 0;
+				audio.play();
 			};
 			
 			var startTeaser = function(ambience) {
 				var soundtrack = new Ambience.Scene();
-				soundtrack.sounds = ['example/9-Trailer_Music.ogg'];
+				soundtrack.sounds = [supportedFormat('example/9-Trailer_Music')];
 				soundtrack.loops = false;
 				
 				var imagine = new Ambience.Scene();
@@ -106,7 +80,7 @@
 				dragon.imageStyle = {
 					backgroundSize: 'cover'
 				};
-				dragon.sounds = ['example/dragon.ogg'];
+				dragon.sounds = [supportedFormat('example/dragon')];
 				dragon.loops = false;
 				dragon.fadeDuration = 3200;
 				dragon.fadesIn = false;
@@ -120,50 +94,76 @@
 				};
 				title.fadeDuration = 3200;
 				
-				window.setTimeout(function() {
+				var playMusic = function() {
 					ambience.play(soundtrack);
+					var audio = document.querySelector('audio');
+					var onStarted = function onStarted() {
+						if ( audio.currentTime > 0 ) {
+							console.log("Playing remaining scenes at " + audio.currentTime);
+							playRest(audio.currentTime);
+							audio.removeEventListener('timeupdate', onStarted);
+						}
+					};
+					audio.addEventListener('timeupdate', onStarted);
+				};
+				
+				var playRest = function(progress) {
+					var milliProgress = progress * 1000;
+					
 					ambience.play(imagine);
-				}, 1000);
+					
+					window.setTimeout(function() {
+						ambience.fadeOutForeground();
+					}, 5500 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.stopForeground();
+						ambience.play(life);
+					}, 7500 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.fadeOutForeground();
+					}, 10500 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.stopForeground();
+						ambience.play(city);
+					}, 12500 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.play(dragon);
+					}, 17000 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.fadeOutForeground();
+					}, 23000 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.stopForeground();
+						ambience.play(title);
+					}, 27000 - milliProgress);
+					
+					window.setTimeout(function() {
+						ambience.fadeOutForeground();
+					}, 32000 - milliProgress);
+					
+					window.setTimeout(function() {
+						document.getElementById('information').style.visibility = 'visible';
+					}, 38500 - milliProgress);
+				};
 				
-				window.setTimeout(function() {
-					ambience.fadeOutForeground();
-				}, 6500);
-				
-				window.setTimeout(function() {
-					ambience.stopForeground();
-					ambience.play(life);
-				}, 8500);
-				
-				window.setTimeout(function() {
-					ambience.fadeOutForeground();
-				}, 11500);
-				
-				window.setTimeout(function() {
-					ambience.stopForeground();
-					ambience.play(city);
-				}, 13500);
-				
-				window.setTimeout(function() {
-					ambience.play(dragon);
-				}, 18000);
-				
-				window.setTimeout(function() {
-					ambience.fadeOutForeground();
-				}, 24000);
-				
-				window.setTimeout(function() {
-					ambience.stopForeground();
-					ambience.play(title);
-				}, 28000);
-				
-				window.setTimeout(function() {
-					ambience.fadeOutForeground();
-				}, 33000);
-				
-				window.setTimeout(function() {
-					document.getElementById('information').style.visibility = 'visible';
-				}, 39500);
+				window.setTimeout(playMusic, 1000);
 			};
+			
+			window.addEventListener('load', function() {
+				var layers = ['background', 'foreground'].map(function(id) {
+					var node = document.getElementById(id);
+					return new Ambience.Layer(node);
+				});
+				var ambience = new Ambience(layers[0], layers[1]);
+				preload();
+				startTeaser(ambience);
+			});
 		</script>
 		
 		<link rel="stylesheet" href="teaser.css">

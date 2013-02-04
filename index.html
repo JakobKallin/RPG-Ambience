@@ -8,13 +8,27 @@
 		<script>
 			// "Cheat" by loading the media for the trailer already.
 			window.addEventListener('load', function() {
-				['dragon.ogg', '9-Trailer_Music.ogg'].forEach(function(filename) {
-					var path = 'example/' + filename;
+				var supportedFormat = function(path) {
+					var audio = document.createElement('audio');
+					if ( audio.canPlayType('audio/ogg') ) {
+						return path + '.ogg';
+					} else {
+						return path + '.mp3';
+					}
+				};
+				
+				['dragon', '9-Trailer_Music'].forEach(function(filename) {
+					var path = 'example/' + supportedFormat(filename);
 					var node = document.createElement('audio');
 					document.body.appendChild(node);
 					node.src = path;
 					node.volume = 0;
 					node.play();
+				});
+				
+				['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(path) {
+					var node = document.createElement('img');
+					node.src = path;
 				});
 			});
 		</script>

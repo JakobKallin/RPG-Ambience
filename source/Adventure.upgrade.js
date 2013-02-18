@@ -35,5 +35,6 @@ for ( var version in Ambience.Adventure.upgraders ) {
 	Ambience.Adventure.upgraders[version] = function() {
 		upgrader.call(this, arguments);
 		this.version = Number(version) + 1;
+		// A recursive call should be made if the adventure needs to be upgraded by more than one version.
 	};
 }

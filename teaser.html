@@ -4,17 +4,16 @@
 		<meta charset="UTF-8">
 		<title>RPG Ambience Teaser</title>
 		
-		<script src="libraries/functions.js"></script>
-		<script src="libraries/manymation/source/manymation.js"></script>
+		<script src="source/extensions.js"></script>
 		
-		<script src="source/ambience.js"></script>
-		<script src="source/media/background.js"></script>
-		<script src="source/media/image.js"></script>
-		<script src="source/media/sound-list.js"></script>
-		<script src="source/media/sound.js"></script>
-		<script src="source/media/text.js"></script>
-		<script src="source/scene.js"></script>
-		<script src="source/layer.js"></script>
+		<script src="libraries/ambience-stage/libraries/manymation/source/manymation.js"></script>
+		<script src="libraries/ambience-stage/source/Stage.js"></script>
+		<script src="libraries/ambience-stage/source/MediaPlayers/Background.js"></script>
+		<script src="libraries/ambience-stage/source/MediaPlayers/Image.js"></script>
+		<script src="libraries/ambience-stage/source/MediaPlayers/Sound.js"></script>
+		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
+		<script src="libraries/ambience-stage/source/Scene.js"></script>
+		<script src="source/Controller.js"></script>
 		
 		<script>
 			// Some fairly complex preloading logic.
@@ -59,69 +58,58 @@
 			var start = function() {
 				var layers = ['background', 'foreground'].map(function(id) {
 					var node = document.getElementById(id);
-					return new Ambience.Layer(node);
+					return new Ambience.Stage(node);
 				});
-				var ambience = new Ambience(layers[0], layers[1]);
+				var ambience = new Ambience.Controller(layers[0], layers[1]);
 				startTeaser(ambience);
 			};
 			
 			var startTeaser = function(ambience) {
-				var soundtrack = new Ambience.Scene();
-				soundtrack.sounds = ['example/9-Trailer_Music.ogg'];
-				soundtrack.loops = false;
+				var soundtrack = new Ambience.Scene(['Sound']);
+				soundtrack.sound.tracks = ['example/9-Trailer_Music.ogg'];
+				soundtrack.sound.loop = false;
 				
-				var imagine = new Ambience.Scene();
-				imagine.layer = 'foreground';
-				imagine.text = 'Don’t just imagine your world';
-				imagine.textStyle = {
+				var imagine = new Ambience.Scene(['Text']);
+				imagine.text.string = 'Don’t just imagine your world';
+				imagine.text.style = {
 					fontSize: '4.5em',
 					fontFamily: 'Palatino Linotype, Georgia, serif',
 					fontStyle: 'italic'
 				};
-				imagine.fadeDuration = 1600;
+				imagine.fade.in = imagine.fade.out = 1600;
 				
-				var life = new Ambience.Scene();
-				life.layer = 'foreground';
-				life.text = 'Bring it to life';
-				life.textStyle = {
+				var life = new Ambience.Scene(['Text']);
+				life.text.string = 'Bring it to life';
+				life.text.style = {
 					fontSize: '9em',
 					fontFamily: 'Palatino Linotype, Georgia, serif',
 					fontStyle: 'italic'
 				};
-				life.fadeDuration = 1600;
-				life.fadesIn = false;
+				life.fade.out = 1600;
 				
-				var city = new Ambience.Scene();
-				city.layer = 'foreground';
-				city.image = 'example/ishtar_rooftop.jpg';
-				city.imageStyle = {
-					backgroundSize: 'cover'
-				};
-				city.fadeDuration = 4000;
+				var city = new Ambience.Scene(['Image']);
+				city.image.url = 'example/ishtar_rooftop.jpg';
+				city.image.style = { backgroundSize: 'cover' };
+				city.fade.in = city.fade.out = 4000;
 				
-				var dragon = new Ambience.Scene();
-				dragon.layer = 'foreground';
-				dragon.image = 'example/sintel-wallpaper-dragon.jpg';
-				dragon.imageStyle = {
-					backgroundSize: 'cover'
-				};
-				dragon.sounds = ['example/dragon.ogg'];
-				dragon.loops = false;
-				dragon.fadeDuration = 3200;
-				dragon.fadesIn = false;
+				var dragon = new Ambience.Scene(['Image', 'Sound']);
+				dragon.image.url = 'example/sintel-wallpaper-dragon.jpg',
+				dragon.image.style = { backgroundSize: 'cover' };
+				dragon.sound.tracks = ['example/dragon.ogg'];
+				dragon.sound.loop = false;
+				dragon.fade.out = 3200;
 				
-				var title = new Ambience.Scene();
-				title.layer = 'foreground';
-				title.text = 'RPG Ambience';
-				title.textStyle = {
+				var title = new Ambience.Scene(['Text']);
+				title.text.string = 'RPG Ambience';
+				title.text.style = {
 					fontSize: '9em',
 					fontFamily: 'Constantia, Georgia, serif'
 				};
-				title.fadeDuration = 3200;
+				title.fade.in = title.fade.out = 3200;
 				
 				window.setTimeout(function() {
-					ambience.play(soundtrack);
-					ambience.play(imagine);
+					ambience.playBackground(soundtrack);
+					ambience.playForeground(imagine);
 				}, 1000);
 				
 				window.setTimeout(function() {
@@ -130,7 +118,7 @@
 				
 				window.setTimeout(function() {
 					ambience.stopForeground();
-					ambience.play(life);
+					ambience.playForeground(life);
 				}, 8500);
 				
 				window.setTimeout(function() {
@@ -139,11 +127,11 @@
 				
 				window.setTimeout(function() {
 					ambience.stopForeground();
-					ambience.play(city);
+					ambience.playForeground(city);
 				}, 13500);
 				
 				window.setTimeout(function() {
-					ambience.play(dragon);
+					ambience.playForeground(dragon);
 				}, 18000);
 				
 				window.setTimeout(function() {
@@ -152,7 +140,7 @@
 				
 				window.setTimeout(function() {
 					ambience.stopForeground();
-					ambience.play(title);
+					ambience.playForeground(title);
 				}, 28000);
 				
 				window.setTimeout(function() {

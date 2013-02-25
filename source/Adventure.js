@@ -2,7 +2,7 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var Adventure = function(app) {
+Ambience.Adventure = function(app) {
 	var self = this;
 	
 	self.title = '';
@@ -206,18 +206,20 @@ var Adventure = function(app) {
 			}
 		}
 		
-		converted.text = {
-			string: scene.text.string,
-			style: {
-				fontSize: (window.innerWidth * scene.text.size / 100) + 'px',
-				fontFamily: scene.text.font,
-				fontStyle: scene.text.style,
-				fontWeight: scene.text.weight,
-				color: scene.text.color,
-				textAlign: scene.text.alignment,
-				padding: '0 ' + (window.innerWidth * scene.text.padding / 100) + 'px'
-			}
-		};
+		if ( scene.text.string ) {
+			converted.text = {
+				string: scene.text.string,
+				style: {
+					fontSize: (window.innerWidth * scene.text.size / 100) + 'px',
+					fontFamily: scene.text.font,
+					fontStyle: scene.text.style,
+					fontWeight: scene.text.weight,
+					color: scene.text.color,
+					textAlign: scene.text.alignment,
+					padding: '0 ' + (window.innerWidth * scene.text.padding / 100) + 'px'
+				}
+			};
+		}
 		
 		return converted;
 	};
@@ -411,4 +413,4 @@ var Adventure = function(app) {
 	};
 };
 
-Adventure.version = 1;
+Ambience.Adventure.version = 1;

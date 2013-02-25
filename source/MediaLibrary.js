@@ -2,7 +2,7 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var MediaLibrary = function(db) {
+Ambience.MediaLibrary = function(db) {
 	var self = this;
 	
 	self.transactionCount = 0;
@@ -40,7 +40,7 @@ var MediaLibrary = function(db) {
 		console.log('Loading media: ' + id);
 	};
 	
-	var saveWorker = new Worker('source/immersive/media-saver.js');
+	var saveWorker = new Worker('source/MediaSaver.js');
 	var saveListeners = {};
 	self.save = function(id, file, onSuccess) {
 		saveListeners[id] = onSuccess;

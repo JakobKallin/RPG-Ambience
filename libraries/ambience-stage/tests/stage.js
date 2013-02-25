@@ -9,7 +9,7 @@ describe('Ambience stage', function() {
 	beforeEach(function() {
 		stageNode = document.createElement('div');
 		document.body.appendChild(stageNode);
-		stage = new Ambience.Stage(stageNode);
+		stage = new Ambience.DebugStage(stageNode);
 	});
 	
 	afterEach(function() {

@@ -2,7 +2,7 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var ViewModel = function(db, editorWidth) {
+Ambience.App = function(db, editorWidth) {
 	var self = this;
 	
 	self.start = function() {
@@ -14,7 +14,7 @@ var ViewModel = function(db, editorWidth) {
 	
 	var ambience;
 	function startAmbience() {
-		ambience = new AmbienceController(
+		ambience = new Ambience.Controller(
 			new Ambience.Stage(document.getElementById('background')),
 			new Ambience.Stage(document.getElementById('foreground'))
 		);
@@ -40,7 +40,7 @@ var ViewModel = function(db, editorWidth) {
 	self.adventure = undefined;
 	self.adventures = [];
 	self.createAdventure = function() {
-		var adventure = new Adventure(self);
+		var adventure = new Ambience.Adventure(self);
 		adventure.title = 'Untitled adventure';
 		adventure.add();
 		
@@ -69,7 +69,7 @@ var ViewModel = function(db, editorWidth) {
 		}
 	};
 	
-	self.library = new AdventureLibrary(self);
+	self.library = new Ambience.AdventureLibrary(self);
 	var loadAdventures = function() {
 		var adventures = self.library.load();
 		if ( adventures.length === 0 ) {
@@ -100,7 +100,7 @@ var ViewModel = function(db, editorWidth) {
 		input.style.width = button.offsetWidth + 'px';
 	};
 	
-	self.media = new MediaLibrary(db);
+	self.media = new Ambience.MediaLibrary(db);
 	var removeUnusedMedia = function() {
 		var items = self.adventures.map(get('media')).flatten();
 		var usedIds = items.map(get('id'));
@@ -465,7 +465,7 @@ window.addEventListener('load', function() {
 	var onDatabaseLoaded = function(db) {
 		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
 		
-		viewModel = new ViewModel(db, 0.75);
+		viewModel = new Ambience.App(db, 0.75);
 		knockwrap.wrap(viewModel);
 		viewModel.start();		
 		ko.applyBindings(viewModel);

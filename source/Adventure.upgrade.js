@@ -1,14 +1,14 @@
-Adventure.prototype.upgrade = function() {
-	Adventure.upgraders[this.version].call(this);
+Ambience.Adventure.prototype.upgrade = function() {
+	Ambience.Adventure.upgraders[this.version].call(this);
 };
 
-Object.defineProperty(Adventure.prototype, 'isObsolete', {
+Object.defineProperty(Ambience.Adventure.prototype, 'isObsolete', {
 	get: function() {
-		return this.version < Adventure.version;
+		return this.version < Ambience.Adventure.version;
 	}
 });
 
-Adventure.upgraders = {
+Ambience.Adventure.upgraders = {
 	1: function() {
 		delete this.media;
 		
@@ -30,9 +30,9 @@ Adventure.upgraders = {
 	}
 };
 
-for ( var version in Adventure.upgraders ) {
-	var upgrader = Adventure.upgraders[version];
-	Adventure.upgraders[version] = function() {
+for ( var version in Ambience.Adventure.upgraders ) {
+	var upgrader = Ambience.Adventure.upgraders[version];
+	Ambience.Adventure.upgraders[version] = function() {
 		upgrader.call(this, arguments);
 		this.version = Number(version) + 1;
 	};

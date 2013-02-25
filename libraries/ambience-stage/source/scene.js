@@ -34,7 +34,6 @@ Ambience.Scene.prototype = {
 
 Ambience.Scene.Sound = function() {};
 Ambience.Scene.Sound.prototype = {
-	tracks: [],
 	overlap: 0,
 	shuffle: false,
 	loop: true,
@@ -46,13 +45,11 @@ Ambience.Scene.Sound.prototype = {
 
 Ambience.Scene.Image = function() {};
 Ambience.Scene.Image.prototype = {
-	url: null,
-	style: {}
+	url: null
 };
 Ambience.Scene.Text = function() {};
 Ambience.Scene.Text.prototype = {
-	string: null,
-	style: {}
+	string: null
 };
 
 Ambience.Scene.Background = function() {};

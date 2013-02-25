@@ -9,7 +9,7 @@ describe('Ambience mixin', function() {
 	beforeEach(function() {
 		stageNode = document.createElement('div');
 		document.body.appendChild(stageNode);
-		stage = new Ambience.Stage(stageNode);
+		stage = new Ambience.DebugStage(stageNode);
 	});
 	
 	beforeEach(function() {

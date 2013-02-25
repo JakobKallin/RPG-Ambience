@@ -2,7 +2,7 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var AmbienceController = function(background, foreground) {
+Ambience.Controller = function(background, foreground) {
 	function playBackground(scene) {
 		if ( scene ) {
 			background.play(scene);
@@ -16,11 +16,11 @@ var AmbienceController = function(background, foreground) {
 	}
 	
 	function stopBackground() {
-		background.stopScene();
+		background.stop();
 	}
 
 	function stopForeground() {
-		foreground.stopScene();
+		foreground.stop();
 	}
 	
 	function fadeOutForeground() {

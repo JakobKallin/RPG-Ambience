@@ -2,7 +2,7 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var AdventureLibrary = function(app) {
+Ambience.AdventureLibrary = function(app) {
 	var self = this;
 	
 	this.load = function() {
@@ -31,7 +31,7 @@ var AdventureLibrary = function(app) {
 	
 	this.deserialize = function(json) {
 		var state = JSON.parse(json)
-		var adventure = new Adventure(app);
+		var adventure = new Ambience.Adventure(app);
 		
 		adventure.title = state.title;
 		adventure.version = state.version;
@@ -86,7 +86,7 @@ var AdventureLibrary = function(app) {
 	};
 	
 	this.loadExample = function() {
-		var adventure = new Adventure(app);
+		var adventure = new Ambience.Adventure(app);
 		adventure.title = 'Example adventure';
 		
 		var music = adventure.add();

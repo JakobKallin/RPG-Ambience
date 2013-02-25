@@ -13,7 +13,12 @@ Ambience.Text = function(container) {
 		innerNode.className = 'text inner';
 		outerNode.appendChild(innerNode);
 		
-		innerNode.textContent = scene.text.string;
+		if ( scene.text.string ) {
+			innerNode.textContent = scene.text.string;
+		} else {
+			throw new Error('Text object must have a "string" property.')
+		}
+		
 		for ( var property in scene.text.style ) {
 			var value = scene.text.style[property];
 			innerNode.style[property] = value;

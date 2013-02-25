@@ -2,10 +2,8 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.App = function(db, editorWidth) {
-	var self = this;
-	
-	self.start = function() {
+Ambience.App = function($scope) {
+	function start() {
 		startAmbience();
 		startInterface();
 		loadAdventures();
@@ -20,8 +18,8 @@ Ambience.App = function(db, editorWidth) {
 		);
 	}
 	
-	self.playScene = function(scene) {
-		converted = self.adventure.convertScene(scene);
+	$scope.playScene = function(scene) {
+		converted = $scope.adventure.convertScene(scene);
 		if ( scene.layer === 'background' ) {
 			ambience.playBackground(converted);
 		} else {
@@ -29,125 +27,126 @@ Ambience.App = function(db, editorWidth) {
 		}
 	};
 	
-	self.playSelected = function() {
-		self.playScene(self.adventure.current);
+	$scope.playSelected = function() {
+		$scope.playScene($scope.adventure.current);
 	};
 	
-	self.stopCurrent = function() {
+	$scope.stopCurrent = function() {
 		ambience.fadeOutTopmost();
 	};
 	
-	self.adventure = undefined;
-	self.adventures = [];
-	self.createAdventure = function() {
-		var adventure = new Ambience.Adventure(self);
+	$scope.adventure = undefined;
+	$scope.adventures = [];
+	$scope.createAdventure = function() {
+		var adventure = new Ambience.Adventure($scope);
 		adventure.title = 'Untitled adventure';
 		adventure.add();
 		
-		self.addAdventure(adventure);
+		$scope.addAdventure(adventure);
 		
-		self.startRename();
+		$scope.startRename();
 	};
 	
-	self.addAdventure = function(adventure) {
-		self.adventures.push(adventure);
-		self.adventure = adventure;
-		self.adventure.select(adventure.scenes[0]);
+	$scope.addAdventure = function(adventure) {
+		$scope.adventures.push(adventure);
+		$scope.adventure = adventure;
+		$scope.adventure.select(adventure.scenes[0]);
 	};
 	
-	self.toggleSelectedRemoval = function() {
-		self.adventure.willBeRemoved = !self.adventure.willBeRemoved;
-		if ( self.adventure.willBeRemoved ) {
-			var index = self.adventures.indexOf(self.adventure);
-			if ( self.adventures.length === 1 ) {
-				self.createAdventure();
+	$scope.toggleSelectedRemoval = function() {
+		$scope.adventure.willBeRemoved = !$scope.adventure.willBeRemoved;
+		if ( $scope.adventure.willBeRemoved ) {
+			var index = $scope.adventures.indexOf($scope.adventure);
+			if ( $scope.adventures.length === 1 ) {
+				$scope.createAdventure();
 			} else if ( index === 0 ) {
-				self.adventure = self.adventures[1];
+				$scope.adventure = $scope.adventures[1];
 			} else {
-				self.adventure = self.adventures[index - 1];
+				$scope.adventure = $scope.adventures[index - 1];
 			}
 		}
 	};
 	
-	self.library = new Ambience.AdventureLibrary(self);
+	$scope.library = new Ambience.AdventureLibrary($scope);
 	var loadAdventures = function() {
-		var adventures = self.library.load();
+		var adventures = $scope.library.load();
 		if ( adventures.length === 0 ) {
-			adventures = [self.library.loadExample()];
+			adventures = [$scope.library.loadExample()];
 		}
 		
 		adventures.forEach(function(adventure) {
-			self.adventures.push(adventure);
+			$scope.adventures.push(adventure);
 		});
-		self.adventure = self.adventures[self.adventures.length - 1];
-		self.adventure.loadMedia(); // There is no change event for the first adventure seleted, so load the media manually.
+		$scope.adventure = $scope.adventures[$scope.adventures.length - 1];
+		$scope.adventure.loadMedia(); // There is no change event for the first adventure seleted, so load the media manually.
 		
-		window.addEventListener('beforeunload', self.onExit);
+		window.addEventListener('beforeunload', $scope.onExit);
 	};
 	
-	self.renameInProgress = false;
-	self.startRename = function() {
-		self.renameInProgress = true;
+	$scope.renameInProgress = false;
+	$scope.startRename = function() {
+		$scope.renameInProgress = true;
 		document.getElementById('rename-input').focus();
 		document.getElementById('rename-input').select();
 	};
-	self.stopRename = function() {
-		self.renameInProgress = false;
+	$scope.stopRename = function() {
+		$scope.renameInProgress = false;
 	};
-	self.equalizeRenameFieldWidth = function() {
+	$scope.equalizeRenameFieldWidth = function() {
 		var button = document.getElementById('rename-button');
 		var input = document.getElementById('rename-input');
 		input.style.width = button.offsetWidth + 'px';
 	};
 	
-	self.media = new Ambience.MediaLibrary(db);
+	$scope.media = new Ambience.MediaLibrary(Ambience.App.db);
 	var removeUnusedMedia = function() {
-		var items = self.adventures.map(get('media')).flatten();
+		var items = $scope.adventures.map(get('media')).flatten();
 		var usedIds = items.map(get('id'));
-		self.media.removeUnusedMedia(usedIds);
+		$scope.media.removeUnusedMedia(usedIds);
 	};
 	
+	var editorWidth = 0.75;
 	function startInterface() {
-		self.splitter = new Splitter(document.getElementById('interface'), editorWidth);
+		$scope.splitter = new Splitter(document.getElementById('interface'), editorWidth);
 		
-		document.addEventListener('keypress', self.onKeyPress);
-		document.addEventListener('keydown', self.onKeyDown);
+		document.addEventListener('keypress', $scope.onKeyPress);
+		document.addEventListener('keydown', $scope.onKeyDown);
 		
-		self.equalizeRenameFieldWidth();
+		$scope.equalizeRenameFieldWidth();
 	}
 	
-	self.editorWidth = editorWidth;
-	self.editorIsVisible = true;
-	Object.defineProperty(self, 'editorIsHidden', {
+	$scope.editorWidth = editorWidth;
+	$scope.editorIsVisible = true;
+	Object.defineProperty($scope, 'editorIsHidden', {
 		get: function() {
-			return !self.editorIsVisible;
+			return !$scope.editorIsVisible;
 		}
 	});
 	
-	self.toggleEditor = function(viewModel, event) {
-		if ( self.editorIsVisible ) {
-			self.hideEditor();
+	$scope.toggleEditor = function(viewModel, event) {
+		if ( $scope.editorIsVisible ) {
+			$scope.hideEditor();
 		} else {
-			self.showEditor();
+			$scope.showEditor();
 		}
 		
 		event.stopPropagation();
 	};
 	
-	self.hideEditor = function() {
-		self.editorWidth = self.splitter.leftWidth;
-		self.editorIsVisible = false;
-		self.splitter.update(0);
+	$scope.hideEditor = function() {
+		$scope.editorWidth = $scope.splitter.leftWidth;
+		$scope.editorIsVisible = false;
+		$scope.splitter.update(0);
 	};
 	
-	self.showEditor = function() {
-		self.splitter.update(self.editorWidth);
-		self.editorIsVisible = true;
+	$scope.showEditor = function() {
+		$scope.splitter.update($scope.editorWidth);
+		$scope.editorIsVisible = true;
 	};
 	
-	Object.defineProperty(self, 'toggleButtonText', {
+	Object.defineProperty($scope, 'toggleButtonText', {
 		get: function() {
-			if ( self.editorIsVisible ) {
+			if ( $scope.editorIsVisible ) {
 				return 'Hide Editor';
 			} else {
 				return 'Show Editor';
@@ -155,19 +154,19 @@ Ambience.App = function(db, editorWidth) {
 		}
 	});
 	
-	self.mouseHasRecentlyMoved = true;
+	$scope.mouseHasRecentlyMoved = true;
 	var theater = document.getElementById('theater');
 	var cursorTimer;
 	var cursorHideDelay = 1000;
 	var previousX;
 	var previousY;
 	
-	self.hideInterface = function() {
+	$scope.hideInterface = function() {
 		theater.style.cursor = 'none';
-		self.mouseHasRecentlyMoved = false;
+		$scope.mouseHasRecentlyMoved = false;
 	};
 
-	self.showInterface = function(viewModel, event) {
+	$scope.showInterface = function(viewModel, event) {
 		// In Firefox, the mouseout event is triggered when a scene with an image is started, because the mouse leaves the theater for the image.
 		// This code only shows the interface when the mouse leaves for another part of the document.
 		// There should be a better way to do this but it seems to fix the problem for now.
@@ -177,33 +176,33 @@ Ambience.App = function(db, editorWidth) {
 		
 		clearTimeout(cursorTimer);
 		theater.style.cursor = 'auto';
-		self.mouseHasRecentlyMoved = true;
+		$scope.mouseHasRecentlyMoved = true;
 	};
 	
-	self.showInterfaceIndef = function(viewModel, event) {
+	$scope.showInterfaceIndef = function(viewModel, event) {
 		event.stopPropagation();
-		self.showInterface();
+		$scope.showInterface();
 	};
 	
-	Object.defineProperty(self, 'guiEditorIsVisible', {
+	Object.defineProperty($scope, 'guiEditorIsVisible', {
 		get: function() {
-			return self.editorIsVisible || self.mouseHasRecentlyMoved;
+			return $scope.editorIsVisible || $scope.mouseHasRecentlyMoved;
 		}
 	});
 	
-	self.scheduleHiddenInterface = function(viewModel, event) {
+	$scope.scheduleHiddenInterface = function(viewModel, event) {
 		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
 		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 		if ( mouseHasMoved ) {
-			self.showInterface();
-			cursorTimer = window.setTimeout(self.hideInterface, cursorHideDelay);
+			$scope.showInterface();
+			cursorTimer = window.setTimeout($scope.hideInterface, cursorHideDelay);
 		}
 
 		previousX = event.screenX;
 		previousY = event.screenY;
 	};
 	
-	self.stopPropagation = function(viewModel, event) {
+	$scope.stopPropagation = function(viewModel, event) {
 		var interactiveTagNames = ['input', 'select', 'option', 'optgroup', 'button', 'a', 'textarea'];
 		var targetTagName = event.target.tagName.toLowerCase();
 		if ( interactiveTagNames.contains(targetTagName) ) {
@@ -213,66 +212,66 @@ Ambience.App = function(db, editorWidth) {
 		return true;
 	}
 	
-	self.onKeyDown = function(event) {
+	$scope.onKeyDown = function(event) {
 		var key = Key.name(event.keyCode);
-		if ( self.commands[key]  ) {
+		if ( $scope.commands[key]  ) {
 			event.preventDefault();
-			self.commands[key]();
+			$scope.commands[key]();
 		} else {
-			var scenes = self.adventure.keyedScenes(key);
+			var scenes = $scope.adventure.keyedScenes(key);
 			if ( scenes.length > 0 ) {
 				event.preventDefault();
-				scenes.forEach(self.playScene);
+				scenes.forEach($scope.playScene);
 			}
 		}
 	};
 	
-	self.sceneName = '';
-	self.onKeyPress = function(event) {
+	$scope.sceneName = '';
+	$scope.onKeyPress = function(event) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
 		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
-			var scenes = self.adventure.keyedScenes(character.toUpperCase());
+			var scenes = $scope.adventure.keyedScenes(character.toUpperCase());
 			if ( scenes.length > 0 ) {
-				scenes.forEach(self.playScene);
-				self.sceneName = '';
+				scenes.forEach($scope.playScene);
+				$scope.sceneName = '';
 			} else if ( character ) {
-				self.sceneName = self.sceneName + character;
+				$scope.sceneName = $scope.sceneName + character;
 			}
 		}
 	};
 	
-	self.backspaceSceneName = function() {
-		if ( self.sceneName.length > 0 ) {
-			self.sceneName = self.sceneName.substring(0, self.sceneName.length - 1);
+	$scope.backspaceSceneName = function() {
+		if ( $scope.sceneName.length > 0 ) {
+			$scope.sceneName = $scope.sceneName.substring(0, $scope.sceneName.length - 1);
 		}
 	};
 	
-	self.playNamedScene = function() {
-		if ( self.sceneName.length === 0 ) {
+	$scope.playNamedScene = function() {
+		if ( $scope.sceneName.length === 0 ) {
 			ambience.fadeOutTopmost();
 		} else {
-			var scene = self.adventure.namedScene(self.sceneName);
+			var scene = $scope.adventure.namedScene($scope.sceneName);
 			if ( scene ) {
-				self.playScene(scene);
+				$scope.playScene(scene);
 			}
-			self.sceneName = '';
+			$scope.sceneName = '';
 		}
 	};
 	
-	self.commands = {
-		'Enter': self.playNamedScene,
-		'Backspace': self.backspaceSceneName
+	$scope.commands = {
+		'Enter': $scope.playNamedScene,
+		'Backspace': $scope.backspaceSceneName
 	};
 	
-	self.help = {
+	$scope.help = {
 		mixin: "When you play this scene, you retain the elements of the previous scene that are not redefined in this scene.",
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	
-	Object.defineProperty(self, 'exitMessage', {
+	Object.defineProperty($scope, 'exitMessage', {
 		get: function() {
-			if ( self.media.transactionCount > 0 ) {
+			if ( $scope.media.transactionCount > 0 ) {
 				return 'There are currently media files being saved. If you exit now, you risk losing data.';
 			} else {
 				return undefined;
@@ -280,138 +279,39 @@ Ambience.App = function(db, editorWidth) {
 		}
 	});
 	
-	self.onExit = function(event) {
-		self.permanentlyRemoveAdventures();
-		self.library.save(self.adventures);
+	$scope.onExit = function(event) {
+		$scope.permanentlyRemoveAdventures();
+		$scope.library.save($scope.adventures);
 		
-		if ( self.exitMessage ) {
-			return event.returnValue = self.exitMessage;
+		if ( $scope.exitMessage ) {
+			return event.returnValue = $scope.exitMessage;
 		}
 	};
 	
-	self.permanentlyRemoveAdventures = function() {
-		var removed = self.adventures.filter(get('willBeRemoved'));
+	$scope.permanentlyRemoveAdventures = function() {
+		var removed = $scope.adventures.filter(get('willBeRemoved'));
 		removed.forEach(function(adventure) {
-			self.adventures.remove(adventure);
+			$scope.adventures.remove(adventure);
 		});
 	};
 	
-	self.onFilesDropped = function(viewModel, dropEvent) {
+	$scope.onFilesDropped = function(viewModel, dropEvent) {
 		dropEvent.preventDefault();
 		Array.prototype.forEach.call(dropEvent.dataTransfer.files, function(file) {
 			if ( file.name.match(/\.(json)$/i) ) {
-				self.library.loadFile(file);
+				$scope.library.loadFile(file);
 			}
 		});
 	};
 	
-	self.onDrag = function(viewModel, dragEvent) {
+	$scope.onDrag = function(viewModel, dragEvent) {
 		dragEvent.preventDefault();
 		dragEvent.dataTransfer.dropEffect = 'copy';
 	};
 	
-	var selectedTab = 0;
-	self.startPolyfills = function(container) {
-		if ( container.getAttribute('data-is-polyfilled') ) {
-			return;
-		}
-		
-		// Make sure that attribute bindings are converted to Knockout bindings for the new node.
-		attributeBindings.processNode(container);
-		
-		var colorInputs = container.querySelectorAll('input[type=color]');
-		Array.prototype.forEach.call(colorInputs, function(input) {
-			var onChange = function(color) {
-				input.value = color.toHexString();
-				var changeEvent = document.createEvent('CustomEvent');
-				changeEvent.initCustomEvent('change', true, true, null);
-				input.dispatchEvent(changeEvent);
-			};
-			$(input).spectrum({
-				change: onChange,
-				move: onChange,
-				clickoutFiresChange: true,
-				showAlpha: true,
-				showButtons: false
-			});
-		});
-		
-		var buttons = container.querySelectorAll('button.file');
-		Array.prototype.forEach.call(buttons, function(button) {
-			new FileButton(button);
-			button.classList.remove('file'); // Make sure the same button is not affected twice.
-		});
-		
-		// This needs to be before the call to tabs(), because the button heights are calculated from the input elements, which may become hidden under a tab.
-		$('input[type="number"]', container).inputNumber();
-		
-		var options = container.querySelector('.options.specific');
-		var tabs = new Tabs(options);
-		tabs.select(selectedTab);
-		tabs.onSelected = function(index) {
-			selectedTab = index;
-		};
-		
-		container.setAttribute('data-is-polyfilled', true);
-	};
-	
-	self.stopPolyfills = function(container) {
-		var inputs = container.querySelectorAll('input[type=color]');
-		Array.prototype.forEach.call(inputs, function(input) {
-			$(input).spectrum('destroy');
-		});
-	};
-	
-	document.body.addEventListener('added', function(e) { self.startPolyfills(e.target); });
-	document.body.addEventListener('removed', function(e) { self.stopPolyfills(e.target); });
-	
-	self.processSceneNodes = function(nodes) {
-		self.insertIDs(nodes);
-		Array.prototype.forEach.call(nodes, function(node) {
-			if ( node.nodeType === 1 ) {
-				self.startPolyfills(node);
-			}
-		});
-	};
-	
-	self.removeSceneNode = function(node) {
-		if ( node.nodeType === 1 ) {
-			self.stopPolyfills(node);
-		}
-		node.parentNode.removeChild(node);
-	};
-	
-	self.insertIDs = function(nodes) {
-		Array.prototype.forEach.call(nodes, function(node) {
-			if ( node.nodeType === 1 ) {
-				self.insertElementIDs(node);
-			}
-		});
-	};
-	
-	var nextID = 1;
-	self.insertElementIDs = function(element) {
-		
-		Array.prototype.forEach.call(element.querySelectorAll('label[for]'), function(label) {
-			var id = label.htmlFor;
-			var target = element.querySelector('[id=' + id + ']');
-			
-			var newID = id + '-' + nextID;
-			label.htmlFor = newID;
-			target.id = newID;
-		});
-		
-		Array.prototype.forEach.call(element.querySelectorAll('[name]'), function(namedElement) {
-			var name = namedElement.name;
-			var newName = name + '-' + nextID;
-			namedElement.name = newName;
-		});
-		
-		nextID += 1;
-	};
+	start();
 };
 
-var viewModel;
 window.addEventListener('load', function() {
 	var browserIsSupported = function() {
 		return Boolean(window.indexedDB && window.URL);
@@ -434,8 +334,6 @@ window.addEventListener('load', function() {
 		return;
 	}
 
-	attributeBindings.processDocument();
-	
 	var dbRequest = indexedDB.open('media');
 	
 	dbRequest.onupgradeneeded = function(event) {
@@ -463,15 +361,8 @@ window.addEventListener('load', function() {
 	};
 	
 	var onDatabaseLoaded = function(db) {
-		delete jQuery; // This is to prevent Knockout from using jQuery events, which hide some data inside originalEvent, such as dataTransfer.
-		
-		viewModel = new Ambience.App(db, 0.75);
-		knockwrap.wrap(viewModel);
-		viewModel.start();		
-		ko.applyBindings(viewModel);
-		
-		new Tabs(document.getElementById('view-list'));
-		
+		Ambience.App.db = db;
+		angular.bootstrap(document);
 		removeSplashScreen();
 	};
 });

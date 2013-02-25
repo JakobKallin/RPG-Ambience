@@ -14,6 +14,7 @@
 		
 		<script src="source/extensions.js"></script>
 		<script src="libraries/angular.js"></script>
+		<script src="libraries/angular-ui.js"></script>
 		
 		<script src="libraries/splitter.js"></script>
 		<script src="libraries/key.js"></script>
@@ -47,15 +48,29 @@
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
-							<select></select>
+							<select
+								data-ng-model="adventure"
+								data-ng-options="a.dropdownTitle for a in adventures"></select>
 						</li>
 						<li class="action new">
-							<button type="button">New Adventure</button>
+							<button
+								type="button"
+								data-ng-click="createAdventure()">New Adventure</button>
 						</li>
 						<li class="action rename">
-							<form data-event-submit="stopRename">
-								<button type="button" id="rename-button">Rename Adventure</button>
-								<input id="rename-input" type="text">
+							<form data-ng-submit="stopRename()">
+								<button
+									id="rename-button"
+									type="button"
+									data-ng-hide="renameInProgress"
+									data-ng-click="startRename()">Rename Adventure</button>
+								<input
+									id="rename-input"
+									type="text"
+									data-ng-model="adventure.title"
+									data-ng-show="renameInProgress"
+									ui-event="{ blur: stopRename }">
+								<input type="submit" value="crap">
 							</form>
 						</li>
 						<li class="action delete">

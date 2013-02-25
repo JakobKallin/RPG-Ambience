@@ -7,7 +7,7 @@ Ambience.App = function($scope) {
 		startAmbience();
 		startInterface();
 		loadAdventures();
-		removeUnusedMedia();
+		// removeUnusedMedia();
 	}
 	
 	var ambience;
@@ -41,7 +41,6 @@ Ambience.App = function($scope) {
 		var adventure = new Ambience.Adventure($scope);
 		adventure.title = 'Untitled adventure';
 		adventure.add();
-		
 		$scope.addAdventure(adventure);
 		
 		$scope.startRename();
@@ -71,27 +70,33 @@ Ambience.App = function($scope) {
 	var loadAdventures = function() {
 		var adventures = $scope.library.load();
 		if ( adventures.length === 0 ) {
-			adventures = [$scope.library.loadExample()];
+			adventures = [$scope.library.loadExample(), $scope.library.loadExample()];
+			adventures[1].title = 'Another example';
 		}
 		
 		adventures.forEach(function(adventure) {
 			$scope.adventures.push(adventure);
 		});
 		$scope.adventure = $scope.adventures[$scope.adventures.length - 1];
-		$scope.adventure.loadMedia(); // There is no change event for the first adventure seleted, so load the media manually.
+		$scope.adventure.loadMedia(); // There is no change event for the first adventure selected, so load the media manually.
 		
-		window.addEventListener('beforeunload', $scope.onExit);
+		// window.addEventListener('beforeunload', $scope.onExit);
 	};
 	
 	$scope.renameInProgress = false;
 	$scope.startRename = function() {
 		$scope.renameInProgress = true;
-		document.getElementById('rename-input').focus();
-		document.getElementById('rename-input').select();
+		// The input is not visible yet, so we give focus to it when Angular is done.
+		window.setTimeout(function() {
+			document.getElementById('rename-input').focus();
+			document.getElementById('rename-input').select();
+		}, 0);
 	};
+	
 	$scope.stopRename = function() {
 		$scope.renameInProgress = false;
 	};
+	
 	$scope.equalizeRenameFieldWidth = function() {
 		var button = document.getElementById('rename-button');
 		var input = document.getElementById('rename-input');
@@ -202,16 +207,6 @@ Ambience.App = function($scope) {
 		previousY = event.screenY;
 	};
 	
-	$scope.stopPropagation = function(viewModel, event) {
-		var interactiveTagNames = ['input', 'select', 'option', 'optgroup', 'button', 'a', 'textarea'];
-		var targetTagName = event.target.tagName.toLowerCase();
-		if ( interactiveTagNames.contains(targetTagName) ) {
-			event.stopPropagation();
-		}
-		
-		return true;
-	}
-	
 	$scope.onKeyDown = function(event) {
 		var key = Key.name(event.keyCode);
 		if ( $scope.commands[key]  ) {
@@ -313,6 +308,17 @@ Ambience.App = function($scope) {
 };
 
 window.addEventListener('load', function() {
+	var stopPropagation = function(event) {
+		var interactiveTagNames = ['input', 'select', 'option', 'optgroup', 'button', 'a', 'textarea'];
+		var targetTagName = event.target.tagName.toLowerCase();
+		if ( interactiveTagNames.contains(targetTagName) ) {
+			event.stopPropagation();
+		}
+	}
+	
+	document.body.addEventListener('keydown', stopPropagation);
+	document.body.addEventListener('keypress', stopPropagation);
+	
 	var browserIsSupported = function() {
 		return Boolean(window.indexedDB && window.URL);
 	};
@@ -362,7 +368,8 @@ window.addEventListener('load', function() {
 	
 	var onDatabaseLoaded = function(db) {
 		Ambience.App.db = db;
-		angular.bootstrap(document);
+		angular.module('ambience', ['ui']);
+		angular.bootstrap(document, ['ambience']);
 		removeSplashScreen();
 	};
 });

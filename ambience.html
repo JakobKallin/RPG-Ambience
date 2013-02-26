@@ -38,7 +38,7 @@
 	<body data-ng-controller="Ambience.App">
 		<div id="theater" class="theater">
 			<div id="background" class="layer"></div>
-			<div id="background" class="layer"></div>
+			<div id="foreground" class="layer"></div>
 		</div>
 		<div id="interface" class="interface">
 			<div
@@ -69,20 +69,25 @@
 									type="text"
 									data-ng-model="adventure.title"
 									data-ng-show="renameInProgress"
-									ui-event="{ blur: stopRename }">
-								<input type="submit" value="crap">
+									data-ng-blur="stopRename()">
 							</form>
 						</li>
 						<li class="action delete">
-							<button type="button"></button>
+							<button
+								type="button"
+								data-ng-click="toggleSelectedRemoval()">{{adventure.removalButtonText}}</button>
 						</li>
 					</ul>
 					<ul class="action-list playback">
 						<li class="action play">
-							<button type="button">Play</button>
+							<button
+								type="button"
+								data-ng-click="playSelected()">Play</button>
 						</li>
 						<li class="action stop">
-							<button type="button">Stop</button>
+							<button
+								type="button"
+								data-ng-click="stopCurrent()">Stop</button>
 						</li>
 					</ul>
 				</div>

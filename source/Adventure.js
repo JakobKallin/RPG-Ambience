@@ -38,9 +38,6 @@ Ambience.Adventure = function(app) {
 				name: '',
 				id: '',
 				size: 'contain',
-				get css() {
-					return 'url("' + this.path + '")';						
-				},
 				onSelected: function(viewModel, changeEvent) {
 					var file = changeEvent.target.files[0];
 					if ( file ) {

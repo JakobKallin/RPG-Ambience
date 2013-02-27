@@ -30,14 +30,17 @@ Ambience.ScenePreview = function() {
 			Object.defineProperty(scope, 'textStyle', {
 				get: function() {
 					var text = scope.scene.text;
+					var previewSize = (text.size / 100) + 'em';
+					var previewPadding = '0 ' + text.padding + '%';
+					
 					return {
-						fontSize: text.previewSize,
+						fontSize: previewSize,
 						fontFamily: text.font,
 						fontStyle: text.style,
 						fontWeight: text.weight,
 						color: text.color,
 						textAlign: text.alignment,
-						padding: text.previewPadding
+						padding: previewPadding
 					};
 				}
 			});

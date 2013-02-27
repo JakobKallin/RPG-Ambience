@@ -121,13 +121,6 @@ Ambience.Adventure = function(app) {
 				},
 				get weight() {
 					return (this.bold) ? 'bold' : 'normal';
-				},
-				get previewSize() {
-					return (this.size / 100) + 'em';
-				},
-				get previewPadding() {
-					// The percentage is relative to the container's width, so the same property can be used for all previews.
-					return '0 ' + this.padding + '%';
 				}
 			},
 			

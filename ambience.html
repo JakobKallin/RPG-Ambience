@@ -91,9 +91,9 @@
 						</li>
 					</ul>
 					<div class="scene-view tab-content" id="scene-tab">
-						<div class="list-view" data-ng-repeat="adventure in adventures">
-							<ul data-ng-repeat="scene in adventures.scenes">
-								<li class="list-item">
+						<div class="list-view">
+							<ul>
+								<li class="list-item" data-ng-repeat="scene in adventure.scenes">
 									<a href="#">
 										<span>{{scene.name}}</span>
 									</a>

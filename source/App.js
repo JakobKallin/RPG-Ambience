@@ -35,7 +35,7 @@ Ambience.App = function($scope) {
 		ambience.fadeOutTopmost();
 	};
 	
-	$scope.adventure = undefined;
+	$scope.adventure = null;
 	$scope.adventures = [];
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.Adventure($scope);
@@ -72,6 +72,7 @@ Ambience.App = function($scope) {
 		if ( adventures.length === 0 ) {
 			adventures = [$scope.library.loadExample(), $scope.library.loadExample()];
 			adventures[1].title = 'Another example';
+			adventures[1].scenes[0].name = 'Other adventure scene';
 		}
 		
 		adventures.forEach(function(adventure) {

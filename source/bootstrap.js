@@ -65,6 +65,7 @@ window.addEventListener('load', function() {
 		Ambience.App.db = db;
 		var module = angular.module('ambience', []);
 		module.directive('textButton', Ambience.TextButton);
+		module.directive('scenePreview', Ambience.ScenePreview);
 		angular.bootstrap(document, ['ambience']);
 		removeSplashScreen();
 	};

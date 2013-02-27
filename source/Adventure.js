@@ -24,7 +24,9 @@ Ambience.Adventure = function(app) {
 			key: '',
 			layer: 'background',
 			mixin: false,
-			background: '#000000',
+			background: {
+				color: '#000000'
+			},
 			fade: 0,
 			fadeDirection: 'in out',
 			get isForeground() {

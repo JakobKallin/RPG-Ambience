@@ -18,6 +18,11 @@ Ambience.TextButton = function() {
 			
 			scope.isEditing = false;
 			
+			// Make the button and the input have equal widths.
+			scope.$watch('label', function() {
+				input.style.width = button.offsetWidth + 'px';
+			});
+			
 			button.addEventListener('click', function(event) {
 				scope.$apply(function() {
 					scope.isEditing = true;

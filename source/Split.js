@@ -18,8 +18,10 @@ Ambience.Split = function() {
 			var isPressed = false;
 			var latestLeftWidth;
 			
+			// Set left width to zero when split-collapse-left is true.
 			scope.$watch(attrs.splitCollapseLeft, function(value) {
 				if ( value ) {
+					// Allow the previous width to be recovered later by not setting zero as the latest width.
 					updateSilently(0);
 				} else {
 					update(latestLeftWidth);

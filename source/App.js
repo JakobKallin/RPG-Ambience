@@ -93,8 +93,6 @@ Ambience.App = function($scope) {
 	
 	var editorWidth = 0.75;
 	function startInterface() {
-		$scope.splitter = new Splitter(document.getElementById('interface'), editorWidth);
-		
 		document.addEventListener('keypress', $scope.onKeyPress);
 		document.addEventListener('keydown', $scope.onKeyDown);
 	}

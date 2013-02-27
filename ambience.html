@@ -16,7 +16,6 @@
 		<script src="libraries/angular.js"></script>
 		<script src="libraries/angular-ui.js"></script>
 		
-		<script src="libraries/splitter.js"></script>
 		<script src="libraries/key.js"></script>
 		<script src="libraries/object-url-from-data-url.js"></script>
 		
@@ -38,6 +37,7 @@
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
 		<script src="source/ToggleButton.js"></script>
+		<script src="source/Split.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
@@ -46,7 +46,7 @@
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
-		<div id="interface" class="interface">
+		<div id="interface" class="interface" data-split="0.75" data-split-collapse-left="!editorIsVisible">
 			<div
 				id="editor"
 				class="editor"

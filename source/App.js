@@ -1,5 +1,5 @@
 // This file is part of RPG Ambience
-// Copyright 2012 Jakob Kallin
+// Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
 Ambience.App = function($scope) {
@@ -83,26 +83,6 @@ Ambience.App = function($scope) {
 		// window.addEventListener('beforeunload', $scope.onExit);
 	};
 	
-	$scope.renameInProgress = false;
-	$scope.startRename = function() {
-		$scope.renameInProgress = true;
-		// The input is not visible yet, so we give focus to it when Angular is done.
-		window.setTimeout(function() {
-			document.getElementById('rename-input').focus();
-			document.getElementById('rename-input').select();
-		}, 0);
-	};
-	
-	$scope.stopRename = function() {
-		$scope.renameInProgress = false;
-	};
-	
-	$scope.equalizeRenameFieldWidth = function() {
-		var button = document.getElementById('rename-button');
-		var input = document.getElementById('rename-input');
-		input.style.width = button.offsetWidth + 'px';
-	};
-	
 	$scope.media = new Ambience.MediaLibrary(Ambience.App.db);
 	var removeUnusedMedia = function() {
 		var items = $scope.adventures.map(get('media')).flatten();
@@ -116,96 +96,9 @@ Ambience.App = function($scope) {
 		
 		document.addEventListener('keypress', $scope.onKeyPress);
 		document.addEventListener('keydown', $scope.onKeyDown);
-		
-		$scope.equalizeRenameFieldWidth();
 	}
 	
 	$scope.editorWidth = editorWidth;
-	$scope.editorIsVisible = true;
-	Object.defineProperty($scope, 'editorIsHidden', {
-		get: function() {
-			return !$scope.editorIsVisible;
-		}
-	});
-	
-	$scope.toggleEditor = function(viewModel, event) {
-		if ( $scope.editorIsVisible ) {
-			$scope.hideEditor();
-		} else {
-			$scope.showEditor();
-		}
-		
-		event.stopPropagation();
-	};
-	
-	$scope.hideEditor = function() {
-		$scope.editorWidth = $scope.splitter.leftWidth;
-		$scope.editorIsVisible = false;
-		$scope.splitter.update(0);
-	};
-	
-	$scope.showEditor = function() {
-		$scope.splitter.update($scope.editorWidth);
-		$scope.editorIsVisible = true;
-	};
-	
-	Object.defineProperty($scope, 'toggleButtonText', {
-		get: function() {
-			if ( $scope.editorIsVisible ) {
-				return 'Hide Editor';
-			} else {
-				return 'Show Editor';
-			}
-		}
-	});
-	
-	$scope.mouseHasRecentlyMoved = true;
-	var theater = document.getElementById('theater');
-	var cursorTimer;
-	var cursorHideDelay = 1000;
-	var previousX;
-	var previousY;
-	
-	$scope.hideInterface = function() {
-		theater.style.cursor = 'none';
-		$scope.mouseHasRecentlyMoved = false;
-	};
-
-	$scope.showInterface = function(viewModel, event) {
-		// In Firefox, the mouseout event is triggered when a scene with an image is started, because the mouse leaves the theater for the image.
-		// This code only shows the interface when the mouse leaves for another part of the document.
-		// There should be a better way to do this but it seems to fix the problem for now.
-		if ( event && event.currentTarget.contains(event.target) ) {
-			return;
-		}
-		
-		clearTimeout(cursorTimer);
-		theater.style.cursor = 'auto';
-		$scope.mouseHasRecentlyMoved = true;
-	};
-	
-	$scope.showInterfaceIndef = function(viewModel, event) {
-		event.stopPropagation();
-		$scope.showInterface();
-	};
-	
-	Object.defineProperty($scope, 'guiEditorIsVisible', {
-		get: function() {
-			return $scope.editorIsVisible || $scope.mouseHasRecentlyMoved;
-		}
-	});
-	
-	$scope.scheduleHiddenInterface = function(viewModel, event) {
-		// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
-		var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
-		if ( mouseHasMoved ) {
-			$scope.showInterface();
-			cursorTimer = window.setTimeout($scope.hideInterface, cursorHideDelay);
-		}
-
-		previousX = event.screenX;
-		previousY = event.screenY;
-	};
 	
 	$scope.onKeyDown = function(event) {
 		var key = Key.name(event.keyCode);
@@ -306,70 +199,3 @@ Ambience.App = function($scope) {
 	
 	start();
 };
-
-window.addEventListener('load', function() {
-	var stopPropagation = function(event) {
-		var interactiveTagNames = ['input', 'select', 'option', 'optgroup', 'button', 'a', 'textarea'];
-		var targetTagName = event.target.tagName.toLowerCase();
-		if ( interactiveTagNames.contains(targetTagName) ) {
-			event.stopPropagation();
-		}
-	}
-	
-	document.body.addEventListener('keydown', stopPropagation);
-	document.body.addEventListener('keypress', stopPropagation);
-	
-	var browserIsSupported = function() {
-		return Boolean(window.indexedDB && window.URL);
-	};
-	
-	var removeSplashScreen = function() {
-		var splash = document.getElementById('splash');
-		splash.parentNode.removeChild(splash);
-	};
-	
-	var showSupportInfo = function() {
-		var loadingMessage = document.getElementById('splash-loading');
-		var unsupportedMessage = document.getElementById('splash-unsupported');
-		loadingMessage.style.display = 'none';
-		unsupportedMessage.style.display = '';
-	};
-	
-	if ( !browserIsSupported() ) {
-		showSupportInfo();
-		return;
-	}
-
-	var dbRequest = indexedDB.open('media');
-	
-	dbRequest.onupgradeneeded = function(event) {
-		createDatabase(event.target.result);
-	};
-	
-	dbRequest.onsuccess = function(successEvent) {
-		var db = successEvent.target.result;
-		if ( db.setVersion ) {
-			db.setVersion('1').onsuccess = function(versionEvent) {
-				createDatabase(db)
-				versionEvent.target.result.oncomplete = function() {
-					onDatabaseLoaded(db);
-				};
-			}
-		} else {
-			onDatabaseLoaded(db);
-		}
-	};
-	
-	var createDatabase = function(db) {
-		if ( !db.objectStoreNames.contains('media') ) {
-			db.createObjectStore('media');
-		}
-	};
-	
-	var onDatabaseLoaded = function(db) {
-		Ambience.App.db = db;
-		angular.module('ambience', ['ui']);
-		angular.bootstrap(document, ['ambience']);
-		removeSplashScreen();
-	};
-});

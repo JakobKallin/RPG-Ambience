@@ -34,6 +34,10 @@
 		<script src="source/AdventureLibrary.js"></script>
 		<script src="source/MediaLibrary.js"></script>
 		<script src="source/App.js"></script>
+		
+		<script src="source/TextButton.js"></script>
+		
+		<script src="source/bootstrap.js"></script>
 	</head>
 	<body data-ng-controller="Ambience.App">
 		<div id="theater" class="theater">
@@ -43,8 +47,7 @@
 		<div id="interface" class="interface">
 			<div
 				id="editor"
-				class="editor"
-				data-ng-show="editorIsVisible">
+				class="editor">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -58,19 +61,9 @@
 								data-ng-click="createAdventure()">New Adventure</button>
 						</li>
 						<li class="action rename">
-							<form data-ng-submit="stopRename()">
-								<button
-									id="rename-button"
-									type="button"
-									data-ng-hide="renameInProgress"
-									data-ng-click="startRename()">Rename Adventure</button>
-								<input
-									id="rename-input"
-									type="text"
-									data-ng-model="adventure.title"
-									data-ng-show="renameInProgress"
-									data-ng-blur="stopRename()">
-							</form>
+							<text-button
+								ng-model="adventure.title"
+								ng-label="Rename Adventure"></text-button>
 						</li>
 						<li class="action delete">
 							<button
@@ -91,16 +84,31 @@
 						</li>
 					</ul>
 				</div>
-			</div>
-			<div id="gui-editor" class="gui-editor">
-				<form id="gui-editor-form" class="gui-editor-form">
-					<ul class="action-list">
-						<li class="action toggle">
-							<button type="button">Show Editor</button>
+				<div class="view-list" id="view-list">
+					<ul class="tab-list">
+						<li class="tab">
+							<a href="#scene-tab">Scenes</a>
 						</li>
 					</ul>
-				</form>
+					<div class="scene-view tab-content" id="scene-tab">
+						<div class="list-view" data-ng-repeat="adventure in adventures">
+							<ul data-ng-repeat="scene in adventures.scenes">
+								<li class="list-item">
+									<a href="#">
+										<span>{{scene.name}}</span>
+									</a>
+								</li>
+							</ul>
+							<div class="add-item">
+								<button
+									type="button"
+									data-ng-click="adventure.add()">Add Scene</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
+			<div id="gui-editor" class="gui-editor"></div>
 		</div>
 		<div id="splash" class="splash">
 			<div id="splash-loading">

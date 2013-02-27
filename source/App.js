@@ -198,5 +198,7 @@ Ambience.App = function($scope) {
 		dragEvent.dataTransfer.dropEffect = 'copy';
 	};
 	
+	$scope.editorIsVisible = true;
+	
 	start();
 };

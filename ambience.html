@@ -37,6 +37,7 @@
 		
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
+		<script src="source/ToggleButton.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
@@ -48,7 +49,8 @@
 		<div id="interface" class="interface">
 			<div
 				id="editor"
-				class="editor">
+				class="editor"
+				ng-show="editorIsVisible">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -110,7 +112,18 @@
 					</div>
 				</div>
 			</div>
-			<div id="gui-editor" class="gui-editor"></div>
+			<div class="theater-overlay">
+				<form>
+					<ul class="action-list">
+						<li class="action toggle">
+							<toggle-button
+								ng-model="editorIsVisible"
+								ng-true="Hide Editor"
+								ng-false="Show Editor"></toggle-button>
+						</li>
+					</ul>
+				</form>
+			</div>
 		</div>
 		<div id="splash" class="splash">
 			<div id="splash-loading">

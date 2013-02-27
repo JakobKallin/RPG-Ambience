@@ -117,7 +117,7 @@ body {
 	height: 100%;
 }
 
-.editor, .gui-editor, .theater {
+.editor, .theater-overlay, .theater {
 	position: absolute;
 	top: 0;
 	height: 100%;
@@ -476,12 +476,12 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			height: 1.5em;
 		}
 
-.gui-editor {
+.theater-overlay {
 	right: 0;
 	width: 40%;
 }
 
-	.gui-editor-form {
+	.theater-overlay form {
 		float: left;
 		padding: 1em;
 	}

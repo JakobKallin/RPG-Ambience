@@ -63,7 +63,7 @@ window.addEventListener('load', function() {
 	
 	var onDatabaseLoaded = function(db) {
 		Ambience.App.db = db;
-		var module = angular.module('ambience', []);
+		var module = angular.module('ambience', ['ui']);
 		module.directive('textButton', Ambience.TextButton);
 		module.directive('scenePreview', Ambience.ScenePreview);
 		module.directive('toggleButton', Ambience.ToggleButton);

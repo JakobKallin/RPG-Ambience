@@ -100,8 +100,13 @@
 								<li class="list-item" data-ng-repeat="scene in adventure.scenes">
 									<a href="#">
 										<scene-preview ng-scene="scene"></scene-preview>
-										<span>{{scene.name}}</span>
+										<span data-ui-if="scene.name">{{scene.name}}</span>
+										<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
 									</a>
+									<div class="icons">
+										<img data-ui-if="scene.mixin" src="images/mixin.svg" title="Mixin">
+										<img data-ui-if="scene.isForeground" src="images/foreground.svg" title="Foreground">
+									</div>
 								</li>
 							</ul>
 							<div class="add-item">

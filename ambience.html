@@ -38,6 +38,7 @@
 		<script src="source/ScenePreview.js"></script>
 		<script src="source/ToggleButton.js"></script>
 		<script src="source/Split.js"></script>
+		<script src="source/NoPointer.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
@@ -112,18 +113,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="theater-overlay">
+			<no-pointer
+				class="theater-overlay"
+				data-always-show-when="editorIsVisible"
+				data-hide-delay="1000">
 				<form>
 					<ul class="action-list">
 						<li class="action toggle">
 							<toggle-button
-								ng-model="editorIsVisible"
+								ng-model="$parent.editorIsVisible"
 								ng-true="Hide Editor"
 								ng-false="Show Editor"></toggle-button>
 						</li>
 					</ul>
 				</form>
-			</div>
+			</no-pointer>
 		</div>
 		<div id="splash" class="splash">
 			<div id="splash-loading">

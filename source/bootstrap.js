@@ -68,6 +68,7 @@ window.addEventListener('load', function() {
 		module.directive('scenePreview', Ambience.ScenePreview);
 		module.directive('toggleButton', Ambience.ToggleButton);
 		module.directive('split', Ambience.Split);
+		module.directive('noPointer', Ambience.NoPointer);
 		angular.bootstrap(document, ['ambience']);
 		removeSplashScreen();
 	};

@@ -1,14 +1,14 @@
-Ambience.Adventure.prototype.upgrade = function() {
-	Ambience.Adventure.upgraders[this.version].call(this);
+Ambience.App.Adventure.prototype.upgrade = function() {
+	Ambience.App.Adventure.upgraders[this.version].call(this);
 };
 
-Object.defineProperty(Ambience.Adventure.prototype, 'isObsolete', {
+Object.defineProperty(Ambience.App.Adventure.prototype, 'isObsolete', {
 	get: function() {
-		return this.version < Ambience.Adventure.version;
+		return this.version < Ambience.App.Adventure.version;
 	}
 });
 
-Ambience.Adventure.upgraders = {
+Ambience.App.Adventure.upgraders = {
 	1: function() {
 		delete this.media;
 		
@@ -30,9 +30,9 @@ Ambience.Adventure.upgraders = {
 	}
 };
 
-for ( var version in Ambience.Adventure.upgraders ) {
-	var upgrader = Ambience.Adventure.upgraders[version];
-	Ambience.Adventure.upgraders[version] = function() {
+for ( var version in Ambience.App.Adventure.upgraders ) {
+	var upgrader = Ambience.App.Adventure.upgraders[version];
+	Ambience.App.Adventure.upgraders[version] = function() {
 		upgrader.call(this, arguments);
 		this.version = Number(version) + 1;
 		// A recursive call should be made if the adventure needs to be upgraded by more than one version.

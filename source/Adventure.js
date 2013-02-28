@@ -2,7 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Adventure = function(app) {
+Ambience.App.Adventure = function(app) {
 	var self = this;
 	
 	self.title = '';
@@ -17,147 +17,6 @@ Ambience.Adventure = function(app) {
 			return self.scenes.map(get('media')).flatten();
 		}
 	});
-	
-	self.newScene = function() {
-		return {
-			name: '',
-			key: '',
-			layer: 'background',
-			mixin: false,
-			background: {
-				color: '#000000'
-			},
-			fade: 0,
-			fadeDirection: 'in out',
-			get isForeground() {
-				return this.layer === 'foreground'
-			},
-			
-			image: {
-				path: '',
-				name: '',
-				id: '',
-				size: 'contain',
-				onSelected: function(viewModel, changeEvent) {
-					var file = changeEvent.target.files[0];
-					if ( file ) {
-						this.load(file);
-					};
-				},
-				load: function(file) {
-					var objectURL = window.URL.createObjectURL(file);
-					var id = objectURL.replace(/^blob:/, '');
-					
-					var scene = this;
-					var fileName = file.name; // This is to make sure the file object isn't removed.
-					var onSaved = function() {
-						scene.name = fileName;
-						scene.path = objectURL;
-						scene.id = id;
-					};
-					
-					app.media.save(id, file, onSaved);
-				},
-				unload: function() {
-					this.path = '';
-					this.name = '';
-					this.id = '';
-				}
-			},
-			
-			sound: {
-				tracks: [],
-				loop: true,
-				shuffle: false,
-				volume: 100,
-				crossover: 0,
-				onSelected: function(viewModel, selectEvent) {
-					var newFiles = selectEvent.target.files;
-					for ( var i = 0; i < newFiles.length; ++i ) {
-						this.load(newFiles[i]);
-					}
-				},
-				load: function(file) {
-					var objectURL = window.URL.createObjectURL(file)
-					var id = objectURL.replace(/^blob:/, '');
-					
-					var sound = this;
-					// This is to make sure the file object isn't removed.
-					var fileName = file.name;
-					var fileType = file.type;
-					
-					var onSaved = function() {
-						sound.tracks.push({
-							name: fileName,
-							path: objectURL,
-							id: id,
-							isPlayable: Boolean(
-								document.createElement('audio').canPlayType(fileType)
-							)
-						});
-					};
-					
-					app.media.save(id, file, onSaved);
-				},
-				unload: function(track) {
-					this.tracks.remove(track);
-				}
-			},
-			
-			text: {
-				string: '',
-				size: 5,
-				font: '',
-				color: '#ffffff',
-				bold: false,
-				italic: false,
-				alignment: 'center',
-				padding: 0,
-				get style() {
-					return (this.italic) ? 'italic' : 'normal';
-				},
-				get weight() {
-					return (this.bold) ? 'bold' : 'normal';
-				}
-			},
-			
-			get media() {
-				// We use this convoluted code because concat does not work as expected on array-like objects.
-				var tracks = this.sound.tracks.map(function(track) { return track; });
-				if ( this.image.id || this.image.path ) {
-					tracks.push(this.image);
-				}
-				return tracks;
-			},
-			
-			// State
-			get isSelected() {
-				return this === self.current;
-			},
-			
-			onFilesDropped: function(viewModel, dropEvent) {
-				dropEvent.preventDefault();
-				
-				var files = dropEvent.dataTransfer.files;
-				for ( var i = 0; i < files.length; ++i ) {
-					this.load(files[i]);
-				}
-			},
-			
-			onDrag: function(viewModel, dragEvent) {
-				dragEvent.preventDefault();
-				dragEvent.dataTransfer.dropEffect = 'copy';
-			},
-			
-			load: function(file) {
-				if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/i) ) {
-					this.sound.load(file);
-				} else if ( file.name.match(/\.(jpg|jpeg|gif|png|bmp|svg)$/i) ) {
-					this.image.load(file);
-				}
-			}
-		};
-	};
 	
 	self.onDrag = function(viewModel, dragEvent) {
 		dragEvent.preventDefault();
@@ -227,7 +86,7 @@ Ambience.Adventure = function(app) {
 	};
 	
 	self.add = function() {
-		var newScene = self.newScene();
+		var newScene = new Ambience.App.Scene();
 		self.scenes.push(newScene);
 		self.select(newScene);
 		
@@ -405,4 +264,4 @@ Ambience.Adventure = function(app) {
 	};
 };
 
-Ambience.Adventure.version = 1;
+Ambience.App.Adventure.version = 1;

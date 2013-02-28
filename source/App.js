@@ -38,7 +38,7 @@ Ambience.App = function($scope) {
 	$scope.adventure = null;
 	$scope.adventures = [];
 	$scope.createAdventure = function() {
-		var adventure = new Ambience.Adventure($scope);
+		var adventure = new Ambience.App.Adventure($scope);
 		adventure.title = 'Untitled adventure';
 		adventure.add();
 		$scope.addAdventure(adventure);

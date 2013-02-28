@@ -31,7 +31,7 @@ Ambience.AdventureLibrary = function(app) {
 	
 	this.deserialize = function(json) {
 		var state = JSON.parse(json)
-		var adventure = new Ambience.Adventure(app);
+		var adventure = new Ambience.App.Adventure(app);
 		
 		adventure.title = state.title;
 		adventure.version = state.version;
@@ -86,7 +86,7 @@ Ambience.AdventureLibrary = function(app) {
 	};
 	
 	this.loadExample = function() {
-		var adventure = new Ambience.Adventure(app);
+		var adventure = new Ambience.App.Adventure(app);
 		adventure.title = 'Example adventure';
 		
 		var music = adventure.add();

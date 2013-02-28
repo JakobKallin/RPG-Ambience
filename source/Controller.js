@@ -2,7 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Controller = function(background, foreground) {
+Ambience.App.Controller = function(background, foreground) {
 	function playBackground(scene) {
 		if ( scene ) {
 			background.play(scene);

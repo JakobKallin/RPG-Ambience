@@ -36,10 +36,19 @@ Ambience.NoPointer = function() {
 				}
 			});
 			
-			element.addEventListener('mousemove', scheduleHide);
-			element.addEventListener('mouseover', scheduleHide);
+			element.addEventListener('mousemove', showElementTemporarily);
+			element.addEventListener('mouseover', showElementTemporarily);
+			element.addEventListener('mouseout', showElement);
 			
-			function scheduleHide(event) {
+			form.addEventListener('mousemove', showElement);
+			form.addEventListener('mouseover', showElement);
+			
+			// Make sure that the element is not hidden when the cursor is over the form.
+			// These separate listeners shouldn't be needed, but I could not get it working without them.
+			form.addEventListener('mousemove', stopPropagation);
+			form.addEventListener('mouseover', stopPropagation);
+			
+			function showElementTemporarily(event) {
 				// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
 				var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 				if ( mouseHasMoved ) {
@@ -72,6 +81,11 @@ Ambience.NoPointer = function() {
 				scope.$apply(function() {
 					mouseHasRecentlyMoved = false;
 				});
+			}
+			
+			function stopPropagation(event) {
+				event.stopPropagation();
+				window.clearTimeout(cursorTimer);
 			}
 		}
 	};

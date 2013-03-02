@@ -85,7 +85,7 @@ Ambience.App.Adventure = function(app) {
 		self.current = scene;
 	};
 	
-	self.add = function() {
+	self.addScene = function() {
 		var newScene = new Ambience.App.Scene();
 		self.scenes.push(newScene);
 		self.select(newScene);
@@ -136,7 +136,7 @@ Ambience.App.Adventure = function(app) {
 		} else if ( next ) {
 			self.select(next);
 		} else {
-			self.add();
+			self.addScene();
 		}
 		
 		// Note that `current` is now different from `self.current`.

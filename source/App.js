@@ -40,7 +40,7 @@ Ambience.App = function($scope) {
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.App.Adventure($scope);
 		adventure.title = 'Untitled adventure';
-		adventure.add();
+		adventure.addScene();
 		$scope.addAdventure(adventure);
 		
 		$scope.startRename();

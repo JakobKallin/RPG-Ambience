@@ -23,11 +23,11 @@ Ambience.ScenePreview = function() {
 			Object.defineProperty(scope, 'layerStyle', {
 				get: function() {
 					var scene = scope.scene;
-					var css = 'url("' + scene.image.path + '")';
+					var css = 'url("' + scene.image.url + '")';
 					
 					return {
 						backgroundColor: scene.background.color,
-						backgroundImage: scene.image.path ? css : undefined,
+						backgroundImage: scene.image.url ? css : undefined,
 						backgroundSize: scene.image.size
 					};
 				}

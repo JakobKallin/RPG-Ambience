@@ -12,7 +12,7 @@ Ambience.App = function($scope) {
 	
 	var ambience;
 	function startAmbience() {
-		ambience = new Ambience.Controller(
+		ambience = new Ambience.App.Controller(
 			new Ambience.Stage(document.getElementById('background')),
 			new Ambience.Stage(document.getElementById('foreground'))
 		);
@@ -79,7 +79,7 @@ Ambience.App = function($scope) {
 			$scope.adventures.push(adventure);
 		});
 		$scope.adventure = $scope.adventures[$scope.adventures.length - 1];
-		$scope.adventure.loadMedia(); // There is no change event for the first adventure selected, so load the media manually.
+		// $scope.adventure.loadMedia(); // There is no change event for the first adventure selected, so load the media manually.
 		
 		// window.addEventListener('beforeunload', $scope.onExit);
 	};

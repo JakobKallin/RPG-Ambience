@@ -27,7 +27,7 @@ Ambience.App.Scene.Sound = function() {
 			var onSaved = function() {
 				sound.tracks.push({
 					name: fileName,
-					path: objectURL,
+					url: objectURL,
 					id: id,
 					isPlayable: Boolean(
 						document.createElement('audio').canPlayType(fileType)

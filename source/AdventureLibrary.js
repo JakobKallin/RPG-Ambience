@@ -61,12 +61,12 @@ Ambience.AdventureLibrary = function(app) {
 		// Keep temporary object URLs from being saved.
 		state.scenes.forEach(function(scene) {
 			if ( scene.image.id ) {
-				scene.image.path = '';
+				scene.image.url = '';
 			}
 			
 			scene.sound.tracks.forEach(function(track) {
 				if ( track.id ) {
-					track.path = '';
+					track.url = '';
 				}
 			});
 		});
@@ -94,7 +94,7 @@ Ambience.AdventureLibrary = function(app) {
 		music.key = 'T';
 		music.sound.tracks.push({
 			name: '9-Trailer_Music.ogg',
-			path: 'example/9-Trailer_Music.ogg',
+			url: 'example/9-Trailer_Music.ogg',
 			isPlayable: true
 		});
 		music.sound.loop = false;
@@ -125,7 +125,7 @@ Ambience.AdventureLibrary = function(app) {
 		city.key = 'C';
 		city.layer = 'foreground';
 		city.image.name = 'ishtar_rooftop.jpg';
-		city.image.path = 'example/ishtar_rooftop.jpg';
+		city.image.url = 'example/ishtar_rooftop.jpg';
 		city.image.size = 'cover';
 		city.fade = 4;
 		
@@ -134,11 +134,11 @@ Ambience.AdventureLibrary = function(app) {
 		dragon.key = 'D';
 		dragon.layer = 'foreground';
 		dragon.image.name = 'sintel-wallpaper-dragon.jpg';
-		dragon.image.path = 'example/sintel-wallpaper-dragon.jpg';
+		dragon.image.url = 'example/sintel-wallpaper-dragon.jpg';
 		dragon.image.size = 'cover';
 		dragon.sound.tracks.push({
 			name: 'dragon.ogg',
-			path: 'example/dragon.ogg',
+			url: 'example/dragon.ogg',
 			isPlayable: true
 		});
 		dragon.sound.loop = false;

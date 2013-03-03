@@ -40,7 +40,8 @@ Ambience.MediaLibrary = function(db) {
 		console.log('Loading media: ' + id);
 	};
 	
-	var saveWorker = new Worker('source/MediaSaver.js');
+	var saveWorker = {};
+	// var saveWorker = new Worker('source/MediaSaver.js');
 	var saveListeners = {};
 	self.save = function(id, file, onSuccess) {
 		saveListeners[id] = onSuccess;

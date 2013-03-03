@@ -103,7 +103,7 @@ Ambience.AdventureLibrary = function(app) {
 		imagine.name = 'Imagine';
 		imagine.key = '1';
 		imagine.layer = 'foreground';
-		imagine.fade = 1.6;
+		imagine.fade.duration = 1.6;
 		imagine.text.string = 'Don’t just imagine your world';
 		imagine.text.size = 4.5;
 		imagine.text.font = 'Palatino Linotype, Georgia, serif';
@@ -117,8 +117,8 @@ Ambience.AdventureLibrary = function(app) {
 		life.text.size = 9;
 		life.text.font = 'Palatino Linotype, Georgia, serif';
 		life.text.italic = true;
-		life.fade = 1.6;
-		life.fadeDirection = 'out';
+		life.fade.duration = 1.6;
+		life.fade.direction = 'out';
 		
 		var city = adventure.addScene();
 		city.name = 'City';
@@ -127,7 +127,7 @@ Ambience.AdventureLibrary = function(app) {
 		city.image.name = 'ishtar_rooftop.jpg';
 		city.image.url = 'example/ishtar_rooftop.jpg';
 		city.image.size = 'cover';
-		city.fade = 4;
+		city.fade.duration = 4;
 		
 		var dragon = adventure.addScene();
 		dragon.name = 'Dragon';
@@ -142,8 +142,8 @@ Ambience.AdventureLibrary = function(app) {
 			isPlayable: true
 		});
 		dragon.sound.loop = false;
-		dragon.fade = 3.2;
-		dragon.fadeDirection = 'out';
+		dragon.fade.duration = 3.2;
+		dragon.fade.direction = 'out';
 		
 		var title = adventure.addScene();
 		title.name = 'Ambience';
@@ -152,7 +152,7 @@ Ambience.AdventureLibrary = function(app) {
 		title.text.string = 'RPG Ambience';
 		title.text.size = 9;
 		title.text.font = 'Constantia, Georgia, serif';
-		title.fade = 3.2;
+		title.fade.duration = 3.2;
 		
 		return adventure;
 	};

@@ -47,6 +47,7 @@
 		<script src="source/ToggleButton.js"></script>
 		<script src="source/Split.js"></script>
 		<script src="source/NoPointer.js"></script>
+		<script src="source/UniqueIDs.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
@@ -136,7 +137,8 @@
 							class="detail-view"
 							data-ng-repeat="scene in adventure.scenes"
 							data-ng-controller="Ambience.App.Scene.Controller"
-							data-ng-show="isSelected">
+							data-ng-show="isSelected"
+							data-unique-ids>
 							<div class="selected-item">
 								<ul class="action-list">
 									<li class="action copy">

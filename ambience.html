@@ -48,6 +48,7 @@
 		<script src="source/Split.js"></script>
 		<script src="source/NoPointer.js"></script>
 		<script src="source/UniqueIDs.js"></script>
+		<script src="source/KeyInput.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
@@ -60,7 +61,7 @@
 			<div
 				id="editor"
 				class="editor"
-				ng-show="editorIsVisible">
+				data-ng-show="editorIsVisible">
 				<div class="menu-bar">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -75,8 +76,8 @@
 						</li>
 						<li class="action rename">
 							<text-button
-								ng-model="adventure.title"
-								ng-label="Rename Adventure"></text-button>
+								data-ng-model="adventure.title"
+								data-ng-label="Rename Adventure"></text-button>
 						</li>
 						<li class="action delete">
 							<button
@@ -117,7 +118,7 @@
 									<a
 										href="#"
 										data-ng-click="selectScene(scene)">
-										<scene-preview ng-scene="scene"></scene-preview>
+										<scene-preview data-ng-scene="scene"></scene-preview>
 										<span data-ui-if="scene.name">{{scene.name}}</span>
 										<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
 									</a>
@@ -147,7 +148,7 @@
 											data-ng-click="removeScene(selectedScene)">Remove</button>
 									</li>
 								</ul>
-								<scene-preview ng-scene="selectedScene"></scene-preview>
+								<scene-preview data-ng-scene="selectedScene"></scene-preview>
 								<div class="options general">
 									<table>
 										<tr>
@@ -163,10 +164,9 @@
 										<tr>
 											<th><label for="key">Hotkey</label></th>
 											<td>
-												<input
+												<key-input
 													id="key"
-													type="text"
-													ng-model="selectedScene.key">
+													data-ng-model="selectedScene.key"></key-input>
 											</td>
 										</tr>
 										<tr>
@@ -486,9 +486,9 @@
 					<ul class="action-list">
 						<li class="action toggle">
 							<toggle-button
-								ng-model="$parent.editorIsVisible"
-								ng-true="Hide Editor"
-								ng-false="Show Editor"></toggle-button>
+								data-ng-model="$parent.editorIsVisible"
+								data-ng-true="Hide Editor"
+								data-ng-false="Show Editor"></toggle-button>
 						</li>
 					</ul>
 				</form>

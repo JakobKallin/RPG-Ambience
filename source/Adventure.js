@@ -69,40 +69,6 @@ Ambience.App.Adventure = function(app) {
 		return converted;
 	};
 	
-	var bindableKeys = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
-	var specialKeyFound = false;
-	self.bindSpecialKey = function(scene, event) {
-		var keyName = Key.name(event.keyCode);
-		if ( keyName === 'Tab' ) {
-			specialKeyFound = true; // Prevent bindTextKey from triggering.
-			return true;
-		} else if ( ['Backspace', 'Delete'].contains(keyName) ) {
-			specialKeyFound = true;
-			scene.key = '';
-			return true;
-		} else if ( bindableKeys.contains(keyName) ) {
-			specialKeyFound = true;
-			scene.key = keyName;
-		} else {
-			return true;
-		}
-	};
-	
-	self.bindTextKey = function(scene, event) {
-		if ( specialKeyFound ) {
-			return true;
-		} else {
-			var keyText = String.fromCharCode(event.which);
-			if ( keyText.isCharacter ) {
-				scene.key = keyText.toUpperCase();
-			}
-		}
-	};
-	
-	self.stopKeyBinding = function(scene, event) {
-		specialKeyFound = false;
-	};
-	
 	self.namedScene = function(name) {
 		if ( name.length > 0 ) {
 			return self.scenes.first(function(scene) {

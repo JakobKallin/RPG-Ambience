@@ -30,7 +30,7 @@ Ambience.KeyInput = function() {
 				var keyName = Key.name(event.keyCode);
 				if ( keyName === 'Tab' ) {
 					specialKeyFound = true; // Prevent bindTextKey from triggering.
-				} else if ( ['Backspace', 'Delete'].contains(keyName) ) {
+				} else if ( ['Backspace', 'Delete', 'Escape'].contains(keyName) ) {
 					specialKeyFound = true;
 					scope.$apply(function() {
 						scope.key = '';

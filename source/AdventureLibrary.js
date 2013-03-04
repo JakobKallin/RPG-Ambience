@@ -89,7 +89,8 @@ Ambience.AdventureLibrary = function(app) {
 		var adventure = new Ambience.App.Adventure(app);
 		adventure.title = 'Example adventure';
 		
-		var music = adventure.addScene();
+		var music = new Ambience.App.Scene();
+		adventure.scenes.push(music);
 		music.name = 'Theme';
 		music.key = 'T';
 		music.sound.tracks.push({
@@ -99,7 +100,8 @@ Ambience.AdventureLibrary = function(app) {
 		});
 		music.sound.loop = false;
 		
-		var imagine = adventure.addScene();
+		var imagine = new Ambience.App.Scene();
+		adventure.scenes.push(imagine);
 		imagine.name = 'Imagine';
 		imagine.key = '1';
 		imagine.layer = 'foreground';
@@ -109,7 +111,8 @@ Ambience.AdventureLibrary = function(app) {
 		imagine.text.font = 'Palatino Linotype, Georgia, serif';
 		imagine.text.italic = true;
 		
-		var life = adventure.addScene();
+		var life = new Ambience.App.Scene();
+		adventure.scenes.push(life);
 		life.name = 'Life';
 		life.key = '2';
 		life.layer = 'foreground';
@@ -120,7 +123,8 @@ Ambience.AdventureLibrary = function(app) {
 		life.fade.duration = 1.6;
 		life.fade.direction = 'out';
 		
-		var city = adventure.addScene();
+		var city = new Ambience.App.Scene();
+		adventure.scenes.push(city);
 		city.name = 'City';
 		city.key = 'C';
 		city.layer = 'foreground';
@@ -129,7 +133,8 @@ Ambience.AdventureLibrary = function(app) {
 		city.image.size = 'cover';
 		city.fade.duration = 4;
 		
-		var dragon = adventure.addScene();
+		var dragon = new Ambience.App.Scene();
+		adventure.scenes.push(dragon);
 		dragon.name = 'Dragon';
 		dragon.key = 'D';
 		dragon.layer = 'foreground';
@@ -145,7 +150,8 @@ Ambience.AdventureLibrary = function(app) {
 		dragon.fade.duration = 3.2;
 		dragon.fade.direction = 'out';
 		
-		var title = adventure.addScene();
+		var title = new Ambience.App.Scene();
+		adventure.scenes.push(title);
 		title.name = 'Ambience';
 		title.key = 'A';
 		title.layer = 'foreground';

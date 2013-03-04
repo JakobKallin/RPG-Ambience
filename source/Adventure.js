@@ -18,12 +18,6 @@ Ambience.App.Adventure = function(app) {
 		}
 	});
 	
-	self.onDrag = function(viewModel, dragEvent) {
-		dragEvent.preventDefault();
-		dragEvent.stopPropagation();
-		dragEvent.dataTransfer.dropEffect = 'copy';
-	};
-	
 	self.convertScene = function(scene) {
 		var converted = new Ambience.Scene();
 		
@@ -73,87 +67,6 @@ Ambience.App.Adventure = function(app) {
 		}
 		
 		return converted;
-	};
-	
-	self.fadeOutTopmost = function() {
-		ambience.fadeOutTopmost();
-	};
-	
-	self.current = undefined;
-	
-	self.select = function(scene) {
-		self.current = scene;
-	};
-	
-	self.addScene = function() {
-		var newScene = new Ambience.App.Scene();
-		self.scenes.push(newScene);
-		self.select(newScene);
-		
-		return newScene;
-	};
-	
-	Object.defineProperty(self, 'previous', {
-		get: function() {
-			var index = self.scenes.indexOf(self.current);
-			if ( index > 0 ) {
-				return self.scenes[index - 1];
-			} else {
-				return null;
-			}
-		}
-	});
-	
-	Object.defineProperty(self, 'next', {
-		get: function() {
-			var index = self.scenes.indexOf(self.current);
-			if ( index < self.scenes.length - 1 ) {
-				return self.scenes[index + 1];
-			} else {
-				return null;
-			}
-		}
-	});
-	
-	Object.defineProperty(self, 'last', {
-		get: function() {
-			var index = self.scenes.length - 1;
-			if ( index !== -1 ) {
-				return self.scenes[index];
-			} else {
-				return null;
-			}
-		}
-	});
-	
-	self.removeSelected = function() {
-		var previous = self.previous;
-		var current = self.current;
-		var next = self.next;
-		
-		if ( previous ) {
-			self.select(previous);
-		} else if ( next ) {
-			self.select(next);
-		} else {
-			self.addScene();
-		}
-		
-		// Note that `current` is now different from `self.current`.
-		var index = self.scenes.indexOf(current);
-		self.scenes.splice(index, 1);
-	};
-	
-	self.copyScene = function(original) {
-		return original.copy();
-	};
-	
-	self.copySelected = function() {
-		var newScene = self.copyScene(self.current);
-		
-		var index = self.scenes.indexOf(self.current) + 1
-		self.scenes.splice(index, 0, newScene);
-		self.select(newScene);
 	};
 	
 	var bindableKeys = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];

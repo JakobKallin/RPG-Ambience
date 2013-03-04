@@ -4,19 +4,64 @@
 
 Ambience.App.Adventure.Controller = function($scope) {
 	$scope.selectedScene = $scope.adventure.scenes[0];
-
+	
+	$scope.addScene = function() {
+		var scene = Ambience.App.Scene();
+		$scope.adventure.scenes.push(scene);
+		$scope.selectScene(scene);
+		
+		return scene;
+	};
+	
 	$scope.selectScene = function(scene) {
 		$scope.selectedScene = scene;
 	};
 
 	$scope.copyScene = function(scene) {
-		var copy = angular.copy(scene);
-		$scope.adventure.scenes.push(copy);
-		$scope.selectedScene = copy;
+		var newScene = angular.copy(scene);
+		
+		var index = $scope.adventure.scenes.indexOf($scope.selectedScene) + 1
+		$scope.adventure.scenes.splice(index, 0, newScene);
+		$scope.selectScene(newScene);
 	};
 
 	$scope.removeScene = function(scene) {
-		$scope.adventure.scenes.remove(scene);
-		$scope.selectedScene = $scope.adventure.scenes[0];
+		var previous = $scope.previousScene;
+		var selected = $scope.selectedScene;
+		var next = $scope.nextScene;
+		
+		if ( previous ) {
+			$scope.selectScene(previous);
+		} else if ( next ) {
+			$scope.selectScene(next);
+		} else {
+			$scope.addScene();
+		}
+		
+		// Note that `selected` is now different from `$scope.selectedScene`.
+		var index = $scope.adventure.scenes.indexOf(selected);
+		$scope.adventure.scenes.splice(index, 1);
 	};
+	
+	Object.defineProperty($scope, 'previousScene', {
+		get: function() {
+			var index = $scope.adventure.scenes.indexOf($scope.selectedScene);
+			if ( index > 0 ) {
+				return $scope.adventure.scenes[index - 1];
+			} else {
+				return null;
+			}
+		}
+	});
+	
+	Object.defineProperty($scope, 'nextScene', {
+		get: function() {
+			var index = $scope.adventure.scenes.indexOf($scope.selectedScene);
+			if ( index < $scope.adventure.scenes.length - 1 ) {
+				return $scope.adventure.scenes[index + 1];
+			} else {
+				return null;
+			}
+		}
+	});
 };

@@ -71,6 +71,7 @@ window.addEventListener('load', function() {
 		module.directive('noPointer', Ambience.NoPointer);
 		module.directive('uniqueIds', Ambience.UniqueIDs);
 		module.directive('keyInput', Ambience.KeyInput);
+		module.directive('spectrum', Ambience.Spectrum);
 		angular.bootstrap(document, ['ambience']);
 		removeSplashScreen();
 	};

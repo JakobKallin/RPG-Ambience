@@ -19,6 +19,10 @@
 		<script src="libraries/key.js"></script>
 		<script src="libraries/object-url-from-data-url.js"></script>
 		
+		<script src="libraries/jquery.js"></script>
+		<script src="libraries/spectrum.js"></script>
+		<link rel="stylesheet" href="libraries/spectrum.css">
+		
 		<script src="libraries/ambience-stage/libraries/manymation/source/manymation.js"></script>
 		<script src="libraries/ambience-stage/source/Stage.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Background.js"></script>
@@ -49,6 +53,7 @@
 		<script src="source/NoPointer.js"></script>
 		<script src="source/UniqueIDs.js"></script>
 		<script src="source/KeyInput.js"></script>
+		<script src="source/Spectrum.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
@@ -403,9 +408,10 @@
 												<th><label for="font-color">Color</label></th>
 												<td>
 													<input
-													id="font-color"
-													type="color"
-													data-ng-model="selectedScene.text.color">
+														id="font-color"
+														type="color"
+														data-ng-model="selectedScene.text.color"
+														data-spectrum>
 												</td>
 											</tr>
 											<tr>
@@ -443,9 +449,10 @@
 												<th><label for="background-color">Background</label></th>
 												<td>
 													<input
-													id="background-color"
-													type="color"
-													data-ng-model="selectedScene.background.color">
+														id="background-color"
+														type="color"
+														data-ng-model="selectedScene.background.color"
+														data-spectrum>
 												</td>
 											</tr>
 											<tr>

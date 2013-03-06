@@ -70,6 +70,7 @@ window.addEventListener('load', function() {
 		module.directive('split', Ambience.Split);
 		module.directive('noPointer', Ambience.NoPointer);
 		module.directive('keyInput', Ambience.KeyInput);
+		module.directive('spectrum', Ambience.Spectrum);
 		angular.bootstrap(document, ['ambience']);
 		removeSplashScreen();
 	};

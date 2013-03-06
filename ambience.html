@@ -15,6 +15,7 @@
 		<script src="source/extensions.js"></script>
 		<script src="libraries/angular.js"></script>
 		<script src="libraries/angular-ui.js"></script>
+		<script src="libraries/angular-ui-bootstrap-tpls-0.2.0.js"></script>
 		
 		<script src="libraries/key.js"></script>
 		<script src="libraries/object-url-from-data-url.js"></script>
@@ -194,14 +195,11 @@
 										</tr>
 									</table>
 								</div>
-								<div class="options specific">
-									<ul class="tab-list">
-										<li class="tab"><a href="#image-tab">Image</a></li>
-										<li class="tab"><a href="#sound-tab">Sound</a></li>
-										<li class="tab"><a href="#text-tab">Text</a></li>
-										<li class="tab"><a href="#other-tab">Other</a></li>
-									</ul>
-									<div id="image-tab" class="tab-content">
+								<tabs class="options specific">
+									<pane
+										heading="Image"
+										id="image-tab"
+										class="tab-content">
 										<table>
 											<tr>
 												<td>
@@ -250,8 +248,9 @@
 												</td>
 											</tr>
 										</table>
-									</div>
-									<div
+									</pane>
+									<pane
+										heading="Sound"
 										id="sound-tab"
 										class="tab-content">
 										<table>
@@ -336,8 +335,9 @@
 												</td>
 											</tr>
 										</table>
-									</div>
-									<div
+									</pane>
+									<pane
+										heading="Text"
 										id="text-tab"
 										class="tab-content">
 										<table>
@@ -433,8 +433,9 @@
 												</td>
 											</tr>
 										</table>
-									</div>
-									<div
+									</pane>
+									<pane
+										heading="Other"
 										id="other-tab"
 										class="tab-content">
 										<table>
@@ -470,8 +471,8 @@
 												</td>
 											</tr>
 										</table>
-									</div>
-								</div>
+									</pane>
+								</tabs>
 							</div>
 						</div>
 					</div>

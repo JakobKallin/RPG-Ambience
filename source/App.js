@@ -19,7 +19,7 @@ Ambience.App = function($scope) {
 	}
 	
 	$scope.playScene = function(scene) {
-		converted = $scope.adventure.convertScene(scene);
+		converted = $scope.selected.adventure.convertScene(scene);
 		if ( scene.layer === 'background' ) {
 			ambience.playBackground(converted);
 		} else {
@@ -28,14 +28,17 @@ Ambience.App = function($scope) {
 	};
 	
 	$scope.playSelected = function() {
-		$scope.playScene($scope.adventure.current);
+		$scope.playScene($scope.selected.adventure.current);
 	};
 	
 	$scope.stopCurrent = function() {
 		ambience.fadeOutTopmost();
 	};
 	
-	$scope.adventure = null;
+	$scope.selected = {
+		adventure: null,
+		scene: null
+	};
 	$scope.adventures = [];
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.App.Adventure($scope);
@@ -48,20 +51,20 @@ Ambience.App = function($scope) {
 	
 	$scope.addAdventure = function(adventure) {
 		$scope.adventures.push(adventure);
-		$scope.adventure = adventure;
-		$scope.adventure.select(adventure.scenes[0]);
+		$scope.selected.adventure = adventure;
+		$scope.selected.scene = adventure.scenes[0];
 	};
 	
 	$scope.toggleSelectedRemoval = function() {
-		$scope.adventure.willBeRemoved = !$scope.adventure.willBeRemoved;
-		if ( $scope.adventure.willBeRemoved ) {
-			var index = $scope.adventures.indexOf($scope.adventure);
+		$scope.selected.adventure.willBeRemoved = !$scope.selected.adventure.willBeRemoved;
+		if ( $scope.selected.adventure.willBeRemoved ) {
+			var index = $scope.adventures.indexOf($scope.selected.adventure);
 			if ( $scope.adventures.length === 1 ) {
 				$scope.createAdventure();
 			} else if ( index === 0 ) {
-				$scope.adventure = $scope.adventures[1];
+				$scope.selected.adventure = $scope.adventures[1];
 			} else {
-				$scope.adventure = $scope.adventures[index - 1];
+				$scope.selected.adventure = $scope.adventures[index - 1];
 			}
 		}
 	};
@@ -78,8 +81,8 @@ Ambience.App = function($scope) {
 		adventures.forEach(function(adventure) {
 			$scope.adventures.push(adventure);
 		});
-		$scope.adventure = $scope.adventures[$scope.adventures.length - 1];
-		// $scope.adventure.loadMedia(); // There is no change event for the first adventure selected, so load the media manually.
+		$scope.selected.adventure = $scope.adventures[$scope.adventures.length - 1];
+		// $scope.selected.adventure.loadMedia(); // There is no change event for the first adventure selected, so load the media manually.
 		
 		// window.addEventListener('beforeunload', $scope.onExit);
 	};
@@ -105,7 +108,7 @@ Ambience.App = function($scope) {
 			event.preventDefault();
 			$scope.commands[key]();
 		} else {
-			var scenes = $scope.adventure.keyedScenes(key);
+			var scenes = $scope.selected.adventure.keyedScenes(key);
 			if ( scenes.length > 0 ) {
 				event.preventDefault();
 				scenes.forEach($scope.playScene);
@@ -118,7 +121,7 @@ Ambience.App = function($scope) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
 		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
-			var scenes = $scope.adventure.keyedScenes(character.toUpperCase());
+			var scenes = $scope.selected.adventure.keyedScenes(character.toUpperCase());
 			if ( scenes.length > 0 ) {
 				scenes.forEach($scope.playScene);
 				$scope.sceneName = '';
@@ -138,7 +141,7 @@ Ambience.App = function($scope) {
 		if ( $scope.sceneName.length === 0 ) {
 			ambience.fadeOutTopmost();
 		} else {
-			var scene = $scope.adventure.namedScene($scope.sceneName);
+			var scene = $scope.selected.adventure.namedScene($scope.sceneName);
 			if ( scene ) {
 				$scope.playScene(scene);
 			}

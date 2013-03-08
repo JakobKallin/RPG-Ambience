@@ -35,10 +35,18 @@ Ambience.App = function($scope) {
 		ambience.fadeOutTopmost();
 	};
 	
+	var adventure = null;
 	$scope.selected = {
-		adventure: null,
+		get adventure() {
+			return adventure;
+		},
+		set adventure(newAdventure) {
+			adventure = newAdventure;
+			$scope.selected.scene = newAdventure.scenes[0];
+		},
 		scene: null
 	};
+	
 	$scope.adventures = [];
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.App.Adventure($scope);
@@ -52,7 +60,6 @@ Ambience.App = function($scope) {
 	$scope.addAdventure = function(adventure) {
 		$scope.adventures.push(adventure);
 		$scope.selected.adventure = adventure;
-		$scope.selected.scene = adventure.scenes[0];
 	};
 	
 	$scope.toggleSelectedRemoval = function() {

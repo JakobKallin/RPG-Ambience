@@ -14,64 +14,16 @@ window.addEventListener('load', function() {
 	document.body.addEventListener('keydown', stopPropagation);
 	document.body.addEventListener('keypress', stopPropagation);
 	
-	var browserIsSupported = function() {
-		return Boolean(window.indexedDB && window.URL);
-	};
+	var module = angular.module('ambience', ['ui', 'ui.bootstrap']);
+	module.directive('textButton', Ambience.TextButton);
+	module.directive('scenePreview', Ambience.ScenePreview);
+	module.directive('toggleButton', Ambience.ToggleButton);
+	module.directive('split', Ambience.Split);
+	module.directive('noPointer', Ambience.NoPointer);
+	module.directive('keyInput', Ambience.KeyInput);
+	module.directive('spectrum', Ambience.Spectrum);
+	angular.bootstrap(document, ['ambience']);
 	
-	var removeSplashScreen = function() {
-		var splash = document.getElementById('splash');
-		splash.parentNode.removeChild(splash);
-	};
-	
-	var showSupportInfo = function() {
-		var loadingMessage = document.getElementById('splash-loading');
-		var unsupportedMessage = document.getElementById('splash-unsupported');
-		loadingMessage.style.display = 'none';
-		unsupportedMessage.style.display = '';
-	};
-	
-	if ( !browserIsSupported() ) {
-		showSupportInfo();
-		return;
-	}
-
-	var dbRequest = indexedDB.open('media');
-	
-	dbRequest.onupgradeneeded = function(event) {
-		createDatabase(event.target.result);
-	};
-	
-	dbRequest.onsuccess = function(successEvent) {
-		var db = successEvent.target.result;
-		if ( db.setVersion ) {
-			db.setVersion('1').onsuccess = function(versionEvent) {
-				createDatabase(db)
-				versionEvent.target.result.oncomplete = function() {
-					onDatabaseLoaded(db);
-				};
-			}
-		} else {
-			onDatabaseLoaded(db);
-		}
-	};
-	
-	var createDatabase = function(db) {
-		if ( !db.objectStoreNames.contains('media') ) {
-			db.createObjectStore('media');
-		}
-	};
-	
-	var onDatabaseLoaded = function(db) {
-		Ambience.App.db = db;
-		var module = angular.module('ambience', ['ui', 'ui.bootstrap']);
-		module.directive('textButton', Ambience.TextButton);
-		module.directive('scenePreview', Ambience.ScenePreview);
-		module.directive('toggleButton', Ambience.ToggleButton);
-		module.directive('split', Ambience.Split);
-		module.directive('noPointer', Ambience.NoPointer);
-		module.directive('keyInput', Ambience.KeyInput);
-		module.directive('spectrum', Ambience.Spectrum);
-		angular.bootstrap(document, ['ambience']);
-		removeSplashScreen();
-	};
+	var splashScreen = document.getElementById('splash');
+	splashScreen.parentNode.removeChild(splashScreen);
 });

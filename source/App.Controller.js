@@ -2,7 +2,9 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.App = function($scope) {
+Ambience.App = {};
+
+Ambience.App.Controller = function($scope) {
 	function start() {
 		startAmbience();
 		startInterface();
@@ -12,7 +14,7 @@ Ambience.App = function($scope) {
 	
 	var ambience;
 	function startAmbience() {
-		ambience = new Ambience.App.Controller(
+		ambience = new Ambience.App.Theater(
 			new Ambience.Stage(document.getElementById('background')),
 			new Ambience.Stage(document.getElementById('foreground'))
 		);

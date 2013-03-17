@@ -13,7 +13,7 @@
 		<script src="libraries/ambience-stage/source/MediaPlayers/Sound.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
 		<script src="libraries/ambience-stage/source/Scene.js"></script>
-		<script src="source/Controller.js"></script>
+		<script src="source/Theater.js"></script>
 		
 		<script>
 			// Some fairly complex preloading logic.
@@ -60,7 +60,7 @@
 					var node = document.getElementById(id);
 					return new Ambience.Stage(node);
 				});
-				var ambience = new Ambience.Controller(layers[0], layers[1]);
+				var ambience = new Ambience.App.Theater(layers[0], layers[1]);
 				startTeaser(ambience);
 			};
 			

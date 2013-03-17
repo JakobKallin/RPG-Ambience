@@ -2,7 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.App.Adventure = function(app) {
+Ambience.App.Adventure = function() {
 	var self = this;
 	
 	self.title = '';
@@ -17,6 +17,13 @@ Ambience.App.Adventure = function(app) {
 			return self.scenes.map(get('media')).flatten();
 		}
 	});
+	
+	self.addScene = function() {
+		var scene = Ambience.App.Scene();
+		self.scenes.push(scene);
+				
+		return scene;
+	};
 	
 	self.convertScene = function(scene) {
 		var converted = new Ambience.Scene();
@@ -89,58 +96,51 @@ Ambience.App.Adventure = function(app) {
 		}
 	};
 	
-	self.willBeRemoved = false;
-	
-	Object.defineProperty(self, 'dropdownTitle', {
-		get: function() {
-			if ( self.willBeRemoved ) {
-				return self.title + ' (will be deleted)';
-			} else {
-				return self.title;
-			}
-		}
-	});
-	
-	Object.defineProperty(self, 'removalButtonText', {
-		get: function() {
-			if ( self.willBeRemoved ) {
-				return 'Recover Adventure';
-			} else {
-				return 'Delete Adventure';
-			}
-		}
-	});
-	
-	var mediaLoaded = false;
-	self.loadMedia = function() {
-		if ( mediaLoaded ) {
-			return;
-		}
+	// var mediaLoaded = false;
+	// self.loadMedia = function() {
+	// 	if ( mediaLoaded ) {
+	// 		return;
+	// 	}
 		
-		mediaLoaded = true;
+	// 	mediaLoaded = true;
 		
-		self.scenes.forEach(function(scene) {
-			if ( scene.image.id ) {
-				app.media.load(scene.image.id, function(url) {
-					scene.image.path = url;
-				});
-			}
+	// 	self.scenes.forEach(function(scene) {
+	// 		if ( scene.image.id ) {
+	// 			app.media.load(scene.image.id, function(url) {
+	// 				scene.image.path = url;
+	// 			});
+	// 		}
 			
-			scene.sound.tracks.forEach(function(track) {
-				// At first assume the track is playable.
-				// This may be invalidated after loading the file.
-				track.isPlayable = true;
-				if ( track.id ) {
-					app.media.load(track.id, function(url, mimeType) {
-						track.path = url;
-						track.isPlayable = Boolean(
-							document.createElement('audio').canPlayType(mimeType)
-						);
-					});
-				}
-			});
-		});
-	};
+	// 		scene.sound.tracks.forEach(function(track) {
+	// 			// At first assume the track is playable.
+	// 			// This may be invalidated after loading the file.
+	// 			track.isPlayable = true;
+	// 			if ( track.id ) {
+	// 				app.media.load(track.id, function(url, mimeType) {
+	// 					track.path = url;
+	// 					track.isPlayable = Boolean(
+	// 						document.createElement('audio').canPlayType(mimeType)
+	// 					);
+	// 				});
+	// 			}
+	// 		});
+	// 	});
+	// };
+};
+
+Ambience.App.Adventure.fromConfig = function(config) {
+	var adventure = new Ambience.App.Adventure();
+	
+	adventure.title = config.title;
+	adventure.version = config.version;
+	
+	config.scenes.forEach(function(sceneConfig) {
+		var scene = new Ambience.App.Scene();
+		Object.overlay(scene, sceneConfig);
+		adventure.scenes.push(scene);
+	});
+	
+	return adventure;
 };
 
 Ambience.App.Adventure.version = 1;

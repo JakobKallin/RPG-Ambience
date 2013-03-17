@@ -5,7 +5,7 @@
 Ambience.App.Scene.Controller = function($scope) {
 	Object.defineProperty($scope, 'isSelected', {
 		get: function() {
-			return $scope.scene === $scope.selected.scene;
+			return $scope.scene === $scope.app.scene;
 		}
 	})
 };

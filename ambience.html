@@ -41,8 +41,7 @@
 		<script src="source/Scene.Image.js"></script>
 		<script src="source/Scene.Text.js"></script>
 		<script src="source/Scene.Sound.js"></script>
-		<script src="source/AdventureLibrary.js"></script>
-		<script src="source/MediaLibrary.js"></script>
+		<script src="source/TestLibrary.js"></script>
 
 		<script src="source/Adventure.Controller.js"></script>
 		<script src="source/Scene.Controller.js"></script>
@@ -76,8 +75,8 @@
 					<ul class="action-list adventure">
 						<li class="action">
 							<select
-								data-ng-model="selected.adventure"
-								data-ng-options="a.dropdownTitle for a in adventures"></select>
+								data-ng-model="app.adventure"
+								data-ng-options="a.title for a in app.adventures"></select>
 						</li>
 						<li class="action new">
 							<button
@@ -86,13 +85,14 @@
 						</li>
 						<li class="action rename">
 							<text-button
-								data-ng-model="selected.adventure.title"
-								data-ng-label="Rename Adventure"></text-button>
+								data-ng-model="app.adventure.title"
+								data-ng-label="Rename Adventure"
+								data-active-when="app.renameInProgress"></text-button>
 						</li>
 						<li class="action delete">
 							<button
 								type="button"
-								data-ng-click="toggleSelectedRemoval()">{{selected.adventure.removalButtonText}}</button>
+								data-ng-click="removeSelected()">Delete Adventure</button>
 						</li>
 					</ul>
 					<ul class="action-list playback">
@@ -113,12 +113,11 @@
 						id="scene-tab"
 						class="scene-view"
 						data-heading="Scenes">
-						<div
-							class="list-view">
+						<div class="list-view" data-ui-if="app.adventure">
 							<ul>
 								<li
 									class="list-item"
-									data-ng-repeat="scene in selected.adventure.scenes"
+									data-ng-repeat="scene in app.adventure.scenes"
 									data-ng-controller="Ambience.App.Scene.Controller"
 									data-ng-class="{ selected: isSelected }">
 									<a
@@ -137,24 +136,24 @@
 							<div class="add-item">
 								<button
 									type="button"
-									data-ng-click="selected.adventure.addScene()">Add Scene</button>
+									data-ng-click="addScene()">Add Scene</button>
 							</div>
 						</div>
-						<div class="detail-view">
+						<div class="detail-view" data-ui-if="app.adventure">
 							<div class="selected-item">
 								<ul class="action-list">
 									<li class="action copy">
 										<button
 											type="button"
-											data-ng-click="copyScene(selected.scene)">Copy</button>
+											data-ng-click="copyScene(app.scene)">Copy</button>
 									</li>
 									<li class="action remove">
 										<button
 											type="button"
-											data-ng-click="removeScene(selected.scene)">Remove</button>
+											data-ng-click="removeScene(app.scene)">Remove</button>
 									</li>
 								</ul>
-								<scene-preview data-ng-scene="selected.scene"></scene-preview>
+								<scene-preview data-ng-scene="app.scene"></scene-preview>
 								<div class="options general">
 									<table>
 										<tr>
@@ -164,7 +163,7 @@
 													id="name"
 													type="text"
 													placeholder="Untitled"
-													data-ng-model="selected.scene.name">
+													data-ng-model="app.scene.name">
 											</td>
 										</tr>
 										<tr>
@@ -172,7 +171,7 @@
 											<td>
 												<key-input
 													id="key"
-													data-ng-model="selected.scene.key"></key-input>
+													data-ng-model="app.scene.key"></key-input>
 											</td>
 										</tr>
 										<tr>
@@ -182,7 +181,7 @@
 													<li>
 														<select
 															id="layer"
-															data-ng-model="selected.scene.layer">
+															data-ng-model="app.scene.layer">
 															<option value="background">Background</option>
 															<option value="foreground">Foreground</option>
 														</select>
@@ -192,7 +191,7 @@
 															<input
 																id="mixin"
 																type="checkbox"
-																data-ng-model="selected.scene.mixin">
+																data-ng-model="app.scene.mixin">
 															Mixin
 														</label>
 													</li>
@@ -211,17 +210,17 @@
 													<button
 														type="button"
 														class="file secondary"
-														data-ng-hide="selected.scene.image.url">Select Image</button>
+														data-ng-hide="app.scene.image.url">Select Image</button>
 													<button
 														type="button"
 														class="secondary"
-														data-ng-show="selected.scene.image.url">Remove</button>
+														data-ng-show="app.scene.image.url">Remove</button>
 													<span
 														class="primary"
-														data-ui-if="selected.scene.image.url">{{selected.scene.image.name}}</span>
+														data-ui-if="app.scene.image.url">{{app.scene.image.name}}</span>
 													<span
 														class="primary note"
-														data-ui-if="!selected.scene.image.url">No image selected</span>
+														data-ui-if="!app.scene.image.url">No image app</span>
 												</td>
 											</tr>
 											<tr>
@@ -234,7 +233,7 @@
 																	type="radio"
 																	name="image-size"
 																	value="contain"
-																	data-ng-model="selected.scene.image.size">
+																	data-ng-model="app.scene.image.size">
 																<span>Fit</span>
 															</label>
 														</li>
@@ -245,7 +244,7 @@
 																	type="radio"
 																	name="image-size"
 																	value="cover"
-																	data-ng-model="selected.scene.image.size">
+																	data-ng-model="app.scene.image.size">
 																<span>Fill</span>
 															</label>
 														</li>
@@ -267,7 +266,7 @@
 																<input
 																	id="loop"
 																	type="checkbox"
-																	data-ng-model="selected.scene.sound.loop">
+																	data-ng-model="app.scene.sound.loop">
 																<span>Loop</span>
 															</label>
 														</li>
@@ -276,7 +275,7 @@
 																<input
 																	id="shuffle"
 																	type="checkbox"
-																	data-ng-model="selected.scene.sound.shuffle">
+																	data-ng-model="app.scene.sound.shuffle">
 																<span>Shuffle</span>
 															</label>
 														</li>
@@ -294,7 +293,7 @@
 														min="0"
 														max="100"
 														step="10"
-														data-ng-model="selected.scene.sound.volume">
+														data-ng-model="app.scene.sound.volume">
 													<span class="note">%</span>
 												</td>
 											</tr>
@@ -306,7 +305,7 @@
 														type="number"
 														min="0"
 														value="0"
-														data-ng-model="selected.scene.sound.overlap">
+														data-ng-model="app.scene.sound.overlap">
 													<span class="note">seconds</span>
 												</td>
 											</tr>
@@ -315,11 +314,11 @@
 												<td>
 													<p
 														class="note"
-														data-ui-if="selected.scene.sound.tracks.length == 0">
+														data-ui-if="app.scene.sound.tracks.length == 0">
 														No tracks selected
 													</p>
 													<ol class="track-list">
-														<li data-ng-repeat="track in selected.scene.sound.tracks">
+														<li data-ng-repeat="track in app.scene.sound.tracks">
 															<button
 																type="button"
 																class="secondary">Remove</button>
@@ -350,7 +349,7 @@
 													<textarea
 														id="text"
 														rows="5"
-														data-ng-model="selected.scene.text.string"></textarea>
+														data-ng-model="app.scene.text.string"></textarea>
 												</td>
 											</tr>
 											<tr>
@@ -361,7 +360,7 @@
 													<input
 														id="font"
 														type="text"
-														data-ng-model="selected.scene.text.font">
+														data-ng-model="app.scene.text.font">
 												</td>
 											</tr>
 											<tr>
@@ -373,7 +372,7 @@
 																<input
 																	id="bold"
 																	type="checkbox"
-																	data-ng-model="selected.scene.text.bold">
+																	data-ng-model="app.scene.text.bold">
 																<span><b>Bold</b></span>
 															</label>
 														</li>
@@ -382,7 +381,7 @@
 																<input
 																	id="italic"
 																	type="checkbox"
-																	data-ng-model="selected.scene.text.italic">
+																	data-ng-model="app.scene.text.italic">
 																<span><i>Italic</i></span>
 															</label>
 														</li>
@@ -397,7 +396,7 @@
 														min="3"
 														max="30"
 														step="0.5"
-														data-ng-model="selected.scene.text.size">
+														data-ng-model="app.scene.text.size">
 													<span class="note">% of screen width</span>
 												</td>
 											</tr>
@@ -407,7 +406,7 @@
 													<input
 														id="font-color"
 														type="color"
-														data-ng-model="selected.scene.text.color"
+														data-ng-model="app.scene.text.color"
 														data-spectrum>
 												</td>
 											</tr>
@@ -416,7 +415,7 @@
 												<td>
 													<select
 														id="text-alignment"
-														data-ng-model="selected.scene.text.alignment">
+														data-ng-model="app.scene.text.alignment">
 														<option value="left">Left</option>
 														<option value="center">Center</option>
 														<option value="right">Right</option>
@@ -432,7 +431,7 @@
 														min="0"
 														max="40"
 														step="2"
-														data-ng-model="selected.scene.text.padding">
+														data-ng-model="app.scene.text.padding">
 													<span class="note">% of screen width</span>
 												</td>
 											</tr>
@@ -448,7 +447,7 @@
 													<input
 														id="background-color"
 														type="color"
-														data-ng-model="selected.scene.background.color"
+														data-ng-model="app.scene.background.color"
 														data-spectrum>
 												</td>
 											</tr>
@@ -461,11 +460,11 @@
 																id="fade"
 																type="number"
 																min="0"
-																data-ng-model="selected.scene.fade.duration">
+																data-ng-model="app.scene.fade.duration">
 															<span class="note">seconds</span>
 														</li>
 														<li>
-															<select data-ng-model="selected.scene.fade.direction">
+															<select data-ng-model="app.scene.fade.direction">
 																<option value="in out">In and out</option>
 																<option value="in">In</option>
 																<option value="out">Out</option>

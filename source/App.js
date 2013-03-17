@@ -19,7 +19,7 @@ Ambience.App = function($scope) {
 	}
 	
 	$scope.playScene = function(scene) {
-		converted = $scope.selected.adventure.convertScene(scene);
+		converted = $scope.app.adventure.convertScene(scene);
 		if ( scene.layer === 'background' ) {
 			ambience.playBackground(converted);
 		} else {
@@ -28,7 +28,7 @@ Ambience.App = function($scope) {
 	};
 	
 	$scope.playSelected = function() {
-		$scope.playScene($scope.selected.adventure.current);
+		$scope.playScene($scope.app.adventure.current);
 	};
 	
 	$scope.stopCurrent = function() {
@@ -36,70 +36,63 @@ Ambience.App = function($scope) {
 	};
 	
 	var adventure = null;
-	$scope.selected = {
+	var scene = null;
+	$scope.app = {
 		get adventure() {
 			return adventure;
 		},
 		set adventure(newAdventure) {
 			adventure = newAdventure;
-			$scope.selected.scene = newAdventure.scenes[0];
+			$scope.app.scene = newAdventure.scenes[0];
 		},
-		scene: null
+		get scene() {
+			return scene;
+		},
+		set scene(newScene) {
+			scene = newScene;
+		},
+		adventures: []
 	};
 	
-	$scope.adventures = [];
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.App.Adventure($scope);
 		adventure.title = 'Untitled adventure';
 		adventure.addScene();
 		$scope.addAdventure(adventure);
-		
-		$scope.startRename();
+		$scope.app.renameInProgress = true;
 	};
 	
 	$scope.addAdventure = function(adventure) {
-		$scope.adventures.push(adventure);
-		$scope.selected.adventure = adventure;
+		$scope.app.adventures.push(adventure);
+		$scope.app.adventure = adventure;
 	};
 	
-	$scope.toggleSelectedRemoval = function() {
-		$scope.selected.adventure.willBeRemoved = !$scope.selected.adventure.willBeRemoved;
-		if ( $scope.selected.adventure.willBeRemoved ) {
-			var index = $scope.adventures.indexOf($scope.selected.adventure);
-			if ( $scope.adventures.length === 1 ) {
-				$scope.createAdventure();
-			} else if ( index === 0 ) {
-				$scope.selected.adventure = $scope.adventures[1];
-			} else {
-				$scope.selected.adventure = $scope.adventures[index - 1];
-			}
-		}
+	$scope.removeSelected = function() {
+		$scope.app.adventures.remove($scope.app.adventure);
+		$scope.app.adventure = null;
+		$scope.app.scene = null;
 	};
 	
-	$scope.library = new Ambience.AdventureLibrary($scope);
+	$scope.library = new Ambience.App.Library.Test();
 	var loadAdventures = function() {
-		var adventures = $scope.library.load();
-		if ( adventures.length === 0 ) {
-			adventures = [$scope.library.loadExample(), $scope.library.loadExample()];
-			adventures[1].title = 'Another example';
-			adventures[1].scenes[0].name = 'Other adventure scene';
+		$scope.library.loadAdventures(onLoad);
+		
+		function onLoad(adventure) {
+			$scope.$apply(function() {
+				$scope.app.adventures.push(adventure);
+				if ( $scope.app.adventures.length === 1 ) {
+					$scope.app.adventure = adventure;
+				}
+			});
 		}
-		
-		adventures.forEach(function(adventure) {
-			$scope.adventures.push(adventure);
-		});
-		$scope.selected.adventure = $scope.adventures[$scope.adventures.length - 1];
-		// $scope.selected.adventure.loadMedia(); // There is no change event for the first adventure selected, so load the media manually.
-		
-		// window.addEventListener('beforeunload', $scope.onExit);
 	};
 	
-	$scope.media = new Ambience.MediaLibrary(Ambience.App.db);
-	var removeUnusedMedia = function() {
-		var items = $scope.adventures.map(get('media')).flatten();
-		var usedIds = items.map(get('id'));
-		$scope.media.removeUnusedMedia(usedIds);
-	};
+	// $scope.media = new Ambience.MediaLibrary(Ambience.App.db);
+	// var removeUnusedMedia = function() {
+	// 	var items = $scope.app.adventures.map(get('media')).flatten();
+	// 	var usedIds = items.map(get('id'));
+	// 	$scope.media.removeUnusedMedia(usedIds);
+	// };
 	
 	var editorWidth = 0.75;
 	function startInterface() {
@@ -115,7 +108,7 @@ Ambience.App = function($scope) {
 			event.preventDefault();
 			$scope.commands[key]();
 		} else {
-			var scenes = $scope.selected.adventure.keyedScenes(key);
+			var scenes = $scope.app.adventure.keyedScenes(key);
 			if ( scenes.length > 0 ) {
 				event.preventDefault();
 				scenes.forEach($scope.playScene);
@@ -128,7 +121,7 @@ Ambience.App = function($scope) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
 		if ( event.charCode !== 0 ) {
 			var character = String.fromCharCode(event.charCode);
-			var scenes = $scope.selected.adventure.keyedScenes(character.toUpperCase());
+			var scenes = $scope.app.adventure.keyedScenes(character.toUpperCase());
 			if ( scenes.length > 0 ) {
 				scenes.forEach($scope.playScene);
 				$scope.sceneName = '';
@@ -148,7 +141,7 @@ Ambience.App = function($scope) {
 		if ( $scope.sceneName.length === 0 ) {
 			ambience.fadeOutTopmost();
 		} else {
-			var scene = $scope.selected.adventure.namedScene($scope.sceneName);
+			var scene = $scope.app.adventure.namedScene($scope.sceneName);
 			if ( scene ) {
 				$scope.playScene(scene);
 			}
@@ -166,19 +159,19 @@ Ambience.App = function($scope) {
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	
-	Object.defineProperty($scope, 'exitMessage', {
-		get: function() {
-			if ( $scope.media.transactionCount > 0 ) {
-				return 'There are currently media files being saved. If you exit now, you risk losing data.';
-			} else {
-				return undefined;
-			}
-		}
-	});
+	// Object.defineProperty($scope, 'exitMessage', {
+	// 	get: function() {
+	// 		if ( $scope.media.transactionCount > 0 ) {
+	// 			return 'There are currently media files being saved. If you exit now, you risk losing data.';
+	// 		} else {
+	// 			return undefined;
+	// 		}
+	// 	}
+	// });
 	
 	$scope.onExit = function(event) {
 		$scope.permanentlyRemoveAdventures();
-		$scope.library.save($scope.adventures);
+		$scope.library.save($scope.app.adventures);
 		
 		if ( $scope.exitMessage ) {
 			return event.returnValue = $scope.exitMessage;
@@ -186,9 +179,9 @@ Ambience.App = function($scope) {
 	};
 	
 	$scope.permanentlyRemoveAdventures = function() {
-		var removed = $scope.adventures.filter(get('willBeRemoved'));
+		var removed = $scope.app.adventures.filter(get('willBeRemoved'));
 		removed.forEach(function(adventure) {
-			$scope.adventures.remove(adventure);
+			$scope.app.adventures.remove(adventure);
 		});
 	};
 	
@@ -210,3 +203,5 @@ Ambience.App = function($scope) {
 	
 	start();
 };
+
+Ambience.App.Library = {};

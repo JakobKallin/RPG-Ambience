@@ -3,31 +3,28 @@
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
 Ambience.App.Adventure.Controller = function($scope) {
-	$scope.selected.scene = $scope.selected.adventure.scenes[0];
-	
 	$scope.addScene = function() {
-		var scene = Ambience.App.Scene();
-		$scope.selected.adventure.scenes.push(scene);
+		var scene = $scope.app.adventure.addScene();
 		$scope.selectScene(scene);
 		
 		return scene;
 	};
 	
 	$scope.selectScene = function(scene) {
-		$scope.selected.scene = scene;
+		$scope.app.scene = scene;
 	};
 
 	$scope.copyScene = function(scene) {
 		var newScene = angular.copy(scene);
 		
-		var index = $scope.selected.adventure.scenes.indexOf($scope.selected.scene) + 1
-		$scope.selected.adventure.scenes.splice(index, 0, newScene);
+		var index = $scope.app.adventure.scenes.indexOf($scope.app.scene) + 1
+		$scope.app.adventure.scenes.splice(index, 0, newScene);
 		$scope.selectScene(newScene);
 	};
 
 	$scope.removeScene = function(scene) {
 		var previous = $scope.previousScene;
-		var selected = $scope.selected.scene;
+		var app = $scope.app.scene;
 		var next = $scope.nextScene;
 		
 		if ( previous ) {
@@ -38,16 +35,16 @@ Ambience.App.Adventure.Controller = function($scope) {
 			$scope.addScene();
 		}
 		
-		// Note that `selected` is now different from `$scope.selected.scene`.
-		var index = $scope.selected.adventure.scenes.indexOf(selected);
-		$scope.selected.adventure.scenes.splice(index, 1);
+		// Note that `app` is now different from `$scope.app.scene`.
+		var index = $scope.app.adventure.scenes.indexOf(app);
+		$scope.app.adventure.scenes.splice(index, 1);
 	};
 	
 	Object.defineProperty($scope, 'previousScene', {
 		get: function() {
-			var index = $scope.selected.adventure.scenes.indexOf($scope.selected.scene);
+			var index = $scope.app.adventure.scenes.indexOf($scope.app.scene);
 			if ( index > 0 ) {
-				return $scope.selected.adventure.scenes[index - 1];
+				return $scope.app.adventure.scenes[index - 1];
 			} else {
 				return null;
 			}
@@ -56,9 +53,9 @@ Ambience.App.Adventure.Controller = function($scope) {
 	
 	Object.defineProperty($scope, 'nextScene', {
 		get: function() {
-			var index = $scope.selected.adventure.scenes.indexOf($scope.selected.scene);
-			if ( index < $scope.selected.adventure.scenes.length - 1 ) {
-				return $scope.selected.adventure.scenes[index + 1];
+			var index = $scope.app.adventure.scenes.indexOf($scope.app.scene);
+			if ( index < $scope.app.adventure.scenes.length - 1 ) {
+				return $scope.app.adventure.scenes[index + 1];
 			} else {
 				return null;
 			}

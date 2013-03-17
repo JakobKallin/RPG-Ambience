@@ -44,7 +44,6 @@
 		<script src="source/TestLibrary.js"></script>
 
 		<script src="source/Adventure.Controller.js"></script>
-		<script src="source/Scene.Controller.js"></script>
 		
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
@@ -118,8 +117,7 @@
 								<li
 									class="list-item"
 									data-ng-repeat="scene in app.adventure.scenes"
-									data-ng-controller="Ambience.App.Scene.Controller"
-									data-ng-class="{ selected: isSelected }">
+									data-ng-class="{ selected: isSelected(scene) }">
 									<a
 										href="#"
 										data-ng-click="selectScene(scene)">
@@ -210,17 +208,19 @@
 													<button
 														type="button"
 														class="file secondary"
-														data-ng-hide="app.scene.image.url">Select Image</button>
+														data-ng-hide="app.scene.image.url"
+														data-ng-click="selectImage(app.scene)">Select Image</button>
 													<button
 														type="button"
 														class="secondary"
-														data-ng-show="app.scene.image.url">Remove</button>
+														data-ng-show="app.scene.image.url"
+														data-ng-click="removeImage(app.scene)">Remove</button>
 													<span
 														class="primary"
 														data-ui-if="app.scene.image.url">{{app.scene.image.name}}</span>
 													<span
 														class="primary note"
-														data-ui-if="!app.scene.image.url">No image app</span>
+														data-ui-if="!app.scene.image.url">No image selected</span>
 												</td>
 											</tr>
 											<tr>

@@ -13,6 +13,10 @@ Ambience.App.Adventure.Controller = function($scope) {
 	$scope.selectScene = function(scene) {
 		$scope.app.scene = scene;
 	};
+	
+	$scope.isSelected = function(scene) {
+		return scene === $scope.app.scene;
+	}
 
 	$scope.copyScene = function(scene) {
 		var newScene = angular.copy(scene);
@@ -61,4 +65,18 @@ Ambience.App.Adventure.Controller = function($scope) {
 			}
 		}
 	});
+	
+	$scope.selectImage = function(scene) {
+		$scope.library.selectImage(onLoad);
+		
+		function onLoad(imageURL) {
+			$scope.$apply(function() {
+				scene.image.url = imageURL;
+			});
+		}
+	};
+	
+	$scope.removeImage = function(scene) {
+		scene.image.url = null;
+	};
 };

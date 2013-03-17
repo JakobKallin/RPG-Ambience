@@ -73,7 +73,7 @@ Ambience.App = function($scope) {
 		$scope.app.scene = null;
 	};
 	
-	$scope.library = new Ambience.App.Library.Test();
+	$scope.library = new Ambience.App.TestLibrary();
 	var loadAdventures = function() {
 		$scope.library.loadAdventures(onLoad);
 		

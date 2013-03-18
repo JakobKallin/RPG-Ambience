@@ -65,8 +65,8 @@ describe('Adventure conversion', function() {
 						"color": "#abcdef"
 					},
 					"fade": {
-						"in": "1",
-						"out": "1"
+						"direction": "in out",
+						"duration": "1"
 					},
 					"image": {
 						"path": "",

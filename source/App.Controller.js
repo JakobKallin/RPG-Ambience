@@ -5,24 +5,12 @@
 Ambience.App = {};
 
 Ambience.App.Controller = function($scope, ambience) {
-	function start() {
-		document.addEventListener('keypress', $scope.onKeyPress);
-		document.addEventListener('keydown', $scope.onKeyDown);
-		loadAdventures();
-		// removeUnusedMedia();
-	}
-	
 	$scope.playScene = function(scene) {
-		converted = $scope.app.adventure.convertScene(scene);
-		if ( scene.layer === 'background' ) {
-			ambience.playBackground(converted);
-		} else {
-			ambience.playForeground(converted);
-		}
+		ambience.play(scene);
 	};
 	
 	$scope.playSelected = function() {
-		$scope.playScene($scope.app.adventure.current);
+		$scope.playScene($scope.app.scene);
 	};
 	
 	$scope.stopCurrent = function() {
@@ -191,7 +179,10 @@ Ambience.App.Controller = function($scope, ambience) {
 	
 	$scope.editorIsVisible = true;
 	
-	start();
+	document.addEventListener('keypress', $scope.onKeyPress);
+	document.addEventListener('keydown', $scope.onKeyDown);
+	loadAdventures();
+	// removeUnusedMedia();
 };
 
 Ambience.App.Controller.$inject = ['$scope', 'ambience'];

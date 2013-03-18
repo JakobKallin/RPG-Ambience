@@ -62,15 +62,6 @@ Ambience.Stage = function(node) {
 	}
 	
 	function play(newScene) {
-		var alreadyPlaying = scene !== null;
-		if ( alreadyPlaying && newScene.isMixin ) {
-			playMixin(newScene);
-		} else {
-			playRegularScene(newScene);
-		}
-	}
-
-	function playRegularScene(newScene) {
 		stop();
 
 		scene = newScene;
@@ -83,8 +74,13 @@ Ambience.Stage = function(node) {
 		}
 	}
 
-
-	function playMixin(mixin) {
+	function mixin(mixin) {
+		var alreadyPlaying = scene !== null;
+		if ( !alreadyPlaying ) {
+			play(mixin);
+			return;
+		}
+		
 		var newScene = Object.create(scene);
 		for ( var property in mixin ) {
 			newScene[property] = mixin[property];
@@ -145,6 +141,7 @@ Ambience.Stage = function(node) {
 	
 	return {
 		play: play,
+		mixin: mixin,
 		stop: stop,
 		fadeOut: fadeOut,
 		get sceneIsPlaying() {

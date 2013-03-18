@@ -25,57 +25,6 @@ Ambience.App.Adventure = function() {
 		return scene;
 	};
 	
-	self.convertScene = function(scene) {
-		var converted = new Ambience.Scene();
-		
-		converted.isMixin = scene.mixin;
-
-		var fadeDuration = scene.fade * 1000;
-		converted.fade = {
-			in: scene.fadeDirection.contains('in') ? fadeDuration : 0,
-			out: scene.fadeDirection.contains('out') ? fadeDuration : 0,
-		};
-
-		converted.background = { color: scene.background };
-		
-		if ( scene.image.path.length > 0 ) {
-			converted.image = {
-				url: scene.image.path,
-				style: { backgroundSize: scene.image.size }
-			};
-		}
-		
-		var actualTracks = scene.sound.tracks.filter(function(track) {
-			return track.path.length > 0 && track.isPlayable;
-		});
-		if ( actualTracks.length > 0 ) {
-			converted.sound = {
-				tracks: actualTracks.map(get('path')),
-				overlap: scene.sound.crossover,
-				shuffle: scene.sound.shuffle,
-				loop: scene.sound.loop,
-				volume: scene.sound.volume / 100
-			}
-		}
-		
-		if ( scene.text.string ) {
-			converted.text = {
-				string: scene.text.string,
-				style: {
-					fontSize: (window.innerWidth * scene.text.size / 100) + 'px',
-					fontFamily: scene.text.font,
-					fontStyle: scene.text.style,
-					fontWeight: scene.text.weight,
-					color: scene.text.color,
-					textAlign: scene.text.alignment,
-					padding: '0 ' + (window.innerWidth * scene.text.padding / 100) + 'px'
-				}
-			};
-		}
-		
-		return converted;
-	};
-	
 	self.namedScene = function(name) {
 		if ( name.length > 0 ) {
 			return self.scenes.first(function(scene) {

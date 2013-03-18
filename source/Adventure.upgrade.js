@@ -16,8 +16,8 @@ Ambience.App.Adventure.upgraders = {
 			scene.background = { color: scene.background };
 			
 			scene.fade = {
-				in: scene.fadeDirection.contains('in') ? scene.fade : 0,
-				out: scene.fadeDirection.contains('out') ? scene.fade : 0
+				direction: scene.fadeDirection,
+				duration: scene.fade
 			};
 			delete scene.fadeDirection;
 			

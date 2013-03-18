@@ -33,9 +33,8 @@ describe('Ambience mixin', function() {
 		stage.play(scene);
 		
 		var mixin = new Ambience.Scene(['Text']);
-		mixin.isMixin = true;
 		mixin.text.string = 'Mixin';
-		stage.play(mixin);
+		stage.mixin(mixin);
 		
 		expect(stage.textNode.textContent).toBe('Mixin');
 	});
@@ -46,9 +45,8 @@ describe('Ambience mixin', function() {
 		stage.play(scene);
 		
 		var mixin = new Ambience.Scene(['Image']);
-		mixin.isMixin = true;
 		mixin.image.url = 'test-image.jpg';
-		stage.play(mixin);
+		stage.mixin(mixin);
 		
 		expect(stage.textNode.textContent).toBe('Test');
 		expect(stage.imageNode.style.backgroundImage).toMatch(/test-image/);
@@ -61,10 +59,9 @@ describe('Ambience mixin', function() {
 			stage.play(scene);
 			
 			var mixin = new Ambience.Scene(['Text']);
-			mixin.isMixin = true;
 			mixin.text.string = 'Mixin';
 			mixin.fade.in = 2000;
-			stage.play(mixin);
+			stage.mixin(mixin);
 		});
 		
 		waits(1000);
@@ -77,10 +74,9 @@ describe('Ambience mixin', function() {
 	it('respects fading when a scene is not already playing', function() {
 		runs(function() {
 			var mixin = new Ambience.Scene(['Text']);
-			mixin.isMixin = true;
 			mixin.text.string = 'Mixin';
 			mixin.fade.in = 2000;
-			stage.play(mixin);
+			stage.mixin(mixin);
 		});
 		
 		waits(1000);
@@ -102,9 +98,8 @@ describe('Ambience mixin', function() {
 		
 		runs(function() {
 			var mixin = new Ambience.Scene(['Text']);
-			mixin.isMixin = true;
 			mixin.text.string = 'Mixin';
-			stage.play(mixin);
+			stage.mixin(mixin);
 		});
 		
 		waits(500);
@@ -126,9 +121,8 @@ describe('Ambience mixin', function() {
 		
 		runs(function() {
 			var mixin = new Ambience.Scene(['Sound']);
-			mixin.isMixin = true;
 			mixin.sound.tracks = ['test-audio.ogg'];
-			stage.play(mixin);
+			stage.mixin(mixin);
 		});
 		
 		waits(500);
@@ -145,10 +139,9 @@ describe('Ambience mixin', function() {
 			stage.play(scene);
 			
 			var mixin = new Ambience.Scene(['Sound']);
-			mixin.isMixin = true;
 			mixin.sound.tracks = ['test-audio-2s.ogg'];
 			mixin.sound.loop = false;
-			stage.play(mixin);
+			stage.mixin(mixin);
 		});
 		
 		waits(500);
@@ -171,9 +164,8 @@ describe('Ambience mixin', function() {
 		stage.play(scene);
 		
 		var mixin = new Ambience.Scene(['Image']);
-		mixin.isMixin = true;
 		mixin.image.url = 'test-image.jpg';
-		stage.play(mixin);
+		stage.mixin(mixin);
 		
 		expect(stageNode.style.visibility).toBe('visible');
 	});
@@ -186,11 +178,10 @@ describe('Ambience mixin', function() {
 			stage.play(scene);
 			
 			var mixin = new Ambience.Scene(['Sound']);
-			mixin.isMixin = true;
 			mixin.sound.tracks = ['test-audio-2s.ogg'];
 			mixin.sound.volume = 0.5;
 			mixin.sound.loop = false;
-			stage.play(mixin);
+			stage.mixin(mixin);
 		});
 		
 		waits(500);

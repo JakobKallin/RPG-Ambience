@@ -4,20 +4,12 @@
 
 Ambience.App = {};
 
-Ambience.App.Controller = function($scope) {
+Ambience.App.Controller = function($scope, ambience) {
 	function start() {
-		startAmbience();
-		startInterface();
+		document.addEventListener('keypress', $scope.onKeyPress);
+		document.addEventListener('keydown', $scope.onKeyDown);
 		loadAdventures();
 		// removeUnusedMedia();
-	}
-	
-	var ambience;
-	function startAmbience() {
-		ambience = new Ambience.App.Theater(
-			new Ambience.Stage(document.getElementById('background')),
-			new Ambience.Stage(document.getElementById('foreground'))
-		);
 	}
 	
 	$scope.playScene = function(scene) {
@@ -96,13 +88,7 @@ Ambience.App.Controller = function($scope) {
 	// 	$scope.media.removeUnusedMedia(usedIds);
 	// };
 	
-	var editorWidth = 0.75;
-	function startInterface() {
-		document.addEventListener('keypress', $scope.onKeyPress);
-		document.addEventListener('keydown', $scope.onKeyDown);
-	}
-	
-	$scope.editorWidth = editorWidth;
+	$scope.editorWidth = 0.75;
 	
 	$scope.onKeyDown = function(event) {
 		var key = Key.name(event.keyCode);
@@ -205,3 +191,5 @@ Ambience.App.Controller = function($scope) {
 	
 	start();
 };
+
+Ambience.App.Controller.$inject = ['$scope', 'ambience'];

@@ -37,7 +37,9 @@ Ambience.App.Controller = function($scope, ambience) {
 		},
 		set adventure(newAdventure) {
 			adventure = newAdventure;
-			$scope.app.scene = newAdventure.scenes[0];
+			if ( newAdventure !== null ) {
+				$scope.app.scene = newAdventure.scenes[0];
+			}
 		},
 		get scene() {
 			return scene;

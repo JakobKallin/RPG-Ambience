@@ -205,5 +205,3 @@ Ambience.App.Controller = function($scope) {
 	
 	start();
 };
-
-Ambience.App.Library = {};

@@ -321,10 +321,11 @@
 														<li data-ng-repeat="track in app.scene.sound.tracks">
 															<button
 																type="button"
-																class="secondary">Remove</button>
+																class="secondary"
+																data-ng-click="removeTrack(app.scene, track)">Remove</button>
 															<span
 																class="primary"
-																data-ng-class="{ unsupported: !isPlayable }">
+																data-ng-class="{ unsupported: !track.isPlayable }">
 																{{track.name}}
 															</span>
 															<audio
@@ -334,7 +335,8 @@
 													</ol>
 													<button
 														type="button"
-														class="file">Add Tracks</button>
+														class="file"
+														data-ng-click="selectTrack(app.scene)">Add Tracks</button>
 												</td>
 											</tr>
 										</table>

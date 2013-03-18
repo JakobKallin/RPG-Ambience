@@ -69,14 +69,30 @@ Ambience.App.Adventure.Controller = function($scope) {
 	$scope.selectImage = function(scene) {
 		$scope.library.selectImage(onLoad);
 		
-		function onLoad(imageURL) {
+		function onLoad(image) {
 			$scope.$apply(function() {
-				scene.image.url = imageURL;
+				scene.image.url = image.url;
+				scene.image.name = image.name;
+				scene.image.id = image.id;
 			});
 		}
 	};
 	
 	$scope.removeImage = function(scene) {
 		scene.image.url = null;
+	};
+	
+	$scope.selectTrack = function(scene) {
+		$scope.library.selectTrack(onLoad);
+		
+		function onLoad(track) {
+			$scope.$apply(function() {
+				scene.sound.tracks.add(track);
+			});
+		}
+	};
+	
+	$scope.removeTrack = function(scene, track) {
+		scene.sound.tracks.remove(track);
 	};
 };

@@ -14,8 +14,8 @@ Ambience.App.TestLibrary.prototype.loadAdventures = function(onLoad) {
 					colo: '#abcdef'
 				},
 				fade: {
-					in: '1',
-					out: '1'
+					in: 1,
+					out: 1
 				},
 				image: {
 					url: null,
@@ -27,18 +27,18 @@ Ambience.App.TestLibrary.prototype.loadAdventures = function(onLoad) {
 					tracks: [],
 					loop: true,
 					shuffle: true,
-					volume: '50',
-					crossover: '1'
+					volume: 50,
+					crossover: 1
 				},
 				text: {
 					string: 'Test string',
-					size: '5',
+					size: 5,
 					font: 'Test font',
 					color: '#abcdef',
 					bold: true,
 					italic: true,
 					alignment: 'center',
-					padding: '10'
+					padding: 10
 				}
 			}
 		]

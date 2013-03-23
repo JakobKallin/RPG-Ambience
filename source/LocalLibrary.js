@@ -41,7 +41,8 @@ Ambience.App.LocalLibrary = function() {
 		});
 		
 		input.click();
-	};
+		document.body.removeChild(input);
+	}
 	
 	return {
 		adventures: adventures,

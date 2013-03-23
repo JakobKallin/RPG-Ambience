@@ -4,7 +4,7 @@
 
 Ambience.App = {};
 
-Ambience.App.Controller = function($scope, ambience) {
+Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLibrary) {
 	$scope.playScene = function(scene) {
 		ambience.play(scene);
 	};
@@ -35,7 +35,12 @@ Ambience.App.Controller = function($scope, ambience) {
 		set scene(newScene) {
 			scene = newScene;
 		},
-		adventures: []
+		library: localLibrary,
+		libraryIsSelected: false,
+		libraries: {
+			local: localLibrary,
+			googleDrive: googleDriveLibrary
+		}
 	};
 	
 	$scope.createAdventure = function() {
@@ -47,27 +52,33 @@ Ambience.App.Controller = function($scope, ambience) {
 	};
 	
 	$scope.addAdventure = function(adventure) {
-		$scope.app.adventures.push(adventure);
+		$scope.app.library.adventures.push(adventure);
 		$scope.app.adventure = adventure;
 	};
 	
 	$scope.removeSelected = function() {
-		$scope.app.adventures.remove($scope.app.adventure);
+		$scope.app.library.adventures.remove($scope.app.adventure);
 		$scope.app.adventure = null;
 		$scope.app.scene = null;
 	};
 	
-	$scope.library = new Ambience.App.TestLibrary();
-	var loadAdventures = function() {
-		$scope.library.loadAdventures(onLoad);
+	$scope.selectLibrary = function(newLibrary) {
+		$scope.app.library = newLibrary;
+		$scope.libraryIsSelected = true;
+		$scope.app.library.adventures.load(onLoad);
 		
 		function onLoad(adventure) {
-			$scope.$apply(function() {
-				$scope.app.adventures.push(adventure);
-				if ( $scope.app.adventures.length === 1 ) {
+			var callback = function() {
+				if ( $scope.app.library.adventures.length === 1 ) {
 					$scope.app.adventure = adventure;
 				}
-			});
+			};
+
+			if ( $scope.$$phase ) {
+				callback();
+			} else {
+				$scope.$apply(callback);
+			}
 		}
 	};
 	
@@ -149,7 +160,7 @@ Ambience.App.Controller = function($scope, ambience) {
 	
 	$scope.onExit = function(event) {
 		$scope.permanentlyRemoveAdventures();
-		$scope.library.save($scope.app.adventures);
+		$scope.app.library.save($scope.app.adventures);
 		
 		if ( $scope.exitMessage ) {
 			return event.returnValue = $scope.exitMessage;
@@ -167,7 +178,7 @@ Ambience.App.Controller = function($scope, ambience) {
 		dropEvent.preventDefault();
 		Array.prototype.forEach.call(dropEvent.dataTransfer.files, function(file) {
 			if ( file.name.match(/\.(json)$/i) ) {
-				$scope.library.loadFile(file);
+				$scope.app.library.loadFile(file);
 			}
 		});
 	};
@@ -181,8 +192,7 @@ Ambience.App.Controller = function($scope, ambience) {
 	
 	document.addEventListener('keypress', $scope.onKeyPress);
 	document.addEventListener('keydown', $scope.onKeyDown);
-	loadAdventures();
 	// removeUnusedMedia();
 };
 
-Ambience.App.Controller.$inject = ['$scope', 'ambience'];
+Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

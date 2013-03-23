@@ -19,7 +19,7 @@ Ambience.App.Adventure = function() {
 	});
 	
 	self.addScene = function() {
-		var scene = Ambience.App.Scene();
+		var scene = new Ambience.App.Scene();
 		self.scenes.push(scene);
 				
 		return scene;

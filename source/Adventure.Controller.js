@@ -19,7 +19,9 @@ Ambience.App.Adventure.Controller = function($scope) {
 	}
 
 	$scope.copyScene = function(scene) {
-		var newScene = angular.copy(scene);
+		// We don't create an actual copy because getters and setters are not copied (only their values).
+		var newScene = new Ambience.App.Scene();
+		Object.overlay(newScene, scene);
 		
 		var index = $scope.app.adventure.scenes.indexOf($scope.app.scene) + 1
 		$scope.app.adventure.scenes.splice(index, 0, newScene);

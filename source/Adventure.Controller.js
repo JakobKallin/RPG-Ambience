@@ -69,14 +69,20 @@ Ambience.App.Adventure.Controller = function($scope) {
 	});
 	
 	$scope.selectImage = function(scene) {
-		$scope.library.selectImage(onLoad);
+		$scope.app.library.selectImage(onLoad);
 		
 		function onLoad(image) {
-			$scope.$apply(function() {
+			var callback = function() {
 				scene.image.url = image.url;
 				scene.image.name = image.name;
 				scene.image.id = image.id;
-			});
+			};
+			
+			if ( $scope.$$phase ) {
+				callback();
+			} else {
+				$scope.$apply(callback);
+			}
 		}
 	};
 	

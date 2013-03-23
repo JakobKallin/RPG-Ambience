@@ -107,7 +107,6 @@ Ambience.App.Theater = function(background, foreground) {
 	
 	return {
 		play: play,
-		stop: stop,
 		fadeOutForeground: fadeOutForeground,
 		fadeOutBackground: fadeOutBackground,
 		fadeOutTopmost: fadeOutTopmost,

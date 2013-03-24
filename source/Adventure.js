@@ -7,23 +7,15 @@ Ambience.App.Adventure = function() {
 	
 	self.title = '';
 	self.scenes = [];
+	self.creationDate = new Date();
 	
-	// Adventure version, unrelated to application version.
-	// Should be increased whenever the format of an adventure changes.
-	self.version = 1;
+	self.version = Ambience.App.Adventure.version;
 	
 	Object.defineProperty(self, 'media', {
 		get: function() {
 			return self.scenes.map(get('media')).flatten();
 		}
 	});
-	
-	self.addScene = function() {
-		var scene = new Ambience.App.Scene();
-		self.scenes.push(scene);
-				
-		return scene;
-	};
 	
 	self.namedScene = function(name) {
 		if ( name.length > 0 ) {
@@ -95,7 +87,9 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 		
 		// Do not copy if getter and/or setter.
 		if ( !descriptor.get && !descriptor.set ) {
-			if ( value instanceof Array ) {
+			if ( value instanceof Date ) {
+				copy[property] = new Date(value.getTime());
+			} else if ( value instanceof Array ) {
 				copy[property] = new Array(value.length);
 				for ( var i = 0; i < value.length; ++i ) {
 					copyProperty(value, i, copy[property]);
@@ -116,6 +110,7 @@ Ambience.App.Adventure.fromConfig = function(config) {
 	
 	adventure.title = config.title;
 	adventure.version = config.version;
+	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {
 		var scene = new Ambience.App.Scene();
@@ -126,4 +121,6 @@ Ambience.App.Adventure.fromConfig = function(config) {
 	return adventure;
 };
 
-Ambience.App.Adventure.version = 1;
+// Adventure version, unrelated to application version.
+// Should be increased whenever the format of an adventure changes.
+Ambience.App.Adventure.version = 2;

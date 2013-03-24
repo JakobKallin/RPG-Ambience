@@ -46,13 +46,13 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.App.Adventure($scope);
 		adventure.title = 'Untitled adventure';
-		adventure.addScene();
+		adventure.scenes.push(new Ambience.App.Scene());
 		$scope.addAdventure(adventure);
 		$scope.app.renameInProgress = true;
 	};
 	
 	$scope.addAdventure = function(adventure) {
-		$scope.app.library.adventures.push(adventure);
+		$scope.app.library.adventures.unshift(adventure);
 		$scope.app.adventure = adventure;
 	};
 	
@@ -72,7 +72,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		
 		function onLoad(adventure) {
 			var callback = function() {
-				if ( $scope.app.library.adventures.length === 1 ) {
+				if ( !$scope.app.adventure ) {
 					$scope.app.adventure = adventure;
 				}
 			};

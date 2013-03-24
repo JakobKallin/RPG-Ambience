@@ -12,9 +12,13 @@ Ambience.App.LocalLibrary = function() {
 			var config = JSON.parse(localStorage.getItem(i));
 			var adventure = Ambience.App.Adventure.fromConfig(config);
 			this.push(adventure);
-			onLoad(adventure);
 		}
 		
+		this.sort(function(a, b) {
+			return a.creationDate < b.creationDate;
+		});
+		
+		this.forEach(onLoad);
 		self.adventures.haveLoaded = true;
 	};
 	

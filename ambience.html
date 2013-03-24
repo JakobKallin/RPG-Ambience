@@ -209,9 +209,10 @@
 												<td>
 													<button
 														type="button"
-														class="file secondary"
+														class="secondary"
 														data-ng-hide="app.scene.image.url"
-														data-ng-click="selectImage(app.scene)">Select Image</button>
+														data-ng-click="selectImage(app.scene)"
+														accept="">Select Image</button>
 													<button
 														type="button"
 														class="secondary"
@@ -336,8 +337,7 @@
 													</ol>
 													<button
 														type="button"
-														class="file"
-														data-ng-click="selectTrack(app.scene)">Add Tracks</button>
+														data-ng-click="selectTracks(app.scene)">Add Tracks</button>
 												</td>
 											</tr>
 										</table>

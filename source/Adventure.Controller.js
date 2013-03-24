@@ -90,13 +90,19 @@ Ambience.App.Adventure.Controller = function($scope) {
 		scene.image.url = null;
 	};
 	
-	$scope.selectTrack = function(scene) {
-		$scope.library.selectTrack(onLoad);
+	$scope.selectTracks = function(scene) {
+		$scope.app.library.selectTracks(onLoad);
 		
 		function onLoad(track) {
-			$scope.$apply(function() {
+			var callback = function() {
 				scene.sound.tracks.add(track);
-			});
+			};
+			
+			if ( $scope.$$phase ) {
+				callback();
+			} else {
+				$scope.$apply(callback);
+			}
 		}
 	};
 	

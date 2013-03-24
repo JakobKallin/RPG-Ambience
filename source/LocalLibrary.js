@@ -17,6 +17,40 @@ Ambience.App.LocalLibrary = function() {
 	};
 	
 	function selectImage(onLoad) {
+		selectFiles(onFilesLoad);
+		
+		function onFilesLoad(files) {
+			var file = files[0];
+			var objectURL = window.URL.createObjectURL(file);
+			var id = objectURL.replace(/^blob:/, '');
+			
+			onLoad({
+				name: file.name,
+				url: objectURL,
+				id: id
+			});
+		}
+	}
+	
+	function selectTracks(onLoad) {
+		selectFiles(onFilesLoad);
+		
+		function onFilesLoad(files) {
+			Array.prototype.forEach.call(files, function(file) {
+				var objectURL = window.URL.createObjectURL(file)
+				var id = objectURL.replace(/^blob:/, '');
+				
+				onLoad({
+					name: file.name,
+					url: objectURL,
+					id: id,
+					mimeType: file.type
+				});
+			});
+		}
+	}
+	
+	function selectFiles(onLoad) {
 		// We create a new file input on every click because we want a change event even if we select the same file.
 		var input = document.createElement('input');
 		input.type = 'file';
@@ -29,15 +63,7 @@ Ambience.App.LocalLibrary = function() {
 		// This should be before the call to click.
 		// It makes more sense semantically, and IE10 seems to require it.
 		input.addEventListener('change', function(event) {
-			var file = event.target.files[0];
-			var objectURL = window.URL.createObjectURL(file);
-			var id = objectURL.replace(/^blob:/, '');
-			
-			onLoad({
-				name: file.name,
-				url: objectURL,
-				id: id
-			});
+			onLoad(event.target.files);
 		});
 		
 		input.click();
@@ -46,6 +72,7 @@ Ambience.App.LocalLibrary = function() {
 	
 	return {
 		adventures: adventures,
-		selectImage: selectImage
+		selectImage: selectImage,
+		selectTracks: selectTracks
 	};
 };

@@ -28,8 +28,12 @@ window.addEventListener('load', function() {
 			new Ambience.Stage(document.getElementById('foreground'))
 		);
 	});
-	module.service('localLibrary', Ambience.App.LocalLibrary);
-	module.service('googleDriveLibrary', Ambience.App.GoogleDriveLibrary);
+	module.service('localLibrary', function() {
+		return new Ambience.App.LocalLibrary();
+	});
+	module.service('googleDriveLibrary', function() {
+		return new Ambience.App.GoogleDriveLibrary();
+	});
 	angular.bootstrap(document, ['ambience']);
 	
 	var splashScreen = document.getElementById('splash');

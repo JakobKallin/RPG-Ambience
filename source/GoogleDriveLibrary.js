@@ -1,17 +1,15 @@
 Ambience.App.GoogleDriveLibrary = function() {
-	var adventures = [];
-	adventures.haveLoaded = false;
-	adventures.load = function(onLoad) {
-		if ( adventures.haveLoaded ) {
+	var self = this;
+	
+	self.adventures = [];
+	self.adventures.haveLoaded = false;
+	self.adventures.load = function(onLoad) {
+		if ( self.adventures.haveLoaded ) {
 			return;
 		}
 		
 		console.log('Loading adventures from Google Drive.');
 		
-		adventures.haveLoaded = true;
-	};
-	
-	return {
-		adventures: adventures
+		self.adventures.haveLoaded = true;
 	};
 };

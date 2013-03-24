@@ -25,7 +25,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		},
 		set adventure(newAdventure) {
 			adventure = newAdventure;
-			if ( newAdventure !== null ) {
+			if ( newAdventure === null ) {
+				$scope.app.scene = null;
+			} else {
 				$scope.app.scene = newAdventure.scenes[0];
 			}
 		},
@@ -56,10 +58,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.adventure = adventure;
 	};
 	
-	$scope.removeSelected = function() {
-		$scope.app.library.adventures.remove($scope.app.adventure);
-		$scope.app.adventure = null;
-		$scope.app.scene = null;
+	$scope.removeAdventure = function(adventure) {
+		$scope.app.adventure = $scope.app.library.adventures.closest(adventure);
+		$scope.app.library.adventures.remove(adventure);
 	};
 	
 	var beforeunloadListener;

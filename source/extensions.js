@@ -54,6 +54,25 @@ Array.prototype.flatten = function() {
 	return array.concat.apply(array, this);
 };
 
+Array.prototype.closest = function(value) {
+	var index = this.indexOf(value);
+	var closestIndex;
+	
+	if ( index === -1 ) {
+		closestIndex = 0;
+	} else if ( index === 0 ) {
+		closestIndex = 1;
+	} else {
+		closestIndex = index - 1;
+	}
+	
+	if ( closestIndex in this ) {
+		return this[closestIndex];
+	} else {
+		return null;
+	}
+};
+
 String.prototype.contains = function(substring) {
 	return this.indexOf(substring) !== -1;
 };

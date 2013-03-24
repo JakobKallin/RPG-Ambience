@@ -17,6 +17,35 @@ Ambience.App.LocalLibrary = function() {
 		
 		self.adventures.haveLoaded = true;
 	};
+	
+	self.adventures.save = function() {
+		console.log('Saving adventures to local storage.');
+		
+		// Save old JSON if something goes wrong when saving new JSON.
+		var oldJSON = new Array(localStorage.length);
+		for ( var i = 0; i < localStorage.length; ++i ) {
+			oldJSON[i] = localStorage.getItem(i);
+		}
+		
+		try {
+			localStorage.clear();
+			this.forEach(function(adventure, index) {
+				var config = adventure.toConfig();
+				var json = angular.toJson(config);
+				localStorage.setItem(index, json);
+			});
+		} catch(error) {
+			// Restore old JSON, since something went wrong.
+			localStorage.clear();
+			for ( var i = 0; i < oldJSON.length; ++i ) {
+				localStorage.setItem(i, oldJSON[i]);
+			}
+			
+			throw new Error(
+				'There was an error saving your adventure:\n\n' + error.message
+			);
+		}
+	};
 };
 
 Ambience.App.LocalLibrary.prototype.selectImage = function(onLoad) {
@@ -74,4 +103,12 @@ Ambience.App.LocalLibrary.prototype.selectFiles = function(onLoad, mimeType) {
 	
 	input.click();
 	document.body.removeChild(input);
+};
+
+Ambience.App.LocalLibrary.prototype.onExit = function() {
+	try {
+		this.adventures.save();
+	} catch(error) {
+		return error.message;
+	}
 };

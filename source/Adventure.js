@@ -77,6 +77,40 @@ Ambience.App.Adventure = function() {
 	// };
 };
 
+Ambience.App.Adventure.prototype.toConfig = function() {
+	return copyObject(this);
+	
+	function copyObject(original) {
+		var copy = {};
+		for ( var property in original ) {
+			copyProperty(original, property, copy);
+		}
+		
+		return copy;
+	}
+	
+	function copyProperty(original, property, copy) {
+		var value = original[property];
+		var descriptor = Object.getPropertyDescriptor(original, property);
+		
+		// Do not copy if getter and/or setter.
+		if ( !descriptor.get && !descriptor.set ) {
+			if ( value instanceof Array ) {
+				copy[property] = new Array(value.length);
+				for ( var i = 0; i < value.length; ++i ) {
+					copyProperty(value, i, copy[property]);
+				}
+			} else if ( value instanceof Function ) {
+				// Do nothing.
+			} else if ( value instanceof Object ) {
+				copy[property] = copyObject(value);
+			} else {
+				copy[property] = value;
+			}
+		}
+	}
+};
+
 Ambience.App.Adventure.fromConfig = function(config) {
 	var adventure = new Ambience.App.Adventure();
 	

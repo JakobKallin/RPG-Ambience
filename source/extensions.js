@@ -14,6 +14,12 @@ Object.overlay = function(base, overlay) {
 	}
 };
 
+Object.getPropertyDescriptor = function(object, property) {
+	var ownDescriptor = Object.getOwnPropertyDescriptor(object, property);
+	var proto = Object.getPrototypeOf(object);	
+	return ownDescriptor || Object.getPropertyDescriptor(proto, property) || undefined;
+};
+
 Array.prototype.contains = function(value) {
 	return this.indexOf(value) !== -1;
 };

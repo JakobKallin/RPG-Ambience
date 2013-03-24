@@ -62,7 +62,10 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.scene = null;
 	};
 	
+	var beforeunloadListener;
 	$scope.selectLibrary = function(newLibrary) {
+		window.removeEventListener('beforeunload', beforeunloadListener);
+		
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
 		$scope.app.library.adventures.load(onLoad);
@@ -80,6 +83,14 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				$scope.$apply(callback);
 			}
 		}
+		
+		beforeunloadListener = function(event) {
+			var returnValue = $scope.app.library.onExit();
+			if ( returnValue !== undefined ) {
+				return event.returnValue = returnValue;
+			}
+		};
+		window.addEventListener('beforeunload', beforeunloadListener);
 	};
 	
 	// $scope.media = new Ambience.MediaLibrary(Ambience.App.db);

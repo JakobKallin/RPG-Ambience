@@ -5,8 +5,8 @@
 Ambience.App.Adventure.Controller = function($scope) {
 	$scope.addScene = function() {
 		var scene = new Ambience.App.Scene()
-		adventure.scenes.push(scene);
-		$scope.selectScene(scene);
+		$scope.app.adventure.scenes.push(scene);
+		$scope.app.scene = scene;
 		
 		return scene;
 	};
@@ -30,44 +30,13 @@ Ambience.App.Adventure.Controller = function($scope) {
 	};
 
 	$scope.removeScene = function(scene) {
-		var previous = $scope.previousScene;
-		var app = $scope.app.scene;
-		var next = $scope.nextScene;
+		$scope.app.scene = $scope.app.adventure.scenes.closest(scene);
+		$scope.app.adventure.scenes.remove(scene);
 		
-		if ( previous ) {
-			$scope.selectScene(previous);
-		} else if ( next ) {
-			$scope.selectScene(next);
-		} else {
+		if ( !$scope.app.scene ) {
 			$scope.addScene();
 		}
-		
-		// Note that `app` is now different from `$scope.app.scene`.
-		var index = $scope.app.adventure.scenes.indexOf(app);
-		$scope.app.adventure.scenes.splice(index, 1);
 	};
-	
-	Object.defineProperty($scope, 'previousScene', {
-		get: function() {
-			var index = $scope.app.adventure.scenes.indexOf($scope.app.scene);
-			if ( index > 0 ) {
-				return $scope.app.adventure.scenes[index - 1];
-			} else {
-				return null;
-			}
-		}
-	});
-	
-	Object.defineProperty($scope, 'nextScene', {
-		get: function() {
-			var index = $scope.app.adventure.scenes.indexOf($scope.app.scene);
-			if ( index < $scope.app.adventure.scenes.length - 1 ) {
-				return $scope.app.adventure.scenes[index + 1];
-			} else {
-				return null;
-			}
-		}
-	});
 	
 	$scope.selectImage = function(scene) {
 		$scope.app.library.selectImage(onLoad);

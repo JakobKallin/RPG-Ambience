@@ -17,7 +17,7 @@ Ambience.App.LocalLibrary = function() {
 	};
 	
 	function selectImage(onLoad) {
-		selectFiles(onFilesLoad);
+		selectFiles(onFilesLoad, 'image/*');
 		
 		function onFilesLoad(files) {
 			var file = files[0];
@@ -33,7 +33,7 @@ Ambience.App.LocalLibrary = function() {
 	}
 	
 	function selectTracks(onLoad) {
-		selectFiles(onFilesLoad);
+		selectFiles(onFilesLoad, 'audio/*');
 		
 		function onFilesLoad(files) {
 			Array.prototype.forEach.call(files, function(file) {
@@ -50,11 +50,14 @@ Ambience.App.LocalLibrary = function() {
 		}
 	}
 	
-	function selectFiles(onLoad) {
+	function selectFiles(onLoad, mimeType) {
 		// We create a new file input on every click because we want a change event even if we select the same file.
 		var input = document.createElement('input');
 		input.type = 'file';
 		input.multiple = true;
+		if ( mimeType ) {
+			input.accept = mimeType;
+		}
 		
 		// We need to actually insert the node for IE10 to accept the click() call below.
 		input.style.display = 'none';

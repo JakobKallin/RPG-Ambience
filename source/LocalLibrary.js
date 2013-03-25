@@ -73,13 +73,7 @@ Ambience.App.LocalLibrary.prototype.selectImage = function(onLoad) {
 		var objectURL = window.URL.createObjectURL(file);
 		var id = objectURL.replace(/^blob:/, '');
 		
-		self.media.saveMedia(id, file);
-		
-		onLoad({
-			name: file.name,
-			url: objectURL,
-			id: id
-		});
+		self.media.saveMedia(id, file, onLoad);
 	}
 };
 
@@ -93,14 +87,7 @@ Ambience.App.LocalLibrary.prototype.selectTracks = function(onLoad) {
 			var objectURL = window.URL.createObjectURL(file)
 			var id = objectURL.replace(/^blob:/, '');
 			
-			self.media.saveMedia(id, file);
-			
-			onLoad({
-				name: file.name,
-				url: objectURL,
-				id: id,
-				mimeType: file.type
-			});
+			self.media.saveMedia(id, file, onLoad);
 		});
 	}
 };
@@ -204,26 +191,44 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 		};
 	};
 	
-	var saveWorker = new Worker('source/MediaSaver.js');
-	self.saveMedia = function(id, file) {
+	var readWorker = new Worker('source/MediaReader.js');
+	var mediaBeingSaved = {};
+	var saveListeners = {};
+	
+	self.saveMedia = function(id, file, onSave) {
 		console.log('Saving media: ' + id);
 		
-		saveWorker.postMessage({
+		mediaBeingSaved[id] = {
+			id: id,
+			name: file.name,
+			mimeType: file.type
+		};
+		saveListeners[id] = onSave;
+		
+		readWorker.postMessage({
 			id: id,
 			file: file
 		});
 	};
 	
-	saveWorker.onmessage = function(event) {
+	readWorker.onmessage = function(event) {
 		var message = event.data;
 		var id = message.id;
-		var dataURL = message.dataURL;
+		var url = message.url;
 		
 		self.db.transaction('media', 'readwrite')
 		.objectStore('media')
-		.put(dataURL, id)
+		.put(url, id)
 		.onsuccess = function() {
 			console.log('Done saving media: ' + id);
+			
+			var media = mediaBeingSaved[id];
+			media.url = url;
+			var listener = saveListeners[id];
+			listener(media);
+			
+			delete mediaBeingSaved[id];
+			delete saveListeners[id];
 		};
 	};
 	

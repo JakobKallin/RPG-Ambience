@@ -2,15 +2,12 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-self.onmessage = function(messageEvent) {
-	var message = messageEvent.data;
-	var id = message.id;
-	var file = message.file;
-	
+self.onmessage = function(event) {
+	var message = event.data;
 	var reader = new FileReaderSync();
-	var dataURL = reader.readAsDataURL(file);
+	var url = reader.readAsDataURL(message.file);
 	self.postMessage({
-		id: id,
-		dataURL: dataURL
+		id: message.id,
+		url: url
 	});
 };

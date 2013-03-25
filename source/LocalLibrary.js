@@ -28,7 +28,9 @@ Ambience.App.LocalLibrary = function() {
 		this.forEach(onAdventureLoad);
 		self.adventures.haveLoaded = true;
 		
-		self.media.init();		
+		var usedMedia = this.map(get('media')).flatten();
+		var usedIds = usedMedia.map(get('id'));
+		self.media.init(usedIds);
 	};
 	
 	self.adventures.save = function() {
@@ -128,7 +130,7 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 	
 	self.db = null;
 	
-	self.init = function() {
+	self.init = function(usedIds) {
 		var request = indexedDB.open('media');
 		
 		request.onupgradeneeded = function(event) {
@@ -144,6 +146,8 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 				self.loadScene(descriptor.scene, descriptor.onMediaLoad);
 			});
 			scenesToLoad.length = 0;
+			
+			self.removeUnusedMedia(usedIds);
 		};
 	};
 	

@@ -24,7 +24,7 @@ Ambience.App.Scene = function() {
 		get media() {
 			// We use this convoluted code because concat does not work as expected on array-like objects.
 			var tracks = this.sound.tracks.map(function(track) { return track; });
-			if ( this.image.id || this.image.path ) {
+			if ( this.image.id || this.image.url ) {
 				tracks.push(this.image);
 			}
 			return tracks;

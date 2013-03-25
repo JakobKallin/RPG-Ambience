@@ -70,7 +70,17 @@ Ambience.App.Adventure = function() {
 };
 
 Ambience.App.Adventure.prototype.toConfig = function() {
-	return copyObject(this);
+	var copy = copyObject(this);
+	
+	// Delete temporary media URLs; IDs hold the persistent info.
+	copy.scenes.forEach(function(scene) {
+		delete scene.image.url;
+		scene.sound.tracks.forEach(function(sound) {
+			delete sound.url;
+		})
+	});
+	
+	return copy;
 	
 	function copyObject(original) {
 		var copy = {};

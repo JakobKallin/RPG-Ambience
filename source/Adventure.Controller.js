@@ -6,6 +6,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 	$scope.addScene = function() {
 		var scene = new Ambience.App.Scene()
 		$scope.app.adventure.scenes.push(scene);
+		$scope.app.library.load(scene);
 		$scope.app.scene = scene;
 		
 		return scene;
@@ -57,7 +58,9 @@ Ambience.App.Adventure.Controller = function($scope) {
 	};
 	
 	$scope.removeImage = function(scene) {
+		scene.image.id = null;
 		scene.image.url = null;
+		scene.image.name = null;
 	};
 	
 	$scope.selectTracks = function(scene) {
@@ -65,7 +68,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 		
 		function onLoad(track) {
 			var callback = function() {
-				scene.sound.tracks.add(track);
+				scene.sound.tracks.push(track);
 			};
 			
 			if ( $scope.$$phase ) {

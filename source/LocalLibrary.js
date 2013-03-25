@@ -1,9 +1,13 @@
+// This file is part of RPG Ambience
+// Copyright 2012-2013 Jakob Kallin
+// License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
+
 Ambience.App.LocalLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
 	self.adventures.haveLoaded = false;
-	self.adventures.load = function(onLoad) {
+	self.adventures.load = function(onAdventureLoad, onMediaLoad) {
 		if ( self.adventures.haveLoaded ) {
 			return;
 		}
@@ -11,6 +15,9 @@ Ambience.App.LocalLibrary = function() {
 		for ( var i = 0; i < localStorage.length; ++i ) {
 			var config = JSON.parse(localStorage.getItem(i));
 			var adventure = Ambience.App.Adventure.fromConfig(config);
+			adventure.scenes.forEach(function(scene) {
+				self.media.loadScene(scene, onMediaLoad);
+			});
 			this.push(adventure);
 		}
 		
@@ -18,8 +25,10 @@ Ambience.App.LocalLibrary = function() {
 			return a.creationDate < b.creationDate;
 		});
 		
-		this.forEach(onLoad);
+		this.forEach(onAdventureLoad);
 		self.adventures.haveLoaded = true;
+		
+		self.media.init();		
 	};
 	
 	self.adventures.save = function() {
@@ -50,15 +59,21 @@ Ambience.App.LocalLibrary = function() {
 			);
 		}
 	};
+	
+	self.media = new Ambience.App.LocalLibrary.MediaLibrary();
 };
 
 Ambience.App.LocalLibrary.prototype.selectImage = function(onLoad) {
-	this.selectFiles(onFilesLoad, 'image/*');
+	var self = this;
+	
+	self.selectFiles(onFilesLoad, 'image/*');
 	
 	function onFilesLoad(files) {
 		var file = files[0];
 		var objectURL = window.URL.createObjectURL(file);
 		var id = objectURL.replace(/^blob:/, '');
+		
+		self.media.saveMedia(id, file);
 		
 		onLoad({
 			name: file.name,
@@ -69,12 +84,16 @@ Ambience.App.LocalLibrary.prototype.selectImage = function(onLoad) {
 };
 
 Ambience.App.LocalLibrary.prototype.selectTracks = function(onLoad) {
+	var self = this;
+	
 	this.selectFiles(onFilesLoad, 'audio/*');
 	
 	function onFilesLoad(files) {
 		Array.prototype.forEach.call(files, function(file) {
 			var objectURL = window.URL.createObjectURL(file)
 			var id = objectURL.replace(/^blob:/, '');
+			
+			self.media.saveMedia(id, file);
 			
 			onLoad({
 				name: file.name,
@@ -115,4 +134,120 @@ Ambience.App.LocalLibrary.prototype.onExit = function() {
 	} catch(error) {
 		return error.message;
 	}
+};
+
+Ambience.App.LocalLibrary.MediaLibrary = function() {
+	var self = this;
+	
+	self.db = null;
+	
+	self.init = function() {
+		var request = indexedDB.open('media');
+		
+		request.onupgradeneeded = function(event) {
+			var db = event.target.result;
+			if ( !db.objectStoreNames.contains('media') ) {
+				db.createObjectStore('media');
+			}
+		};
+		
+		request.onsuccess = function(event) {
+			self.db = event.target.result;
+			scenesToLoad.forEach(function(descriptor) {
+				self.loadScene(descriptor.scene, descriptor.onMediaLoad);
+			});
+			scenesToLoad.length = 0;
+		};
+	};
+	
+	var scenesToLoad = [];
+	self.loadScene = function(scene, onMediaLoad) {
+		if ( self.db ) {
+			scene.media.forEach(function(media) {
+				self.loadMedia(media.id, function(objectURL) {
+					media.url = objectURL;
+					onMediaLoad(media);
+				});
+			});
+		} else {
+			scenesToLoad.push({
+				scene: scene,
+				onMediaLoad: onMediaLoad
+			});
+		}
+	};
+	
+	self.loadMedia = function(id, onSuccess) {
+		console.log('Loading media: ' + id);
+		
+		self.db.transaction('media', 'readonly')
+		.objectStore('media')
+		.get(id)
+		.onsuccess = function(event) {
+			var dataURL = event.target.result;
+			
+			var base64 = dataURL.substring(dataURL.indexOf(',') + 1);
+			var byteString = atob(base64);
+			var mimeType = dataURL.substring(dataURL.indexOf(':') + 1, dataURL.indexOf(';'));
+			
+			var buffer = new ArrayBuffer(byteString.length);
+			var integers = new Uint8Array(buffer);
+			for ( var i = 0; i < byteString.length; ++i ) {
+				integers[i] = byteString.charCodeAt(i);
+			}
+			var blob = new Blob([integers], { type: mimeType });
+			var objectURL = window.URL.createObjectURL(blob);
+			
+			onSuccess(objectURL, mimeType);
+			
+			console.log('Done loading media: ' + id);
+		};
+	};
+	
+	var saveWorker = new Worker('source/MediaSaver.js');
+	self.saveMedia = function(id, file) {
+		console.log('Saving media: ' + id);
+		
+		saveWorker.postMessage({
+			id: id,
+			file: file
+		});
+	};
+	
+	saveWorker.onmessage = function(event) {
+		var message = event.data;
+		var id = message.id;
+		var dataURL = message.dataURL;
+		
+		self.db.transaction('media', 'readwrite')
+		.objectStore('media')
+		.put(dataURL, id)
+		.onsuccess = function() {
+			console.log('Done saving media: ' + id);
+		};
+	};
+	
+	self.removeUnusedMedia = function(usedIds) {
+		var store = self.db.transaction('media', 'readwrite').objectStore('media');
+		var mediaCount = 0;
+		var removedCount = 0;
+		
+		store.openCursor().onsuccess = function(event) {
+			var cursor = event.target.result;
+			if ( cursor ) {
+				mediaCount += 1;
+				var id = cursor.key;
+				if ( !usedIds.contains(id) ) {
+					console.log('Removing media: ' + id);
+					store.delete(id);
+					removedCount += 1;
+				} else {
+					console.log('Retaining media: ' + id);
+				}
+				cursor.continue();
+			} else {
+				console.log('Removed ' + removedCount + ' of ' + mediaCount + ' media');
+			}
+		};
+	};
 };

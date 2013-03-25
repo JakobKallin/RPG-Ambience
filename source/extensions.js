@@ -2,7 +2,7 @@ Object.overlay = function(base, overlay) {
 	for ( var property in base ) {
 		if ( property in overlay ) {
 			if ( base[property] instanceof Array ) {
-				overlay[property].map(function(subvalue) {
+				overlay[property].forEach(function(subvalue) {
 					base[property].push(subvalue);
 				});
 			} else if ( base[property] instanceof Object ) {

@@ -69,9 +69,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
-		$scope.app.library.adventures.load(onLoad);
+		$scope.app.library.adventures.load(onAdventureLoad, onMediaLoad);
 		
-		function onLoad(adventure) {
+		function onAdventureLoad(adventure) {
 			var callback = function() {
 				if ( !$scope.app.adventure ) {
 					$scope.app.adventure = adventure;
@@ -83,6 +83,11 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			} else {
 				$scope.$apply(callback);
 			}
+		}
+		
+		// Just make sure that the media URL change is registered.
+		function onMediaLoad(media) {
+			$scope.$apply(function() {});
 		}
 		
 		beforeunloadListener = function(event) {
@@ -198,6 +203,12 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	$scope.onDrag = function(viewModel, dragEvent) {
 		dragEvent.preventDefault();
 		dragEvent.dataTransfer.dropEffect = 'copy';
+	};
+	
+	$scope.trackIsPlayable = function(track) {
+		return Boolean(
+			document.createElement('audio').canPlayType(track.mimeType)
+		);
 	};
 	
 	$scope.editorIsVisible = true;

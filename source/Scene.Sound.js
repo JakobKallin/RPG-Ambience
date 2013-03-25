@@ -4,12 +4,6 @@
 
 Ambience.App.Scene.Sound = function() {
 	var tracks = [];
-	tracks.add = function(track) {
-		track.isPlayable = Boolean(
-			document.createElement('audio').canPlayType(track.mimeType)
-		);
-		this.push(track);
-	};
 	
 	return {
 		tracks: tracks,

@@ -7,7 +7,7 @@ Ambience.App.LocalLibrary = function() {
 	
 	self.adventures = [];
 	self.adventures.haveLoaded = false;
-	self.adventures.load = function(onAdventureLoad, onMediaLoad) {
+	self.adventures.load = function(onAdventureLoad) {
 		if ( self.adventures.haveLoaded ) {
 			return;
 		}
@@ -15,9 +15,6 @@ Ambience.App.LocalLibrary = function() {
 		for ( var i = 0; i < localStorage.length; ++i ) {
 			var config = JSON.parse(localStorage.getItem(i));
 			var adventure = Ambience.App.Adventure.fromConfig(config);
-			adventure.scenes.forEach(function(scene) {
-				self.media.loadScene(scene, onMediaLoad);
-			});
 			this.push(adventure);
 		}
 		
@@ -34,7 +31,7 @@ Ambience.App.LocalLibrary = function() {
 	};
 	
 	self.adventures.save = function() {
-		console.log('Saving adventures to local storage.');
+		console.log('Saving adventures to local storage');
 		
 		// Save old JSON if something goes wrong when saving new JSON.
 		var oldJSON = new Array(localStorage.length);
@@ -141,31 +138,53 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 		};
 		
 		request.onsuccess = function(event) {
+			console.log('IndexedDB has loaded');
+			
 			self.db = event.target.result;
-			scenesToLoad.forEach(function(descriptor) {
-				self.loadScene(descriptor.scene, descriptor.onMediaLoad);
+			adventuresToLoad.forEach(function(descriptor) {
+				self.loadAdventure(descriptor.adventure, descriptor.onMediaLoad);
 			});
-			scenesToLoad.length = 0;
+			adventuresToLoad.length = 0;
 			
 			self.removeUnusedMedia(usedIds);
 		};
 	};
 	
-	var scenesToLoad = [];
-	self.loadScene = function(scene, onMediaLoad) {
+	
+	var adventuresToLoad = [];
+	var loadedAdventures = [];
+	self.loadAdventure = function(adventure, onMediaLoad) {
+		if ( loadedAdventures.contains(adventure) ) {
+			console.log(
+				'Not loading media for adventure "' +
+				adventure.title +
+				'"; it has already been loaded'
+			);
+			return;
+		}
+		
 		if ( self.db ) {
-			scene.media.forEach(function(media) {
-				self.loadMedia(media.id, function(objectURL) {
-					media.url = objectURL;
-					onMediaLoad(media);
-				});
+			console.log('Loading media for adventure "' + adventure.title + '"');
+			adventure.scenes.forEach(function(scene) {
+				self.loadScene(scene, onMediaLoad);
 			});
+			loadedAdventures.push(adventure);
 		} else {
-			scenesToLoad.push({
-				scene: scene,
+			console.log('Delaying load of adventure "' + adventure.title + '" until IndexedDB has loaded')
+			adventuresToLoad.push({
+				adventure: adventure,
 				onMediaLoad: onMediaLoad
 			});
 		}
+	};
+	
+	self.loadScene = function(scene, onMediaLoad) {
+		scene.media.forEach(function(media) {
+			self.loadMedia(media.id, function(objectURL) {
+				media.url = objectURL;
+				onMediaLoad(media);
+			});
+		});
 	};
 	
 	self.loadMedia = function(id, onSuccess) {
@@ -250,6 +269,8 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 	};
 	
 	self.removeUnusedMedia = function(usedIds) {
+		console.log('Starting to remove unused media from IndexedDB...')
+		
 		var store = self.db.transaction('media', 'readwrite').objectStore('media');
 		var mediaCount = 0;
 		var removedCount = 0;
@@ -268,7 +289,7 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 				}
 				cursor.continue();
 			} else {
-				console.log('Removed ' + removedCount + ' of ' + mediaCount + ' media');
+				console.log('Removed ' + removedCount + ' of ' + mediaCount + ' media from IndexedDB');
 			}
 		};
 	};

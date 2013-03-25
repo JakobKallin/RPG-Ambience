@@ -19,6 +19,10 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	
 	var adventure = null;
 	var scene = null;
+	// Just make sure that the media URL change is registered.
+	var onMediaLoad = function onMediaLoad(media) {
+		$scope.$apply(function() {});
+	};
 	$scope.app = {
 		get adventure() {
 			return adventure;
@@ -29,6 +33,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				$scope.app.scene = null;
 			} else {
 				$scope.app.scene = newAdventure.scenes[0];
+				$scope.app.library.media.loadAdventure(newAdventure, onMediaLoad);
 			}
 		},
 		get scene() {

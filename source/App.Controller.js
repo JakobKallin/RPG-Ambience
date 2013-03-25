@@ -113,7 +113,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		if ( $scope.commands[key]  ) {
 			event.preventDefault();
 			$scope.commands[key]();
-		} else {
+		} else if ( $scope.app.adventure ) {
 			var scenes = $scope.app.adventure.keyedScenes(key);
 			if ( scenes.length > 0 ) {
 				event.preventDefault();
@@ -125,7 +125,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	$scope.sceneName = '';
 	$scope.onKeyPress = function(event) {
 		// Firefox handles charCode 0 as a string so we guard against it here.
-		if ( event.charCode !== 0 ) {
+		if ( event.charCode !== 0 && $scope.app.adventure ) {
 			var character = String.fromCharCode(event.charCode);
 			var scenes = $scope.app.adventure.keyedScenes(character.toUpperCase());
 			if ( scenes.length > 0 ) {
@@ -146,7 +146,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	$scope.playNamedScene = function() {
 		if ( $scope.sceneName.length === 0 ) {
 			ambience.fadeOutTopmost();
-		} else {
+		} else if ( $scope.app.adventure ) {
 			var scene = $scope.app.adventure.namedScene($scope.sceneName);
 			if ( scene ) {
 				$scope.playScene(scene);

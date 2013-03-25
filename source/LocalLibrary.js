@@ -172,18 +172,8 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 		.get(id)
 		.onsuccess = function(event) {
 			var dataURL = event.target.result;
-			
-			var base64 = dataURL.substring(dataURL.indexOf(',') + 1);
-			var byteString = atob(base64);
-			var mimeType = dataURL.substring(dataURL.indexOf(':') + 1, dataURL.indexOf(';'));
-			
-			var buffer = new ArrayBuffer(byteString.length);
-			var integers = new Uint8Array(buffer);
-			for ( var i = 0; i < byteString.length; ++i ) {
-				integers[i] = byteString.charCodeAt(i);
-			}
-			var blob = new Blob([integers], { type: mimeType });
-			var objectURL = window.URL.createObjectURL(blob);
+			var objectURL = self.objectURLFromDataURL(dataURL);
+			var mimeType = self.mimeTypeFromDataURL(dataURL);
 			
 			onSuccess(objectURL, mimeType);
 			
@@ -214,22 +204,45 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 	readWorker.onmessage = function(event) {
 		var message = event.data;
 		var id = message.id;
-		var url = message.url;
+		var dataURL = message.url;
 		
 		self.db.transaction('media', 'readwrite')
 		.objectStore('media')
-		.put(url, id)
+		.put(dataURL, id)
 		.onsuccess = function() {
 			console.log('Done saving media: ' + id);
 			
 			var media = mediaBeingSaved[id];
-			media.url = url;
+			var objectURL = objectURLFromDataURL(dataURL);
+			media.url = objectURL;
+			
 			var listener = saveListeners[id];
 			listener(media);
 			
 			delete mediaBeingSaved[id];
 			delete saveListeners[id];
 		};
+	};
+	
+	self.objectURLFromDataURL = function(dataURL) {
+		var base64 = dataURL.substring(dataURL.indexOf(',') + 1);
+		var byteString = atob(base64);
+		
+		var buffer = new ArrayBuffer(byteString.length);
+		var integers = new Uint8Array(buffer);
+		for ( var i = 0; i < byteString.length; ++i ) {
+			integers[i] = byteString.charCodeAt(i);
+		}
+		
+		var mimeType = self.mimeTypeFromDataURL(dataURL);
+		var blob = new Blob([integers], { type: mimeType });
+		var objectURL = window.URL.createObjectURL(blob);
+		
+		return objectURL;
+	};
+	
+	self.mimeTypeFromDataURL = function(dataURL) {
+		return dataURL.substring(dataURL.indexOf(':') + 1, dataURL.indexOf(';'));
 	};
 	
 	self.removeUnusedMedia = function(usedIds) {

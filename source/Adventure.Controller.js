@@ -6,7 +6,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 	$scope.addScene = function() {
 		var scene = new Ambience.App.Scene()
 		$scope.app.adventure.scenes.push(scene);
-		$scope.app.library.load(scene);
+		$scope.app.library.media.loadScene(scene);
 		$scope.app.scene = scene;
 		
 		return scene;

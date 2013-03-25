@@ -20,26 +20,6 @@ Ambience.App.Theater = function(background, foreground) {
 		method(theaterScene);
 	}
 	
-	function playBackground(scene) {
-		if ( scene ) {
-			background.play(scene);
-		}
-	}
-
-	function playForeground(scene) {
-		if ( scene ) {
-			foreground.play(scene);
-		}
-	}
-	
-	function stopBackground() {
-		background.stop();
-	}
-
-	function stopForeground() {
-		foreground.stop();
-	}
-	
 	function fadeOutForeground() {
 		foreground.fadeOut();
 	}
@@ -56,53 +36,62 @@ Ambience.App.Theater = function(background, foreground) {
 		}
 	}
 	
-	function convertScene(scene) {
-		var converted = new Ambience.Scene();
-
-		var fadeDuration = scene.fade.duration * 1000;
-		converted.fade = {
-			in: scene.fade.direction.contains('in') ? fadeDuration : 0,
-			out: scene.fade.direction.contains('out') ? fadeDuration : 0,
-		};
-
-		converted.background = { color: scene.background };
-		
-		if ( scene.image.url ) {
-			converted.image = {
-				url: scene.image.url,
-				style: { backgroundSize: scene.image.size }
-			};
-		}
-		
-		var actualTracks = scene.sound.tracks.filter(function(track) {
-			return track.url.length > 0 && track.isPlayable;
+	function convertScene(appScene) {
+		var actualTracks = appScene.sound.tracks.filter(function(track) {
+			return Boolean(
+				track.url &&
+				window.audioCanPlayType(track.mimeType)
+			);
 		});
-		if ( actualTracks.length > 0 ) {
-			converted.sound = {
-				tracks: actualTracks.map(get('url')),
-				overlap: scene.sound.crossover,
-				shuffle: scene.sound.shuffle,
-				loop: scene.sound.loop,
-				volume: scene.sound.volume / 100
+		
+		var mediaTypeTable = {
+			Background: true, // Scenes always have a background color.
+			Image: Boolean(appScene.image.url),
+			Sound: actualTracks.length > 0,
+			Text: Boolean(appScene.text.string)
+		};
+		var mediaTypesPresent = [];
+		for ( var mediaType in mediaTypeTable ) {
+			if ( mediaTypeTable[mediaType] ) {
+				mediaTypesPresent.push(mediaType);
 			}
 		}
 		
-		if ( scene.text.string ) {
-			converted.text = {
-				string: scene.text.string,
-				style: {
-					fontSize: (window.innerWidth * scene.text.size / 100) + 'px',
-					fontFamily: scene.text.font,
-					fontStyle: scene.text.style,
-					fontWeight: scene.text.weight,
-					color: scene.text.color,
-					textAlign: scene.text.alignment,
-					padding: '0 ' + (window.innerWidth * scene.text.padding / 100) + 'px'
-				}
+		var theaterScene = new Ambience.Scene(mediaTypesPresent);
+
+		var fadeDuration = appScene.fade.duration * 1000;
+		theaterScene.fade.in = appScene.fade.direction.contains('in') ? fadeDuration : 0;
+		theaterScene.fade.out = appScene.fade.direction.contains('out') ? fadeDuration : 0;
+
+		theaterScene.background.color = appScene.background;
+		
+		if ( theaterScene.image ) {
+			theaterScene.image.url = appScene.image.url;
+			theaterScene.image.style = { backgroundSize: appScene.image.size };
+		}
+		
+		if ( theaterScene.sound ) {
+			theaterScene.sound.tracks = actualTracks.map(get('url'));
+			theaterScene.sound.overlap = appScene.sound.crossover;
+			theaterScene.sound.shuffle = appScene.sound.shuffle;
+			theaterScene.sound.loop = appScene.sound.loop;
+			theaterScene.sound.volume = appScene.sound.volume / 100;
+		}
+		
+		if ( theaterScene.text ) {
+			theaterScene.text.string = appScene.text.string;
+			theaterScene.text.style = {
+				fontSize: (window.innerWidth * appScene.text.size / 100) + 'px',
+				fontFamily: appScene.text.font,
+				fontStyle: appScene.text.style,
+				fontWeight: appScene.text.weight,
+				color: appScene.text.color,
+				textAlign: appScene.text.alignment,
+				padding: '0 ' + (window.innerWidth * appScene.text.padding / 100) + 'px'
 			};
 		}
 		
-		return converted;
+		return theaterScene;
 	}
 	
 	return {

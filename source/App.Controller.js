@@ -206,9 +206,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	};
 	
 	$scope.trackIsPlayable = function(track) {
-		return Boolean(
-			document.createElement('audio').canPlayType(track.mimeType)
-		);
+		return window.audioCanPlayType(track.mimeType);
 	};
 	
 	$scope.editorIsVisible = true;

@@ -100,3 +100,10 @@ window.get = function(property) {
 		return object[property];
 	};
 };
+
+(function() {
+	var audio = document.createElement('audio');
+	window.audioCanPlayType = function(mimeType) {
+		return Boolean(audio.canPlayType(mimeType));
+	}
+})();

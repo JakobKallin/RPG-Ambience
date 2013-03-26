@@ -68,10 +68,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.library.adventures.remove(adventure);
 	};
 	
-	var beforeunloadListener;
 	$scope.selectLibrary = function(newLibrary) {
-		window.removeEventListener('beforeunload', beforeunloadListener);
-		
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
 		
@@ -98,22 +95,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		function onMediaLoad(media) {
 			$scope.$apply(function() {});
 		}
-		
-		beforeunloadListener = function(event) {
-			var returnValue = $scope.app.library.onExit();
-			if ( returnValue !== undefined ) {
-				return event.returnValue = returnValue;
-			}
-		};
-		window.addEventListener('beforeunload', beforeunloadListener);
 	};
-	
-	// $scope.media = new Ambience.MediaLibrary(Ambience.App.db);
-	// var removeUnusedMedia = function() {
-	// 	var items = $scope.app.adventures.map(get('media')).flatten();
-	// 	var usedIds = items.map(get('id'));
-	// 	$scope.media.removeUnusedMedia(usedIds);
-	// };
 	
 	$scope.editorWidth = 0.75;
 	
@@ -174,25 +156,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	
-	// Object.defineProperty($scope, 'exitMessage', {
-	// 	get: function() {
-	// 		if ( $scope.media.transactionCount > 0 ) {
-	// 			return 'There are currently media files being saved. If you exit now, you risk losing data.';
-	// 		} else {
-	// 			return undefined;
-	// 		}
-	// 	}
-	// });
-	
-	$scope.onExit = function(event) {
-		$scope.permanentlyRemoveAdventures();
-		$scope.app.library.save($scope.app.adventures);
-		
-		if ( $scope.exitMessage ) {
-			return event.returnValue = $scope.exitMessage;
-		}
-	};
-	
 	$scope.permanentlyRemoveAdventures = function() {
 		var removed = $scope.app.adventures.filter(get('willBeRemoved'));
 		removed.forEach(function(adventure) {
@@ -222,7 +185,13 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	
 	document.addEventListener('keypress', $scope.onKeyPress);
 	document.addEventListener('keydown', $scope.onKeyDown);
-	// removeUnusedMedia();
+	window.addEventListener('beforeunload', function(event) {
+		// TODO: We should check every activated library for exit messages.
+		var returnValue = $scope.app.library.onExit();
+		if ( returnValue !== undefined ) {
+			return event.returnValue = returnValue;
+		}
+	});
 };
 
 Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

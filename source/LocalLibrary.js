@@ -47,77 +47,22 @@ Ambience.App.LocalLibrary = function() {
 				localStorage.setItem(i, oldJSON[i]);
 			}
 			
-			throw new Error(
-				'There was an error saving your adventure:\n\n' + error.message
-			);
+			throw error;
 		}
 	};
 	
 	self.media = new Ambience.App.LocalLibrary.MediaLibrary();
 };
 
-Ambience.App.LocalLibrary.prototype.selectImage = function(onLoad) {
-	this.selectFiles(onLoad, false, 'image/*');
-};
-
-Ambience.App.LocalLibrary.prototype.selectTracks = function(onLoad) {
-	this.selectFiles(onLoad, true, 'audio/*');
-};
-
-Ambience.App.LocalLibrary.prototype.selectFiles = function(onLoad, multiple, mimeType) {
-	var self = this;
-	
-	// We create a new file input on every click because we want a change event even if we select the same file.
-	var input = document.createElement('input');
-	input.type = 'file';
-	// If the argument is undefined, the value should be true.
-	input.multiple = multiple;
-	input.accept = mimeType;
-	
-	// We need to actually insert the node for IE10 to accept the click() call below.
-	input.style.display = 'none';
-	document.body.appendChild(input);
-	
-	// This should be before the call to click.
-	// It makes more sense semantically, and IE10 seems to require it.
-	input.addEventListener('change', function(event) {
-		onFilesSelected(event.target.files);
-	});
-	
-	input.click();
-	
-	function onFilesSelected(files) {
-		// Make sure that the input is only removed after all files have been used.
-		// If it's removed earlier, needed file references may disappear.
-		var remaining = files.length;
-		var modifiedOnLoad = function(media) {
-			onLoad(media);
-			remaining -= 1;
-			
-			if ( remaining === 0 ) {
-				console.log('Saved ' + files.length + ' media; removing file input');
-				document.body.removeChild(input);
-			}
-		}
-		
-		Array.prototype.forEach.call(files, function(file) {
-			var objectURL = window.URL.createObjectURL(file)
-			var id = objectURL.replace(/^blob:/, '');
-			
-			self.media.saveMedia(id, file, modifiedOnLoad);
-		});
-	}
-};
-
 Ambience.App.LocalLibrary.prototype.onExit = function() {
+	try {
+		this.adventures.save();
+	} catch(error) {
+		return 'There was an error saving your adventure:\n\n' + error.message;
+	}
+	
 	if ( this.media.isSaving ) {
 		return 'There are currently media files being saved. If you exit now, you risk losing data.';
-	} else {
-		try {
-			this.adventures.save();
-		} catch(error) {
-			return error.message;
-		}
 	}
 };
 
@@ -302,4 +247,57 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 			}
 		};
 	};
+};
+
+Ambience.App.LocalLibrary.MediaLibrary.prototype.selectImage = function(onLoad) {
+	this.selectFiles(onLoad, false, 'image/*');
+};
+
+Ambience.App.LocalLibrary.MediaLibrary.prototype.selectTracks = function(onLoad) {
+	this.selectFiles(onLoad, true, 'audio/*');
+};
+
+Ambience.App.LocalLibrary.MediaLibrary.prototype.selectFiles = function(onLoad, multiple, mimeType) {
+	var self = this;
+	
+	// We create a new file input on every click because we want a change event even if we select the same file.
+	var input = document.createElement('input');
+	input.type = 'file';
+	// If the argument is undefined, the value should be true.
+	input.multiple = multiple;
+	input.accept = mimeType;
+	
+	// We need to actually insert the node for IE10 to accept the click() call below.
+	input.style.display = 'none';
+	document.body.appendChild(input);
+	
+	// This should be before the call to click.
+	// It makes more sense semantically, and IE10 seems to require it.
+	input.addEventListener('change', function(event) {
+		onFilesSelected(event.target.files);
+	});
+	
+	input.click();
+	
+	function onFilesSelected(files) {
+		// Make sure that the input is only removed after all files have been used.
+		// If it's removed earlier, needed file references may disappear.
+		var remaining = files.length;
+		var modifiedOnLoad = function(media) {
+			onLoad(media);
+			remaining -= 1;
+			
+			if ( remaining === 0 ) {
+				console.log('Saved ' + files.length + ' media; removing file input');
+				document.body.removeChild(input);
+			}
+		}
+		
+		Array.prototype.forEach.call(files, function(file) {
+			var objectURL = window.URL.createObjectURL(file)
+			var id = objectURL.replace(/^blob:/, '');
+			
+			self.saveMedia(id, file, modifiedOnLoad);
+		});
+	}
 };

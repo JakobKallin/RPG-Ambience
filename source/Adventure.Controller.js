@@ -39,7 +39,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 	};
 	
 	$scope.selectImage = function(scene) {
-		$scope.app.library.selectImage(onLoad);
+		$scope.app.library.media.selectImage(onLoad);
 		
 		function onLoad(image) {
 			var callback = function() {
@@ -63,7 +63,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 	};
 	
 	$scope.selectTracks = function(scene) {
-		$scope.app.library.selectTracks(onLoad);
+		$scope.app.library.media.selectTracks(onLoad);
 		
 		function onLoad(track) {
 			var callback = function() {

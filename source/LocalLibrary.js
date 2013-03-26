@@ -6,12 +6,7 @@ Ambience.App.LocalLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	self.adventures.haveLoaded = false;
 	self.adventures.load = function(onAdventureLoad) {
-		if ( self.adventures.haveLoaded ) {
-			return;
-		}
-		
 		for ( var i = 0; i < localStorage.length; ++i ) {
 			var config = JSON.parse(localStorage.getItem(i));
 			var adventure = Ambience.App.Adventure.fromConfig(config);
@@ -23,7 +18,6 @@ Ambience.App.LocalLibrary = function() {
 		});
 		
 		this.forEach(onAdventureLoad);
-		self.adventures.haveLoaded = true;
 		
 		var usedMedia = this.map(get('media')).flatten();
 		var usedIds = usedMedia.map(get('id'));
@@ -149,7 +143,6 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 			self.removeUnusedMedia(usedIds);
 		};
 	};
-	
 	
 	var adventuresToLoad = [];
 	var loadedAdventures = [];

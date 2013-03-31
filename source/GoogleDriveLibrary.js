@@ -18,36 +18,62 @@ Ambience.App.GoogleDriveLibrary = function() {
 	self.adventures.request = function(onAllAdventuresLoaded) {
 		console.log('Requesting adventures from Google Drive');
 		
-		var query = "title contains '(RPG Ambience)' and trashed = false";
+		var mimeTypes = [
+			'application/json',
+			'application/octet-stream',
+			'text/plain'
+		];
+		var mimeTypeQuery = mimeTypes.map(function(mimeType) {
+			return "mimeType = '" + mimeType + "'";
+		}).join(' or ');
+		
+		var query = 'trashed = false and (' + mimeTypeQuery + ')';
+		var itemsPerRequest = 100;
 		var request = gapi.client.drive.files.list({
-			q: query
+			q: query,
+			maxResults: itemsPerRequest
 		});
 		
 		var adventuresToLoad = 0;
-		var moreAdventuresExist = true;
+		var moreAdventuresMayExist = true;
 		
 		self.drive.makeRequest(request, onItemsLoaded);
 		
 		function onItemsLoaded(response) {
+			// It appears that not even an empty array is returned when there are zero items, so create one here.
+			if ( !response.items ) {
+				response.items = [];
+			}
+			
 			console.log('Receiving metadata for ' + response.items.length + ' adventures');
 			
-			adventuresToLoad += response.items.length;
-			response.items.forEach(function(item) {
+			// We apparently cannot query for file extensions in the Google Drive API so we filter here instead.
+			var adventureItems = response.items.filter(function(item) {
+				return item.fileExtension === 'ambience'
+			});
+			
+			adventuresToLoad += adventureItems.length;
+			adventureItems.forEach(function(item) {
 				downloadAdventure(item, onAllAdventuresLoaded);
 			});
 			
-			if ( response.nextPageToken ) {
+			if ( response.items.length > 0 && response.nextPageToken ) {
 				console.log('Requesting next page of adventures');
 				
-				moreAdventuresExist = true;
+				moreAdventuresMayExist = true;
 				
 				var nextRequest = gapi.client.drive.files.list({
 					q: query,
+					maxResults: itemsPerRequest,
 					pageToken: response.nextPageToken
 				});
-				self.drive.makeRequest(request, onItemsLoaded);
+				self.drive.makeRequest(nextRequest, onItemsLoaded);
 			} else {
-				moreAdventuresExist = false;
+				console.log('Done requesting adventure pages');
+				
+				moreAdventuresMayExist = false;
+				// If we reach this point after retrieving an empty list of items, we must call signalIfReady explicitly because there might not be any item download left to trigger it for us.
+				signalIfReady();
 			}
 		}
 		
@@ -68,7 +94,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 		}
 		
 		function signalIfReady() {
-			if ( adventuresToLoad === 0 && !moreAdventuresExist ) {
+			if ( adventuresToLoad === 0 && !moreAdventuresMayExist ) {
 				console.log('All adventures loaded from Google Drive; sorting by date');
 				
 				self.adventures.sort(function(a, b) {

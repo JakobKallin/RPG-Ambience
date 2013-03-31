@@ -6,7 +6,7 @@ Ambience.App.LocalLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	self.adventures.load = function(onAdventureLoad) {
+	self.adventures.load = function(onAllAdventuresLoaded) {
 		for ( var i = 0; i < localStorage.length; ++i ) {
 			var config = JSON.parse(localStorage.getItem(i));
 			var adventure = Ambience.App.Adventure.fromConfig(config);
@@ -17,7 +17,7 @@ Ambience.App.LocalLibrary = function() {
 			return a.creationDate < b.creationDate;
 		});
 		
-		this.forEach(onAdventureLoad);
+		onAllAdventuresLoaded(this);
 		
 		var usedMedia = this.map(get('media')).flatten();
 		var usedIds = usedMedia.map(get('id'));

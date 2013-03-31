@@ -73,15 +73,13 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.libraryIsSelected = true;
 		
 		if ( !newLibrary.adventures.haveLoaded ) {
-			newLibrary.adventures.load(onAdventureLoad, onMediaLoad);
+			newLibrary.adventures.load(onAllAdventuresLoaded, onMediaLoad);
 			newLibrary.adventures.haveLoaded = true;
 		}
 		
-		function onAdventureLoad(adventure) {
+		function onAllAdventuresLoaded(adventures) {
 			var callback = function() {
-				if ( !$scope.app.adventure ) {
-					$scope.app.adventure = adventure;
-				}
+				$scope.app.adventure = adventures[0];
 			};
 
 			if ( $scope.$$phase ) {

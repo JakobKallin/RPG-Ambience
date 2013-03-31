@@ -6,11 +6,80 @@ Ambience.App.GoogleDriveLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	self.adventures.load = function(onLoad) {
-		console.log('Loading adventures from Google Drive.');
+	self.adventures.load = function(onAllAdventuresLoaded) {
+		console.log('Loading adventures from Google Drive');
+		
+		gapi.client.load('drive', 'v2');
+		self.drive.authorize(function() {
+			self.adventures.request(onAllAdventuresLoaded);
+		});
 	};
 	
-	self.googleDrive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();
+	self.adventures.request = function(onAllAdventuresLoaded) {
+		console.log('Requesting adventures from Google Drive');
+		
+		var query = "title contains '(RPG Ambience)' and trashed = false";
+		var request = gapi.client.drive.files.list({
+			q: query
+		});
+		
+		var adventuresToLoad = 0;
+		var moreAdventuresExist = true;
+		
+		self.drive.makeRequest(request, onItemsLoaded);
+		
+		function onItemsLoaded(response) {
+			console.log('Receiving metadata for ' + response.items.length + ' adventures');
+			
+			adventuresToLoad += response.items.length;
+			response.items.forEach(function(item) {
+				downloadAdventure(item, onAllAdventuresLoaded);
+			});
+			
+			if ( response.nextPageToken ) {
+				console.log('Requesting next page of adventures');
+				
+				moreAdventuresExist = true;
+				
+				var nextRequest = gapi.client.drive.files.list({
+					q: query,
+					pageToken: response.nextPageToken
+				});
+				self.drive.makeRequest(request, onItemsLoaded);
+			} else {
+				moreAdventuresExist = false;
+			}
+		}
+		
+		function downloadAdventure(item) {
+			var onSingleAdventureLoaded = function(request) {
+				console.log('Downloaded JSON for adventure file "' + item.title + '"');
+				
+				adventuresToLoad -= 1;
+				
+				var config = JSON.parse(request.responseText);
+				var adventure = Ambience.App.Adventure.fromConfig(config);
+				self.adventures.push(adventure);
+				
+				signalIfReady();
+			};
+			
+			self.drive.downloadItem(item, onSingleAdventureLoaded);
+		}
+		
+		function signalIfReady() {
+			if ( adventuresToLoad === 0 && !moreAdventuresExist ) {
+				console.log('All adventures loaded from Google Drive; sorting by date');
+				
+				self.adventures.sort(function(a, b) {
+					return a.creationDate - b.creationDate;
+				});
+				onAllAdventuresLoaded(self.adventures);
+			}
+		}
+	};
+	
+	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();
 	self.media = new Ambience.App.GoogleDriveLibrary.MediaLibrary();
 };
 
@@ -38,8 +107,6 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 	};
 };
 
-
-
 Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(onLoad) {
 	console.log('Selecting image from Google Drive');
 };
@@ -53,6 +120,36 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectFiles = function(on
 
 Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	var self = this;
+	
+	self.appID = '907013371139.apps.googleusercontent.com';
+	
+	self.authorize = function(onAuth) {
+		console.log('Authorizing to Google Drive');
+		
+		gapi.auth.authorize(
+			{
+				client_id: self.appID,
+				scope: 'https://www.googleapis.com/auth/drive',
+				immediate: true
+			},
+			onPossibleAuth
+		);
+		
+		function onPossibleAuth(result) {
+			if ( result && !result.error ) {
+				onAuth();
+			} else {
+				gapi.auth.authorize(
+					{
+						client_id: self.appID,
+						scope: 'https://www.googleapis.com/auth/drive',
+						immediate: false
+					},
+					onPossibleAuth
+				);
+			}
+		}
+	};
 	
 	self.makeRequest = function(request, onLoad, onError) {
 		onLoad = onLoad || function() {};

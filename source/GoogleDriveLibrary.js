@@ -9,9 +9,10 @@ Ambience.App.GoogleDriveLibrary = function() {
 	self.adventures.load = function(onAllAdventuresLoaded) {
 		console.log('Loading adventures from Google Drive');
 		
-		gapi.client.load('drive', 'v2');
-		self.drive.authorize(function() {
-			self.adventures.request(onAllAdventuresLoaded);
+		gapi.client.load('drive', 'v2', function() {
+			self.drive.authorize(function() {
+				self.adventures.request(onAllAdventuresLoaded);
+			});
 		});
 	};
 	
@@ -57,7 +58,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 				downloadAdventure(item, onAllAdventuresLoaded);
 			});
 			
-			if ( response.items.length > 0 && response.nextPageToken ) {
+			if ( response.items.length === itemsPerRequest && response.nextPageToken ) {
 				console.log('Requesting next page of adventures');
 				
 				moreAdventuresMayExist = true;

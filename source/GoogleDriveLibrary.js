@@ -6,6 +6,8 @@ Ambience.App.GoogleDriveLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
+	var latestJSON = {};
+	
 	self.adventures.load = function(onAllAdventuresLoaded) {
 		console.log('Loading adventures from Google Drive');
 		
@@ -34,6 +36,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.App.Adventure.fromConfig(config);
 					adventure.id = file.metadata.id;
+					latestJSON[adventure.id] = file.contents;
 					return adventure;
 				})
 				// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
@@ -50,10 +53,18 @@ Ambience.App.GoogleDriveLibrary = function() {
 		console.log('Saving adventures to Google Drive');
 		
 		this.forEach(function(adventure) {
+			// Only save if the adventure has been modified.
+			var json = JSON.stringify(adventure.toConfig());
+			if ( adventure.id && json === latestJSON[adventure.id] ) {
+				console.log('Not saving adventure "' + adventure.title + '" because it has not been modified');
+				return;
+			}
+			
 			saveSingleAdventure(adventure, onSingleAdventureSaved);
 			function onSingleAdventureSaved(item) {
 				console.log('Adventure "' + adventure.title + '" was saved to Google Drive');
 				adventure.id = item.id;
+				latestJSON[adventure.id] = JSON.stringify(adventure.toConfig());
 			}
 		});
 		

@@ -182,11 +182,34 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 	}});
 };
 
-Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(onLoad) {
+Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(onSingleTrackLoaded) {
+	var self = this;
+	
 	console.log('Selecting tracks from Google Drive');
-};
-
-Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectFiles = function(onLoad, multiple, mimeType) {
+	
+	google.load('picker', '1', { callback: function() {
+		var views = {
+			docs: new google.picker.View(google.picker.ViewId.DOCS),
+			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED)
+		};
+		var picker = new google.picker.PickerBuilder()
+			.setAppId(self.drive.appID)
+			.addView(views.docs)
+			.addView(views.recent)
+			.setSelectableMimeTypes('audio/mpeg,audio/ogg,audio/webm')
+			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+			.setCallback(onPickerAction)
+			.build();
+		picker.setVisible(true);
+		
+		function onPickerAction(data) {
+			if ( data.action === google.picker.Action.PICKED ) {
+				data.docs.forEach(function(doc) {
+					self.loadMedia(doc.id, onSingleTrackLoaded);
+				});
+			}
+		}
+	}});
 };
 
 Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {

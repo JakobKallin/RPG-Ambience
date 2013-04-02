@@ -11,38 +11,38 @@ Ambience.App.GoogleDriveLibrary = function() {
 		
 		gapi.client.load('drive', 'v2', function() {
 			self.drive.authorize(function() {
-				self.adventures.request(onAllAdventuresLoaded);
+				requestAdventures(onAllAdventuresLoaded);
 			});
 		});
-	};
-	
-	self.adventures.request = function(onAllAdventuresLoaded) {
-		console.log('Requesting adventures from Google Drive');
 		
-		var mimeTypes = ['application/json', 'application/octet-stream', 'text/plain'];
-		var mimeTypeQuery = mimeTypes.map(function(mimeType) {
-			return "mimeType = '" + mimeType + "'";
-		}).join(' or ');
-		var query = 'trashed = false and (' + mimeTypeQuery + ')';
-		
-		self.drive.downloadFiles(query, onAllFilesLoaded, function(item) {
-			return item.fileExtension === 'ambience'
-		});
-		
-		function onAllFilesLoaded(files) {
-			files
-			.map(function(file) {
-				var config = JSON.parse(file.contents);
-				var adventure = Ambience.App.Adventure.fromConfig(config);
-				adventure.id = file.metadata.id;
-				return adventure;
-			})
-			// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
-			.forEach(function(adventure) {
-				self.adventures.push(adventure);
+		function requestAdventures(onAllAdventuresLoaded) {
+			console.log('Requesting adventures from Google Drive');
+			
+			var mimeTypes = ['application/json', 'application/octet-stream', 'text/plain'];
+			var mimeTypeQuery = mimeTypes.map(function(mimeType) {
+				return "mimeType = '" + mimeType + "'";
+			}).join(' or ');
+			var query = 'trashed = false and (' + mimeTypeQuery + ')';
+			
+			self.drive.downloadFiles(query, onAllFilesLoaded, function(item) {
+				return item.fileExtension === 'ambience'
 			});
 			
-			onAllAdventuresLoaded(self.adventures);
+			function onAllFilesLoaded(files) {
+				files
+				.map(function(file) {
+					var config = JSON.parse(file.contents);
+					var adventure = Ambience.App.Adventure.fromConfig(config);
+					adventure.id = file.metadata.id;
+					return adventure;
+				})
+				// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
+				.forEach(function(adventure) {
+					self.adventures.push(adventure);
+				});
+				
+				onAllAdventuresLoaded(self.adventures);
+			}
 		}
 	};
 	
@@ -50,34 +50,34 @@ Ambience.App.GoogleDriveLibrary = function() {
 		console.log('Saving adventures to Google Drive');
 		
 		this.forEach(function(adventure) {
-			self.saveSingleAdventure(adventure, onSingleAdventureSaved);
+			saveSingleAdventure(adventure, onSingleAdventureSaved);
 			function onSingleAdventureSaved(item) {
 				console.log('Adventure "' + adventure.title + '" was saved to Google Drive');
 				adventure.id = item.id;
 			}
 		});
-	};
-	
-	self.saveSingleAdventure = function(adventure, onSaved) {
-		var onError = function() {
-			console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
-		};
 		
-		var file = self.fileFromAdventure(adventure);
-		if ( adventure.id ) {
-			self.drive.saveOldFile(file, adventure.id, onSaved, onError);
-		} else {
-			self.drive.saveNewFile(file, onSaved, onError);
+		function saveSingleAdventure(adventure, onSaved) {
+			var onError = function() {
+				console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
+			};
+			
+			var file = fileFromAdventure(adventure);
+			if ( adventure.id ) {
+				self.drive.saveOldFile(file, adventure.id, onSaved, onError);
+			} else {
+				self.drive.saveNewFile(file, onSaved, onError);
+			}
 		}
-	};
-
-	self.fileFromAdventure = function(adventure) {
-		var config = adventure.toConfig();
-		var json = JSON.stringify(config);
-		var file = new Blob([json], { type: 'application/json' });
-		file.name = adventure.title + '.ambience';
 		
-		return file;
+		function fileFromAdventure(adventure) {
+			var config = adventure.toConfig();
+			var json = JSON.stringify(config);
+			var file = new Blob([json], { type: 'application/json' });
+			file.name = adventure.title + '.ambience';
+			
+			return file;
+		}
 	};
 	
 	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();

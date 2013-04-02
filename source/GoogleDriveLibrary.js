@@ -72,7 +72,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 		
 		function fileFromAdventure(adventure) {
 			var config = adventure.toConfig();
-			var json = JSON.stringify(config);
+			var json = angular.toJson(config);
 			var file = new Blob([json], { type: 'application/json' });
 			file.name = adventure.title + '.ambience';
 			

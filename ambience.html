@@ -330,7 +330,10 @@
 														data-ui-if="app.scene.sound.tracks.length == 0">
 														No tracks selected
 													</p>
-													<ol class="track-list">
+													<ol
+														class="track-list"
+														data-ui-sortable="{ distance: 10, axis: 'y' }"
+														data-ng-model="app.scene.sound.tracks">
 														<li data-ng-repeat="track in app.scene.sound.tracks">
 															<button
 																type="button"

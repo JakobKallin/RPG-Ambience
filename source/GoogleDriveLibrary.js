@@ -36,6 +36,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 				var adventure = Ambience.App.Adventure.fromConfig(config);
 				return adventure;
 			})
+			// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
 			.forEach(function(adventure) {
 				self.adventures.push(adventure);
 			});

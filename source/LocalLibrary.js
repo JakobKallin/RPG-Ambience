@@ -14,7 +14,10 @@ Ambience.App.LocalLibrary = function() {
 			adventures.push(adventure);
 		}
 		
-		adventures.forEach(self.adventures.push);
+		// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
+		adventures.forEach(function(adventure) {
+			self.adventures.push(adventure);
+		});
 		onAllAdventuresLoaded(self.adventures);
 		
 		var usedMedia = this.map(get('media')).flatten();

@@ -162,12 +162,11 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 	
 	google.load('picker', '1', { callback: function() {
 		var views = {
-			docs: new google.picker.View(google.picker.ViewId.DOCS),
+			docs: new google.picker.View(google.picker.ViewId.DOCS_IMAGES),
 			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED)
 		};
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
-			.enableFeature(google.picker.Feature.NAV_HIDDEN)
 			.addView(views.docs)
 			.addView(views.recent)
 			.setCallback(onPickerAction)

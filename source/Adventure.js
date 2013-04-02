@@ -49,6 +49,9 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 		})
 	});
 	
+	// Delete adventure ID; this is storage-specific.
+	delete copy.id;
+	
 	return copy;
 	
 	function copyObject(original) {
@@ -89,7 +92,6 @@ Ambience.App.Adventure.fromConfig = function(config) {
 	
 	adventure.title = config.title;
 	adventure.version = config.version;
-	adventure.id = config.id;
 	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {

@@ -6,8 +6,6 @@ Ambience.App.GoogleDriveLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	var latestJSON = {};
-	
 	self.adventures.load = function(onAllAdventuresLoaded) {
 		console.log('Loading adventures from Google Drive');
 		
@@ -36,7 +34,6 @@ Ambience.App.GoogleDriveLibrary = function() {
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.App.Adventure.fromConfig(config);
 					adventure.id = file.metadata.id;
-					latestJSON[adventure.id] = file.contents;
 					return adventure;
 				})
 				// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
@@ -53,18 +50,10 @@ Ambience.App.GoogleDriveLibrary = function() {
 		console.log('Saving adventures to Google Drive');
 		
 		this.forEach(function(adventure) {
-			// Only save if the adventure has been modified.
-			var json = JSON.stringify(adventure.toConfig());
-			if ( adventure.id && json === latestJSON[adventure.id] ) {
-				console.log('Not saving adventure "' + adventure.title + '" because it has not been modified');
-				return;
-			}
-			
 			saveSingleAdventure(adventure, onSingleAdventureSaved);
 			function onSingleAdventureSaved(item) {
 				console.log('Adventure "' + adventure.title + '" was saved to Google Drive');
 				adventure.id = item.id;
-				latestJSON[adventure.id] = JSON.stringify(adventure.toConfig());
 			}
 		});
 		
@@ -178,11 +167,23 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		request.execute(callback);
 	};
 	
+	var latestContents = {};
 	self.downloadItem = function(item, onLoad, onError) {
 		onLoad = onLoad || function() {};
 		onError = onError || function() {};
 		
-		self.downloadSingleFile(item.downloadUrl, onLoad, onError);
+		var request = new XMLHttpRequest();
+		var token = gapi.auth.getToken().access_token;
+		request.open('GET', item.downloadUrl);
+		request.setRequestHeader('Authorization', 'Bearer ' + token);
+		request.send();
+		
+		request.addEventListener('load', function() {
+			latestContents[item.id] = request.responseText;
+			onLoad(request.responseText);
+		});
+		
+		request.addEventListener('error', onError);
 	};
 	
 	var filesPerRequest = 100;
@@ -235,10 +236,10 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		}
 		
 		function downloadFile(item) {
-			var onSingleFileLoaded = function(request) {
+			var onSingleFileLoaded = function(contents) {
 				console.log('Downloaded contents of file "' + item.title + '"');
 				
-				files.push({ contents: request.responseText, metadata: item });
+				files.push({ contents: contents, metadata: item });
 				filesToLoad -= 1;
 				
 				signalIfReady();
@@ -257,51 +258,47 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	};
 	
 	self.downloadSingleFile = function(url, onLoad, onError) {
-		onLoad = onLoad || function() {};
-		onError = onError || function() {};
-		
-		var request = new XMLHttpRequest();
-		var token = gapi.auth.getToken().access_token;
-		request.open('GET', url);
-		request.setRequestHeader('Authorization', 'Bearer ' + token);
-		request.send();
-		
-		request.addEventListener('load', function() {
-			onLoad(request);
-		});
-		
-		request.addEventListener('error', onError);
 	};
 	
 	self.saveNewFile = function(file, onSaved, onError) {
-		var path = '/upload/drive/v2/files';
-		var method = 'POST';
-		
-		self.uploadFile(file, path, method, onSaved, onError);
-	};
-
-	self.saveOldFile = function(file, id, onSaved, onError) {
-		var path = '/upload/drive/v2/files/' + id;
-		var method = 'PUT';
-
-		self.uploadFile(file, path, method, onSaved, onError);
+		self.uploadFile(file, null, onSaved, onError);
 	};
 	
-	self.uploadFile = function(file, path, method, onLoad, onError) {
+	self.saveOldFile = function(file, id, onSaved, onError) {
+		self.uploadFile(file, id, onSaved, onError);
+	};
+	
+	self.uploadFile = function(file, id, onFileUploaded, onError) {
 		const boundary = '-------314159265358979323846';
 		const delimiter = "\r\n--" + boundary + "\r\n";
 		const close_delim = "\r\n--" + boundary + "--";
 		
+		if ( id ) {
+			var path = '/upload/drive/v2/files/' + id;
+			var method = 'PUT';
+		} else {
+			var path = '/upload/drive/v2/files';
+			var method = 'POST';
+		}
+		
 		var reader = new FileReader();
 		reader.readAsBinaryString(file);
 		reader.onload = function(e) {
+			var contents = reader.result;
+			
+			// Only upload file if modified.
+			if ( id && contents === latestContents[id] ) {
+				console.log('Not uploading file "' + file.name + '" because it has not been modified');
+				return;
+			}
+			
 			var contentType = file.type || 'application/octet-stream';
 			var metadata = {
 				'title': file.name,
 				'mimeType': contentType
 			};
 			
-			var base64Data = btoa(reader.result);
+			var base64Data = btoa(contents);
 			var multipartRequestBody =
 				delimiter +
 				'Content-Type: application/json\r\n\r\n' +
@@ -323,7 +320,12 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 				'body': multipartRequestBody
 			});
 			
-			self.makeRequest(request, onLoad, onError);
-		}
+			self.makeRequest(request, onRequestCompleted, onError);
+			
+			function onRequestCompleted(item) {
+				latestContents[item.id] = contents;
+				onFileUploaded(item);
+			}
+		};
 	};
 };

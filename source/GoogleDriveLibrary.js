@@ -202,15 +202,19 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 			{
 				client_id: self.appID,
 				scope: 'https://www.googleapis.com/auth/drive',
-				immediate: true
+				immediate: false
 			},
 			onPossibleAuth
 		);
 		
 		function onPossibleAuth(result) {
+			console.log('Receiving authorization result');
+			
 			if ( result && !result.error ) {
+				console.log('Authorization succeeded');
 				onAuth();
 			} else {
+				console.log('Authorization failed; trying again');
 				gapi.auth.authorize(
 					{
 						client_id: self.appID,
@@ -340,9 +344,9 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	};
 	
 	self.uploadFile = function(file, id, onFileUploaded, onError) {
-		const boundary = '-------314159265358979323846';
-		const delimiter = "\r\n--" + boundary + "\r\n";
-		const close_delim = "\r\n--" + boundary + "--";
+		var boundary = '-------314159265358979323846';
+		var delimiter = "\r\n--" + boundary + "\r\n";
+		var close_delim = "\r\n--" + boundary + "--";
 		
 		if ( id ) {
 			var path = '/upload/drive/v2/files/' + id;

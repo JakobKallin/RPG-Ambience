@@ -1,7 +1,6 @@
-﻿/***
-Spectrum: The No Hassle Colorpicker
+/***
+Spectrum Colorpicker v1.0.9
 https://github.com/bgrins/spectrum
-
 Author: Brian Grinstead
 License: MIT
 ***/
@@ -180,6 +179,10 @@ License: MIT
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00ff', endColorstr='#ff0000');
 }
 
+.sp-hidden {
+    display: none !important;
+}
+
 /* Clearfix hack */
 .sp-cf:before, .sp-cf:after { content: ""; display: table; }
 .sp-cf:after { clear: both; }
@@ -342,6 +345,11 @@ License: MIT
     border-color: #F0C49B;
     color: #111;
 }
+.sp-replacer.sp-disabled {
+    cursor:default;
+    border-color: silver;
+    color: silver;
+}
 .sp-dd {
     padding: 2px 0;
     height: 16px;
@@ -454,6 +462,12 @@ License: MIT
     display:block;
     position:absolute;
     top:0;left:0;bottom:0;right:0;
+}
+
+.sp-palette .sp-thumb-inner
+{
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
 }
 
 .sp-palette .sp-thumb-light.sp-thumb-active .sp-thumb-inner

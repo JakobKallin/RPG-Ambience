@@ -13,16 +13,18 @@
 		</script>
 		
 		<script src="source/extensions.js"></script>
+		
+		<script src="libraries/jquery-1.9.1.js"></script>
+		<script src="libraries/jquery-ui-1.10.2.custom.js"></script>
+		<script src="libraries/spectrum-1.0.9.js"></script>
+		<link rel="stylesheet" href="libraries/spectrum-1.0.9.css">
+		
 		<script src="libraries/angular.js"></script>
 		<script src="libraries/angular-ui.js"></script>
 		<script src="libraries/angular-ui-bootstrap-0.2.0.js"></script>
 		
 		<script src="libraries/key.js"></script>
 		<script src="libraries/object-url-from-data-url.js"></script>
-		
-		<script src="libraries/jquery.js"></script>
-		<script src="libraries/spectrum.js"></script>
-		<link rel="stylesheet" href="libraries/spectrum.css">
 		
 		<script src="libraries/ambience-stage/libraries/manymation/source/manymation.js"></script>
 		<script src="libraries/ambience-stage/source/Stage.js"></script>
@@ -122,7 +124,9 @@
 						class="scene-view"
 						data-heading="Scenes">
 						<div class="list-view" data-ui-if="app.adventure">
-							<ul>
+							<ul
+								data-ui-sortable="{ distance: 10, axis: 'y' }"
+								data-ng-model="app.adventure.scenes">
 								<li
 									class="list-item"
 									data-ng-repeat="scene in app.adventure.scenes"

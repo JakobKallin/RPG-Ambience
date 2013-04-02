@@ -29,11 +29,11 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		},
 		set adventure(newAdventure) {
 			adventure = newAdventure;
-			if ( newAdventure === null ) {
-				$scope.app.scene = null;
-			} else {
+			if ( newAdventure ) {
 				$scope.app.scene = newAdventure.scenes[0];
 				$scope.app.library.media.loadAdventure(newAdventure, onMediaLoad);
+			} else {
+				$scope.app.scene = null;
 			}
 		},
 		get scene() {

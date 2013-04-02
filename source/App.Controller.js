@@ -193,6 +193,16 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			return event.returnValue = returnValue;
 		}
 	});
+	
+	// Save adventures once every two minutes.
+	// var saveInterval = 120 * 1000;
+	// window.setInterval(function() {
+	// 	$scope.app.library.adventures.save();
+	// }, saveInterval);
+	
+	$scope.saveAllAdventures = function() {
+		$scope.app.library.adventures.save();
+	};
 };
 
 Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

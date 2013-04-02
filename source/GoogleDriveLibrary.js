@@ -32,8 +32,9 @@ Ambience.App.GoogleDriveLibrary = function() {
 		function onAllFilesLoaded(files) {
 			files
 			.map(function(file) {
-				var config = JSON.parse(file);
+				var config = JSON.parse(file.contents);
 				var adventure = Ambience.App.Adventure.fromConfig(config);
+				adventure.id = file.metadata.id;
 				return adventure;
 			})
 			// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
@@ -43,6 +44,40 @@ Ambience.App.GoogleDriveLibrary = function() {
 			
 			onAllAdventuresLoaded(self.adventures);
 		}
+	};
+	
+	self.adventures.save = function() {
+		console.log('Saving adventures to Google Drive');
+		
+		this.forEach(function(adventure) {
+			self.saveSingleAdventure(adventure, onSingleAdventureSaved);
+			function onSingleAdventureSaved(item) {
+				console.log('Adventure "' + adventure.title + '" was saved to Google Drive');
+				adventure.id = item.id;
+			}
+		});
+	};
+	
+	self.saveSingleAdventure = function(adventure, onSaved) {
+		var onError = function() {
+			console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
+		};
+		
+		var file = self.fileFromAdventure(adventure);
+		if ( adventure.id ) {
+			self.drive.saveOldFile(file, adventure.id, onSaved, onError);
+		} else {
+			self.drive.saveNewFile(file, onSaved, onError);
+		}
+	};
+
+	self.fileFromAdventure = function(adventure) {
+		var config = adventure.toConfig();
+		var json = JSON.stringify(config);
+		var file = new Blob([json], { type: 'application/json' });
+		file.name = adventure.title + '.ambience';
+		
+		return file;
 	};
 	
 	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();
@@ -192,7 +227,7 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 			var onSingleFileLoaded = function(request) {
 				console.log('Downloaded contents of file "' + item.title + '"');
 				
-				files.push(request.responseText);
+				files.push({ contents: request.responseText, metadata: item });
 				filesToLoad -= 1;
 				
 				signalIfReady();
@@ -225,6 +260,20 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		});
 		
 		request.addEventListener('error', onError);
+	};
+	
+	self.saveNewFile = function(file, onSaved, onError) {
+		var path = '/upload/drive/v2/files';
+		var method = 'POST';
+		
+		self.uploadFile(file, path, method, onSaved, onError);
+	};
+
+	self.saveOldFile = function(file, id, onSaved, onError) {
+		var path = '/upload/drive/v2/files/' + id;
+		var method = 'PUT';
+
+		self.uploadFile(file, path, method, onSaved, onError);
 	};
 	
 	self.uploadFile = function(file, path, method, onLoad, onError) {

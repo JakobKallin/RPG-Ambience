@@ -89,6 +89,7 @@ Ambience.App.Adventure.fromConfig = function(config) {
 	
 	adventure.title = config.title;
 	adventure.version = config.version;
+	adventure.id = config.id;
 	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {

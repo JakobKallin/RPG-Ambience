@@ -19,90 +19,28 @@ Ambience.App.GoogleDriveLibrary = function() {
 	self.adventures.request = function(onAllAdventuresLoaded) {
 		console.log('Requesting adventures from Google Drive');
 		
-		var mimeTypes = [
-			'application/json',
-			'application/octet-stream',
-			'text/plain'
-		];
+		var mimeTypes = ['application/json', 'application/octet-stream', 'text/plain'];
 		var mimeTypeQuery = mimeTypes.map(function(mimeType) {
 			return "mimeType = '" + mimeType + "'";
 		}).join(' or ');
-		
 		var query = 'trashed = false and (' + mimeTypeQuery + ')';
-		var itemsPerRequest = 100;
-		var request = gapi.client.drive.files.list({
-			q: query,
-			maxResults: itemsPerRequest
+		
+		self.drive.downloadFiles(query, onAllFilesLoaded, function(item) {
+			return item.fileExtension === 'ambience'
 		});
 		
-		var adventuresToLoad = 0;
-		var moreAdventuresMayExist = true;
-		
-		self.drive.makeRequest(request, onItemsLoaded);
-		
-		function onItemsLoaded(response) {
-			// It appears that not even an empty array is returned when there are zero items, so create one here.
-			if ( !response.items ) {
-				response.items = [];
-			}
-			
-			console.log('Receiving metadata for ' + response.items.length + ' adventures');
-			
-			// We apparently cannot query for file extensions in the Google Drive API so we filter here instead.
-			var adventureItems = response.items.filter(function(item) {
-				return item.fileExtension === 'ambience'
-			});
-			
-			adventuresToLoad += adventureItems.length;
-			adventureItems.forEach(function(item) {
-				downloadAdventure(item, onAllAdventuresLoaded);
-			});
-			
-			if ( response.items.length === itemsPerRequest && response.nextPageToken ) {
-				console.log('Requesting next page of adventures');
-				
-				moreAdventuresMayExist = true;
-				
-				var nextRequest = gapi.client.drive.files.list({
-					q: query,
-					maxResults: itemsPerRequest,
-					pageToken: response.nextPageToken
-				});
-				self.drive.makeRequest(nextRequest, onItemsLoaded);
-			} else {
-				console.log('Done requesting adventure pages');
-				
-				moreAdventuresMayExist = false;
-				// If we reach this point after retrieving an empty list of items, we must call signalIfReady explicitly because there might not be any item download left to trigger it for us.
-				signalIfReady();
-			}
-		}
-		
-		function downloadAdventure(item) {
-			var onSingleAdventureLoaded = function(request) {
-				console.log('Downloaded JSON for adventure file "' + item.title + '"');
-				
-				adventuresToLoad -= 1;
-				
-				var config = JSON.parse(request.responseText);
+		function onAllFilesLoaded(files) {
+			files
+			.map(function(file) {
+				var config = JSON.parse(file);
 				var adventure = Ambience.App.Adventure.fromConfig(config);
+				return adventure;
+			})
+			.forEach(function(adventure) {
 				self.adventures.push(adventure);
-				
-				signalIfReady();
-			};
+			});
 			
-			self.drive.downloadItem(item, onSingleAdventureLoaded);
-		}
-		
-		function signalIfReady() {
-			if ( adventuresToLoad === 0 && !moreAdventuresMayExist ) {
-				console.log('All adventures loaded from Google Drive; sorting by date');
-				
-				self.adventures.sort(function(a, b) {
-					return a.creationDate - b.creationDate;
-				});
-				onAllAdventuresLoaded(self.adventures);
-			}
+			onAllAdventuresLoaded(self.adventures);
 		}
 	};
 	
@@ -197,10 +135,81 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		onLoad = onLoad || function() {};
 		onError = onError || function() {};
 		
-		self.downloadFile(item.downloadUrl, onLoad, onError);
+		self.downloadSingleFile(item.downloadUrl, onLoad, onError);
 	};
 	
-	self.downloadFile = function(url, onLoad, onError) {
+	var filesPerRequest = 100;
+	self.downloadFiles = function(query, onAllFilesLoaded, itemFilter) {
+		var request = gapi.client.drive.files.list({
+			q: query,
+			maxResults: filesPerRequest
+		});
+		
+		var files = [];
+		var filesToLoad = 0;
+		var moreFilesMayExist = true;
+		
+		self.makeRequest(request, onItemsLoaded);
+		
+		function onItemsLoaded(response) {
+			// It appears that not even an empty array is returned when there are zero items, so create one here.
+			if ( !response.items ) {
+				response.items = [];
+			}
+			
+			console.log('Receiving metadata for ' + response.items.length + ' files');
+			
+			// We apparently cannot query for file extensions in the Google Drive API so we filter here instead.
+			var matchingItems = response.items.filter(itemFilter);
+			
+			filesToLoad += matchingItems.length;
+			matchingItems.forEach(function(item) {
+				downloadFile(item, onAllFilesLoaded);
+			});
+			
+			if ( response.items.length === filesPerRequest && response.nextPageToken ) {
+				console.log('Requesting next page of files');
+				
+				moreFilesMayExist = true;
+				
+				var nextRequest = gapi.client.drive.files.list({
+					q: query,
+					maxResults: filesPerRequest,
+					pageToken: response.nextPageToken
+				});
+				self.makeRequest(nextRequest, onItemsLoaded);
+			} else {
+				console.log('Done requesting file pages');
+				
+				moreFilesMayExist = false;
+				// If we reach this point after retrieving an empty list of items, we must call signalIfReady explicitly because there might not be any item download left to trigger it for us.
+				signalIfReady();
+			}
+		}
+		
+		function downloadFile(item) {
+			var onSingleFileLoaded = function(request) {
+				console.log('Downloaded contents of file "' + item.title + '"');
+				
+				files.push(request.responseText);
+				filesToLoad -= 1;
+				
+				signalIfReady();
+			};
+			
+			self.downloadItem(item, onSingleFileLoaded);
+		}
+		
+		function signalIfReady() {
+			if ( filesToLoad === 0 && !moreFilesMayExist ) {
+				console.log('All files loaded from Google Drive');
+				
+				onAllFilesLoaded(files);
+			}
+		}
+	};
+	
+	self.downloadSingleFile = function(url, onLoad, onError) {
 		onLoad = onLoad || function() {};
 		onError = onError || function() {};
 		

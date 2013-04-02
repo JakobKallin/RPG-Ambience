@@ -88,12 +88,12 @@
 				life.fade.out = 1600;
 				
 				var city = new Ambience.Scene(['Image']);
-				city.image.url = 'example/ishtar_rooftop.jpg';
+				city.image.file.url = 'example/ishtar_rooftop.jpg';
 				city.image.style = { backgroundSize: 'cover' };
 				city.fade.in = city.fade.out = 4000;
 				
 				var dragon = new Ambience.Scene(['Image', 'Sound']);
-				dragon.image.url = 'example/sintel-wallpaper-dragon.jpg',
+				dragon.image.file.url = 'example/sintel-wallpaper-dragon.jpg',
 				dragon.image.style = { backgroundSize: 'cover' };
 				dragon.sound.tracks = ['example/dragon.ogg'];
 				dragon.sound.loop = false;

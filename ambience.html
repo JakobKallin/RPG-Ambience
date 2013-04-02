@@ -217,20 +217,20 @@
 													<button
 														type="button"
 														class="secondary"
-														data-ng-hide="app.scene.image.url"
+														data-ng-hide="app.scene.image.file"
 														data-ng-click="selectImage(app.scene)"
 														accept="">Select Image</button>
 													<button
 														type="button"
 														class="secondary"
-														data-ng-show="app.scene.image.url"
+														data-ng-show="app.scene.image.file"
 														data-ng-click="removeImage(app.scene)">Remove</button>
 													<span
 														class="primary"
-														data-ui-if="app.scene.image.url">{{app.scene.image.name}}</span>
+														data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
 													<span
 														class="primary note"
-														data-ui-if="!app.scene.image.url">No image selected</span>
+														data-ui-if="!app.scene.image.file">No image selected</span>
 												</td>
 											</tr>
 											<tr>

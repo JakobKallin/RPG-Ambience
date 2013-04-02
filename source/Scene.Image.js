@@ -4,9 +4,7 @@
 
 Ambience.App.Scene.Image = function() {
 	return {
-		url: null,
-		name: null,
-		id: null,
+		file: null,
 		size: 'contain'
 		// onSelected: function(viewModel, changeEvent) {
 		// 	var file = changeEvent.target.files[0];

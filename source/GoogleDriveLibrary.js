@@ -82,6 +82,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 	
 	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();
 	self.media = new Ambience.App.GoogleDriveLibrary.MediaLibrary();
+	self.media.drive = self.drive;
 };
 
 Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
@@ -99,8 +100,54 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 		console.log('Loading media for scene ' + scene.name + ' from Google Drive');
 	};
 	
-	self.loadMedia = function(id, onSuccess) {
+	
+	
+	var adventuresToLoad = [];
+	var loadedAdventures = [];
+	self.loadAdventure = function(adventure, onSingleMediaLoaded) {
+		if ( loadedAdventures.contains(adventure) ) {
+			console.log(
+				'Not loading media for adventure "' +
+				adventure.title +
+				'"; it has already been loaded'
+			);
+			return;
+		}
+		
+		console.log('Loading media for adventure "' + adventure.title + '"');
+		adventure.scenes.forEach(function(scene) {
+			self.loadScene(scene, onSingleMediaLoaded);
+		});
+		loadedAdventures.push(adventure);
+	};
+	
+	self.loadScene = function(scene, onSingleMediaLoaded) {
+		scene.media.forEach(function(media) {
+			self.loadMedia(media.id, function(loadedMedia) {
+				media.url = loadedMedia.url;
+				media.thumbnail = loadedMedia.thumbnail;
+				onSingleMediaLoaded(media);
+			});
+		});
+	};
+	
+	self.loadMedia = function(id, onMediaLoaded) {
 		console.log('Loading media ' + id + ' from Google Drive');
+		
+		var request = gapi.client.drive.files.get({
+			fileId: id
+		});
+		self.drive.makeRequest(request, onItemLoaded)
+		
+		function onItemLoaded(item) {
+			onMediaLoaded({
+				id: id,
+				url: item.webContentLink,
+				thumbnail: item.thumbnailLink,
+				name: item.title,
+				mimeType: item.mimeType
+			});
+		}
 	};
 	
 	self.saveMedia = function(id, file, onSave) {
@@ -108,8 +155,32 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 	};
 };
 
-Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(onLoad) {
+Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(onImageLoaded) {
+	var self = this;
+	
 	console.log('Selecting image from Google Drive');
+	
+	google.load('picker', '1', { callback: function() {
+		var views = {
+			docs: new google.picker.View(google.picker.ViewId.DOCS),
+			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED)
+		};
+		var picker = new google.picker.PickerBuilder()
+			.setAppId(self.drive.appID)
+			.enableFeature(google.picker.Feature.NAV_HIDDEN)
+			.addView(views.docs)
+			.addView(views.recent)
+			.setCallback(onPickerAction)
+			.build();
+		picker.setVisible(true);
+		
+		function onPickerAction(data) {
+			if ( data.action === google.picker.Action.PICKED ) {
+				var fileID = data.docs[0].id;
+				self.loadMedia(fileID, onImageLoaded);
+			}
+		}
+	}});
 };
 
 Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(onLoad) {

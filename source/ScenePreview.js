@@ -23,11 +23,16 @@ Ambience.ScenePreview = function() {
 			Object.defineProperty(scope, 'layerStyle', {
 				get: function() {
 					var scene = scope.scene;
-					var css = 'url("' + scene.image.url + '")';
+					if ( scene.image.file && scene.image.file.thumbnail ) {
+						// This should probably be encoded, but encoding prevents object URLs from working here.
+						var css = 'url("' + scene.image.file.thumbnail + '")';
+					} else {
+						var css = undefined;
+					}
 					
 					return {
 						backgroundColor: scene.background.color,
-						backgroundImage: scene.image.url ? css : undefined,
+						backgroundImage: css,
 						backgroundSize: scene.image.size
 					};
 				}

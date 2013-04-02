@@ -126,6 +126,7 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 		scene.media.forEach(function(media) {
 			self.loadMedia(media.id, function(objectURL) {
 				media.url = objectURL;
+				media.thumbnail = objectURL;
 				onMediaLoad(media);
 			});
 		});
@@ -182,6 +183,7 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 			var media = mediaBeingSaved[id];
 			var objectURL = objectURLFromDataURL(dataURL);
 			media.url = objectURL;
+			media.thumbnail = objectURL;
 			
 			var listener = saveListeners[id];
 			listener(media);

@@ -46,7 +46,7 @@ Ambience.App.Theater = function(background, foreground) {
 		
 		var mediaTypeTable = {
 			Background: true, // Scenes always have a background color.
-			Image: Boolean(appScene.image.url),
+			Image: Boolean(appScene.image.file.url),
 			Sound: actualTracks.length > 0,
 			Text: Boolean(appScene.text.string)
 		};
@@ -66,7 +66,7 @@ Ambience.App.Theater = function(background, foreground) {
 		theaterScene.background.color = appScene.background;
 		
 		if ( theaterScene.image ) {
-			theaterScene.image.url = appScene.image.url;
+			theaterScene.image.url = appScene.image.file.url;
 			theaterScene.image.style = { backgroundSize: appScene.image.size };
 		}
 		

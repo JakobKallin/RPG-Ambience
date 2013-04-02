@@ -43,7 +43,11 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 	
 	// Delete temporary media URLs; IDs hold the persistent info.
 	copy.scenes.forEach(function(scene) {
-		delete scene.image.url;
+		if ( scene.image.file ) {
+			delete scene.image.file.url;
+			delete scene.image.file.thumbnail;
+		}
+		
 		scene.sound.tracks.forEach(function(sound) {
 			delete sound.url;
 		})

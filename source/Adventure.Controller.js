@@ -41,11 +41,9 @@ Ambience.App.Adventure.Controller = function($scope) {
 	$scope.selectImage = function(scene) {
 		$scope.app.library.media.selectImage(onLoad);
 		
-		function onLoad(image) {
+		function onLoad(file) {
 			var callback = function() {
-				scene.image.url = image.url;
-				scene.image.name = image.name;
-				scene.image.id = image.id;
+				scene.image.file = file;
 			};
 			
 			if ( $scope.$$phase ) {
@@ -57,9 +55,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 	};
 	
 	$scope.removeImage = function(scene) {
-		scene.image.id = null;
-		scene.image.url = null;
-		scene.image.name = null;
+		scene.image.file = null;
 	};
 	
 	$scope.selectTracks = function(scene) {

@@ -57,6 +57,13 @@ Ambience.App.GoogleDriveLibrary = function() {
 			}
 		});
 		
+		adventuresToRemove.forEach(function(adventure) {
+			removeSingleAdventure(adventure, onSingleAdventureRemoved);
+			function onSingleAdventureRemoved() {
+				console.log('Adventure "' + adventure.title + '" was removed from Google Drive');
+			}
+		});
+		
 		function saveSingleAdventure(adventure, onSaved) {
 			var onError = function() {
 				console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
@@ -78,6 +85,22 @@ Ambience.App.GoogleDriveLibrary = function() {
 			
 			return file;
 		}
+		
+		function removeSingleAdventure(adventure, onRemoved) {
+			// We can only remove the adventure from Google Drive it has been saved there to begin with.
+			if ( !adventure.id ) {
+				return;
+			}
+			
+			self.drive.removeFile(adventure.id, onRemoved);
+		}
+	};
+	
+	var removeFromArray = self.adventures.remove;
+	var adventuresToRemove = [];
+	self.adventures.remove = function(adventure) {
+		adventuresToRemove.push(adventure);
+		removeFromArray.call(self.adventures, adventure);
 	};
 	
 	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();
@@ -363,6 +386,13 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	
 	self.saveOldFile = function(file, id, onSaved, onError) {
 		self.uploadFile(file, id, onSaved, onError);
+	};
+	
+	self.removeFile = function(id, onRemoved, onError) {
+		var request = gapi.client.drive.files.trash({
+			fileId: id
+		});
+		self.makeRequest(request, onRemoved, onError);
 	};
 	
 	self.uploadFile = function(file, id, onFileUploaded, onError) {

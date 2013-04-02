@@ -73,6 +73,11 @@ Array.prototype.closest = function(value) {
 	}
 };
 
+Array.prototype.insertAfter = function(value, previous) {
+	var index = this.indexOf(previous) + 1;
+	this.splice(index, 0, value);
+};
+
 String.prototype.contains = function(substring) {
 	return this.indexOf(substring) !== -1;
 };

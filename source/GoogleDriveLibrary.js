@@ -115,6 +115,8 @@ Ambience.App.GoogleDriveLibrary = function() {
 	self.media.drive = self.drive;
 };
 
+Ambience.App.GoogleDriveLibrary.prototype.name = 'Google Drive';
+
 Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
 	return 'Google Drive library received the exit signal';
 };

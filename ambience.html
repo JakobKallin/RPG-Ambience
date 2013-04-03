@@ -496,6 +496,24 @@
 							</div>
 						</div>
 					</pane>
+					<pane
+						id="options-tab"
+						class="enclosed-view"
+						data-heading="Options">
+						<ul>
+							<li data-ng-repeat="library in app.orderedLibraries">
+								<label>
+									<input
+										type="radio"
+										name="library"
+										data-ng-value="library"
+										data-ng-model="app.library"
+										data-ng-change="selectLibrary(library)">
+									<span>{{library.name}}</span>
+								</label>
+							</li>
+						</ul>
+					</pane>
 				</tabs>
 			</div>
 			<no-pointer

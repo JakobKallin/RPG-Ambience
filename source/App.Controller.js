@@ -23,6 +23,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	var onMediaLoad = function onMediaLoad(media) {
 		$scope.$apply(function() {});
 	};
+	var library = localLibrary;
 	$scope.app = {
 		get adventure() {
 			return adventure;
@@ -42,12 +43,19 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		set scene(newScene) {
 			scene = newScene;
 		},
-		library: localLibrary,
+		get library() {
+			return library;
+		},
+		set library(newLibrary) {
+			library = newLibrary;
+			this.adventure = library.adventures[0];
+		},
 		libraryIsSelected: false,
 		libraries: {
 			local: localLibrary,
 			googleDrive: googleDriveLibrary
-		}
+		},
+		orderedLibraries: [localLibrary, googleDriveLibrary]
 	};
 	
 	$scope.createAdventure = function() {

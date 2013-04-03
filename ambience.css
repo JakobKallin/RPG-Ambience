@@ -27,7 +27,7 @@ label {
 	white-space: nowrap;
 }
 
-label[for] {
+label[for], label > span {
 	cursor: pointer;
 }
 
@@ -437,7 +437,7 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 	content: "Unsupported format: ";
 }
 	
-	.help-document {
+	.enclosed-view {
 		height: 100%;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
@@ -446,42 +446,42 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 		overflow: auto;
 	}
 		
-		.help-document h2 {
+		.enclosed-view h2 {
 			font-weight: normal;
 			font-size: 1.5em;
 			color: hsl(60, 75%, 50%);
 		}
 		
-		.help-document p, .help-document ul {
+		.enclosed-view p, .enclosed-view ul {
 			margin-bottom: 1em;
 		}
 		
-		.help-document ul {
+		.enclosed-view ul {
 			margin-left: 2em;
 			margin-right: 2em;
 		}
 		
-		.help-document li {
+		.enclosed-view li {
 			display: list-item;
 		}
 		
-		.help-document ul li {
+		.enclosed-view ul li {
 			list-style-type: square;
 		}
 		
-		.help-document a:link {
+		.enclosed-view a:link {
 			color: hsl(60, 75%, 50%);
 		}
 		
-		.help-document a:visited {
+		.enclosed-view a:visited {
 			color: hsl(60, 50%, 40%);
 		}
 		
-		.help-document a:hover {
+		.enclosed-view a:hover {
 			color: hsl(60, 100%, 50%);
 		}
 		
-		.help-document dfn {
+		.enclosed-view dfn {
 			font-weight: bold;
 			font-style: normal;
 		}

@@ -157,19 +157,31 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 	self.loadMedia = function(id, onMediaLoaded) {
 		console.log('Loading media ' + id + ' from Google Drive');
 		
+		var media = {
+			id: id,
+			url: null,
+			name: null,
+			mimeType: null
+		};
+		
 		var request = gapi.client.drive.files.get({
 			fileId: id
 		});
-		self.drive.makeRequest(request, onItemLoaded)
+		self.drive.makeRequest(request, onItemLoaded);
 		
 		function onItemLoaded(item) {
-			onMediaLoaded({
-				id: id,
-				url: item.webContentLink,
-				thumbnail: item.thumbnailLink,
-				name: item.title,
-				mimeType: item.mimeType
-			});
+			media.name = item.title;
+			media.mimeType = item.mimeType;
+			if ( item.thumbnailLink ) {
+				media.thumbnail = item.thumbnailLink;
+			}
+			
+			self.drive.downloadBlob(item, onBlobLoaded);
+		}
+		
+		function onBlobLoaded(blob) {
+			media.url = window.URL.createObjectURL(blob);
+			onMediaLoaded(media);
 		}
 	};
 	
@@ -307,6 +319,24 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		
 		request.addEventListener('error', onError);
 	};
+	
+	self.downloadBlob = function(item, onBlobLoaded, onError) {
+		onBlobLoaded = onBlobLoaded || function() {};
+		onError = onError || function() {};
+		
+		var request = new XMLHttpRequest();
+		var token = gapi.auth.getToken().access_token;
+		request.open('GET', item.downloadUrl);
+		request.responseType = 'blob';
+		request.setRequestHeader('Authorization', 'Bearer ' + token);
+		request.send();
+		
+		request.addEventListener('load', function() {
+			onBlobLoaded(request.response);
+		});
+		
+		request.addEventListener('error', onError);
+	}
 	
 	var filesPerRequest = 100;
 	self.downloadFiles = function(query, onAllFilesLoaded, itemFilter) {

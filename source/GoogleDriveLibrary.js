@@ -7,6 +7,10 @@ Ambience.App.GoogleDriveLibrary = function() {
 	
 	self.adventures = [];
 	self.adventures.haveBeenLoaded = false;
+	
+	// This is updated in adventures.load and checked in adventures.save to only save adventures that have been modified.
+	var latestJSON = {};
+	
 	self.adventures.load = function(onAllAdventuresLoaded) {
 		console.log('Loading adventures from Google Drive');
 		
@@ -35,6 +39,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.App.Adventure.fromConfig(config);
 					adventure.id = file.metadata.id;
+					latestJSON[adventure.id] = file.contents;
 					return adventure;
 				})
 				// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
@@ -54,11 +59,46 @@ Ambience.App.GoogleDriveLibrary = function() {
 		
 		console.log('Saving adventures to Google Drive');
 		
-		this.forEach(function(adventure) {
-			saveSingleAdventure(adventure, onSingleAdventureSaved);
+		this.saveInProgress = true;
+		this.errorOnLastSave = false;
+		var adventuresToSave = 0;
+		
+		this.map(function(adventure) {
+			var config = adventure.toConfig();
+			var json = angular.toJson(config);
+			
+			if ( adventure.id ) {
+				var shouldBeSaved = json !== latestJSON[adventure.id];
+			} else {
+				var shouldBeSaved = true;
+			}
+			
+			if ( shouldBeSaved ) {
+				console.log('Uploading adventure "' + adventure.title + '" to Google Drive');
+				adventuresToSave += 1;
+				saveSingleAdventure(adventure, onSingleAdventureSaved, onError);
+			} else {
+				console.log('Not uploading adventure "' + adventure.title + '" to Google Drive because it has not been modified');
+			}
+			
 			function onSingleAdventureSaved(item) {
 				console.log('Adventure "' + adventure.title + '" was saved to Google Drive');
 				adventure.id = item.id;
+				adventuresToSave -= 1;
+				
+				if ( adventuresToSave === 0 ) {
+					self.adventures.saveInProgress = false;
+				}
+			}
+			
+			function onError() {
+				console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
+				adventuresToSave -= 1;
+				self.adventures.errorOnLastSave = true;
+				
+				if ( adventuresToSave === 0 ) {
+					self.adventures.saveInProgress = false;
+				}
 			}
 		});
 		
@@ -69,11 +109,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 			}
 		});
 		
-		function saveSingleAdventure(adventure, onSaved) {
-			var onError = function() {
-				console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
-			};
-			
+		function saveSingleAdventure(adventure, onSaved, onError) {
 			var file = fileFromAdventure(adventure);
 			if ( adventure.id ) {
 				self.drive.saveOldFile(file, adventure.id, onSaved, onError);
@@ -157,7 +193,13 @@ Ambience.App.GoogleDriveLibrary = function() {
 Ambience.App.GoogleDriveLibrary.prototype.name = 'Google Drive';
 
 Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
-	return 'Google Drive library received the exit signal';
+	var self = this;
+	
+	if ( self.adventures.saveInProgress ) {
+		return 'Your adventures are currently being saved to Google Drive. If you exit now, you risk losing data.';
+	} else if ( self.adventures.errorOnLastSave ) {
+		return 'There was an error saving your adventures to Google Drive. To avoid losing data, stay on this page, go to the "Options" tab, and click "Save Google Drive Adventures to Computer".';
+	}
 };
 
 Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
@@ -339,7 +381,6 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		request.execute(callback);
 	};
 	
-	var latestContents = {};
 	self.downloadItem = function(item, onLoad, onError) {
 		onLoad = onLoad || function() {};
 		onError = onError || function() {};
@@ -351,7 +392,6 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		request.send();
 		
 		request.addEventListener('load', function() {
-			latestContents[item.id] = request.responseText;
 			onLoad(request.responseText);
 		});
 		
@@ -402,7 +442,7 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 			
 			filesToLoad += matchingItems.length;
 			matchingItems.forEach(function(item) {
-				downloadFile(item, onAllFilesLoaded);
+				downloadSingleFile(item, onAllFilesLoaded);
 			});
 			
 			if ( response.items.length === filesPerRequest && response.nextPageToken ) {
@@ -425,7 +465,7 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 			}
 		}
 		
-		function downloadFile(item) {
+		function downloadSingleFile(item) {
 			var onSingleFileLoaded = function(contents) {
 				console.log('Downloaded contents of file "' + item.title + '"');
 				
@@ -481,14 +521,7 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		var reader = new FileReader();
 		reader.readAsBinaryString(file);
 		reader.onload = function(e) {
-			var contents = reader.result;
-			
-			// Only upload file if modified.
-			if ( id && contents === latestContents[id] ) {
-				console.log('Not uploading file "' + file.name + '" because it has not been modified');
-				return;
-			}
-			
+			var contents = reader.result;			
 			var contentType = file.type || 'application/octet-stream';
 			var metadata = {
 				'title': file.name,
@@ -517,12 +550,7 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 				'body': multipartRequestBody
 			});
 			
-			self.makeRequest(request, onRequestCompleted, onError);
-			
-			function onRequestCompleted(item) {
-				latestContents[item.id] = contents;
-				onFileUploaded(item);
-			}
+			self.makeRequest(request, onFileUploaded, onError);
 		};
 	};
 };

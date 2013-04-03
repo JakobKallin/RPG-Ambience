@@ -101,7 +101,7 @@ describe('Adventure conversion', function() {
 			]
 		};
 		
-		Ambience.App.Adventure.prototype.upgrade.call(current)
+		Ambience.App.Adventure.upgradeConfig(current)
 		expect(current).toEqual(next);
 	});
 });

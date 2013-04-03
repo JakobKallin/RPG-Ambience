@@ -63,7 +63,7 @@ Ambience.App.Theater = function(background, foreground) {
 		theaterScene.fade.in = appScene.fade.direction.contains('in') ? fadeDuration : 0;
 		theaterScene.fade.out = appScene.fade.direction.contains('out') ? fadeDuration : 0;
 
-		theaterScene.background.color = appScene.background;
+		theaterScene.background.color = appScene.background.color;
 		
 		if ( theaterScene.image ) {
 			theaterScene.image.url = appScene.image.file.url;
@@ -72,7 +72,7 @@ Ambience.App.Theater = function(background, foreground) {
 		
 		if ( theaterScene.sound ) {
 			theaterScene.sound.tracks = actualTracks.map(get('url'));
-			theaterScene.sound.overlap = appScene.sound.crossover;
+			theaterScene.sound.overlap = appScene.sound.overlap;
 			theaterScene.sound.shuffle = appScene.sound.shuffle;
 			theaterScene.sound.loop = appScene.sound.loop;
 			theaterScene.sound.volume = appScene.sound.volume / 100;

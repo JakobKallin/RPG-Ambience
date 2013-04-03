@@ -28,7 +28,7 @@ Ambience.App.TestLibrary.prototype.loadAdventures = function(onLoad) {
 					loop: true,
 					shuffle: true,
 					volume: 50,
-					crossover: 1
+					overlap: 1
 				},
 				text: {
 					string: 'Test string',

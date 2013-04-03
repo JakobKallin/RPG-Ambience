@@ -495,6 +495,7 @@
 						id="options-tab"
 						class="enclosed-view"
 						data-heading="Options">
+						<h2>Save Location</h2>
 						<ul>
 							<li data-ng-repeat="library in app.orderedLibraries">
 								<label>
@@ -506,6 +507,16 @@
 										data-ng-change="selectLibrary(library)">
 									<span>{{library.name}}</span>
 								</label>
+							</li>
+						</ul>
+						
+						<h2>Operations</h2>
+						<ul data-ui-if="app.library == app.libraries.googleDrive">
+							<li>
+								<button
+									type="button"
+									data-ng-disabled="!app.libraries.googleDrive.adventures.haveBeenLoaded"
+									data-ng-click="app.libraries.googleDrive.adventures.download()">Save Google Drive Adventures to Your Computer</button>
 							</li>
 						</ul>
 					</pane>

@@ -43,8 +43,6 @@ Ambience.App.GoogleDriveLibrary = function() {
 				});
 				
 				onAllAdventuresLoaded(self.adventures);
-				
-				self.adventures.haveBeenLoaded = true;
 			}
 		}
 	};
@@ -108,6 +106,29 @@ Ambience.App.GoogleDriveLibrary = function() {
 	self.adventures.remove = function(adventure) {
 		adventuresToRemove.push(adventure);
 		removeFromArray.call(self.adventures, adventure);
+	};
+	
+	self.adventures.download = function() {
+		var links = this.map(function(adventure) {
+			var config = adventure.toConfig();
+			var json = angular.toJson(config);
+			var blob = new Blob([json], { type: 'application/json' });
+			var url = window.URL.createObjectURL(blob);
+			
+			var link = document.createElement('a');
+			link.download = adventure.title + '.ambience';
+			link.href = url;
+			link.target = '_blank';
+			link.style.display = 'none';
+			
+			return link;
+		});
+		
+		links.forEach(function(link) {
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		});
 	};
 	
 	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();

@@ -109,26 +109,44 @@ Ambience.App.GoogleDriveLibrary = function() {
 	};
 	
 	self.adventures.download = function() {
-		var links = this.map(function(adventure) {
+		var adventureBlobs = this.map(function(adventure) {
 			var config = adventure.toConfig();
 			var json = angular.toJson(config);
 			var blob = new Blob([json], { type: 'application/json' });
-			var url = window.URL.createObjectURL(blob);
-			
-			var link = document.createElement('a');
-			link.download = adventure.title + '.ambience';
-			link.href = url;
-			link.target = '_blank';
-			link.style.display = 'none';
-			
-			return link;
+			return {
+				adventure: adventure,
+				blob: blob
+			};
 		});
 		
-		links.forEach(function(link) {
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-		});
+		if ( navigator.msSaveBlob ) {
+			adventureBlobs.forEach(function(adventureBlob) {
+				var adventure = adventureBlob.adventure;
+				var blob = adventureBlob.blob;
+				var filename = adventure.title + '.ambience';
+				navigator.msSaveBlob(blob, filename);
+			});
+		} else {
+			var links = adventureBlobs.map(function(adventureBlob) {
+				var adventure = adventureBlob.adventure;
+				var blob = adventureBlob.blob;
+				var url = window.URL.createObjectURL(blob);
+				
+				var link = document.createElement('a');
+				link.download = adventure.title + '.ambience';
+				link.href = url;
+				link.target = '_blank';
+				link.style.display = 'none';
+				
+				return link;
+			});
+			
+			links.forEach(function(link) {
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			});
+		}
 	};
 	
 	self.drive = new Ambience.App.GoogleDriveLibrary.GoogleDrive();

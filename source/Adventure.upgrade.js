@@ -23,8 +23,17 @@ Ambience.App.Adventure.upgraders = {
 			
 			delete scene.media;
 			
+			scene.image.file = {
+				id: scene.image.id,
+				name: scene.image.name
+			};
+			delete scene.image.id;
+			delete scene.image.name;
+			delete scene.image.path;
+			
 			scene.sound.tracks.forEach(function(track) {
 				delete track.isPlayable;
+				delete track.path;
 			});
 		});
 	}

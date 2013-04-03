@@ -69,17 +69,17 @@ describe('Adventure conversion', function() {
 						"duration": "1"
 					},
 					"image": {
-						"path": "",
-						"name": "Test.jpg",
-						"id": "Test ID",
+						"file": {
+							"name": "Test.jpg",
+							"id": "Test ID"
+						},
 						"size": "cover"
 					},
 					"sound": {
 						"tracks": [
 							{
 								"name": "Test.mp3",
-								"path": "",
-								"id": "Test ID",
+								"id": "Test ID"
 							}
 						],
 						"loop": true,

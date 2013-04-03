@@ -26,7 +26,7 @@ Ambience.App.LocalLibrary = function() {
 	};
 	
 	self.adventures.save = function() {
-		console.log('Saving adventures to local storage');
+		console.log('Saving ' + this.length + ' adventures to local storage');
 		
 		// Save old JSON if something goes wrong when saving new JSON.
 		var oldJSON = new Array(localStorage.length);
@@ -37,10 +37,19 @@ Ambience.App.LocalLibrary = function() {
 		try {
 			localStorage.clear();
 			this.forEach(function(adventure, index) {
+				console.log('Saving adventure "' + adventure.title + '" to local storage');
+				
 				var config = adventure.toConfig();
 				var json = angular.toJson(config);
 				localStorage.setItem(index, json);
+				if ( localStorage.length === 0 ) {
+					debugger;
+				}
 			});
+			
+			if ( localStorage.length === 0 ) {
+				debugger;
+			}
 		} catch(error) {
 			// Restore old JSON, since something went wrong.
 			localStorage.clear();
@@ -48,12 +57,15 @@ Ambience.App.LocalLibrary = function() {
 				localStorage.setItem(i, oldJSON[i]);
 			}
 			
+			debugger;
 			throw error;
 		}
 	};
 	
 	self.media = new Ambience.App.LocalLibrary.MediaLibrary();
 };
+
+Ambience.App.LocalLibrary.prototype.name = 'This computer';
 
 Ambience.App.LocalLibrary.prototype.onExit = function() {
 	try {

@@ -255,10 +255,12 @@ Ambience.App.LocalLibrary.MediaLibrary = function() {
 Ambience.App.LocalLibrary.MediaLibrary.prototype.selectImage = function(onLoad) {
 	this.selectFiles(onLoad, false, 'image/*');
 };
+Ambience.App.LocalLibrary.MediaLibrary.prototype.selectImage.label = 'Select Image';
 
 Ambience.App.LocalLibrary.MediaLibrary.prototype.selectTracks = function(onLoad) {
 	this.selectFiles(onLoad, true, 'audio/*');
 };
+Ambience.App.LocalLibrary.MediaLibrary.prototype.selectTracks.label = 'Select Tracks';
 
 Ambience.App.LocalLibrary.MediaLibrary.prototype.selectFiles = function(onLoad, multiple, mimeType) {
 	var self = this;

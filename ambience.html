@@ -223,7 +223,7 @@
 														class="secondary"
 														data-ng-hide="app.scene.image.file"
 														data-ng-click="selectImage(app.scene)"
-														accept="">Select Image</button>
+														accept="">{{app.library.media.selectImage.label}}</button>
 													<button
 														type="button"
 														class="secondary"
@@ -351,7 +351,7 @@
 													</ol>
 													<button
 														type="button"
-														data-ng-click="selectTracks(app.scene)">Add Tracks</button>
+														data-ng-click="selectTracks(app.scene)">{{app.library.media.selectTracks.label}}</button>
 												</td>
 											</tr>
 										</table>
@@ -531,7 +531,7 @@
 							type="button"
 							data-ng-click="selectLibrary(app.libraries.googleDrive)">
 							<img src="images/google-drive.png">
-							<span>Google Drive</span>
+							<span>Google Drive ™</span>
 						</button>
 					</li>
 				</ul>

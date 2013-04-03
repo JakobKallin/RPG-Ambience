@@ -204,6 +204,7 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 		}
 	}});
 };
+Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage.label = "Select Image From Google Drive";
 
 Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(onSingleTrackLoaded) {
 	var self = this;
@@ -234,6 +235,7 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 		}
 	}});
 };
+Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks.label = "Add Tracks From Google Drive";
 
 Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	var self = this;

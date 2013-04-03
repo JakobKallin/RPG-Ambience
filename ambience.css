@@ -582,23 +582,23 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 		font-size: 1.5em;
 	}
 	
-	.splash ul + ul {
+	.splash ul.buttons + ul.buttons {
 		margin-top: 2em;
 		font-size: 1.25em;
 	}
 	
-		.splash ul li {
+		.splash ul.buttons li {
 			display: inline-block;
 			margin: 0 1em;
 			border: 1px solid hsl(0, 0%, 25%);
 			line-height: 1;
 		}
 		
-		.splash ul li:hover {
+		.splash ul.buttons li:hover {
 			background-color: hsl(0, 0%, 12.5%);
 		}
 		
-		.splash ul button {
+		.splash ul.buttons button {
 			display: block;
 			padding: 1em;
 			border: 0;
@@ -613,7 +613,7 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			width: 5em;
 		}
 		
-		.splash ul p {
+		.splash ul.buttons p {
 			font-size: 1em;
 			line-height: 1.5;
 		}

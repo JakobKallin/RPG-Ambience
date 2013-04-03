@@ -34,7 +34,14 @@ window.addEventListener('load', function() {
 	module.service('googleDriveLibrary', function() {
 		return new Ambience.App.GoogleDriveLibrary();
 	});
-	angular.bootstrap(document, ['ambience']);
+	
+	var browserIsSupported = Boolean(window.indexedDB && window.URL);
+	if ( browserIsSupported ) {
+		angular.bootstrap(document, ['ambience']);
+	} else {
+		var unsupportedScreen = document.getElementById('splash-unsupported');
+		unsupportedScreen.style.display = '';
+	}
 	
 	var splashScreen = document.getElementById('splash');
 	splashScreen.parentNode.removeChild(splashScreen);

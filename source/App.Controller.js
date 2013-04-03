@@ -90,6 +90,8 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				adventures.sort(function(a, b) {
 					return b.creationDate - a.creationDate;
 				});
+				
+				$scope.app.library = newLibrary;
 				$scope.app.adventure = adventures[0];
 			};
 

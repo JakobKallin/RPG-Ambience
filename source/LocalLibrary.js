@@ -68,12 +68,6 @@ Ambience.App.LocalLibrary = function() {
 Ambience.App.LocalLibrary.prototype.name = 'This computer';
 
 Ambience.App.LocalLibrary.prototype.onExit = function() {
-	try {
-		this.adventures.save();
-	} catch(error) {
-		return 'There was an error saving your adventure:\n\n' + error.message;
-	}
-	
 	if ( this.media.isSaving ) {
 		return 'There are currently media files being saved. If you exit now, you risk losing data.';
 	}

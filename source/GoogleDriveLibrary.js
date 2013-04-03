@@ -6,8 +6,6 @@ Ambience.App.GoogleDriveLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	self.adventures.haveBeenLoaded = false;
-	
 	// This is updated in adventures.load and checked in adventures.save to only save adventures that have been modified.
 	var latestJSON = {};
 	
@@ -52,18 +50,16 @@ Ambience.App.GoogleDriveLibrary = function() {
 		}
 	};
 	
+	self.adventures.currentlyBeingSaved = 0;
 	self.adventures.save = function() {
-		if ( !self.adventures.haveBeenLoaded ) {
+		if ( self.adventures.currentlyBeingSaved > 0 ) {
+			console.log('Ignoring request to save adventures to Google Drive because saving is already in progress');
 			return;
 		}
 		
 		console.log('Saving adventures to Google Drive');
 		
-		this.saveInProgress = true;
-		this.errorOnLastSave = false;
-		var adventuresToSave = 0;
-		
-		this.map(function(adventure) {
+		self.adventures.map(function(adventure) {
 			var config = adventure.toConfig();
 			var json = angular.toJson(config);
 			
@@ -75,7 +71,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 			
 			if ( shouldBeSaved ) {
 				console.log('Uploading adventure "' + adventure.title + '" to Google Drive');
-				adventuresToSave += 1;
+				self.adventures.currentlyBeingSaved += 1;
 				saveSingleAdventure(adventure, onSingleAdventureSaved, onError);
 			} else {
 				console.log('Not uploading adventure "' + adventure.title + '" to Google Drive because it has not been modified');
@@ -84,21 +80,13 @@ Ambience.App.GoogleDriveLibrary = function() {
 			function onSingleAdventureSaved(item) {
 				console.log('Adventure "' + adventure.title + '" was saved to Google Drive');
 				adventure.id = item.id;
-				adventuresToSave -= 1;
-				
-				if ( adventuresToSave === 0 ) {
-					self.adventures.saveInProgress = false;
-				}
+				latestJSON[adventure.id] = json;
+				self.adventures.currentlyBeingSaved -= 1;
 			}
 			
 			function onError() {
 				console.log('Adventure "' + adventure.title + '" was not saved to Google Drive');
-				adventuresToSave -= 1;
-				self.adventures.errorOnLastSave = true;
-				
-				if ( adventuresToSave === 0 ) {
-					self.adventures.saveInProgress = false;
-				}
+				self.adventures.currentlyBeingSaved -= 1;
 			}
 		});
 		
@@ -145,7 +133,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 	};
 	
 	self.adventures.download = function() {
-		var adventureBlobs = this.map(function(adventure) {
+		var adventureBlobs = self.adventures.map(function(adventure) {
 			var config = adventure.toConfig();
 			var json = angular.toJson(config);
 			var blob = new Blob([json], { type: 'application/json' });
@@ -195,10 +183,12 @@ Ambience.App.GoogleDriveLibrary.prototype.name = 'Google Drive';
 Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
 	var self = this;
 	
-	if ( self.adventures.saveInProgress ) {
-		return 'Your adventures are currently being saved to Google Drive. If you exit now, you risk losing data.';
-	} else if ( self.adventures.errorOnLastSave ) {
-		return 'There was an error saving your adventures to Google Drive. To avoid losing data, stay on this page, go to the "Options" tab, and click "Save Google Drive Adventures to Computer".';
+	// At this point, adventures.save has just been called. If there was an error uploading any adventure, it will currently be uploading again and the message below will be displayed. This is the same as if one adventure is simply being saved because it has been modified, so there is no special case for errors.
+	if ( self.adventures.currentlyBeingSaved > 0 ) {
+		return (
+			'Your adventures are currently being saved to Google Drive. If you exit now, you risk losing data.' + '\n\n' +
+			'If this message persists, go to the "Options" tab and click "Save Google Drive Adventures to Computer", then manually upload them to Google Drive.'
+		);
 	}
 };
 

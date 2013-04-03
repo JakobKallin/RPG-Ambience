@@ -198,7 +198,17 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	document.addEventListener('keypress', $scope.onKeyPress);
 	document.addEventListener('keydown', $scope.onKeyDown);
 	window.addEventListener('beforeunload', function(event) {
+		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
+		if ( $scope.app.library.adventures.haveBeenLoaded ) {
+			try {
+				$scope.app.library.adventures.save();
+			} catch(error) {
+				return 'There was an error saving your adventure:\n\n' + error.message;
+			}
+		}
+		
 		// TODO: We should check every activated library for exit messages.
+		
 		var returnValue = $scope.app.library.onExit();
 		if ( returnValue !== undefined ) {
 			return event.returnValue = returnValue;
@@ -208,7 +218,12 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	// Save adventures once every two minutes.
 	var saveInterval = 10 * 1000;
 	function saveAdventures() {
-		$scope.app.library.adventures.save();
+		// Only save if the adventures have been loaded. Otherwise they might be overwritten with an empty list.
+		if ( $scope.app.library.adventures.haveBeenLoaded ) {
+			$scope.app.library.adventures.save();
+		} else {
+			console.log('Delaying adventure saving until adventures for this library have loaded');
+		}
 		window.setTimeout(saveAdventures, saveInterval);
 	}
 	window.setTimeout(saveAdventures, saveInterval);

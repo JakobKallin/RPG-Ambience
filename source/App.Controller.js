@@ -195,10 +195,12 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	});
 	
 	// Save adventures once every two minutes.
-	// var saveInterval = 120 * 1000;
-	// window.setInterval(function() {
-	// 	$scope.app.library.adventures.save();
-	// }, saveInterval);
+	var saveInterval = 10 * 1000;
+	function saveAdventures() {
+		$scope.app.library.adventures.save();
+		window.setTimeout(saveAdventures, saveInterval);
+	}
+	window.setTimeout(saveAdventures, saveInterval);
 	
 	$scope.saveAllAdventures = function() {
 		$scope.app.library.adventures.save();

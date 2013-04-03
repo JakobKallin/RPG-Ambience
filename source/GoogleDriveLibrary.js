@@ -6,6 +6,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
+	self.adventures.haveBeenLoaded = false;
 	self.adventures.load = function(onAllAdventuresLoaded) {
 		console.log('Loading adventures from Google Drive');
 		
@@ -42,11 +43,17 @@ Ambience.App.GoogleDriveLibrary = function() {
 				});
 				
 				onAllAdventuresLoaded(self.adventures);
+				
+				self.adventures.haveBeenLoaded = true;
 			}
 		}
 	};
 	
 	self.adventures.save = function() {
+		if ( !self.adventures.haveBeenLoaded ) {
+			return;
+		}
+		
 		console.log('Saving adventures to Google Drive');
 		
 		this.forEach(function(adventure) {
@@ -114,16 +121,6 @@ Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
 
 Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 	var self = this;
-	
-	self.loadAdventure = function(adventure, onMediaLoad) {
-		console.log('Loading media for adventure ' + adventure.title + ' from Google Drive');
-	};
-	
-	self.loadScene = function(scene, onMediaLoad) {
-		console.log('Loading media for scene ' + scene.name + ' from Google Drive');
-	};
-	
-	
 	
 	var adventuresToLoad = [];
 	var loadedAdventures = [];

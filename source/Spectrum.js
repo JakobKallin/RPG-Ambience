@@ -14,7 +14,8 @@ Ambience.Spectrum = function() {
 				move: onChange,
 				clickoutFiresChange: true,
 				showAlpha: false,
-				showButtons: false
+				showButtons: false,
+				color: scope.$eval(attrs.ngModel)
 			});
 			
 			read();

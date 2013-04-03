@@ -211,10 +211,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		window.setTimeout(saveAdventures, saveInterval);
 	}
 	window.setTimeout(saveAdventures, saveInterval);
-	
-	$scope.saveAllAdventures = function() {
-		$scope.app.library.adventures.save();
-	};
 };
 
 Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

@@ -66,7 +66,7 @@ describe('Adventure conversion', function() {
 					},
 					"fade": {
 						"direction": "in out",
-						"duration": "1"
+						"duration": 1
 					},
 					"image": {
 						"file": {
@@ -84,18 +84,18 @@ describe('Adventure conversion', function() {
 						],
 						"loop": true,
 						"shuffle": true,
-						"volume": "50",
-						"crossover": "1"
+						"volume": 50,
+						"overlap": 1
 					},
 					"text": {
 						"string": "Test string",
-						"size": "5",
+						"size": 5,
 						"font": "Test font",
 						"color": "#abcdef",
 						"bold": true,
 						"italic": true,
 						"alignment": "center",
-						"padding": "10"
+						"padding": 10
 					}
 				}
 			]

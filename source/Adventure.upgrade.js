@@ -15,7 +15,7 @@ Ambience.App.Adventure.upgraders = {
 			
 			scene.fade = {
 				direction: scene.fadeDirection,
-				duration: scene.fade
+				duration: Number(scene.fade)
 			};
 			delete scene.fadeDirection;
 			
@@ -33,6 +33,12 @@ Ambience.App.Adventure.upgraders = {
 				delete track.isPlayable;
 				delete track.path;
 			});
+			scene.sound.volume = Number(scene.sound.volume);
+			scene.sound.overlap = Number(scene.sound.crossover);
+			delete scene.sound.crossover;
+			
+			scene.text.size = Number(scene.text.size);
+			scene.text.padding = Number(scene.text.padding);
 		});
 	}
 };

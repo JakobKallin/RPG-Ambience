@@ -1,9 +1,16 @@
 Ambience.App.Adventure.upgradeConfig = function(config) {
 	config.version = Number(config.version);
+	var originalVersion = config.version;
 	while ( config.version < Ambience.App.Adventure.version ) {
 		Ambience.App.Adventure.upgraders[config.version](config);
 		config.version += + 1;
 	}
+	var upgradedVersion = config.version;
+	console.log(
+		'Upgraded adventure "' + config.title +
+		'" from version ' + originalVersion +
+		' to version ' + upgradedVersion
+	);
 };
 
 Ambience.App.Adventure.upgraders = {

@@ -6,30 +6,5 @@ Ambience.App.Scene.Image = function() {
 	return {
 		file: null,
 		size: 'contain'
-		// onSelected: function(viewModel, changeEvent) {
-		// 	var file = changeEvent.target.files[0];
-		// 	if ( file ) {
-		// 		this.load(file);
-		// 	};
-		// },
-		// load: function(file) {
-		// 	var objectURL = window.URL.createObjectURL(file);
-		// 	var id = objectURL.replace(/^blob:/, '');
-			
-		// 	var scene = this;
-		// 	var fileName = file.name; // This is to make sure the file object isn't removed.
-		// 	var onSaved = function() {
-		// 		scene.name = fileName;
-		// 		scene.url = objectURL;
-		// 		scene.id = id;
-		// 	};
-			
-		// 	app.media.save(id, file, onSaved);
-		// },
-		// unload: function() {
-		// 	this.url = '';
-		// 	this.name = '';
-		// 	this.id = '';
-		// }
 	};
 }

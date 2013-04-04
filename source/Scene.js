@@ -28,19 +28,6 @@ Ambience.App.Scene = function() {
 				files.push(this.image.file);
 			}
 			return files;
-		},
-		
-		// State
-		get isSelected() {
-			return this === self.current;
-		},
-		
-		load: function(file) {
-			if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/i) ) {
-				this.sound.load(file);
-			} else if ( file.name.match(/\.(jpg|jpeg|gif|png|bmp|svg)$/i) ) {
-				this.image.load(file);
-			}
 		}
 	};
 };

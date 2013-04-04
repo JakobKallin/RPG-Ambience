@@ -94,11 +94,6 @@
 								data-ng-label="Rename Adventure"
 								data-active-when="app.renameInProgress"></text-button>
 						</li>
-						<li class="action delete">
-							<button
-								type="button"
-								data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
-						</li>
 					</ul>
 					<ul class="action-list playback">
 						<li class="action play">
@@ -510,7 +505,7 @@
 							</li>
 						</ul>
 						
-						<h2>Operations</h2>
+						<h2>Transfer</h2>
 						<ul data-ui-if="app.library == app.libraries.googleDrive" class="controls">
 							<li>
 								<button
@@ -527,6 +522,13 @@
 									data-ng-disabled="!app.libraries.local.adventures.canBeCopiedToGoogleDrive"
 									data-ng-click="copyAdventuresToGoogleDrive()">Copy Adventures on This Computer to Google Drive</button>
 							</li>
+						</ul>
+						
+						<h2>Delete Adventure</h2>
+						<ul class="controls">
+							<button
+								type="button"
+								data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
 						</ul>
 					</pane>
 					<pane

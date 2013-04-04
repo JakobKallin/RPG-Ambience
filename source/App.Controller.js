@@ -23,7 +23,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	var onMediaLoad = function onMediaLoad(media) {
 		$scope.$apply(function() {});
 	};
-	var library = localLibrary;
+	var library = null;
 	$scope.app = {
 		get adventure() {
 			return adventure;
@@ -79,6 +79,8 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	$scope.selectLibrary = function(newLibrary) {
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
+		
+		window.localStorage.setItem('library', newLibrary.name);
 		
 		if ( !newLibrary.adventures.haveBeenLoaded ) {
 			newLibrary.adventures.load(onAllAdventuresLoaded, onMediaLoad);
@@ -167,13 +169,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	
-	$scope.permanentlyRemoveAdventures = function() {
-		var removed = $scope.app.adventures.filter(get('willBeRemoved'));
-		removed.forEach(function(adventure) {
-			$scope.app.adventures.remove(adventure);
-		});
-	};
-	
 	$scope.onFilesDropped = function(viewModel, dropEvent) {
 		dropEvent.preventDefault();
 		Array.prototype.forEach.call(dropEvent.dataTransfer.files, function(file) {
@@ -236,6 +231,14 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			$scope.$apply(function() {});
 		}
 	};
+	
+	if ( window.localStorage.getItem('library') === localLibrary.name ) {
+		console.log('Setting library to saved setting: ' + localLibrary.name)
+		$scope.selectLibrary(localLibrary);
+	} else if ( window.localStorage.getItem('library') === googleDriveLibrary.name ) {
+		console.log('Setting library to saved setting: ' + localLibrary.name)
+		$scope.selectLibrary(googleDriveLibrary);
+	}
 };
 
 Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

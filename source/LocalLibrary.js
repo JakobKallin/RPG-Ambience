@@ -7,8 +7,12 @@ Ambience.App.LocalLibrary = function() {
 	
 	self.adventures = [];
 	self.adventures.load = function(onAllAdventuresLoaded) {
+		if ( !localStorage.getItem('count') ) {
+			localStorage.setItem('count', 0);
+		}
+		
 		var adventures = [];
-		for ( var i = 0; i < localStorage.length; ++i ) {
+		for ( var i = 0; i < localStorage.getItem('count'); ++i ) {
 			var config = JSON.parse(localStorage.getItem(i));
 			var adventure = Ambience.App.Adventure.fromConfig(config);
 			adventures.push(adventure);
@@ -28,31 +32,29 @@ Ambience.App.LocalLibrary = function() {
 	self.adventures.save = function() {
 		console.log('Saving ' + this.length + ' adventures to local storage');
 		
+		if ( !localStorage.getItem('count') ) {
+			localStorage.setItem('count', 0);
+		}
+		
 		// Save old JSON if something goes wrong when saving new JSON.
-		var oldJSON = new Array(localStorage.length);
-		for ( var i = 0; i < localStorage.length; ++i ) {
+		var oldJSON = new Array(localStorage.getItem('count'));
+		for ( var i = 0; i < localStorage.getItem('count'); ++i ) {
 			oldJSON[i] = localStorage.getItem(i);
 		}
 		
 		try {
-			localStorage.clear();
+			clearLocalStorage();
 			this.forEach(function(adventure, index) {
 				console.log('Saving adventure "' + adventure.title + '" to local storage');
 				
 				var config = adventure.toConfig();
 				var json = angular.toJson(config);
 				localStorage.setItem(index, json);
-				if ( localStorage.length === 0 ) {
-					debugger;
-				}
 			});
-			
-			if ( localStorage.length === 0 ) {
-				debugger;
-			}
+			localStorage.setItem('count', this.length);
 		} catch(error) {
 			// Restore old JSON, since something went wrong.
-			localStorage.clear();
+			clearLocalStorage();
 			for ( var i = 0; i < oldJSON.length; ++i ) {
 				localStorage.setItem(i, oldJSON[i]);
 			}
@@ -61,6 +63,13 @@ Ambience.App.LocalLibrary = function() {
 			throw error;
 		}
 	};
+	
+	function clearLocalStorage() {
+		for ( var i = 0; i < localStorage.getItem('count'); ++i ) {
+			localStorage.removeItem(i);
+		}
+		localStorage.setItem('count', 0);
+	}
 	
 	// The code below is very messy and should preferably be refactored using a library for async programming.
 	self.adventures.haveBeenCopiedToGoogleDrive = false;
@@ -85,7 +94,7 @@ Ambience.App.LocalLibrary = function() {
 				googleDriveLibrary.adventures.sort(function(a, b) {
 					return b.creationDate - a.creationDate;
 				});
-				$scope.app.library = googleDriveLibrary;
+				$scope.selectLibrary(googleDriveLibrary);
 			});
 			
 			self.adventures.forEach(function(adventure) {

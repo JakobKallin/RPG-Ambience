@@ -190,7 +190,7 @@ Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
 	if ( self.adventures.currentlyBeingSaved > 0 ) {
 		return (
 			'Your adventures are currently being saved to Google Drive. If you exit now, you risk losing data.' + '\n\n' +
-			'If this message persists, go to the "Options" tab and click "Save Google Drive Adventures to Computer", then manually upload them to Google Drive.'
+			'If this message persists, go to the "Options" tab and click "Save Google Drive Adventures to Your Computer", then manually upload them to Google Drive.'
 		);
 	}
 };

@@ -106,9 +106,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
 		
-		if ( !newLibrary.adventures.haveBeenLoaded ) {
+		if ( !newLibrary.adventures.areBeingLoaded && !newLibrary.adventures.haveBeenLoaded ) {
 			newLibrary.adventures.load(onAllAdventuresLoaded);
-			newLibrary.adventures.haveBeenLoaded = true;
+			newLibrary.adventures.areBeingLoaded = true;
 		}
 		
 		function onAllAdventuresLoaded(adventures) {
@@ -119,6 +119,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				
 				$scope.app.library = newLibrary;
 				adventures.haveBeenLoaded = true;
+				adventures.areBeingLoaded = false;
 			};
 
 			if ( $scope.$$phase ) {

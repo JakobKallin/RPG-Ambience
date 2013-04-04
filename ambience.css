@@ -585,6 +585,10 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 		line-height: 2;
 	}
 	
+	.splash p.note {
+		font-size: 1.5em;
+	}
+	
 	.splash ul {
 		display: block;
 		margin: 1em 0;
@@ -627,7 +631,7 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			line-height: 1.5;
 		}
 		
-		.splash p.note {
+		.splash ul.buttons p.note {
 			font-size: 0.75em;
 		}
 		

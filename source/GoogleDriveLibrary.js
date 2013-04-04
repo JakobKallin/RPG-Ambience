@@ -32,6 +32,14 @@ Ambience.App.GoogleDriveLibrary = function() {
 			});
 			
 			function onAllFilesLoaded(files) {
+				if ( !window.localStorage.exampleAdventureCreated ) {
+					console.log('Adding example adventure because it has not been added before');
+					var exampleJSON = Ambience.App.Adventure.exampleJSON;
+					var exampleAdventureConfig = JSON.parse(exampleJSON);
+					var exampleAdventure = Ambience.App.Adventure.fromConfig(exampleAdventureConfig);
+					self.adventures.push(exampleAdventure);
+				}
+				
 				files
 				.map(function(file) {
 					var config = JSON.parse(file.contents);
@@ -49,6 +57,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 				
 				// Only save Google Drive as a preference if adventures were successfully loaded.
 				window.localStorage.library = self.name;
+				window.localStorage.exampleAdventureCreated = true;
 			}
 		}
 	};

@@ -80,9 +80,25 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	};
 	
 	var loadedMediaURLs = {};
+	var exampleMediaURLs = {
+		'example:city': 'example/ishtar_rooftop.jpg',
+		'example:dragon-image': 'example/sintel-wallpaper-dragon.jpg',
+		'example:dragon-sound': 'example/dragon.ogg',
+		'example:music': 'example/9-Trailer_Music.ogg'
+	};
 	$scope.loadMedia = function(media) {
 		if ( loadedMediaURLs[media.id] ) {
 			console.log('Not loading media "' + media.id + '"; it has already been loaded');
+			return;
+		}
+		
+		if ( exampleMediaURLs[media.id] ) {
+			window.setTimeout(function() {
+				onMediaLoaded({
+					id: media.id,
+					url: exampleMediaURLs[media.id]
+				});
+			});
 			return;
 		}
 		

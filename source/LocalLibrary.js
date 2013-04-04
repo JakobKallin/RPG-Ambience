@@ -26,23 +26,7 @@ Ambience.App.LocalLibrary.prototype = {
 
 Ambience.App.LocalLibrary.MediaLibrary = function() {};
 Ambience.App.LocalLibrary.MediaLibrary.prototype = (function() {
-	var mediaURLs = {
-		'example:city': 'example/ishtar_rooftop.jpg',
-		'example:dragon-image': 'example/sintel-wallpaper-dragon.jpg',
-		'example:dragon-sound': 'example/dragon.ogg',
-		'example:music': 'example/9-Trailer_Music.ogg'
-	};
-	
-	function load(id, onMediaLoaded) {
-		if ( mediaURLs[id] ) {
-			window.setTimeout(function() {
-				onMediaLoaded({
-					id: id,
-					url: mediaURLs[id]
-				});
-			});
-		}
-	}
+	function load(id, onMediaLoaded) {}
 	
 	function selectImage(onImageLoaded) {
 		selectFiles(onImageLoaded, false, 'image/*');

@@ -242,8 +242,8 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
-			.addView(views.recent)
 			.addView(views.upload)
+			.addView(views.recent)
 			.setCallback(onPickerAction)
 			.build();
 		picker.setVisible(true);
@@ -279,8 +279,8 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
-			.addView(views.recent)
 			.addView(views.upload)
+			.addView(views.recent)
 			.setSelectableMimeTypes(mimeTypes.join(','))
 			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 			.setCallback(onPickerAction)

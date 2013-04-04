@@ -79,7 +79,8 @@ Ambience.App.LocalLibrary = function() {
 		console.log('Copying local adventures to Google Drive');
 		
 		if ( googleDriveLibrary.adventures.haveBeenLoaded ) {
-			onGoogleDriveAdventuresLoaded();
+			// Timeout because of $scope.$apply.
+			window.setTimeout(onGoogleDriveAdventuresLoaded, 1);
 		} else {
 			// Before the call below, since the call below calls selectLibrary, which tries to load the adventures.
 			googleDriveLibrary.adventures.haveBeenLoaded = true;
@@ -106,6 +107,10 @@ Ambience.App.LocalLibrary = function() {
 				
 				var config = adventure.toConfig();
 				var copy = Ambience.App.Adventure.fromConfig(config);
+				// If adventure has no media.
+				// Timeout because callback uses $scope.$apply..
+				window.setTimeout(completeIfReady, 1); 
+				
 				copy.media.forEach(function(media) {
 					var url = mediaURLs[media.id];
 					var request = new XMLHttpRequest();
@@ -130,20 +135,20 @@ Ambience.App.LocalLibrary = function() {
 						mediaToLoad -= 1;
 						completeIfReady();
 					}
-					
-					function completeIfReady() {
-						if ( mediaToLoad === 0 ) {
-							console.log('Local adventure "' + adventure.title + '" was copied to Google Drive');
-							
-							$scope.$apply(function() {
-								googleDriveLibrary.adventures.push(adventure);
-								googleDriveLibrary.adventures.sort(function(a, b) {
-									return b.creationDate - a.creationDate;
-								});
-							});
-						}
-					}
 				});
+				
+				function completeIfReady() {
+					if ( mediaToLoad === 0 ) {
+						console.log('Local adventure "' + adventure.title + '" was copied to Google Drive');
+						
+						$scope.$apply(function() {
+							googleDriveLibrary.adventures.push(adventure);
+							googleDriveLibrary.adventures.sort(function(a, b) {
+								return b.creationDate - a.creationDate;
+							});
+						});
+					}
+				}
 			});
 		}
 	};

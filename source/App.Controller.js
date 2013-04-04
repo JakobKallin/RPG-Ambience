@@ -222,7 +222,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		console.log('Setting library to saved setting: ' + localLibrary.name)
 		$scope.selectLibrary(localLibrary);
 	} else if ( window.localStorage.getItem('library') === googleDriveLibrary.name ) {
-		console.log('Setting library to saved setting: ' + localLibrary.name)
+		console.log('Setting library to saved setting: ' + googleDriveLibrary.name)
 		$scope.selectLibrary(googleDriveLibrary);
 	}
 };

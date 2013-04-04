@@ -15,6 +15,7 @@ Ambience.App.Adventure.upgradeConfig = function(config) {
 
 Ambience.App.Adventure.upgraders = {
 	1: function(config) {
+		config.creationDate = new Date();
 		delete config.media;
 		
 		config.scenes.forEach(function(scene) {

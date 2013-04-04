@@ -101,7 +101,8 @@ describe('Adventure conversion', function() {
 			]
 		};
 		
-		Ambience.App.Adventure.upgradeConfig(current)
+		Ambience.App.Adventure.upgradeConfig(current);
+		delete current.creationDate; // The date will have an unpredictable value so disregard it here.
 		expect(current).toEqual(next);
 	});
 });

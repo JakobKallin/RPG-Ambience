@@ -13,7 +13,6 @@
 		<script src="libraries/ambience-stage/source/MediaPlayers/Sound.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
 		<script src="libraries/ambience-stage/source/Scene.js"></script>
-		<script src="source/Theater.js"></script>
 		
 		<script>
 			// Some fairly complex preloading logic.
@@ -60,11 +59,12 @@
 					var node = document.getElementById(id);
 					return new Ambience.Stage(node);
 				});
-				var ambience = new Ambience.App.Theater(layers[0], layers[1]);
-				startTeaser(ambience);
+				var background = layers[0];
+				var foreground = layers[1];
+				startTeaser(background, foreground);
 			};
 			
-			var startTeaser = function(ambience) {
+			var startTeaser = function(background, foreground) {
 				var soundtrack = new Ambience.Scene(['Sound']);
 				soundtrack.sound.tracks = ['example/9-Trailer_Music.ogg'];
 				soundtrack.sound.loop = false;
@@ -88,12 +88,12 @@
 				life.fade.out = 1600;
 				
 				var city = new Ambience.Scene(['Image']);
-				city.image.file.url = 'example/ishtar_rooftop.jpg';
+				city.image.url = 'example/ishtar_rooftop.jpg';
 				city.image.style = { backgroundSize: 'cover' };
 				city.fade.in = city.fade.out = 4000;
 				
 				var dragon = new Ambience.Scene(['Image', 'Sound']);
-				dragon.image.file.url = 'example/sintel-wallpaper-dragon.jpg',
+				dragon.image.url = 'example/sintel-wallpaper-dragon.jpg',
 				dragon.image.style = { backgroundSize: 'cover' };
 				dragon.sound.tracks = ['example/dragon.ogg'];
 				dragon.sound.loop = false;
@@ -108,43 +108,43 @@
 				title.fade.in = title.fade.out = 3200;
 				
 				window.setTimeout(function() {
-					ambience.playBackground(soundtrack);
-					ambience.playForeground(imagine);
+					background.play(soundtrack);
+					foreground.play(imagine);
 				}, 1000);
 				
 				window.setTimeout(function() {
-					ambience.fadeOutForeground();
+					foreground.fadeOut();
 				}, 6500);
 				
 				window.setTimeout(function() {
-					ambience.stopForeground();
-					ambience.playForeground(life);
+					foreground.stop();
+					foreground.play(life);
 				}, 8500);
 				
 				window.setTimeout(function() {
-					ambience.fadeOutForeground();
+					foreground.fadeOut();
 				}, 11500);
 				
 				window.setTimeout(function() {
-					ambience.stopForeground();
-					ambience.playForeground(city);
+					foreground.stop();
+					foreground.play(city);
 				}, 13500);
 				
 				window.setTimeout(function() {
-					ambience.playForeground(dragon);
+					foreground.play(dragon);
 				}, 18000);
 				
 				window.setTimeout(function() {
-					ambience.fadeOutForeground();
+					foreground.fadeOut();
 				}, 24000);
 				
 				window.setTimeout(function() {
-					ambience.stopForeground();
-					ambience.playForeground(title);
+					foreground.stop();
+					foreground.play(title);
 				}, 28000);
 				
 				window.setTimeout(function() {
-					ambience.fadeOutForeground();
+					foreground.fadeOut();
 				}, 33000);
 				
 				window.setTimeout(function() {

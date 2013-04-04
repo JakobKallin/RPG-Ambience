@@ -13,7 +13,7 @@ Ambience.App.Adventure = function() {
 	
 	Object.defineProperty(self, 'media', {
 		get: function() {
-			return self.scenes.map(get('media')).flatten();
+			return this.scenes.map(get('media')).flatten();
 		}
 	});
 	

@@ -21,6 +21,7 @@ Ambience.App.Adventure.Controller = function($scope) {
 
 	$scope.copyScene = function(scene) {
 		// We don't create an actual copy because getters and setters are not copied (only their values).
+		// TODO: Nested objects (like tracks) should be deeply copied.
 		var newScene = new Ambience.App.Scene();
 		Object.overlay(newScene, scene);
 		

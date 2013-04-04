@@ -62,13 +62,92 @@ Ambience.App.LocalLibrary = function() {
 		}
 	};
 	
+	// The code below is very messy and should preferably be refactored using a library for async programming.
 	self.adventures.haveBeenCopiedToGoogleDrive = false;
-	self.adventures.copyToGoogleDrive = function(googleDriveLibrary) {
+	
+	// Should be refactored so the library does not know about $scope.
+	self.adventures.copyToGoogleDrive = function(googleDriveLibrary, $scope) {
 		console.log('Copying local adventures to Google Drive');
 		
+		if ( googleDriveLibrary.adventures.haveBeenLoaded ) {
+			onGoogleDriveAdventuresLoaded();
+		} else {
+			// Before the call below, since the call below calls selectLibrary, which tries to load the adventures.
+			googleDriveLibrary.adventures.haveBeenLoaded = true;
+			googleDriveLibrary.adventures.load(onGoogleDriveAdventuresLoaded);
+		}
 		
 		self.adventures.haveBeenCopiedToGoogleDrive = true;
+		
+		function onGoogleDriveAdventuresLoaded() {
+			$scope.$apply(function() {
+				// This duplicates what is already in selectLibrary.
+				googleDriveLibrary.adventures.sort(function(a, b) {
+					return b.creationDate - a.creationDate;
+				});
+				$scope.app.library = googleDriveLibrary;
+			});
+			
+			self.adventures.forEach(function(adventure) {
+				var mediaURLs = {};
+				adventure.media.forEach(function(media) {
+					mediaURLs[media.id] = media.url;
+				});
+				var mediaToLoad = adventure.media.length;
+				
+				var config = adventure.toConfig();
+				var copy = Ambience.App.Adventure.fromConfig(config);
+				copy.media.forEach(function(media) {
+					var url = mediaURLs[media.id];
+					var request = new XMLHttpRequest();
+					request.open('GET', url);
+					request.responseType = 'blob';
+					request.send();
+					request.addEventListener('load', onMediaLoaded);
+					
+					function onMediaLoaded(event) {
+						var file = event.target.response;
+						file.name = media.name;
+						googleDriveLibrary.media.saveMedia(file, onFileSaved, onError);
+					}
+					
+					function onFileSaved(item) {
+						media.id = item.id;
+						mediaToLoad -= 1;
+						completeIfReady();
+					}
+					
+					function onError() {
+						mediaToLoad -= 1;
+						completeIfReady();
+					}
+					
+					function completeIfReady() {
+						if ( mediaToLoad === 0 ) {
+							console.log('Local adventure "' + adventure.title + '" was copied to Google Drive');
+							
+							$scope.$apply(function() {
+								googleDriveLibrary.adventures.push(adventure);
+								googleDriveLibrary.adventures.sort(function(a, b) {
+									return b.creationDate - a.creationDate;
+								});
+							});
+						}
+					}
+				});
+			});
+		}
 	};
+	
+	Object.defineProperty(self.adventures, 'canBeCopiedToGoogleDrive', {
+		get: function() {
+			return Boolean(
+				self.media.db &&
+				self.adventures.haveBeenLoaded &&
+				!self.adventures.haveBeenCopiedToGoogleDrive
+			);
+		}
+	});
 	
 	self.media = new Ambience.App.LocalLibrary.MediaLibrary();
 };

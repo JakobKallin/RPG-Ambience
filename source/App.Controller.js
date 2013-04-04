@@ -80,9 +80,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
 		
-		if ( !newLibrary.adventures.haveLoaded ) {
+		if ( !newLibrary.adventures.haveBeenLoaded ) {
 			newLibrary.adventures.load(onAllAdventuresLoaded, onMediaLoad);
-			newLibrary.adventures.haveLoaded = true;
+			newLibrary.adventures.haveBeenLoaded = true;
 		}
 		
 		function onAllAdventuresLoaded(adventures) {
@@ -92,7 +92,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				});
 				
 				$scope.app.library = newLibrary;
-				$scope.app.adventure = adventures[0];
 				adventures.haveBeenLoaded = true;
 			};
 
@@ -216,7 +215,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	});
 	
 	// Save adventures once every two minutes.
-	var saveInterval = 10 * 1000;
+	var saveInterval = 60 * 1000;
 	function saveAdventures() {
 		// Only save if the adventures have been loaded. Otherwise they might be overwritten with an empty list.
 		if ( $scope.app.library.adventures.haveBeenLoaded ) {
@@ -227,6 +226,16 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		window.setTimeout(saveAdventures, saveInterval);
 	}
 	window.setTimeout(saveAdventures, saveInterval);
+	
+	$scope.copyAdventuresToGoogleDrive = function() {
+		$scope.app.libraries.local.adventures.copyToGoogleDrive($scope.app.libraries.googleDrive, $scope);
+		$scope.selectLibrary($scope.app.libraries.googleDrive);
+		
+		// Just make sure the adventures are added to the Google Drive list.
+		function onAdventuresCopied() {
+			$scope.$apply(function() {});
+		}
+	};
 };
 
 Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

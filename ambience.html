@@ -524,10 +524,8 @@
 							<li>
 								<button
 									type="button"
-									data-ng-disabled="
-										!app.libraries.local.adventures.haveBeenLoaded ||
-										app.libraries.local.adventures.haveBeenCopiedToGoogleDrive"
-									data-ng-click="app.libraries.local.adventures.copyToGoogleDrive(app.libraries.googleDrive)">Save Adventures on This Computer to Google Drive</button>
+									data-ng-disabled="!app.libraries.local.adventures.canBeCopiedToGoogleDrive"
+									data-ng-click="copyAdventuresToGoogleDrive()">Save Adventures on This Computer to Google Drive</button>
 							</li>
 						</ul>
 					</pane>

@@ -254,10 +254,6 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 			onMediaLoaded(media);
 		}
 	};
-	
-	self.saveMedia = function(id, file, onSave) {
-		console.log('Saving media ' + id + ' to Google Drive');
-	};
 };
 
 Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(onImageLoaded) {
@@ -318,6 +314,13 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 	}});
 };
 Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks.label = "Add Tracks From Google Drive";
+
+Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.saveMedia = function(file, onMediaSaved, onError) {
+	var self = this;
+	
+	console.log('Saving media file "' + file.name + '" to Google Drive');
+	self.drive.saveNewFile(file, onMediaSaved, onError);
+};
 
 Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	var self = this;
@@ -475,9 +478,6 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 				onAllFilesLoaded(files);
 			}
 		}
-	};
-	
-	self.downloadSingleFile = function(url, onLoad, onError) {
 	};
 	
 	self.saveNewFile = function(file, onSaved, onError) {

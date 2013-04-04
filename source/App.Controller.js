@@ -77,10 +77,10 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	};
 	
 	$scope.selectLibrary = function(newLibrary) {
+		console.log('Selecting library: ' + newLibrary.name);
+		
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
-		
-		window.localStorage.setItem('library', newLibrary.name);
 		
 		if ( !newLibrary.adventures.haveBeenLoaded ) {
 			newLibrary.adventures.load(onAllAdventuresLoaded, onMediaLoad);
@@ -189,9 +189,11 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		
 		// TODO: We should check every activated library for exit messages.
 		
-		var returnValue = $scope.app.library.onExit();
-		if ( returnValue !== undefined ) {
-			return event.returnValue = returnValue;
+		if ( $scope.app.library.onExit ) {
+			var returnValue = $scope.app.library.onExit();
+			if ( returnValue !== undefined ) {
+				return event.returnValue = returnValue;
+			}
 		}
 	});
 	
@@ -208,20 +210,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	}
 	window.setTimeout(saveAdventures, saveInterval);
 	
-	$scope.copyAdventuresToGoogleDrive = function() {
-		$scope.app.libraries.local.adventures.copyToGoogleDrive($scope.app.libraries.googleDrive, $scope);
-		$scope.selectLibrary($scope.app.libraries.googleDrive);
-		
-		// Just make sure the adventures are added to the Google Drive list.
-		function onAdventuresCopied() {
-			$scope.$apply(function() {});
-		}
-	};
-	
-	if ( window.localStorage.getItem('library') === localLibrary.name ) {
-		console.log('Setting library to saved setting: ' + localLibrary.name)
-		$scope.selectLibrary(localLibrary);
-	} else if ( window.localStorage.getItem('library') === googleDriveLibrary.name ) {
+	if ( window.localStorage.library === googleDriveLibrary.name ) {
 		console.log('Setting library to saved setting: ' + googleDriveLibrary.name)
 		$scope.selectLibrary(googleDriveLibrary);
 	}

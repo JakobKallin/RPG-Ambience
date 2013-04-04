@@ -7,409 +7,70 @@ Ambience.App.LocalLibrary = function() {
 	
 	self.adventures = [];
 	self.adventures.load = function(onAllAdventuresLoaded) {
-		if ( !localStorage.getItem('count') ) {
-			localStorage.setItem('count', 0);
-		}
-		
-		var adventures = [];
-		for ( var i = 0; i < localStorage.getItem('count'); ++i ) {
-			var config = JSON.parse(localStorage.getItem(i));
-			var adventure = Ambience.App.Adventure.fromConfig(config);
-			adventures.push(adventure);
-		}
-		
-		// Simply calling forEach on self.adventures.push gives this error: "Array.prototype.push called on null or undefined".
-		adventures.forEach(function(adventure) {
-			self.adventures.push(adventure);
-		});
 		onAllAdventuresLoaded(self.adventures);
-		
-		var usedMedia = this.map(get('media')).flatten();
-		var usedIds = usedMedia.map(get('id'));
-		self.media.init(usedIds);
 	};
 	
-	self.adventures.save = function() {
-		console.log('Saving ' + this.length + ' adventures to local storage');
-		
-		if ( !localStorage.getItem('count') ) {
-			localStorage.setItem('count', 0);
-		}
-		
-		// Save old JSON if something goes wrong when saving new JSON.
-		var oldJSON = new Array(localStorage.getItem('count'));
-		for ( var i = 0; i < localStorage.getItem('count'); ++i ) {
-			oldJSON[i] = localStorage.getItem(i);
-		}
-		
-		try {
-			clearLocalStorage();
-			this.forEach(function(adventure, index) {
-				console.log('Saving adventure "' + adventure.title + '" to local storage');
-				
-				var config = adventure.toConfig();
-				var json = angular.toJson(config);
-				localStorage.setItem(index, json);
-			});
-			localStorage.setItem('count', this.length);
-		} catch(error) {
-			// Restore old JSON, since something went wrong.
-			clearLocalStorage();
-			for ( var i = 0; i < oldJSON.length; ++i ) {
-				localStorage.setItem(i, oldJSON[i]);
-			}
-			
-			debugger;
-			throw error;
-		}
-	};
-	
-	function clearLocalStorage() {
-		for ( var i = 0; i < localStorage.getItem('count'); ++i ) {
-			localStorage.removeItem(i);
-		}
-		localStorage.setItem('count', 0);
-	}
-	
-	// The code below is very messy and should preferably be refactored using a library for async programming.
-	self.adventures.haveBeenCopiedToGoogleDrive = false;
-	
-	// Should be refactored so the library does not know about $scope.
-	self.adventures.copyToGoogleDrive = function(googleDriveLibrary, $scope) {
-		console.log('Copying local adventures to Google Drive');
-		
-		if ( googleDriveLibrary.adventures.haveBeenLoaded ) {
-			// Timeout because of $scope.$apply.
-			window.setTimeout(onGoogleDriveAdventuresLoaded, 1);
-		} else {
-			// Before the call below, since the call below calls selectLibrary, which tries to load the adventures.
-			googleDriveLibrary.adventures.haveBeenLoaded = true;
-			googleDriveLibrary.adventures.load(onGoogleDriveAdventuresLoaded);
-		}
-		
-		self.adventures.haveBeenCopiedToGoogleDrive = true;
-		
-		function onGoogleDriveAdventuresLoaded() {
-			$scope.$apply(function() {
-				// This duplicates what is already in selectLibrary.
-				googleDriveLibrary.adventures.sort(function(a, b) {
-					return b.creationDate - a.creationDate;
-				});
-				$scope.selectLibrary(googleDriveLibrary);
-			});
-			
-			self.adventures.forEach(function(adventure) {
-				var mediaURLs = {};
-				adventure.media.forEach(function(media) {
-					mediaURLs[media.id] = media.url;
-				});
-				var mediaToLoad = adventure.media.length;
-				
-				var config = adventure.toConfig();
-				var copy = Ambience.App.Adventure.fromConfig(config);
-				// If adventure has no media.
-				// Timeout because callback uses $scope.$apply..
-				window.setTimeout(completeIfReady, 1); 
-				
-				copy.media.forEach(function(media) {
-					var url = mediaURLs[media.id];
-					var request = new XMLHttpRequest();
-					request.open('GET', url);
-					request.responseType = 'blob';
-					request.send();
-					request.addEventListener('load', onMediaLoaded);
-					
-					function onMediaLoaded(event) {
-						var file = event.target.response;
-						file.name = media.name;
-						googleDriveLibrary.media.saveMedia(file, onFileSaved, onError);
-					}
-					
-					function onFileSaved(item) {
-						media.id = item.id;
-						mediaToLoad -= 1;
-						completeIfReady();
-					}
-					
-					function onError() {
-						mediaToLoad -= 1;
-						completeIfReady();
-					}
-				});
-				
-				function completeIfReady() {
-					if ( mediaToLoad === 0 ) {
-						console.log('Local adventure "' + adventure.title + '" was copied to Google Drive');
-						
-						$scope.$apply(function() {
-							googleDriveLibrary.adventures.push(adventure);
-							googleDriveLibrary.adventures.sort(function(a, b) {
-								return b.creationDate - a.creationDate;
-							});
-						});
-					}
-				}
-			});
-		}
-	};
-	
-	Object.defineProperty(self.adventures, 'canBeCopiedToGoogleDrive', {
-		get: function() {
-			return Boolean(
-				self.media.db &&
-				self.adventures.haveBeenLoaded &&
-				!self.adventures.haveBeenCopiedToGoogleDrive
-			);
-		}
-	});
+	self.adventures.save = function() {};
 	
 	self.media = new Ambience.App.LocalLibrary.MediaLibrary();
 };
 
-Ambience.App.LocalLibrary.prototype.name = 'This computer';
+Ambience.App.LocalLibrary.prototype = {
+	onExit: function() {},
+	name: 'This computer'
+};
 
-Ambience.App.LocalLibrary.prototype.onExit = function() {
-	if ( this.media.isSaving ) {
-		return 'There are currently media files being saved. If you exit now, you risk losing data.';
+Ambience.App.LocalLibrary.MediaLibrary = function() {};
+Ambience.App.LocalLibrary.MediaLibrary.prototype = (function() {
+	function selectImage(onImageLoaded) {
+		selectFiles(onImageLoaded, false, 'image/*');
 	}
-};
-
-Ambience.App.LocalLibrary.MediaLibrary = function() {
-	var self = this;
+	selectImage.label = 'Select Image';
 	
-	self.db = null;
-	
-	self.init = function(usedIds) {
-		var request = indexedDB.open('media');
-		
-		request.onupgradeneeded = function(event) {
-			var db = event.target.result;
-			if ( !db.objectStoreNames.contains('media') ) {
-				db.createObjectStore('media');
-			}
-		};
-		
-		request.onsuccess = function(event) {
-			console.log('IndexedDB has loaded');
-			
-			self.db = event.target.result;
-			adventuresToLoad.forEach(function(descriptor) {
-				self.loadAdventure(descriptor.adventure, descriptor.onMediaLoad);
-			});
-			adventuresToLoad.length = 0;
-			
-			self.removeUnusedMedia(usedIds);
-		};
-	};
-	
-	var adventuresToLoad = [];
-	var loadedAdventures = [];
-	self.loadAdventure = function(adventure, onMediaLoad) {
-		if ( loadedAdventures.contains(adventure) ) {
-			console.log(
-				'Not loading media for adventure "' +
-				adventure.title +
-				'"; it has already been loaded'
-			);
-			return;
-		}
-		
-		if ( self.db ) {
-			console.log('Loading media for adventure "' + adventure.title + '"');
-			adventure.scenes.forEach(function(scene) {
-				self.loadScene(scene, onMediaLoad);
-			});
-			loadedAdventures.push(adventure);
-		} else {
-			console.log('Delaying load of adventure "' + adventure.title + '" until IndexedDB has loaded')
-			adventuresToLoad.push({
-				adventure: adventure,
-				onMediaLoad: onMediaLoad
-			});
-		}
-	};
-	
-	self.loadScene = function(scene, onMediaLoad) {
-		scene.media.forEach(function(media) {
-			self.loadMedia(media.id, function(objectURL) {
-				media.url = objectURL;
-				media.thumbnail = objectURL;
-				onMediaLoad(media);
-			});
-		});
-	};
-	
-	self.loadMedia = function(id, onSuccess) {
-		console.log('Loading media: ' + id);
-		
-		self.db.transaction('media', 'readonly')
-		.objectStore('media')
-		.get(id)
-		.onsuccess = function(event) {
-			var dataURL = event.target.result;
-			var objectURL = self.objectURLFromDataURL(dataURL);
-			var mimeType = self.mimeTypeFromDataURL(dataURL);
-			
-			onSuccess(objectURL, mimeType);
-			
-			console.log('Done loading media: ' + id);
-		};
-	};
-	
-	var readWorker = new Worker('source/MediaReader.js');
-	var mediaBeingSaved = {};
-	var saveListeners = {};
-	
-	self.saveMedia = function(id, file, onSave) {
-		console.log('Saving media: ' + id);
-		
-		mediaBeingSaved[id] = {
-			id: id,
-			name: file.name,
-			mimeType: file.type
-		};
-		saveListeners[id] = onSave;
-		
-		readWorker.postMessage({
-			id: id,
-			file: file
-		});
-	};
-	
-	readWorker.onmessage = function(event) {
-		var message = event.data;
-		var id = message.id;
-		var dataURL = message.url;
-		
-		self.db.transaction('media', 'readwrite')
-		.objectStore('media')
-		.put(dataURL, id)
-		.onsuccess = function() {
-			console.log('Done saving media: ' + id);
-			
-			var media = mediaBeingSaved[id];
-			var objectURL = objectURLFromDataURL(dataURL);
-			media.url = objectURL;
-			media.thumbnail = objectURL;
-			
-			var listener = saveListeners[id];
-			listener(media);
-			
-			delete mediaBeingSaved[id];
-			delete saveListeners[id];
-		};
-	};
-	
-	self.objectURLFromDataURL = function(dataURL) {
-		var base64 = dataURL.substring(dataURL.indexOf(',') + 1);
-		var byteString = atob(base64);
-		
-		var buffer = new ArrayBuffer(byteString.length);
-		var integers = new Uint8Array(buffer);
-		for ( var i = 0; i < byteString.length; ++i ) {
-			integers[i] = byteString.charCodeAt(i);
-		}
-		
-		var mimeType = self.mimeTypeFromDataURL(dataURL);
-		var blob = new Blob([integers], { type: mimeType });
-		var objectURL = window.URL.createObjectURL(blob);
-		
-		return objectURL;
-	};
-	
-	self.mimeTypeFromDataURL = function(dataURL) {
-		return dataURL.substring(dataURL.indexOf(':') + 1, dataURL.indexOf(';'));
-	};
-	
-	Object.defineProperty(self, 'isSaving', {
-		get: function() {
-			var isSaving = false;
-			for ( var id in mediaBeingSaved ) {
-				isSaving = true;
-			}
-			
-			return isSaving;
-		}
-	});
-	
-	self.removeUnusedMedia = function(usedIds) {
-		console.log('Starting to remove unused media from IndexedDB...')
-		
-		var store = self.db.transaction('media', 'readwrite').objectStore('media');
-		var mediaCount = 0;
-		var removedCount = 0;
-		
-		store.openCursor().onsuccess = function(event) {
-			var cursor = event.target.result;
-			if ( cursor ) {
-				mediaCount += 1;
-				var id = cursor.key;
-				if ( !usedIds.contains(id) ) {
-					console.log('Removing media: ' + id);
-					store.delete(id);
-					removedCount += 1;
-				} else {
-					console.log('Retaining media: ' + id);
-				}
-				cursor.continue();
-			} else {
-				console.log('Removed ' + removedCount + ' of ' + mediaCount + ' media from IndexedDB');
-			}
-		};
-	};
-};
-
-Ambience.App.LocalLibrary.MediaLibrary.prototype.selectImage = function(onLoad) {
-	this.selectFiles(onLoad, false, 'image/*');
-};
-Ambience.App.LocalLibrary.MediaLibrary.prototype.selectImage.label = 'Select Image';
-
-Ambience.App.LocalLibrary.MediaLibrary.prototype.selectTracks = function(onLoad) {
-	this.selectFiles(onLoad, true, 'audio/*');
-};
-Ambience.App.LocalLibrary.MediaLibrary.prototype.selectTracks.label = 'Select Tracks';
-
-Ambience.App.LocalLibrary.MediaLibrary.prototype.selectFiles = function(onLoad, multiple, mimeType) {
-	var self = this;
-	
-	// We create a new file input on every click because we want a change event even if we select the same file.
-	var input = document.createElement('input');
-	input.type = 'file';
-	// If the argument is undefined, the value should be true.
-	input.multiple = multiple;
-	input.accept = mimeType;
-	
-	// We need to actually insert the node for IE10 to accept the click() call below.
-	input.style.display = 'none';
-	document.body.appendChild(input);
-	
-	// This should be before the call to click.
-	// It makes more sense semantically, and IE10 seems to require it.
-	input.addEventListener('change', function(event) {
-		onFilesSelected(event.target.files);
-	});
-	
-	input.click();
-	
-	function onFilesSelected(files) {
-		// Make sure that the input is only removed after all files have been used.
-		// If it's removed earlier, needed file references may disappear.
-		var remaining = files.length;
-		var modifiedOnLoad = function(media) {
-			onLoad(media);
-			remaining -= 1;
-			
-			if ( remaining === 0 ) {
-				console.log('Saved ' + files.length + ' media; removing file input');
-				document.body.removeChild(input);
-			}
-		}
-		
-		Array.prototype.forEach.call(files, function(file) {
-			var objectURL = window.URL.createObjectURL(file)
-			var id = objectURL.replace(/^blob:/, '');
-			
-			self.saveMedia(id, file, modifiedOnLoad);
-		});
+	function selectTracks(onTrackLoaded) {
+		selectFiles(onTrackLoaded, true, 'audio/*');
 	}
-};
+	selectTracks.label = 'Add Tracks';
+	
+	function selectFiles(onMediaLoaded, multiple, mimeType) {
+		// We create a new file input on every click because we want a change event even if we select the same file.
+		var input = document.createElement('input');
+		input.type = 'file';
+		input.multiple = multiple;
+		input.accept = mimeType;
+		
+		// We need to actually insert the node for IE10 to accept the click() call below.
+		input.style.display = 'none';
+		document.body.appendChild(input);
+		
+		// This should be before the call to click.
+		// It makes more sense semantically, and IE10 seems to require it.
+		input.addEventListener('change', function(event) {
+			onFilesSelected(event.target.files);
+		});
+		
+		input.click();
+		
+		function onFilesSelected(files) {
+			Array.prototype.forEach.call(files, function(file) {
+				var objectURL = window.URL.createObjectURL(file)
+				var id = objectURL.replace(/^blob:/, '');
+				var media = {
+					id: id,
+					url: objectURL
+				};
+				onMediaLoaded(media)
+			});
+			
+			// Make sure that the input is only removed after all files have been used.
+			// If it's removed earlier, needed file references may disappear.
+			document.body.removeChild(input);
+		}
+	}
+	
+	return {
+		selectImage: selectImage,
+		selectTracks: selectTracks,
+		loadAdventure: function() {}
+	};
+})();

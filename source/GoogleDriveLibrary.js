@@ -46,6 +46,9 @@ Ambience.App.GoogleDriveLibrary = function() {
 				});
 				
 				onAllAdventuresLoaded(self.adventures);
+				
+				// Only save Google Drive as a preference if adventures were successfully loaded.
+				window.localStorage.library = self.name;
 			}
 		}
 	};

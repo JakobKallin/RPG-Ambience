@@ -94,6 +94,11 @@
 								data-ng-label="Rename Adventure"
 								data-active-when="app.renameInProgress"></text-button>
 						</li>
+						<li class="action delete">
+							<button
+								type="button"
+								data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
+						</li>
 					</ul>
 					<ul class="action-list playback">
 						<li class="action play">
@@ -487,51 +492,6 @@
 						</div>
 					</pane>
 					<pane
-						id="options-tab"
-						class="enclosed-view"
-						data-heading="Options">
-						<h2>Save Location</h2>
-						<ul class="controls">
-							<li data-ng-repeat="library in app.orderedLibraries">
-								<label>
-									<input
-										type="radio"
-										name="library"
-										data-ng-value="library"
-										data-ng-model="app.library"
-										data-ng-change="selectLibrary(library)">
-									<span>{{library.name}}</span>
-								</label>
-							</li>
-						</ul>
-						
-						<h2>Transfer</h2>
-						<ul data-ui-if="app.library == app.libraries.googleDrive" class="controls">
-							<li>
-								<button
-									type="button"
-									data-ng-disabled="!app.libraries.googleDrive.adventures.haveBeenLoaded"
-									data-ng-click="app.libraries.googleDrive.adventures.download()">Save Google Drive Adventures to Hard Drive</button>
-							</li>
-						</ul>
-						
-						<ul data-ui-if="app.library == app.libraries.local" class="controls">
-							<li>
-								<button
-									type="button"
-									data-ng-disabled="!app.libraries.local.adventures.canBeCopiedToGoogleDrive"
-									data-ng-click="copyAdventuresToGoogleDrive()">Copy Adventures on This Computer to Google Drive</button>
-							</li>
-						</ul>
-						
-						<h2>Delete Adventure</h2>
-						<ul class="controls">
-							<button
-								type="button"
-								data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
-						</ul>
-					</pane>
-					<pane
 						id="help-tab"
 						class="enclosed-view help-document"
 						data-heading="Help">
@@ -619,14 +579,6 @@
 				<p>Where do you want to save your adventures?</p>
 				<ul class="buttons">
 					<li>
-						<button
-							type="button"
-							data-ng-click="selectLibrary(app.libraries.local)">
-							<img src="images/html5.png">
-							<span>This computer</span>
-						</button>
-					</li><!--
-					--><li>
 						<button
 							type="button"
 							data-ng-click="selectLibrary(app.libraries.googleDrive)">

@@ -491,16 +491,16 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		}
 		
 		var reader = new FileReader();
-		reader.readAsBinaryString(file);
+		reader.readAsDataURL(file);
 		reader.onload = function(e) {
-			var contents = reader.result;			
+			var dataURL = reader.result;
+			var base64Data = dataURL.substring(dataURL.indexOf(',') + 1);
 			var contentType = file.type || 'application/octet-stream';
 			var metadata = {
 				'title': file.name,
 				'mimeType': contentType
 			};
 			
-			var base64Data = btoa(contents);
 			var multipartRequestBody =
 				delimiter +
 				'Content-Type: application/json\r\n\r\n' +

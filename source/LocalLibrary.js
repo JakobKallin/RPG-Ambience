@@ -62,6 +62,14 @@ Ambience.App.LocalLibrary = function() {
 		}
 	};
 	
+	self.adventures.haveBeenCopiedToGoogleDrive = false;
+	self.adventures.copyToGoogleDrive = function(googleDriveLibrary) {
+		console.log('Copying local adventures to Google Drive');
+		
+		
+		self.adventures.haveBeenCopiedToGoogleDrive = true;
+	};
+	
 	self.media = new Ambience.App.LocalLibrary.MediaLibrary();
 };
 

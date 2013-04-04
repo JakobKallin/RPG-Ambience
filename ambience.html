@@ -519,6 +519,17 @@
 									data-ng-click="app.libraries.googleDrive.adventures.download()">Save Google Drive Adventures to Your Computer</button>
 							</li>
 						</ul>
+						
+						<ul data-ui-if="app.library == app.libraries.local">
+							<li>
+								<button
+									type="button"
+									data-ng-disabled="
+										!app.libraries.local.adventures.haveBeenLoaded ||
+										app.libraries.local.adventures.haveBeenCopiedToGoogleDrive"
+									data-ng-click="app.libraries.local.adventures.copyToGoogleDrive(app.libraries.googleDrive)">Save Adventures on This Computer to Google Drive</button>
+							</li>
+						</ul>
 					</pane>
 					<pane
 						id="help-tab"

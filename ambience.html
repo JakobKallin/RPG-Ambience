@@ -38,7 +38,7 @@
 		<script src="source/Theater.js"></script>
 		<script src="source/Adventure.js"></script>
 		<script src="source/Adventure.upgrade.js"></script>
-		<script src="source/Adventure.exampleJSON.js"></script>
+		<script src="source/Adventure.Example.js"></script>
 		<script src="source/Scene.js"></script>
 		<script src="source/Scene.Background.js"></script>
 		<script src="source/Scene.Image.js"></script>
@@ -119,6 +119,14 @@
 						id="scene-tab"
 						class="scene-view"
 						data-heading="Scenes">
+						<div class="notice" data-ui-if="!app.adventure">
+							<p>You have no adventures</p>
+							<p>
+								<button
+									type="button"
+									data-ng-click="loadExampleAdventure()">Load an Example Adventure</button>
+							</p>
+						</div>
 						<div class="list-view" data-ui-if="app.adventure">
 							<ul
 								data-ui-sortable="{ distance: 10, axis: 'y' }"

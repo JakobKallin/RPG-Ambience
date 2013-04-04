@@ -437,6 +437,21 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 	content: "Unsupported format: ";
 }
 	
+	.notice {
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		padding: 1.5em;
+		font-size: 1.5em;
+		line-height: 2;
+		text-align: center;
+	}
+	
+		.notice button {
+			font-size: 0.67em;
+		}
+	
 	.enclosed-view {
 		height: 100%;
 		box-sizing: border-box;

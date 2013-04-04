@@ -16,9 +16,8 @@ Ambience.ScenePreview = function() {
 		},
 		replace: true,
 		link: function(scope, $element, attrs) {
-			var element = $element[0];
-			var layer = element;
-			var text = element.querySelector('.text.inner');
+			var layer = $element[0];
+			var text = layer.querySelector('.text.inner');
 			
 			Object.defineProperty(scope, 'layerStyle', {
 				get: function() {

@@ -146,6 +146,12 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		}
 	};
 	
+	$scope.loadExampleAdventure = function() {
+		var adventure = new Ambience.App.Adventure.Example();
+		$scope.app.library.adventures.push(adventure);
+		$scope.app.adventure = adventure;
+	};
+	
 	$scope.editorWidth = 0.75;
 	
 	$scope.onKeyDown = function(event) {

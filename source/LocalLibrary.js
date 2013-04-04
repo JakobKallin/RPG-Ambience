@@ -6,7 +6,11 @@ Ambience.App.LocalLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	self.adventures.load = function(onAllAdventuresLoaded) {
+	self.adventures.load = function(onAllAdventuresLoaded, onMediaLoaded) {
+		var exampleJSON = Ambience.App.Adventure.exampleJSON;
+		var exampleAdventureConfig = JSON.parse(exampleJSON);
+		var exampleAdventure = Ambience.App.Adventure.fromConfig(exampleAdventureConfig);
+		self.adventures.push(exampleAdventure);
 		onAllAdventuresLoaded(self.adventures);
 	};
 	

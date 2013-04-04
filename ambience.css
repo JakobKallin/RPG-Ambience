@@ -469,6 +469,15 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			list-style-type: square;
 		}
 		
+		.enclosed-view ul.controls {
+			margin-left: 0;
+			margin-right: 0;
+		}
+		
+			.enclosed-view ul.controls li {
+				list-style-type: none; 
+			}
+		
 		.enclosed-view a:link {
 			color: hsl(60, 75%, 50%);
 		}

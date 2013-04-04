@@ -496,7 +496,7 @@
 						class="enclosed-view"
 						data-heading="Options">
 						<h2>Save Location</h2>
-						<ul>
+						<ul class="controls">
 							<li data-ng-repeat="library in app.orderedLibraries">
 								<label>
 									<input
@@ -511,7 +511,7 @@
 						</ul>
 						
 						<h2>Operations</h2>
-						<ul data-ui-if="app.library == app.libraries.googleDrive">
+						<ul data-ui-if="app.library == app.libraries.googleDrive" class="controls">
 							<li>
 								<button
 									type="button"
@@ -520,7 +520,7 @@
 							</li>
 						</ul>
 						
-						<ul data-ui-if="app.library == app.libraries.local">
+						<ul data-ui-if="app.library == app.libraries.local" class="controls">
 							<li>
 								<button
 									type="button"

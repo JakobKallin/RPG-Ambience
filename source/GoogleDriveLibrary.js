@@ -198,38 +198,7 @@ Ambience.App.GoogleDriveLibrary.prototype.onExit = function() {
 Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 	var self = this;
 	
-	var adventuresToLoad = [];
-	var loadedAdventures = [];
-	self.loadAdventure = function(adventure, onSingleMediaLoaded) {
-		if ( loadedAdventures.contains(adventure) ) {
-			console.log(
-				'Not loading media for adventure "' +
-				adventure.title +
-				'"; it has already been loaded'
-			);
-			return;
-		}
-		
-		console.log('Loading media for adventure "' + adventure.title + '"');
-		adventure.scenes.forEach(function(scene) {
-			self.loadScene(scene, onSingleMediaLoaded);
-		});
-		loadedAdventures.push(adventure);
-	};
-	
-	self.loadScene = function(scene, onSingleMediaLoaded) {
-		scene.media.forEach(function(media) {
-			self.loadMedia(media.id, function(loadedMedia) {
-				media.url = loadedMedia.url;
-				media.thumbnail = loadedMedia.thumbnail;
-				onSingleMediaLoaded(media);
-			});
-		});
-	};
-	
-	self.loadMedia = function(id, onMediaLoaded) {
-		console.log('Loading media ' + id + ' from Google Drive');
-		
+	self.load = function(id, onMediaLoaded) {
 		var media = {
 			id: id,
 			url: null,
@@ -279,8 +248,8 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 		
 		function onPickerAction(data) {
 			if ( data.action === google.picker.Action.PICKED ) {
-				var fileID = data.docs[0].id;
-				self.loadMedia(fileID, onImageLoaded);
+				var mediaID = data.docs[0].id;
+				self.load(mediaID, onImageLoaded);
 			}
 		}
 	}});
@@ -310,7 +279,8 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 		function onPickerAction(data) {
 			if ( data.action === google.picker.Action.PICKED ) {
 				data.docs.forEach(function(doc) {
-					self.loadMedia(doc.id, onSingleTrackLoaded);
+					var mediaID = doc.id;
+					self.load(mediaID, onSingleTrackLoaded);
 				});
 			}
 		}

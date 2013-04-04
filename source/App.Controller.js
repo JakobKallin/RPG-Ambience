@@ -19,11 +19,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	
 	var adventure = null;
 	var scene = null;
-	// Just make sure that the media URL change is registered.
-	var onMediaLoad = function onMediaLoad(media) {
-		$scope.$apply(function() {});
-	};
-	var library = null;
+	var library = localLibrary;
 	$scope.app = {
 		get adventure() {
 			return adventure;
@@ -32,7 +28,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			adventure = newAdventure;
 			if ( newAdventure ) {
 				$scope.app.scene = newAdventure.scenes[0];
-				$scope.app.library.media.loadAdventure(newAdventure, onMediaLoad);
+				$scope.loadAdventureMedia(newAdventure);
 			} else {
 				$scope.app.scene = null;
 			}
@@ -76,6 +72,34 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.library.adventures.remove(adventure);
 	};
 	
+	$scope.loadAdventureMedia = function(adventure) {
+		console.log('Loading media for adventure "' + adventure.title + '"');
+		adventure.scenes.forEach(function(scene) {
+			scene.media.forEach($scope.loadMedia);
+		});
+	};
+	
+	var loadedMediaURLs = {};
+	$scope.loadMedia = function(media) {
+		if ( loadedMediaURLs[media.id] ) {
+			console.log('Not loading media "' + media.id + '"; it has already been loaded');
+			return;
+		}
+		
+		console.log('Loading media "' + media.id + '"');
+		$scope.app.library.media.load(media.id, onMediaLoaded);
+		
+		function onMediaLoaded(loadedMedia) {
+			$scope.$apply(function() {
+				media.url = loadedMedia.url;
+				if ( loadedMedia.thumbnail ) {
+					media.thumbnail = loadedMedia.thumbnail;
+				}
+				loadedMediaURLs[media.id] = loadedMedia.url;
+			});
+		}
+	};
+	
 	$scope.selectLibrary = function(newLibrary) {
 		console.log('Selecting library: ' + newLibrary.name);
 		
@@ -83,7 +107,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.libraryIsSelected = true;
 		
 		if ( !newLibrary.adventures.haveBeenLoaded ) {
-			newLibrary.adventures.load(onAllAdventuresLoaded, onMediaLoad);
+			newLibrary.adventures.load(onAllAdventuresLoaded);
 			newLibrary.adventures.haveBeenLoaded = true;
 		}
 		
@@ -102,11 +126,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			} else {
 				$scope.$apply(callback);
 			}
-		}
-		
-		// Just make sure that the media URL change is registered.
-		function onMediaLoad(media) {
-			$scope.$apply(function() {});
 		}
 	};
 	

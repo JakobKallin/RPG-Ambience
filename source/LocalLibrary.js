@@ -6,7 +6,7 @@ Ambience.App.LocalLibrary = function() {
 	var self = this;
 	
 	self.adventures = [];
-	self.adventures.load = function(onAllAdventuresLoaded, onMediaLoaded) {
+	self.adventures.load = function(onAllAdventuresLoaded) {
 		var exampleJSON = Ambience.App.Adventure.exampleJSON;
 		var exampleAdventureConfig = JSON.parse(exampleJSON);
 		var exampleAdventure = Ambience.App.Adventure.fromConfig(exampleAdventureConfig);
@@ -26,6 +26,24 @@ Ambience.App.LocalLibrary.prototype = {
 
 Ambience.App.LocalLibrary.MediaLibrary = function() {};
 Ambience.App.LocalLibrary.MediaLibrary.prototype = (function() {
+	var mediaURLs = {
+		'example:city': 'example/ishtar_rooftop.jpg',
+		'example:dragon-image': 'example/sintel-wallpaper-dragon.jpg',
+		'example:dragon-sound': 'example/dragon.ogg',
+		'example:music': 'example/9-Trailer_Music.ogg'
+	};
+	
+	function load(id, onMediaLoaded) {
+		if ( mediaURLs[id] ) {
+			window.setTimeout(function() {
+				onMediaLoaded({
+					id: id,
+					url: mediaURLs[id]
+				});
+			});
+		}
+	}
+	
 	function selectImage(onImageLoaded) {
 		selectFiles(onImageLoaded, false, 'image/*');
 	}
@@ -61,7 +79,9 @@ Ambience.App.LocalLibrary.MediaLibrary.prototype = (function() {
 				var id = objectURL.replace(/^blob:/, '');
 				var media = {
 					id: id,
-					url: objectURL
+					url: objectURL,
+					name: file.name,
+					type: file.mimeType
 				};
 				onMediaLoaded(media)
 			});
@@ -73,6 +93,7 @@ Ambience.App.LocalLibrary.MediaLibrary.prototype = (function() {
 	}
 	
 	return {
+		load: load,
 		selectImage: selectImage,
 		selectTracks: selectTracks,
 		loadAdventure: function() {}

@@ -492,6 +492,19 @@
 						</div>
 					</pane>
 					<pane
+						id="options-tab"
+						class="enclosed-view"
+						data-heading="Options">
+						<ul data-ui-if="app.library == app.libraries.googleDrive" class="controls">
+							<li>
+								<button
+									type="button"
+									data-ng-disabled="!app.libraries.googleDrive.adventures.haveBeenLoaded"
+									data-ng-click="app.libraries.googleDrive.adventures.download()">Save Google Drive Adventures to Hard Drive</button>
+							</li>
+						</ul>
+					</pane>
+					<pane
 						id="help-tab"
 						class="enclosed-view help-document"
 						data-heading="Help">

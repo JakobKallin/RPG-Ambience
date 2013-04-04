@@ -236,12 +236,14 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 	google.load('picker', '1', { callback: function() {
 		var views = {
 			docs: new google.picker.View(google.picker.ViewId.DOCS_IMAGES),
-			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED)
+			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED),
+			upload: new google.picker.DocsUploadView()
 		};
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
 			.addView(views.recent)
+			.addView(views.upload)
 			.setCallback(onPickerAction)
 			.build();
 		picker.setVisible(true);
@@ -264,12 +266,14 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 	google.load('picker', '1', { callback: function() {
 		var views = {
 			docs: new google.picker.View(google.picker.ViewId.DOCS),
-			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED)
+			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED),
+			upload: new google.picker.DocsUploadView()
 		};
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
 			.addView(views.recent)
+			.addView(views.upload)
 			.setSelectableMimeTypes('audio/mpeg,audio/ogg,audio/webm')
 			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 			.setCallback(onPickerAction)
@@ -287,13 +291,6 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 	}});
 };
 Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks.label = "Add Tracks From Google Drive";
-
-Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.saveMedia = function(file, onMediaSaved, onError) {
-	var self = this;
-	
-	console.log('Saving media file "' + file.name + '" to Google Drive');
-	self.drive.saveNewFile(file, onMediaSaved, onError);
-};
 
 Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	var self = this;

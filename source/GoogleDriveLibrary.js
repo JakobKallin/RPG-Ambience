@@ -269,12 +269,19 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED),
 			upload: new google.picker.DocsUploadView()
 		};
+		var mimeTypes = [
+			'audio/mpeg',
+			'audio/ogg',
+			'audio/webm',
+			'audio/wave',
+			'audio/wav'
+		];
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
 			.addView(views.recent)
 			.addView(views.upload)
-			.setSelectableMimeTypes('audio/mpeg,audio/ogg,audio/webm')
+			.setSelectableMimeTypes(mimeTypes.join(','))
 			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 			.setCallback(onPickerAction)
 			.build();

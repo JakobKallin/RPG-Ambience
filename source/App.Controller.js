@@ -169,20 +169,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
 	
-	$scope.onFilesDropped = function(viewModel, dropEvent) {
-		dropEvent.preventDefault();
-		Array.prototype.forEach.call(dropEvent.dataTransfer.files, function(file) {
-			if ( file.name.match(/\.(json)$/i) ) {
-				$scope.app.library.loadFile(file);
-			}
-		});
-	};
-	
-	$scope.onDrag = function(viewModel, dragEvent) {
-		dragEvent.preventDefault();
-		dragEvent.dataTransfer.dropEffect = 'copy';
-	};
-	
 	$scope.trackIsPlayable = function(track) {
 		return window.audioCanPlayType(track.mimeType);
 	};

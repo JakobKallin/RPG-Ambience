@@ -35,20 +35,6 @@ Ambience.App.Scene = function() {
 			return this === self.current;
 		},
 		
-		onFilesDropped: function(viewModel, dropEvent) {
-			dropEvent.preventDefault();
-			
-			var files = dropEvent.dataTransfer.files;
-			for ( var i = 0; i < files.length; ++i ) {
-				this.load(files[i]);
-			}
-		},
-		
-		onDrag: function(viewModel, dragEvent) {
-			dragEvent.preventDefault();
-			dragEvent.dataTransfer.dropEffect = 'copy';
-		},
-		
 		load: function(file) {
 			if ( file.name.match(/\.(wav|mp3|ogg|webm|aac)$/i) ) {
 				this.sound.load(file);

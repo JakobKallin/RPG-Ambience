@@ -4,6 +4,10 @@
 
 Ambience.App.Theater = function(background, foreground) {
 	function play(appScene) {
+		if ( !appScene ) {
+			return;
+		}
+		
 		if ( appScene.layer === 'foreground' ) {
 			var layer = foreground;
 		} else {

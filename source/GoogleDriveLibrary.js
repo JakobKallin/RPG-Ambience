@@ -238,15 +238,15 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectImage = function(on
 	
 	google.load('picker', '1', { callback: function() {
 		var views = {
-			docs: new google.picker.View(google.picker.ViewId.DOCS_IMAGES),
-			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED),
+			docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
 			upload: new google.picker.DocsUploadView()
 		};
+		views.docs.setIncludeFolders(true);
+		
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
 			.addView(views.upload)
-			.addView(views.recent)
 			.setCallback(onPickerAction)
 			.build();
 		picker.setVisible(true);
@@ -269,9 +269,9 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 	google.load('picker', '1', { callback: function() {
 		var views = {
 			docs: new google.picker.View(google.picker.ViewId.DOCS),
-			recent: new google.picker.View(google.picker.ViewId.RECENTLY_PICKED),
 			upload: new google.picker.DocsUploadView()
 		};
+
 		var mimeTypes = [
 			'audio/mpeg',
 			'audio/ogg',
@@ -283,7 +283,6 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 			.setAppId(self.drive.appID)
 			.addView(views.docs)
 			.addView(views.upload)
-			.addView(views.recent)
 			.setSelectableMimeTypes(mimeTypes.join(','))
 			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 			.setCallback(onPickerAction)

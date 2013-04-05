@@ -93,12 +93,20 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		}
 		
 		if ( exampleMediaURLs[media.id] ) {
+			var url = exampleMediaURLs[media.id];
+			if ( url.endsWith('.ogg') && !window.audioCanPlayType('audio/ogg') ) {
+				url = url.replace(/\.ogg$/, '.mp3');
+				// The mime type should preferably be set somewhere else based only on the file ID.
+				media.mimeType = 'audio/mpeg';
+			}
+			
 			window.setTimeout(function() {
 				onMediaLoaded({
 					id: media.id,
-					url: exampleMediaURLs[media.id]
+					url: url
 				});
-			});
+			}, 0);
+			
 			return;
 		}
 		

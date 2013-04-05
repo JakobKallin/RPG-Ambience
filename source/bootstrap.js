@@ -35,7 +35,7 @@ window.addEventListener('load', function() {
 		return new Ambience.App.GoogleDriveLibrary();
 	});
 	
-	var browserIsSupported = Boolean(window.indexedDB && window.URL);
+	var browserIsSupported = Boolean(window.URL);
 	if ( browserIsSupported ) {
 		angular.bootstrap(document, ['ambience']);
 	} else {

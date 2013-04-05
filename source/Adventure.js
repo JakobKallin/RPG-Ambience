@@ -56,6 +56,9 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 	// Delete adventure ID; this is storage-specific.
 	delete copy.id;
 	
+	// Delete info on editing rights from Google Drive.
+	delete copy.isEditable;
+	
 	return copy;
 	
 	function copyObject(original) {

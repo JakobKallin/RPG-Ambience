@@ -37,6 +37,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.App.Adventure.fromConfig(config);
 					adventure.id = file.metadata.id;
+					adventure.isEditable = file.metadata.editable;
 					latestJSON[adventure.id] = file.contents;
 					return adventure;
 				})
@@ -66,7 +67,9 @@ Ambience.App.GoogleDriveLibrary = function() {
 			var config = adventure.toConfig();
 			var json = angular.toJson(config);
 			
-			if ( adventure.id ) {
+			if ( !adventure.isEditable ) {
+				var shouldBeSaved = false;
+			} else if ( adventure.id ) {
 				var shouldBeSaved = json !== latestJSON[adventure.id];
 			} else {
 				var shouldBeSaved = true;
@@ -77,7 +80,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 				self.adventures.currentlyBeingSaved += 1;
 				saveSingleAdventure(adventure, onSingleAdventureSaved, onError);
 			} else {
-				console.log('Not uploading adventure "' + adventure.title + '" to Google Drive because it has not been modified');
+				console.log('Not uploading adventure "' + adventure.title + '" to Google Drive because it is not editable or has not been modified');
 			}
 			
 			function onSingleAdventureSaved(item) {

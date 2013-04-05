@@ -198,6 +198,7 @@ h2 {
 
 .footer + .footer {
 	margin-top: 0.5em;
+	margin-bottom: 1.5em;
 }
 
 .footer a {

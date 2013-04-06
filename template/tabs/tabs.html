@@ -1,0 +1,12 @@
+<div>
+	<ul class="tab-list">
+		<li
+			data-ng-repeat="pane in panes"
+			data-ng-class="{ selected: pane.selected }">
+			<a href="" data-ng-click="select(pane)">{{pane.heading}}</a>
+		</li>
+	</ul>
+	<div
+		class="tab-content-list"
+		data-ng-transclude></div>
+</div>

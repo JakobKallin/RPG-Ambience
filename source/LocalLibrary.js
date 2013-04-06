@@ -62,7 +62,7 @@ Ambience.App.LocalLibrary.MediaLibrary.prototype = (function() {
 					id: id,
 					url: objectURL,
 					name: file.name,
-					type: file.mimeType
+					mimeType: file.type
 				};
 				onMediaLoaded(media)
 			});

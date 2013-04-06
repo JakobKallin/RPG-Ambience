@@ -56,18 +56,14 @@ Array.prototype.flatten = function() {
 
 Array.prototype.closest = function(value) {
 	var index = this.indexOf(value);
-	var closestIndex;
 	
-	if ( index === -1 ) {
-		closestIndex = 0;
-	} else if ( index === 0 ) {
-		closestIndex = 1;
-	} else {
-		closestIndex = index - 1;
-	}
-	
-	if ( closestIndex in this ) {
-		return this[closestIndex];
+	// If there is a next value, choose it.
+	if ( (index + 1) in this ) {
+		return this[index + 1];
+	// Otherwise choose the previous value.
+	} else if ( (index - 1) in this ) {
+		return this[index - 1];
+	// Otherwise there is no value at all.
 	} else {
 		return null;
 	}

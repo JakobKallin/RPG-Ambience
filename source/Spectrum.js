@@ -2,6 +2,9 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
+// Prevent Spectrum from automatically altering all of the color inputs.
+$.fn.spectrum.load = false;
+
 Ambience.Spectrum = function() {
 	return {
 		restrict: 'A',

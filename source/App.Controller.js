@@ -80,11 +80,11 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	};
 	
 	var loadedMediaURLs = {};
-	var exampleMediaURLs = {
-		'example:city': 'example/ishtar_rooftop.jpg',
-		'example:dragon-image': 'example/sintel-wallpaper-dragon.jpg',
-		'example:dragon-sound': 'example/dragon.ogg',
-		'example:music': 'example/9-Trailer_Music.ogg'
+	var exampleMedia = {
+		'example:city': { name: 'ishtar_rooftop', type: 'image' },
+		'example:dragon-image': { name: 'sintel-wallpaper-dragon', type: 'image' },
+		'example:dragon-sound': { name: 'dragon', type: 'audio' },
+		'example:music': { name: '9-Trailer_Music', type: 'audio' }
 	};
 	$scope.loadMedia = function(media) {
 		if ( loadedMediaURLs[media.id] ) {
@@ -92,18 +92,27 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			return;
 		}
 		
-		if ( exampleMediaURLs[media.id] ) {
-			var url = exampleMediaURLs[media.id];
-			if ( url.endsWith('.ogg') && !window.audioCanPlayType('audio/ogg') ) {
-				url = url.replace(/\.ogg$/, '.mp3');
-				// The mime type should preferably be set somewhere else based only on the file ID.
-				media.mimeType = 'audio/mpeg';
+		if ( exampleMedia[media.id] ) {
+			var name = exampleMedia[media.id].name;
+			var type = exampleMedia[media.id].type;
+			if ( type === 'audio' && window.audioCanPlayType('audio/ogg') ) {
+				var mimeType = 'audio/ogg';
+				var extension = 'ogg';
+			} else if ( type === 'audio' ) {
+				var mimeType = 'audio/mpeg';
+				var extension = 'mp3';
+			} else {
+				var mimeType = 'image/jpeg';
+				var extension = 'jpg';
 			}
+			var url = 'example/' + name + '.' + extension;
 			
 			window.setTimeout(function() {
 				onMediaLoaded({
 					id: media.id,
-					url: url
+					url: url,
+					name: name + '.' + extension,
+					mimeType: mimeType
 				});
 			}, 0);
 			
@@ -116,9 +125,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		function onMediaLoaded(loadedMedia) {
 			$scope.$apply(function() {
 				media.url = loadedMedia.url;
-				if ( loadedMedia.thumbnail ) {
-					media.thumbnail = loadedMedia.thumbnail;
-				}
+				media.name = loadedMedia.name;
+				media.mimeType = loadedMedia.mimeType;
+				media.thumbnail = loadedMedia.thumbnail;
 				loadedMediaURLs[media.id] = loadedMedia.url;
 			});
 		}

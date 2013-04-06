@@ -67,7 +67,8 @@ Ambience.App.GoogleDriveLibrary = function() {
 			var config = adventure.toConfig();
 			var json = angular.toJson(config);
 			
-			if ( !adventure.isEditable ) {
+			// Only downloaded adventures have isEditable, so explicitly check for false.
+			if ( adventure.isEditable === false ) {
 				var shouldBeSaved = false;
 			} else if ( adventure.id ) {
 				var shouldBeSaved = json !== latestJSON[adventure.id];
@@ -206,7 +207,8 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 			id: id,
 			url: null,
 			name: null,
-			mimeType: null
+			mimeType: null,
+			thumbnail: null
 		};
 		
 		var request = gapi.client.drive.files.get({

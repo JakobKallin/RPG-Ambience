@@ -95,8 +95,6 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 };
 
 Ambience.App.Adventure.fromConfig = function(config) {
-	Ambience.App.Adventure.upgradeConfig(config);
-	
 	var adventure = new Ambience.App.Adventure();
 	
 	adventure.title = config.title;

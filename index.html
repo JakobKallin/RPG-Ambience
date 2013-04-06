@@ -17,20 +17,29 @@
 					}
 				};
 				
-				['dragon', '9-Trailer_Music'].forEach(function(filename) {
-					var path = 'example/' + supportedFormat(filename);
-					var node = document.createElement('audio');
-					document.body.appendChild(node);
-					node.src = path;
-					node.volume = 0;
-					node.play();
-				});
+				window.requestAnimationFrame =
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					window.msRequestAnimationFrame;
 				
-				['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
-					var path = 'example/' + filename;
-					var node = document.createElement('img');
-					node.src = path;
-				});
+				if ( window.requestAnimationFrame ) {
+					document.querySelector('a[href="teaser.html"]').style.display = '';
+					
+					['dragon', '9-Trailer_Music'].forEach(function(filename) {
+						var path = 'example/' + supportedFormat(filename);
+						var node = document.createElement('audio');
+						document.body.appendChild(node);
+						node.src = path;
+						node.volume = 0;
+						node.play();
+					});
+					
+					['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
+						var path = 'example/' + filename;
+						var node = document.createElement('img');
+						node.src = path;
+					});
+				}
 			});
 		</script>
 	</head>
@@ -39,7 +48,7 @@
 		<h2>Bring your game to life with music and visuals</h2>
 		<div class="preview">
 			<div class="teaser">
-				<a href="teaser.html" class="action-container">
+				<a href="teaser.html" class="action-container" style="display: none">
 					<span class="action play">Watch Teaser</span>
 				</a>
 			</div><!--

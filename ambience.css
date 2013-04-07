@@ -236,7 +236,7 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 			.list-item {
 				position: relative;
 				display: block;
-				margin-bottom: 1em;
+				margin-bottom: 0.5em;
 				border-width: 1px;
 				overflow: hidden;
 				white-space: nowrap;

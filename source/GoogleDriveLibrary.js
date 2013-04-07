@@ -21,11 +21,9 @@ Ambience.App.GoogleDriveLibrary = function() {
 		function requestAdventures(onAllAdventuresLoaded) {
 			console.log('Requesting adventures from Google Drive');
 			
-			var mimeTypes = ['application/json', 'application/octet-stream', 'text/plain'];
-			var mimeTypeQuery = mimeTypes.map(function(mimeType) {
-				return "mimeType = '" + mimeType + "'";
-			}).join(' or ');
-			var query = 'trashed = false and (' + mimeTypeQuery + ')';
+			// The Google Drive API does not support the "or" operator, so for now we only search for application/json. (https://developers.google.com/drive/search-parameters)
+			// TODO: This should be fixed in the future so that manually created files (with the wrong mime type) can also be used.
+			var query = "trashed = false and mimeType = 'application/json'";
 			
 			self.drive.downloadFiles(query, onAllFilesLoaded, function(item) {
 				return item.fileExtension === 'ambience'

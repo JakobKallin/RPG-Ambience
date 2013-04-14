@@ -221,7 +221,7 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary = function() {
 				media.thumbnail = item.thumbnailLink;
 			}
 			
-			self.drive.downloadBlob(item, onBlobLoaded);
+			self.drive.queueBlobDownload(item, onBlobLoaded);
 		}
 		
 		function onBlobLoaded(blob) {
@@ -370,7 +370,28 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		request.addEventListener('error', onError);
 	};
 	
+	// Keeps track of downloads that will start.
+	var queuedDownloads = [];
+	// Keeps track of the download currently in progress, which is not in the queue.
+	var downloadInProgress = false;
+	self.queueBlobDownload = function(item, onBlobLoaded, onError) {
+		queuedDownloads.push({
+			item: item,
+			onLoaded: onBlobLoaded,
+			onError: onError
+		});
+		
+		if ( downloadInProgress ) {
+			console.log('Queuing download of file ' + item.id);
+		} else {
+			console.log('Downloading file ' + item.id + ' immediately because there is no download in progress');
+			self.downloadBlob(item, onBlobLoaded, onError)
+		}
+	};
+	
 	self.downloadBlob = function(item, onBlobLoaded, onError) {
+		downloadInProgress = true;
+		
 		onBlobLoaded = onBlobLoaded || function() {};
 		onError = onError || function() {};
 		
@@ -379,13 +400,39 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 		request.open('GET', item.downloadUrl);
 		request.responseType = 'blob';
 		request.setRequestHeader('Authorization', 'Bearer ' + token);
+		
+		request.addEventListener('load', onRequestCompleted);
+		request.addEventListener('error', onRequestNotCompleted);
+		request.addEventListener('abort', onRequestNotCompleted);
+		
 		request.send();
 		
-		request.addEventListener('load', function() {
+		function onRequestCompleted() {
 			onBlobLoaded(request.response);
-		});
+			downloadInProgress = false;
+			downloadNextBlob();
+		}
 		
-		request.addEventListener('error', onError);
+		function onRequestNotCompleted() {
+			console.log('Download of ' + item.id + ' was not completed');
+			onError();
+			downloadInProgress = false;
+			downloadNextBlob();
+		}
+		
+		function downloadNextBlob() {
+			console.log('Download of file ' + item.id + ' has ended');
+			
+			// The most recently added item is downloaded.
+			// This is intentional because it prioritizes downloading of media from the most recently selected adventure.
+			var nextDownload = queuedDownloads.pop();
+			if ( nextDownload ) {
+				console.log('Downloading next file: ' + nextDownload.item.id);
+				self.downloadBlob(nextDownload.item, nextDownload.onLoaded, nextDownload.onError);
+			} else {
+				console.log('No more files in download queue');
+			}
+		}
 	}
 	
 	var filesPerRequest = 100;

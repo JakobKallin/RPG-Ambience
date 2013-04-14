@@ -72,14 +72,23 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.app.library.adventures.remove(adventure);
 	};
 	
+	var mediaLoadedAdventures = [];
 	$scope.loadAdventureMedia = function(adventure) {
+		if ( mediaLoadedAdventures.contains(adventure) ) {
+			console.log(
+				'Not requesting media for adventure "' + adventure.title +
+				'" because it has already been requested'
+			);
+			return;
+		}
+		
 		console.log('Loading media for adventure "' + adventure.title + '"');
+		mediaLoadedAdventures.push(adventure);
 		adventure.scenes.forEach(function(scene) {
 			scene.media.forEach($scope.loadMedia);
 		});
 	};
 	
-	var loadedMediaURLs = {};
 	var exampleMedia = {
 		'example:city': { name: 'ishtar_rooftop', type: 'image' },
 		'example:dragon-image': { name: 'sintel-wallpaper-dragon', type: 'image' },
@@ -87,11 +96,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		'example:music': { name: '9-Trailer_Music', type: 'audio' }
 	};
 	$scope.loadMedia = function(media) {
-		if ( loadedMediaURLs[media.id] ) {
-			console.log('Not loading media "' + media.id + '"; it has already been loaded');
-			return;
-		}
-		
 		if ( exampleMedia[media.id] ) {
 			var name = exampleMedia[media.id].name;
 			var type = exampleMedia[media.id].type;
@@ -128,7 +132,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				media.name = loadedMedia.name;
 				media.mimeType = loadedMedia.mimeType;
 				media.thumbnail = loadedMedia.thumbnail;
-				loadedMediaURLs[media.id] = loadedMedia.url;
 			});
 		}
 	};

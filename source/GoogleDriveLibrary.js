@@ -101,6 +101,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 				console.log('Adventure "' + adventure.title + '" was removed from Google Drive');
 			}
 		});
+		adventuresToRemove.clear();
 		
 		function saveSingleAdventure(adventure, onSaved, onError) {
 			var file = fileFromAdventure(adventure);

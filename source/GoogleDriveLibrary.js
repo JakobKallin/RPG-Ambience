@@ -278,7 +278,8 @@ Ambience.App.GoogleDriveLibrary.MediaLibrary.prototype.selectTracks = function(o
 			'audio/ogg',
 			'audio/webm',
 			'audio/wave',
-			'audio/wav'
+			'audio/wav',
+			'audio/x-wav'
 		];
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(self.drive.appID)

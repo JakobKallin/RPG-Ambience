@@ -377,14 +377,13 @@ Ambience.App.GoogleDriveLibrary.GoogleDrive = function() {
 	// Keeps track of the download currently in progress, which is not in the queue.
 	var downloadInProgress = false;
 	self.queueBlobDownload = function(item, onBlobLoaded, onError) {
-		queuedDownloads.push({
-			item: item,
-			onLoaded: onBlobLoaded,
-			onError: onError
-		});
-		
 		if ( downloadInProgress ) {
 			console.log('Queuing download of file ' + item.id);
+			queuedDownloads.push({
+				item: item,
+				onLoaded: onBlobLoaded,
+				onError: onError
+			});
 		} else {
 			console.log('Downloading file ' + item.id + ' immediately because there is no download in progress');
 			self.downloadBlob(item, onBlobLoaded, onError)

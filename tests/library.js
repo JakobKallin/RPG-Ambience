@@ -10,15 +10,15 @@ describe('library', function() {
 	});
 	
 	it('loads adventures', function() {
-		var adventuresHaveLoaded = false;
-		
 		runs(function() {
-			library.loadAdventures().then(function(adventures) {
-				adventuresHaveLoaded = true;
-			});
+			library.loadAdventures();
 		});
 		
 		waits(1000);
+		
+		runs(function() {
+			expect(library.adventures.length).toBeGreaterThan(0);
+		})
 	});
 	
 	it('loads a single image', function() {

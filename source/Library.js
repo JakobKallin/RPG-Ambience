@@ -7,8 +7,12 @@ Ambience.Library = function(backend) {
 };
 
 Ambience.Library.prototype = {
+	adventures: null,
 	loadAdventures: function() {
-		return this.backend.loadAdventures();
+		var library = this;
+		return this.backend.loadAdventures().then(function(loadedAdventures) {
+			library.adventures = loadedAdventures;
+		});
 	},
 	selectImage: function() {
 		return this.backend.selectImage();

@@ -9,6 +9,18 @@ describe('library', function() {
 		library = new Ambience.Library(new Ambience.TestBackend());
 	});
 	
+	it('loads adventures', function() {
+		var adventuresHaveLoaded = false;
+		
+		runs(function() {
+			library.loadAdventures().then(function(adventures) {
+				adventuresHaveLoaded = true;
+			});
+		});
+		
+		waits(1000);
+	});
+	
 	it('loads a single image', function() {
 		var imageHasLoaded = false;
 		
@@ -18,7 +30,7 @@ describe('library', function() {
 			});
 		});
 		
-		waits(1500);
+		waits(1000);
 		
 		runs(function() {
 			expect(imageHasLoaded).toBe(true);

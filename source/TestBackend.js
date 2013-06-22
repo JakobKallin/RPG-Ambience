@@ -5,22 +5,37 @@
 Ambience.TestBackend = function() {
 };
 
-Ambience.TestBackend.prototype.selectImage = function() {
-	var deferred = when.defer();
-	
-	setTimeout(function() {
-		deferred.notify(1);
-	}, 500);
-	
-	setTimeout(function() {
-		var media = {
-			id: 'image',
-			url: 'image.svg',
-			name: 'image',
-			mimeType: 'image/svg+xml'
-		};
-		deferred.resolve(media);
-	}, 1000);
+Ambience.TestBackend.prototype = {
+	loadAdventures: function() {
+		var deferred = when.defer();
+		
+		setTimeout(function() {
+			var adventures = [
+				{ title: 'Adventure One' },
+				{ title: 'Adventure Two' }
+			];
+			deferred.resolve(adventures)
+		}, 500);
+		
+		return deferred.promise;
+	},
+	selectImage: function() {
+		var deferred = when.defer();
+		
+		setTimeout(function() {
+			deferred.notify(1);
+		}, 250);
+		
+		setTimeout(function() {
+			var media = {
+				id: 'image',
+				url: 'image.svg',
+				name: 'image',
+				mimeType: 'image/svg+xml'
+			};
+			deferred.resolve(media);
+		}, 500);
 
-	return deferred.promise;
+		return deferred.promise;
+	}
 };

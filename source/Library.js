@@ -6,6 +6,11 @@ Ambience.Library = function(backend) {
 	this.backend = backend;
 };
 
-Ambience.Library.prototype.selectImage = function() {
-	return this.backend.selectImage();
+Ambience.Library.prototype = {
+	loadAdventures: function() {
+		return this.backend.loadAdventures();
+	},
+	selectImage: function() {
+		return this.backend.selectImage();
+	}
 };

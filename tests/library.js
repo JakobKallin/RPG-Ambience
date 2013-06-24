@@ -126,13 +126,11 @@ describe('Library', function() {
 		var loaded = [false, false];
 		
 		runs(function() {
-			library.loadMedia('one').then(function() {
+			library.loadMedia({ id: 'one', mimeType: 'image/jpeg' }).then(function() {
 				loaded[0] = true;
-				console.log('first');
 			});
-			library.loadMedia('two').then(function() {
+			library.loadMedia({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
 				loaded[1] = true;
-				console.log('second');
 			});
 		});
 		
@@ -148,6 +146,48 @@ describe('Library', function() {
 		runs(function() {
 			expect(loaded[0]).toBe(true);
 			expect(loaded[1]).toBe(true);
+		});
+	});
+	
+	it('loads media after pause', function() {
+		var loaded = false;
+		
+		runs(function() {
+			library.loadMedia({ id: 'one', mimeType: 'image/jpeg' });
+		});
+		
+		waits(150);
+		
+		runs(function() {
+			library.loadMedia({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
+				loaded = true;
+			});
+		});
+		
+		waits(150);
+		
+		runs(function() {
+			expect(loaded).toBe(true);
+		});
+	});
+	
+	it('loads image and sound simultaneously', function() {
+		var loaded = { image: false, sound: false };
+		
+		runs(function() {
+			library.loadMedia({ id: 'image', mimeType: 'image/jpeg' }).then(function() {
+				loaded.image = true;
+			});
+			library.loadMedia({ id: 'sound', mimeType: 'audio/ogg' }).then(function() {
+				loaded.sound = true;
+			});
+		});
+		
+		waits(150);
+		
+		runs(function() {
+			expect(loaded.image).toBe(true);
+			expect(loaded.sound).toBe(true);
 		});
 	});
 	

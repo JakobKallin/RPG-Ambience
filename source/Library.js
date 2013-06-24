@@ -6,8 +6,9 @@ Ambience.Library = function(backend) {
 	this.backend = backend;
 	this.adventures = null;
 	this.latestFileContents = {};
-	// A promise that immediately returns, used as a base case for "loadMedia" below.
-	this.latestMediaPromise = when(true);
+	// Promises that immediately return, used as base cases for "loadImage" and "loadSound" below.
+	this.latestImagePromise = when(true);
+	this.latestSoundPromise = when(true);
 };
 
 Ambience.Library.prototype = {
@@ -58,17 +59,18 @@ Ambience.Library.prototype = {
 			})
 		);
 	},
-	// Load media files one at a time.
-	// This can probably be implemented using some of the abstractions in when.js.
-	// It should also be improved so that it loads images before audio.
-	loadMedia: function(id) {
+	// Load image files and sound files one at a time, respectively.
+	// This can probably be optimized by allowing more simultaneous downloads (especially of images), but that might be a bit more complex. The when.js abstractions should be helpful.
+	// For each media type (image and sound), a promise is created whenever a download is started from the backend. Whenever this method is called, the start of that download is added as a success handler for the latest of these promises. The effect is that a chain of promises is created, each one being triggered after the previous one has completed.
+	loadMedia: function(media) {
+		var mediaType = media.mimeType.startsWith('audio') ? 'sound' : 'image';
+		var latestPromiseProperty = 'latest' + mediaType.firstToUpperCase() + 'Promise';
+		var latestPromise = this[latestPromiseProperty];
 		var backend = this.backend;
 		
-		var newMediaPromise = this.latestMediaPromise.then(function() {
-			return backend.downloadMediaFile(id);
+		return this[latestPromiseProperty] = latestPromise.then(function() {
+			return backend.downloadMediaFile(media.id);
 		});
-		this.latestMediaPromise = newMediaPromise;
-		return this.latestMediaPromise;
 	},
 	saveFile: function(file) {
 		var library = this;

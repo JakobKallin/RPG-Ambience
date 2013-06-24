@@ -61,12 +61,12 @@ Ambience.Library.prototype = {
 		
 		if ( file.contents === this.latestFileContents[file.id] ) {
 			// "false" means that the file has not been uploaded.
-			return when.defer().resolve(false);
+			return false;
 		} else {
 			return this.backend.uploadFile(file).then(function() {
 				library.latestFileContents[file.id] = file.contents;
 				// "true" means that the file has been uploaded.
-				return when.defer().resolve(true);
+				return true;
 			});
 		}
 	},

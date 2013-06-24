@@ -18,17 +18,10 @@ Ambience.TestBackend.prototype = {
 		]);
 	},
 	downloadFile: function(id) {
-		var deferred = when.defer();
-		
-		setTimeout(function() {
-			var file = {
-				id: id,
-				contents: JSON.stringify({ id: id })
-			};
-			deferred.resolve(file);
-		}, 100);
-		
-		return deferred.promise;
+		return when.delay(100, {
+			id: id,
+			contents: JSON.stringify({ id: id })
+		});
 	},
 	uploadFile: function(file) {
 		return when.delay(100);
@@ -38,7 +31,7 @@ Ambience.TestBackend.prototype = {
 		
 		setTimeout(function() {
 			deferred.notify(1);
-		}, 250);
+		}, 100);
 		
 		setTimeout(function() {
 			var media = {
@@ -48,7 +41,7 @@ Ambience.TestBackend.prototype = {
 				mimeType: 'image/svg+xml'
 			};
 			deferred.resolve(media);
-		}, 500);
+		}, 200);
 
 		return deferred.promise;
 	}

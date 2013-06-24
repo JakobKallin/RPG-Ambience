@@ -79,7 +79,7 @@ describe('Library', function() {
 				// Save the second time, with no modifications to the adventure.
 				.then(library.saveAdventures.bind(library))
 				.then(function(results) {
-					adventureWasUploaded = !(results.length === 1 && results[0] === false);
+					adventureWasUploaded = results[0];
 				});
 		});
 		
@@ -125,6 +125,6 @@ describe('Library', function() {
 	function waitsForPromise() {
 		waitsFor(function() {
 			return promise.inspect().state !== 'pending';
-		});
+		}, 'Promise was not resolved in time', 2000);
 	}		
 });

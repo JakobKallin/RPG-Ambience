@@ -17,10 +17,20 @@ Ambience.TestBackend.prototype = {
 			}
 		]);
 	},
-	downloadFile: function(id) {
+	// Files with text contents (adventures in this case).
+	downloadTextFile: function(id) {
 		return when.delay(100, {
 			id: id,
 			contents: JSON.stringify({ id: id })
+		});
+	},
+	// Media files, whose contents will not be used directly but rather through URLs.
+	downloadMediaFile: function(id) {
+		return when.delay(100, {
+			id: id,
+			url: id + '.jpg',
+			name: id,
+			mimeType: 'image/jpeg'
 		});
 	},
 	uploadFile: function(file) {

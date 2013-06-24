@@ -6,6 +6,8 @@ Ambience.Library = function(backend) {
 	this.backend = backend;
 	this.adventures = null;
 	this.latestFileContents = {};
+	// A promise that immediately returns, used as a base case for "loadMedia" below.
+	this.latestMediaPromise = when(true);
 };
 
 Ambience.Library.prototype = {
@@ -23,7 +25,7 @@ Ambience.Library.prototype = {
 		function downloadAdventureFiles(ids) {
 			return when.parallel(ids.map(function(id) {
 				return function() {
-					return library.backend.downloadFile(id);
+					return library.backend.downloadTextFile(id);
 				};
 			}));
 		}
@@ -55,6 +57,18 @@ Ambience.Library.prototype = {
 				};
 			})
 		);
+	},
+	// Load media files one at a time.
+	// This can probably be implemented using some of the abstractions in when.js.
+	// It should also be improved so that it loads images before audio.
+	loadMedia: function(id) {
+		var backend = this.backend;
+		
+		var newMediaPromise = this.latestMediaPromise.then(function() {
+			return backend.downloadMediaFile(id);
+		});
+		this.latestMediaPromise = newMediaPromise;
+		return this.latestMediaPromise;
 	},
 	saveFile: function(file) {
 		var library = this;

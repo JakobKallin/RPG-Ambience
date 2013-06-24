@@ -90,7 +90,7 @@ describe('Library', function() {
 		});
 	});
 	
-	it('loads a single image', function() {
+	it('selects an image', function() {
 		var imageHasLoaded = false;
 		
 		runs(function() {
@@ -106,7 +106,7 @@ describe('Library', function() {
 		});
 	});
 	
-	it('notifies image load progress', function() {
+	it('notifies image selection download progress', function() {
 		var progressHasBeenNotified = false;
 		
 		runs(function() {
@@ -122,9 +122,38 @@ describe('Library', function() {
 		});
 	});
 	
+	it('loads media sequentially', function() {
+		var loaded = [false, false];
+		
+		runs(function() {
+			library.loadMedia('one').then(function() {
+				loaded[0] = true;
+				console.log('first');
+			});
+			library.loadMedia('two').then(function() {
+				loaded[1] = true;
+				console.log('second');
+			});
+		});
+		
+		waits(150);
+		
+		runs(function() {
+			expect(loaded[0]).toBe(true);
+			expect(loaded[1]).toBe(false);
+		});
+		
+		waits(100);
+		
+		runs(function() {
+			expect(loaded[0]).toBe(true);
+			expect(loaded[1]).toBe(true);
+		});
+	});
+	
 	function waitsForPromise() {
 		waitsFor(function() {
 			return promise.inspect().state !== 'pending';
 		}, 'Promise was not resolved in time', 2000);
-	}		
+	}
 });

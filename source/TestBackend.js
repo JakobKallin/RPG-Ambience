@@ -26,12 +26,16 @@ Ambience.TestBackend.prototype = {
 	},
 	// Media files, whose contents will not be used directly but rather through URLs.
 	downloadMediaFile: function(id) {
-		return when.delay(100, {
-			id: id,
-			url: id + '.jpg',
-			name: id,
-			mimeType: 'image/jpeg'
-		});
+		if ( id === 'error' ) {
+			return when.reject(when.delay(100));
+		} else {
+			return when.delay(100, {
+				id: id,
+				url: id + '.jpg',
+				name: id,
+				mimeType: 'image/jpeg'
+			});
+		}
 	},
 	uploadFile: function(file) {
 		return when.delay(100);

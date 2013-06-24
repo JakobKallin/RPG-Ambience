@@ -68,9 +68,13 @@ Ambience.Library.prototype = {
 		var latestPromise = this[latestPromiseProperty];
 		var backend = this.backend;
 		
-		return this[latestPromiseProperty] = latestPromise.then(function() {
+		var download = function() {
 			return backend.downloadMediaFile(media.id);
-		});
+		};
+		
+		// This seems to be equivalent to the "always" method in when.js, which is now deprecated. I believe it could cause a problem since the failure of the "latestPromise" will not be notified because the new download is triggered in its "catch block". It does not seem to be a problem here, however, since the next download is always started after the previous one has already notified its failure.
+		// At any rate, using one of the other when.js abstractions to implement this rate limiting might solve it in a more elegant way.
+		return this[latestPromiseProperty] = latestPromise.then(download, download);
 	},
 	saveFile: function(file) {
 		var library = this;

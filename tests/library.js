@@ -191,6 +191,27 @@ describe('Library', function() {
 		});
 	});
 	
+	it('loads next media even if previous download failed', function() {
+		var firstMediaFailed = false;
+		var secondMediaLoaded = false;
+		
+		runs(function() {
+			library.loadMedia({ id: 'error', mimeType: 'image/jpeg' }).otherwise(function() {
+				firstMediaFailed = true;
+			});
+			library.loadMedia({ id: 'image', mimeType: 'image/jpeg' }).then(function() {
+				secondMediaLoaded = true;
+			});
+		});
+		
+		waits(250);
+		
+		runs(function() {
+			expect(firstMediaFailed).toBe(true);
+			expect(secondMediaLoaded).toBe(true);
+		});
+	});
+	
 	function waitsForPromise() {
 		waitsFor(function() {
 			return promise.inspect().state !== 'pending';

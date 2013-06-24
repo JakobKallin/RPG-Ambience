@@ -10,12 +10,10 @@
  * @author John Hann
  */
 
-(function(define) {
-define(function(require) {
+window.when.parallel = function(when) {
 
-	var when, slice;
+	var slice;
 
-	when = require('./when');
 	slice = Array.prototype.slice;
 
 	/**
@@ -33,11 +31,4 @@ define(function(require) {
 			});
 		});
 	};
-
-});
-})(
-	typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); }
-	// Boilerplate for AMD and Node
-);
-
-
+}(window.when);

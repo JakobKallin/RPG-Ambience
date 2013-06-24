@@ -6,18 +6,32 @@ Ambience.TestBackend = function() {
 };
 
 Ambience.TestBackend.prototype = {
-	loadAdventures: function() {
+	nextId: 0,
+	listAdventures: function() {
+		return when.parallel([
+			function() {
+				return when.delay(100, 'Adventure one');
+			},
+			function() {
+				return when.delay(200, 'Adventure two');
+			}
+		]);
+	},
+	downloadFile: function(id) {
 		var deferred = when.defer();
 		
 		setTimeout(function() {
-			var adventures = [
-				{ title: 'Adventure One' },
-				{ title: 'Adventure Two' }
-			];
-			deferred.resolve(adventures)
-		}, 500);
+			var file = {
+				id: id,
+				contents: JSON.stringify({ id: id })
+			};
+			deferred.resolve(file);
+		}, 100);
 		
 		return deferred.promise;
+	},
+	uploadFile: function(file) {
+		return when.delay(100);
 	},
 	selectImage: function() {
 		var deferred = when.defer();

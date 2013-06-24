@@ -9,12 +9,9 @@
  * @author John Hann
  */
 
-(function(define) {
-define(function(require) {
+window.when.delay = function(when) {
 	/*global vertx,setTimeout*/
-	var when, setTimer;
-
-	when = require('./when');
+	var setTimer;
 
 	setTimer = typeof vertx === 'object'
 		? function (f, ms) { return vertx.setTimer(ms, f); }
@@ -46,9 +43,4 @@ define(function(require) {
 		});
     };
 
-});
-})(
-	typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); }
-);
-
-
+}(window.when);

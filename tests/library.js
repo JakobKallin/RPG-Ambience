@@ -6,10 +6,12 @@
 
 describe('Library', function() {
 	var library;
+	var backend;
 	var promise;
 	
 	beforeEach(function() {
-		library = new Ambience.Library(new Ambience.TestBackend(), 1, 1);
+		backend = new Ambience.TestBackend();
+		library = new Ambience.Library(backend);
 		promise = null;
 	});
 	
@@ -200,13 +202,13 @@ describe('Library', function() {
 		runs(function() {
 			var image = { id: 'image', mimeType: 'image/jpeg' };
 			
-			library.backend.isOnline = false;
+			backend.isOnline = false;
 			library.loadMedia(image).otherwise(function() {
 				firstMediaFailed = true;
 			})
 			// After the first download has failed, make sure the next one will succeed.
 			.ensure(function() {
-				library.backend.isOnline = true;
+				backend.isOnline = true;
 			});
 			
 			library.loadMedia(image).then(function() {
@@ -223,8 +225,8 @@ describe('Library', function() {
 	});
 	
 	it('logs in again before session expires', function() {
-		library.backend.sessionDuration = 300;
-		library.backend.loginAgainDelay = 100;
+		backend.sessionDuration = 300;
+		backend.loginAgainAdvance = 200;
 		
 		runs(function() {
 			promise = library.login();

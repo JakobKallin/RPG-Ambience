@@ -6,10 +6,10 @@
 
 Ambience.TestBackend = function() {
 	this.isOnline = true;
-	// How long a login lasts.
+	this.imageLimit = 1;
+	this.soundLimit = 1;
 	this.sessionDuration = 300;
-	// How long after login that login is performed again.
-	this.loginAgainDelay = 100;
+	this.loginAgainAdvance = 200;
 };
 
 Ambience.TestBackend.prototype = {

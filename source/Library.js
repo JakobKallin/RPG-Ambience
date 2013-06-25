@@ -4,18 +4,20 @@
 
 'use strict';
 
-Ambience.Library = function(backend, imageLimit, soundLimit) {
+Ambience.Library = function(backend) {
 	this.sessionExpiration = null;
 	
 	this.backend = backend;
 	this.adventures = null;
 	this.latestFileContents = {};
-	this.imageQueue = new Ambience.TaskQueue(imageLimit);
-	this.soundQueue = new Ambience.TaskQueue(soundLimit);
+	this.imageQueue = new Ambience.TaskQueue(this.backend.imageLimit);
+	this.soundQueue = new Ambience.TaskQueue(this.backend.soundLimit);
 };
 
 Ambience.Library.prototype = {
 	login: function() {
+		console.log('Logging in to backend');
+		
 		var library = this;
 		var backend = this.backend;
 		
@@ -23,16 +25,24 @@ Ambience.Library.prototype = {
 		
 		function extendSession(sessionExpiration) {
 			library.sessionExpiration = sessionExpiration;
-			var timeToNextLogin = backend.loginAgainDelay;
+			
+			var now = new Date();
+			var timeToExpiration = sessionExpiration.getTime() - now.getTime();
+			var timeToNextLogin = timeToExpiration - backend.loginAgainAdvance;
+			console.log('Time to expiration: ' + timeToExpiration);
+			console.log('Time to next login: ' + timeToNextLogin);
+			
 			window.setTimeout(loginAgain, timeToNextLogin);
 		}
 		
 		function loginAgain() {
+			console.log('Logging in to backend again')
 			return backend.loginAgain().then(extendSession)
 		}
 	},
 	get isLoggedIn() {
-		return new Date() < this.sessionExpiration;
+		var now = new Date();
+		return now < this.sessionExpiration;
 	},
 	loadAdventures: function() {
 		var library = this;

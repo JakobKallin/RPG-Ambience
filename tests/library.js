@@ -226,7 +226,7 @@ describe('Library', function() {
 	
 	it('logs in again before session expires', function() {
 		backend.sessionDuration = 300;
-		backend.loginAgainAdvance = 200;
+		backend.loginAgainAdvance = 150;
 		
 		runs(function() {
 			promise = library.login();
@@ -237,6 +237,8 @@ describe('Library', function() {
 		
 		runs(function() {
 			expect(library.isLoggedIn).toBe(true);
+			// Stop the callbacks.
+			library.logout();
 		});
 	});
 	

@@ -6,6 +6,7 @@
 
 Ambience.Library = function(backend) {
 	this.sessionExpiration = null;
+	this.hasLoggedOut = false;
 	
 	this.backend = backend;
 	this.adventures = null;
@@ -24,6 +25,10 @@ Ambience.Library.prototype = {
 		return this.backend.login().then(extendSession);
 		
 		function extendSession(sessionExpiration) {
+			if ( library.hasLoggedOut ) {
+				return;
+			}
+			
 			library.sessionExpiration = sessionExpiration;
 			
 			var now = new Date();
@@ -36,9 +41,17 @@ Ambience.Library.prototype = {
 		}
 		
 		function loginAgain() {
+			if ( library.hasLoggedOut ) {
+				return;
+			}
+			
 			console.log('Logging in to backend again')
-			return backend.loginAgain().then(extendSession)
+			return backend.loginAgain().then(extendSession);
 		}
+	},
+	// Logging out is currently only used to stop callbacks in the test suite.
+	logout: function() {
+		this.hasLoggedOut = true;
 	},
 	get isLoggedIn() {
 		var now = new Date();

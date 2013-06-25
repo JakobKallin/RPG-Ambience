@@ -222,6 +222,22 @@ describe('Library', function() {
 		});
 	});
 	
+	it('logs in again before session expires', function() {
+		library.backend.sessionDuration = 300;
+		library.backend.loginAgainDelay = 100;
+		
+		runs(function() {
+			promise = library.login();
+		});
+		
+		waitsForPromise();
+		waits(400);
+		
+		runs(function() {
+			expect(library.isLoggedIn).toBe(true);
+		});
+	});
+	
 	function waitsForPromise() {
 		waitsFor(function() {
 			return promise.inspect().state !== 'pending';

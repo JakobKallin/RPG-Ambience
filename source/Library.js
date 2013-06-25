@@ -5,6 +5,8 @@
 'use strict';
 
 Ambience.Library = function(backend, imageLimit, soundLimit) {
+	this.sessionExpiration = null;
+	
 	this.backend = backend;
 	this.adventures = null;
 	this.latestFileContents = {};
@@ -13,6 +15,25 @@ Ambience.Library = function(backend, imageLimit, soundLimit) {
 };
 
 Ambience.Library.prototype = {
+	login: function() {
+		var library = this;
+		var backend = this.backend;
+		
+		return this.backend.login().then(extendSession);
+		
+		function extendSession(sessionExpiration) {
+			library.sessionExpiration = sessionExpiration;
+			var timeToNextLogin = backend.loginAgainDelay;
+			window.setTimeout(loginAgain, timeToNextLogin);
+		}
+		
+		function loginAgain() {
+			return backend.loginAgain().then(extendSession)
+		}
+	},
+	get isLoggedIn() {
+		return new Date() < this.sessionExpiration;
+	},
 	loadAdventures: function() {
 		var library = this;
 		

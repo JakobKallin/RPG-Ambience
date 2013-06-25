@@ -6,9 +6,31 @@
 
 Ambience.TestBackend = function() {
 	this.isOnline = true;
+	// How long a login lasts.
+	this.sessionDuration = 300;
+	// How long after login that login is performed again.
+	this.loginAgainDelay = 100;
 };
 
 Ambience.TestBackend.prototype = {
+	login: function() {
+		var backend = this;
+		
+		return when.delay(100).then(function() {
+			var expiration = new Date();
+			expiration.setMilliseconds(expiration.getMilliseconds() + backend.sessionDuration);
+			return expiration;
+		});
+	},
+	loginAgain: function() {
+		var backend = this;
+		
+		return when.delay(100).then(function() {
+			var expiration = new Date();
+			expiration.setMilliseconds(expiration.getMilliseconds() + backend.sessionDuration);
+			return expiration;
+		});
+	},
 	listAdventures: function() {
 		return when.parallel([
 			function() {

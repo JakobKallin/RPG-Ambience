@@ -3,10 +3,10 @@
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
 Ambience.TestBackend = function() {
+	this.isOnline = true;
 };
 
 Ambience.TestBackend.prototype = {
-	nextId: 0,
 	listAdventures: function() {
 		return when.parallel([
 			function() {
@@ -60,3 +60,24 @@ Ambience.TestBackend.prototype = {
 		return deferred.promise;
 	}
 };
+
+(function() {
+	// Make all methods fail unless the backend is online.
+	for ( var property in Ambience.TestBackend.prototype ) {
+		var value = Ambience.TestBackend.prototype[property];
+		if ( typeof value === 'function' ) {
+			makeFallible(property);
+		}
+	}
+	
+	function makeFallible(property) {
+		var originalMethod = Ambience.TestBackend.prototype[property];
+		Ambience.TestBackend.prototype[property] = function callIfOnline() {
+			if ( this.isOnline ) {
+				return originalMethod.apply(this, arguments);
+			} else {
+				return when.reject(when.delay(100));
+			}
+		};
+	}
+})();

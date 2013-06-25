@@ -196,10 +196,18 @@ describe('Library', function() {
 		var secondMediaLoaded = false;
 		
 		runs(function() {
-			library.loadMedia({ id: 'error', mimeType: 'image/jpeg' }).otherwise(function() {
+			var image = { id: 'image', mimeType: 'image/jpeg' };
+			
+			library.backend.isOnline = false;
+			library.loadMedia(image).otherwise(function() {
 				firstMediaFailed = true;
+			})
+			// After the first download has failed, make sure the next one will succeed.
+			.ensure(function() {
+				library.backend.isOnline = true;
 			});
-			library.loadMedia({ id: 'image', mimeType: 'image/jpeg' }).then(function() {
+			
+			library.loadMedia(image).then(function() {
 				secondMediaLoaded = true;
 			});
 		});

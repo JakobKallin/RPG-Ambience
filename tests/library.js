@@ -7,7 +7,7 @@ describe('Library', function() {
 	var promise;
 	
 	beforeEach(function() {
-		library = new Ambience.Library(new Ambience.TestBackend());
+		library = new Ambience.Library(new Ambience.TestBackend(), 1, 1);
 		promise = null;
 	});
 	

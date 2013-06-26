@@ -32,7 +32,7 @@ window.addEventListener('load', function() {
 		return new Ambience.App.LocalLibrary();
 	});
 	module.service('googleDriveLibrary', function() {
-		return new Ambience.App.GoogleDriveLibrary();
+		return new Ambience.App.Library(new Ambience.App.GoogleDrive);
 	});
 	
 	var browserIsSupported = Boolean(window.URL);

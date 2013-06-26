@@ -44,7 +44,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		},
 		set library(newLibrary) {
 			library = newLibrary;
-			this.adventure = library.adventures[0];
+			if ( library.adventures ) {
+				this.adventure = library.adventures[0];
+			}
 		},
 		libraryIsSelected: false,
 		libraries: {
@@ -136,15 +138,18 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		}
 	};
 	
+	// Note that this code assumes that a library will only be selected once.
 	$scope.selectLibrary = function(newLibrary) {
 		console.log('Selecting library: ' + newLibrary.name);
 		
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
 		
-		if ( !newLibrary.adventures.areBeingLoaded && !newLibrary.adventures.haveBeenLoaded ) {
-			newLibrary.adventures.load(onAllAdventuresLoaded);
-			newLibrary.adventures.areBeingLoaded = true;
+		if ( !newLibrary.adventuresAreBeingLoaded && !newLibrary.adventuresHaveBeenLoaded ) {
+			newLibrary.login()
+			.then(newLibrary.loadAdventures.bind(newLibrary))
+			.then(onAllAdventuresLoaded);
+			newLibrary.adventuresAreBeingLoaded = true;
 		}
 		
 		function onAllAdventuresLoaded(adventures) {
@@ -154,8 +159,8 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 				});
 				
 				$scope.app.library = newLibrary;
-				adventures.haveBeenLoaded = true;
-				adventures.areBeingLoaded = false;
+				newLibrary.adventuresHaveBeenLoaded = true;
+				newLibrary.adventuresAreBeingLoaded = false;
 			};
 
 			if ( $scope.$$phase ) {
@@ -241,7 +246,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	document.addEventListener('keydown', $scope.onKeyDown);
 	window.addEventListener('beforeunload', function(event) {
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
-		if ( $scope.app.library.adventures.haveBeenLoaded ) {
+		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
 			try {
 				$scope.app.library.adventures.save();
 			} catch(error) {
@@ -262,7 +267,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	var saveInterval = 60 * 1 * 1000;
 	function saveAdventures() {
 		// Only save if the adventures have been loaded. Otherwise they might be overwritten with an empty list.
-		if ( $scope.app.library.adventures.haveBeenLoaded ) {
+		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
 			$scope.app.library.adventures.save();
 		} else {
 			console.log('Delaying adventure saving until adventures for this library have loaded');

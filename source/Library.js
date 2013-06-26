@@ -4,7 +4,7 @@
 
 'use strict';
 
-Ambience.Library = function(backend) {
+Ambience.App.Library = function(backend) {
 	this.sessionExpiration = null;
 	this.hasLoggedOut = false;
 	
@@ -15,9 +15,12 @@ Ambience.Library = function(backend) {
 	this.soundQueue = new Ambience.TaskQueue(this.backend.soundLimit);
 };
 
-Ambience.Library.prototype = {
+Ambience.App.Library.prototype = {
+	get name() {
+		return this.backend.name;
+	},
 	login: function() {
-		console.log('Logging in to backend');
+		console.log('Logging in to backend ' + this.backend.name);
 		
 		var library = this;
 		var backend = this.backend;
@@ -45,7 +48,7 @@ Ambience.Library.prototype = {
 				return;
 			}
 			
-			console.log('Logging in to backend again')
+			console.log('Logging in to backend ' + backend.name + ' again')
 			return backend.loginAgain().then(extendSession);
 		}
 	},

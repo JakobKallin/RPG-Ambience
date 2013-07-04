@@ -143,8 +143,8 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.libraryIsSelected = true;
 		
 		if ( !newLibrary.adventures.areBeingLoaded && !newLibrary.adventures.haveBeenLoaded ) {
+			newLibrary.adventures.areBeingLoaded = true; // Before the call to load, because it might synchronously set this variable to false.
 			newLibrary.adventures.load(onAllAdventuresLoaded);
-			newLibrary.adventures.areBeingLoaded = true;
 		}
 		
 		function onAllAdventuresLoaded(adventures) {

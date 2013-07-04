@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>RPG Ambience</title>
 		
-		<link rel="stylesheet" href="ambience.css">
+		<link rel="stylesheet" href="css/ambience.css">
 		<link rel="icon" type="image/png" href="images/icon.png">
 		
 		<script src="source/extensions.js"></script>
@@ -57,7 +57,7 @@
 		<script src="source/bootstrap.js"></script>
 	</head>
 	<body data-ng-controller="Ambience.App.Controller">
-		<div id="theater" class="theater">
+		<div id="stage" class="stage">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
@@ -65,13 +65,14 @@
 			id="interface"
 			class="interface"
 			data-split="0.75"
-			data-split-collapse-left="!editorIsVisible">
+			data-split-collapse-left="!editorIsVisible"
+			data-ng-show="app.library.adventures.haveBeenLoaded">
 			<div
 				id="editor"
 				class="editor"
 				data-ng-show="editorIsVisible"
 				data-ng-controller="Ambience.App.Adventure.Controller">
-				<div class="menu-bar">
+				<div class="main-controls">
 					<ul class="action-list adventure">
 						<li class="action">
 							<select
@@ -121,12 +122,12 @@
 									data-ng-click="loadExampleAdventure()">Load an Example Adventure</button>
 							</p>
 						</div>
-						<div class="list-view" data-ui-if="app.adventure">
+						<div class="scene-list" data-ui-if="app.adventure">
 							<ul
 								data-ui-sortable="{ distance: 10, axis: 'y' }"
 								data-ng-model="app.adventure.scenes">
 								<li
-									class="list-item"
+									class="scene"
 									data-ng-repeat="scene in app.adventure.scenes"
 									data-ng-class="{ selected: isSelected(scene) }">
 									<a
@@ -135,21 +136,21 @@
 										<scene-preview data-ng-scene="scene"></scene-preview>
 										<span data-ui-if="scene.name">{{scene.name}}</span>
 										<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
+										<div class="icons">
+											<img data-ui-if="scene.mixin" src="images/mixin.svg" title="Mixin">
+											<img data-ui-if="scene.isForeground" src="images/foreground.svg" title="Foreground">
+										</div>
 									</a>
-									<div class="icons">
-										<img data-ui-if="scene.mixin" src="images/mixin.svg" title="Mixin">
-										<img data-ui-if="scene.isForeground" src="images/foreground.svg" title="Foreground">
-									</div>
 								</li>
 							</ul>
-							<div class="add-item">
+							<div class="add-scene">
 								<button
 									type="button"
 									data-ng-click="addScene()">Add Scene</button>
 							</div>
 						</div>
-						<div class="detail-view" data-ui-if="app.adventure">
-							<div class="selected-item">
+						<div class="scene-editor" data-ui-if="app.adventure">
+							<div class="scene">
 								<ul class="action-list">
 									<li class="action copy">
 										<button
@@ -213,61 +214,81 @@
 									<pane
 										data-heading="Image"
 										id="image-tab">
-										<table>
-											<tr>
-												<td>
-													<button
-														type="button"
-														class="secondary"
-														data-ng-hide="app.scene.image.file"
-														data-ng-click="selectImage(app.scene)"
-														accept="">{{app.library.media.selectImage.label}}</button>
-													<button
-														type="button"
-														class="secondary"
-														data-ng-show="app.scene.image.file"
-														data-ng-click="removeImage(app.scene)">Remove</button>
-													<span
-														class="primary"
-														data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
-													<span
-														class="primary note"
-														data-ui-if="!app.scene.image.file">No image selected</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<ul class="control-list">
-														<li>
-															<label for="size-contain">
-																<input
-																	id="size-contain"
-																	type="radio"
-																	name="image-size"
-																	value="contain"
-																	data-ng-model="app.scene.image.size">
-																<span>Fit</span>
-															</label>
-														</li>
-														<li>
-															<label for="size-cover">
-																<input
-																	id="size-cover"
-																	type="radio"
-																	name="image-size"
-																	value="cover"
-																	data-ng-model="app.scene.image.size">
-																<span>Fill</span>
-															</label>
-														</li>
-													</ul>
-												</td>
-											</tr>
-										</table>
+										<div class="primary-secondary">
+											<span
+												class="primary"
+												data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
+											<span
+												class="primary note"
+												data-ui-if="!app.scene.image.file">No image selected</span>
+											<button
+												type="button"
+												class="secondary"
+												data-ng-hide="app.scene.image.file"
+												data-ng-click="selectImage(app.scene)"
+												accept="">{{app.library.media.selectImage.label}}</button>
+											<button
+												type="button"
+												class="secondary"
+												data-ng-show="app.scene.image.file"
+												data-ng-click="removeImage(app.scene)">Remove</button>
+										</div>
+										<ul class="control-list">
+											<li>
+												<label for="size-contain">
+													<input
+														id="size-contain"
+														type="radio"
+														name="image-size"
+														value="contain"
+														data-ng-model="app.scene.image.size">
+													<span>Fit</span>
+												</label>
+											</li>
+											<li>
+												<label for="size-cover">
+													<input
+														id="size-cover"
+														type="radio"
+														name="image-size"
+														value="cover"
+														data-ng-model="app.scene.image.size">
+													<span>Fill</span>
+												</label>
+											</li>
+										</ul>
 									</pane>
 									<pane
 										data-heading="Sound"
 										id="sound-tab">
+										<div class="track-list">
+											<p
+												class="note"
+												data-ui-if="app.scene.sound.tracks.length == 0">
+												No tracks added
+											</p>
+											<ol
+												data-ui-sortable="{ distance: 10, axis: 'y' }"
+												data-ng-model="app.scene.sound.tracks">
+												<li data-ng-repeat="track in app.scene.sound.tracks" class="primary-secondary">
+													<span
+														class="primary"
+														data-ng-class="{ unsupported: !trackIsPlayable(track) }">
+														{{track.name}}
+													</span>
+													<button
+														type="button"
+														class="secondary"
+														data-ng-click="removeTrack(app.scene, track)">Remove</button>
+													<audio
+														data-ng-src="{{track.url}}"
+														preload="auto"></audio>
+												</li>
+											</ol>
+											<button
+												type="button"
+												data-ng-click="selectTracks(app.scene)">{{app.library.media.selectTracks.label}}</button>
+										</div>
 										<table>
 											<tr>
 												<th><label>Playback</label></th>
@@ -320,111 +341,62 @@
 													<span class="note">seconds</span>
 												</td>
 											</tr>
-											<tr>
-												<th><label>Tracks</label></th>
-												<td>
-													<p
-														class="note"
-														data-ui-if="app.scene.sound.tracks.length == 0">
-														No tracks selected
-													</p>
-													<ol
-														class="track-list"
-														data-ui-sortable="{ distance: 10, axis: 'y' }"
-														data-ng-model="app.scene.sound.tracks">
-														<li data-ng-repeat="track in app.scene.sound.tracks">
-															<button
-																type="button"
-																class="secondary"
-																data-ng-click="removeTrack(app.scene, track)">Remove</button>
-															<span
-																class="primary"
-																data-ng-class="{ unsupported: !trackIsPlayable(track) }">
-																{{track.name}}
-															</span>
-															<audio
-																data-ng-src="{{track.url}}"
-																preload="auto"></audio>
-														</li>
-													</ol>
-													<button
-														type="button"
-														data-ng-click="selectTracks(app.scene)">{{app.library.media.selectTracks.label}}</button>
-												</td>
-											</tr>
 										</table>
 									</pane>
 									<pane
 										data-heading="Text"
 										id="text-tab">
+										<div class="text-string">
+											<textarea
+												id="text"
+												rows="5"
+												placeholder="Text"
+												data-ng-model="app.scene.text.string"></textarea>
+										</div>
+										<ul class="control-list font-properties">
+											<li>
+												<input
+													id="font"
+													type="text"
+													placeholder="Font"
+													data-ng-model="app.scene.text.font">
+											</li>
+											<li>
+												<input
+													id="font-size"
+													type="number"
+													min="3"
+													max="30"
+													step="0.5"
+													data-ng-model="app.scene.text.size">
+											</li>
+											<li>
+												<label for="bold">
+													<input
+														id="bold"
+														type="checkbox"
+														data-ng-model="app.scene.text.bold">
+													<span><b>Bold</b></span>
+												</label>
+											</li>
+											<li>
+												<label for="italic">
+													<input
+														id="italic"
+														type="checkbox"
+														data-ng-model="app.scene.text.italic">
+													<span><i>Italic</i></span>
+												</label>
+											</li>
+											<li>
+												<input
+													id="font-color"
+													type="color"
+													data-ng-model="app.scene.text.color"
+													data-spectrum>
+											</li>
+										</ul>
 										<table>
-											<tr>
-												<th><label for="text">Text</label></th>
-												<td>
-													<textarea
-														id="text"
-														rows="5"
-														data-ng-model="app.scene.text.string"></textarea>
-												</td>
-											</tr>
-											<tr>
-												<th>
-													<label for="font">Font</label>
-												</th>
-												<td>
-													<input
-														id="font"
-														type="text"
-														data-ng-model="app.scene.text.font">
-												</td>
-											</tr>
-											<tr>
-												<th></th>
-												<td>
-													<ul class="control-list">
-														<li>
-															<label for="bold">
-																<input
-																	id="bold"
-																	type="checkbox"
-																	data-ng-model="app.scene.text.bold">
-																<span><b>Bold</b></span>
-															</label>
-														</li>
-														<li>
-															<label for="italic">
-																<input
-																	id="italic"
-																	type="checkbox"
-																	data-ng-model="app.scene.text.italic">
-																<span><i>Italic</i></span>
-															</label>
-														</li>
-													</ul>
-												</td>
-											<tr>
-												<th><label for="font-size">Size</label></th>
-												<td>
-													<input
-														id="font-size"
-														type="number"
-														min="3"
-														max="30"
-														step="0.5"
-														data-ng-model="app.scene.text.size">
-													<span class="note">% of screen width</span>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="font-color">Color</label></th>
-												<td>
-													<input
-														id="font-color"
-														type="color"
-														data-ng-model="app.scene.text.color"
-														data-spectrum>
-												</td>
-											</tr>
 											<tr>
 												<th><label for="text-alignment">Align</label></th>
 												<td>
@@ -447,7 +419,6 @@
 														max="40"
 														step="2"
 														data-ng-model="app.scene.text.padding">
-													<span class="note">% of screen width</span>
 												</td>
 											</tr>
 										</table>
@@ -496,7 +467,7 @@
 					</pane>
 					<pane
 						id="options-tab"
-						class="enclosed-view"
+						class="options-view"
 						data-heading="Options">
 						<ul data-ui-if="app.library == app.libraries.googleDrive" class="controls">
 							<li>
@@ -509,7 +480,7 @@
 					</pane>
 					<pane
 						id="help-tab"
-						class="enclosed-view help-document"
+						class="help-view"
 						data-heading="Help">
 						<ul class="table-of-contents">
 							<li><a href="#help-introduction">What RPG Ambience is</a></li>
@@ -571,7 +542,7 @@
 				</tabs>
 			</div>
 			<no-pointer
-				class="theater-overlay"
+				class="stage-overlay"
 				data-always-show-when="editorIsVisible"
 				data-hide-delay="1000">
 				<form>
@@ -586,7 +557,7 @@
 				</form>
 			</no-pointer>
 		</div>
-		<div class="splash" data-ui-if="!app.library.adventures.haveBeenLoaded">
+		<div class="splash" data-ui-if="app.library.adventures.areBeingLoaded">
 			<div>
 				<p>Loading your adventures…</p>
 				<p class="note">If nothing happens, please allow pop-ups and refresh the page</p>

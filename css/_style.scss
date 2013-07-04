@@ -1,0 +1,564 @@
+$gui-background: hsl(0, 0%, 10%);
+$gui-border: hsl(0, 0%, 25%);
+
+%soft-focus {
+	background-color: hsl(0, 0%, 12.5%);
+}
+
+%medium-focus {
+	background-color: hsl(0, 0%, 17.5%);
+}
+
+%strong-focus {
+	background-color: hsl(220, 50%, 20%);
+	border-color: hsl(220, 50%, 50%);
+}
+
+%box {
+	background-color: $gui-background;
+	border: 1px solid $gui-border;
+}
+
+%preview-box {
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+
+	.text.outer {
+		display: table;
+		height: 100%;
+		margin: 0 auto;
+		font-family: serif;
+	}
+
+	.text.inner {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		color: white;
+		white-space: pre-line;
+		text-rendering: optimizeLegibility;
+	}
+}
+
+/* General styling */
+
+.editor, button, select, input, textarea {
+	font-family: Georgia, serif;
+}
+
+.interface button {
+	height: 1.875em; /* Leave 1px above and below. */
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+}
+
+input, textarea {
+	padding: 0.125em 0.25em;
+}
+
+input[type=text], input[type=number], input[type=color], select, textarea {
+	background-color: black;
+	color: hsl(0, 0%, 90%);
+	border: 1px solid hsl(0, 0%, 25%);
+}
+
+/* Applied to all because even smaller numbers can have fractions. */
+input[type=number] {
+	width: 3.5em;
+}
+
+/* Multi-purpose classes */
+
+.note {
+	color: hsl(0, 0%, 40%);
+}
+
+.tab-list {
+	> * {
+		display: block;
+		float: left;
+		margin-right: 0.5em;
+
+		a {
+			@extend %box;
+			display: block;
+			padding-left: 0.5em;
+			padding-right: 0.5em;
+			border-bottom-width: 0;
+			color: hsl(0, 0%, 75%);
+			text-decoration: none;
+			
+			&:hover, &:focus {
+				@extend %soft-focus;
+			}
+		}
+		
+		&.selected a {
+			@extend %medium-focus;
+		}
+	}
+}
+
+.primary-secondary {
+	@include flexbox(row);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+		
+	.primary {
+		@include flex(1);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		height: 2em;
+	}
+	
+	.secondary {
+		margin-left: 0.5em;
+	}
+}
+
+.ui-sortable > * {
+	cursor: move;
+}
+
+.ui-sortable-helper {
+	cursor: move !important;
+}
+
+.editor {
+	position: relative; /* Splitter is absolutely positioned. */
+	padding: 1em 2em 2em 2em;
+	line-height: 2;
+	color: hsl(0, 0%, 75%);
+	background-color: $gui-background;
+
+	.main-controls {
+		@include flexbox(row);
+		@include flex-wrap();
+		margin-bottom: 1em;
+
+		.action-list.adventure {
+			@include flex(1);
+			margin-right: 0.5em;
+		}
+
+		.action-list {
+			li, form {
+				display: inline;
+			}
+			
+			li:not(:last-child) {
+				margin-right: 0.5em;
+			}
+		}
+		
+		select, input {
+			width: 12em;
+		}
+
+		label:after {
+			content: ": ";
+		}
+	}
+
+	.view-list {
+		.scene-view {
+			/* Create a border below the tabs. */
+			border-top: 1px solid $gui-border;
+			padding-top: 1em;
+		}
+		
+		.options-view, .help-view {
+			padding: 1.5em;
+			border: 1px solid $gui-border;
+			line-height: 1.5;
+			overflow: auto;
+			
+			h2 {
+				font-weight: normal;
+				font-size: 1.5em;
+				color: hsl(60, 75%, 50%);
+			}
+			
+			p, ul {
+				margin-bottom: 1em;
+			}
+			
+			ul {
+				margin-left: 2em;
+				margin-right: 2em;
+			}
+			
+			li {
+				display: list-item;
+			}
+			
+			ul li {
+				list-style-type: square;
+			}
+			
+			ul.controls {
+				margin-left: 0;
+				margin-right: 0;
+				
+				li {
+					list-style-type: none; 
+				}
+			}
+		
+			a:link {
+				color: hsl(60, 75%, 50%);
+			}
+			
+			a:visited {
+				color: hsl(60, 50%, 40%);
+			}
+			
+			a:hover {
+				color: hsl(60, 100%, 50%);
+			}
+			
+			dfn {
+				font-weight: bold;
+				font-style: normal;
+			}
+		}
+		
+		.help-view button {
+			height: 1.5em;
+		}
+	}
+
+	.scene-list {
+		margin-right: 0.5em;
+
+		.scene {
+			position: relative;
+			margin-bottom: 0.5em;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		
+			a {
+				@extend %box;
+				
+				display: block;
+				color: inherit;
+				text-decoration: inherit;
+				
+				&:hover {
+					cursor: pointer;
+					@extend %soft-focus;
+				}
+			}
+			
+			&.selected a {
+				@extend %strong-focus;
+			}
+			
+			.preview {
+				@extend %preview-box;
+				
+				display: inline-block;
+				vertical-align: middle;
+				width: 5em;
+				height: 2.8125em; /* Widescreen ratio */
+				margin-right: 0.5em;
+				
+				.text.outer {
+					font-size: 5em; /* Text inside will be scaled relative to the box's width. */
+				}
+			}
+				
+			.key {
+				opacity: 0.5;
+				&:before { content: "(" }
+				&:after { content: ")" }
+			}
+			
+			.icons {
+				position: absolute;
+				right: 0;
+				top: 0;
+				line-height: 2.8125;
+				margin-right: 0.75em;
+				
+				img {
+					opacity: 0.35;
+					border: 0;
+				}
+			}
+		}
+
+		.add-scene {
+			display: block;
+			padding: 0 1em;
+			
+			button {
+				width: 100%;
+				font-size: 1.5em;
+				padding: 0.25em;
+			}
+		}
+	}
+
+	.scene-editor {
+		margin-left: 0.5em;
+		
+		.scene {
+			@extend %box;
+			
+			padding: 1em;
+			overflow: hidden;
+			
+			.action-list {
+				@include flexbox(row);
+				overflow: auto;
+				margin-bottom: 1em;
+				
+				.action.copy {
+					@include flex(1);
+				}
+			}
+
+			.action {
+				display: block;
+				float: left;
+				
+				:not(:last-child) {
+					margin-right: 0.5em;
+				}
+				
+				&.remove {
+					float: right;
+				}
+			}
+			
+			.preview {
+				@extend %box;
+				@extend %preview-box;
+				
+				float: left;
+				width: 10em;
+				height: 5.625em; /* Widescreen ratio */
+				margin-bottom: 1em;
+				margin-right: 1em;
+				
+				.text.outer {
+					font-size: 10em; /* Text inside will be scaled relative to the box's width. */
+				}
+			}
+			
+			.tab-list {
+				overflow: auto;
+				margin-top: 0.5em;
+			}
+			
+			.tab-content-list > * {
+				@extend %box;
+				padding: 1em;
+			}
+			
+			.options.general table {
+				min-width: 8em;
+			}
+			
+			.track-list {
+				padding-bottom: 1em;
+				border-bottom: 1px solid $gui-border;
+				margin-bottom: 1em;
+			}
+			
+			table, tbody {
+				display: block;
+				width: 100%;
+			}
+			
+			table {
+				td, th {
+					padding: 0 0.25em;
+				}
+
+				th {
+					width: 0;
+					font-weight: normal;
+					text-align: right;
+					vertical-align: top;
+					white-space: nowrap;
+					
+					label:after {
+						content: ":";
+					}
+				}
+				
+				td {
+					width: 100%;
+				}
+				
+				input[type=text], textarea, input[type=range] {
+					width: 100%;
+				}
+			}
+			
+			.options.specific {
+				clear: both;
+				
+				table {
+					width: 100%;
+				}
+			}
+			
+			.control-list > * {
+				display: inline;
+				padding-right: 0.5em;
+			}
+			
+			.text-string textarea {
+				width: 100%;
+			}
+			
+			.font-properties {
+				padding-bottom: 1em;
+				border-bottom: 1px solid $gui-border;
+				margin-bottom: 1em;
+			}
+			
+			.unsupported {
+				color: hsl(0, 75%, 50%);
+			}
+
+			.unsupported:before {
+				content: "Unsupported format: ";
+			}
+		}
+	}
+	
+	.notice {
+		width: 100%;
+		height: 100%;
+		padding: 1.5em;
+		font-size: 1.5em;
+		line-height: 2;
+		text-align: center;
+		
+		button {
+			font-size: 0.67em;
+		}
+	}
+}
+
+.stage-overlay form {
+	float: left;
+	padding: 1em;
+}
+
+/* Splash screen */
+
+.splash {
+	background-color: $gui-background;
+	color: white;
+	font-family: Constantia, Georgia, serif;
+	font-size: 1em;
+	line-height: 2;
+	text-align: center;
+
+	> * {
+		display: table-cell;
+		vertical-align: middle;
+	}
+	
+	p {
+		font-weight: normal;
+		font-size: 2em;
+		line-height: 2;
+	}
+	
+	p.note {
+		font-size: 1.5em;
+	}
+	
+	ul {
+		display: block;
+		margin: 1em 0;
+		font-size: 1.5em;
+	}
+	
+	ul.buttons + ul.buttons {
+		margin-top: 2em;
+		font-size: 1.25em;
+	}
+	
+	ul.buttons {
+		li {
+			display: inline-block;
+			margin: 0 1em;
+		}
+		
+		button {
+			display: block;
+			padding: 1em;
+			border: 1px solid $gui-border;
+			color: inherit;
+			background-color: transparent;
+		}
+		
+		button:hover, button:focus {
+			@extend %soft-focus;
+		}
+		
+		button:active {
+			@extend %strong-focus;
+		}
+		
+		img {
+			display: block;
+			margin: 0 auto;
+			margin-bottom: 1em;
+			width: 5em;
+		}
+		
+		p {
+			font-size: 1em;
+			line-height: 1.5;
+		}
+		
+		p.note {
+			font-size: 0.75em;
+		}
+	}
+}
+
+/* Splitter */
+
+.splitter {
+	@extend %box;
+	
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0.375em;
+	height: 100%;
+	cursor: w-resize;
+	border-top-width: 0;
+	border-bottom-width: 0;
+}
+
+/* Spectrum color picker */
+
+.sp-replacer {
+	padding: 0.25em;
+}
+
+.sp-preview {
+	width: 1.5em;
+	height: 1em;
+	margin-right: 0.25em;
+}
+
+.sp-dd {
+	height: 1em;
+	padding: 0.125em 0;
+	font-size: 0.625em;
+}

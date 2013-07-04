@@ -21,41 +21,31 @@ Ambience.TextButton = function() {
 			var button = form.querySelector('button');
 			var input = form.querySelector('input');
 			
-			// Make the button and the input have equal widths.
-			scope.$watch('label', function() {
-				input.style.width = button.offsetWidth + 'px';
-			});
-			
 			scope.$watch('active', function(active) {
 				if ( active ) {
-					activate();
-				} else {
-					deactivate();
+					// We must do this after Angular applies its own DOM transformations.
+					setTimeout(function() {
+						input.focus();
+						input.select();
+					}, 0);
 				}
 			});
 			
 			button.addEventListener('click', function(event) {
-				scope.$apply(activate);
+				// Make the button and the input have equal widths.
+				// Only do this once, but note that this will not be enough if the "Rename Adventure" label changes.
+				// We need to do it in here because the button is not visible when the app first loads.
+				if ( !input.style.width ) {
+					input.style.width = button.offsetWidth + 'px';
+				}
+				scope.$apply(function() { scope.active = true; });
 			});
 			input.addEventListener('blur', function(event) {
-				scope.$apply(deactivate);
+				scope.$apply(function() { scope.active = false; });
 			});
 			form.addEventListener('submit', function(event) {
-				scope.$apply(deactivate);
+				scope.$apply(function() { scope.active = false; });
 			});
-			
-			function activate() {
-				scope.active = true;
-				// We must do this after Angular applies its own DOM transformations.
-				setTimeout(function() {
-					input.focus();
-					input.select();
-				}, 0);
-			}
-			
-			function deactivate() {
-				scope.active = false;
-			}
 		}
 	};
 };

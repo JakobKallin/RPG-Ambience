@@ -63,7 +63,7 @@ Ambience.NoPointer = function() {
 			}
 			
 			function showElement(event) {
-				// In Firefox, the mouseout event is triggered when a scene with an image is started, because the mouse leaves the theater for the image.
+				// In Firefox, the mouseout event is triggered when a scene with an image is started, because the mouse leaves the stage for the image.
 				// This code only shows the interface when the mouse leaves for another part of the document.
 				// There should be a better way to do this but it seems to fix the problem for now.
 				if ( event && event.currentTarget.contains(event.target) ) {

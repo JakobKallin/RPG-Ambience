@@ -146,10 +146,12 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		$scope.libraryIsSelected = true;
 		
 		if ( !newLibrary.adventuresAreBeingLoaded && !newLibrary.adventuresHaveBeenLoaded ) {
+			// Set this state variable before the call to "loadAdventures()", in case it is synchronous and sets it to false immediately.
+			// (Is this a concern with when.js?)
+			newLibrary.adventuresAreBeingLoaded = true;
 			newLibrary.login()
 			.then(newLibrary.loadAdventures.bind(newLibrary))
 			.then(onAllAdventuresLoaded);
-			newLibrary.adventuresAreBeingLoaded = true;
 		}
 		
 		function onAllAdventuresLoaded(adventures) {

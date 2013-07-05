@@ -1,0 +1,50 @@
+/* Default styling */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+img {
+	border: 0;
+}
+
+li {
+	display: block;
+	list-style-type: none;
+}
+
+*[title] {
+	cursor: help !important;
+}
+
+label {
+	white-space: nowrap;
+}
+
+label[for], label > span {
+	cursor: pointer;
+}
+
+button, input, select, textarea {
+	font-size: 1em;
+}
+
+button, input[type=radio], input[type=checkbox] {
+	cursor: pointer;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+textarea {
+	resize: vertical;
+}

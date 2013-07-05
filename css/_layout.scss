@@ -1,0 +1,120 @@
+html {
+	width: 100%;
+	height: 100%;
+	background-color: black; /* This is needed when browsers round percentage values down, creating a gap between the editor and the stage. */
+}
+
+body {
+	width: 100%;
+	height: 100%;
+}
+
+.interface {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	@include flexbox(row);
+	
+	.stage-overlay {
+		width: 25%;
+	}
+	
+	.editor {
+		width: 75%;
+		@include flexbox(column);
+		height: 100%;
+
+		.main-controls {
+		}
+
+		.view-list {
+			@include flex(1);
+			@include flexbox(column);
+
+			/* ">" selector because we should not affect other tab content lists. */
+			> .tab-content-list {
+				@include flex(1);
+				@include flexbox(column);
+
+				> * {
+					@include flex(1);
+				}
+				
+			}
+			
+			.scene-view {
+				@include flexbox(row);
+
+				.scene-list {
+					@include flex(0.4);
+					overflow: auto;
+				}
+
+				.scene-editor {
+					@include flex(0.6);
+					overflow: auto;
+				}
+			}
+		}
+	}
+}
+
+.splash {
+	display: table;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/* Stage */
+
+.stage {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	overflow: hidden;
+	
+	.layer {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		visibility: hidden;
+		opacity: 0;
+		cursor: inherit;
+
+		.image {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: contain;
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+
+		.text.outer {
+			position: relative; /* Needs to be positioned in order to stack above image, which is also positioned. */
+			display: table;
+			height: 100%;
+			margin: 0 auto;
+			font-family: serif;
+		}
+
+		.text.inner {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			color: white;
+			white-space: pre-line;
+			text-rendering: optimizeLegibility;
+		}
+	}
+}

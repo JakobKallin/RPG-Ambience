@@ -4,9 +4,6 @@
 
 'use strict';
 
-Ambience.App.GoogleDrive = function() {
-};
-
 (function() {
 	var appID = '907013371139.apps.googleusercontent.com';
 	
@@ -271,7 +268,8 @@ Ambience.App.GoogleDrive = function() {
 		};
 	};
 	
-	Ambience.App.GoogleDrive.prototype = {
+	window.Ambience.GoogleDrive = function() {
+	window.Ambience.GoogleDrive.prototype = {
 		name: 'Google Drive',
 		imageLimit: 5,
 		soundLimit: 1,

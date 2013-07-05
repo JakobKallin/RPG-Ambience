@@ -13,6 +13,7 @@ Ambience.TestBackend = function() {
 };
 
 Ambience.TestBackend.prototype = {
+	name: 'Test',
 	login: function() {
 		var backend = this;
 		

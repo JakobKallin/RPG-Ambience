@@ -57,7 +57,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	};
 	
 	$scope.createAdventure = function() {
-		var adventure = new Ambience.App.Adventure($scope);
+		var adventure = new Ambience.Adventure($scope);
 		adventure.title = 'Untitled adventure';
 		adventure.scenes.push(new Ambience.App.Scene());
 		$scope.addAdventure(adventure);
@@ -87,53 +87,36 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		console.log('Loading media for adventure "' + adventure.title + '"');
 		mediaLoadedAdventures.push(adventure);
 		adventure.scenes.forEach(function(scene) {
-			scene.media.forEach($scope.loadMedia);
+			if ( scene.image.file ) {
+				$scope.loadImageFile(scene.image.file);
+			}
+			scene.sound.tracks.forEach($scope.loadSoundFile);
 		});
 	};
 	
-	var exampleMedia = {
-		'example:city': { name: 'ishtar_rooftop', type: 'image' },
-		'example:dragon-image': { name: 'sintel-wallpaper-dragon', type: 'image' },
-		'example:dragon-sound': { name: 'dragon', type: 'audio' },
-		'example:music': { name: '9-Trailer_Music', type: 'audio' }
-	};
-	$scope.loadMedia = function(media) {
-		if ( exampleMedia[media.id] ) {
-			var name = exampleMedia[media.id].name;
-			var type = exampleMedia[media.id].type;
-			if ( type === 'audio' && window.audioCanPlayType('audio/ogg') ) {
-				var mimeType = 'audio/ogg';
-				var extension = 'ogg';
-			} else if ( type === 'audio' ) {
-				var mimeType = 'audio/mpeg';
-				var extension = 'mp3';
-			} else {
-				var mimeType = 'image/jpeg';
-				var extension = 'jpg';
-			}
-			var url = 'example/' + name + '.' + extension;
-			
-			window.setTimeout(function() {
-				onMediaLoaded({
-					id: media.id,
-					url: url,
-					name: name + '.' + extension,
-					mimeType: mimeType
-				});
-			}, 0);
-			
-			return;
-		}
+	$scope.loadImageFile = function(file) {
+		console.log('Loading image file "' + file.id + '"');
+		$scope.app.library.loadImageFile(file.id).then(onFileLoaded);
 		
-		console.log('Loading media "' + media.id + '"');
-		$scope.app.library.media.load(media.id, onMediaLoaded);
-		
-		function onMediaLoaded(loadedMedia) {
+		function onFileLoaded(loadedFile) {
 			$scope.$apply(function() {
-				media.url = loadedMedia.url;
-				media.name = loadedMedia.name;
-				media.mimeType = loadedMedia.mimeType;
-				media.thumbnail = loadedMedia.thumbnail;
+				file.url = loadedFile.url;
+				file.name = loadedFile.name;
+				file.mimeType = loadedFile.mimeType;
+				file.thumbnail = loadedFile.thumbnail;
+			});
+		}
+	};
+	
+	$scope.loadSoundFile = function(file) {
+		console.log('Loading sound file "' + file.id + '"');
+		$scope.app.library.loadSoundFile(file.id).then(onFileLoaded);
+		
+		function onFileLoaded(loadedFile) {
+			$scope.$apply(function() {
+				file.url = loadedFile.url;
+				file.name = loadedFile.name;
+				file.mimeType = loadedFile.mimeType;
 			});
 		}
 	};
@@ -156,25 +139,17 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		
 		function onAllAdventuresLoaded(adventures) {
 			var callback = function() {
-				adventures.sort(function(a, b) {
-					return b.creationDate - a.creationDate;
-				});
-				
 				$scope.app.library = newLibrary;
 				newLibrary.adventuresHaveBeenLoaded = true;
 				newLibrary.adventuresAreBeingLoaded = false;
 			};
 
-			if ( $scope.$$phase ) {
-				callback();
-			} else {
-				$scope.$apply(callback);
-			}
+			$scope.$apply(callback);
 		}
 	};
 	
 	$scope.loadExampleAdventure = function() {
-		var adventure = new Ambience.App.Adventure.Example();
+		var adventure = new Ambience.ExampleAdventure();
 		$scope.app.library.adventures.push(adventure);
 		$scope.app.adventure = adventure;
 	};
@@ -250,7 +225,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
 			try {
-				$scope.app.library.adventures.save();
+				$scope.app.library.saveAdventures();
 			} catch(error) {
 				return 'There was an error saving your adventure:\n\n' + error.message;
 			}
@@ -270,7 +245,7 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	function saveAdventures() {
 		// Only save if the adventures have been loaded. Otherwise they might be overwritten with an empty list.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
-			$scope.app.library.adventures.save();
+			$scope.app.library.saveAdventures();
 		} else {
 			console.log('Delaying adventure saving until adventures for this library have loaded');
 		}

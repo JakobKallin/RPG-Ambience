@@ -65,7 +65,7 @@ Ambience.TestBackend.prototype = {
 	uploadFile: function(file) {
 		return when.delay(100);
 	},
-	selectImage: function() {
+	selectImageFile: function() {
 		var deferred = when.defer();
 		
 		setTimeout(function() {

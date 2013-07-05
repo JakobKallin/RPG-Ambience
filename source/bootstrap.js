@@ -29,10 +29,10 @@ window.addEventListener('load', function() {
 		);
 	});
 	module.service('localLibrary', function() {
-		return new Ambience.App.LocalLibrary();
+		return new Ambience.Library(new Ambience.LocalBackend());
 	});
 	module.service('googleDriveLibrary', function() {
-		return new Ambience.App.Library(new Ambience.App.GoogleDrive);
+		return new Ambience.Library(new Ambience.GoogleDrive());
 	});
 	
 	var browserIsSupported = Boolean(window.URL);

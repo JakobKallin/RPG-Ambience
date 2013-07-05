@@ -130,10 +130,10 @@ describe('Library', function() {
 		var loaded = [false, false];
 		
 		runs(function() {
-			library.loadMedia({ id: 'one', mimeType: 'image/jpeg' }).then(function() {
+			library.loadImageFile('one').then(function() {
 				loaded[0] = true;
 			});
-			library.loadMedia({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
+			library.loadImageFile('two').then(function() {
 				loaded[1] = true;
 			});
 		});
@@ -157,13 +157,13 @@ describe('Library', function() {
 		var loaded = false;
 		
 		runs(function() {
-			library.loadMedia({ id: 'one', mimeType: 'image/jpeg' });
+			library.loadImageFile('one');
 		});
 		
 		waits(150);
 		
 		runs(function() {
-			library.loadMedia({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
+			library.loadImageFile('two').then(function() {
 				loaded = true;
 			});
 		});
@@ -179,10 +179,10 @@ describe('Library', function() {
 		var loaded = { image: false, sound: false };
 		
 		runs(function() {
-			library.loadMedia({ id: 'image', mimeType: 'image/jpeg' }).then(function() {
+			library.loadImageFile('image').then(function() {
 				loaded.image = true;
 			});
-			library.loadMedia({ id: 'sound', mimeType: 'audio/ogg' }).then(function() {
+			library.loadMedia('sound').then(function() {
 				loaded.sound = true;
 			});
 		});
@@ -200,10 +200,8 @@ describe('Library', function() {
 		var secondMediaLoaded = false;
 		
 		runs(function() {
-			var image = { id: 'image', mimeType: 'image/jpeg' };
-			
 			backend.isOnline = false;
-			library.loadMedia(image).otherwise(function() {
+			library.loadImageFile('image').otherwise(function() {
 				firstMediaFailed = true;
 			})
 			// After the first download has failed, make sure the next one will succeed.
@@ -211,7 +209,7 @@ describe('Library', function() {
 				backend.isOnline = true;
 			});
 			
-			library.loadMedia(image).then(function() {
+			library.loadImageFile('image').then(function() {
 				secondMediaLoaded = true;
 			});
 		});

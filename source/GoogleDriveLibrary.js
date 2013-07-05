@@ -33,7 +33,7 @@ Ambience.App.GoogleDriveLibrary = function() {
 				files
 				.map(function(file) {
 					var config = JSON.parse(file.contents);
-					var adventure = Ambience.App.Adventure.fromConfig(config);
+					var adventure = Ambience.Adventure.fromConfig(config);
 					adventure.id = file.metadata.id;
 					adventure.isEditable = file.metadata.editable;
 					latestJSON[adventure.id] = file.contents;

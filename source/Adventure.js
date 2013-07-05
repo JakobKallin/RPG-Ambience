@@ -2,14 +2,14 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.App.Adventure = function() {
+Ambience.Adventure = function() {
 	var self = this;
 	
 	self.title = '';
 	self.scenes = [];
 	self.creationDate = new Date();
 	
-	self.version = Ambience.App.Adventure.version;
+	self.version = Ambience.Adventure.version;
 	
 	Object.defineProperty(self, 'media', {
 		get: function() {
@@ -38,7 +38,7 @@ Ambience.App.Adventure = function() {
 	};
 };
 
-Ambience.App.Adventure.prototype.toConfig = function() {
+Ambience.Adventure.prototype.toConfig = function() {
 	var copy = copyObject(this);
 	
 	// Delete everything except the file IDs, because other info might change.
@@ -98,8 +98,8 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 	}
 };
 
-Ambience.App.Adventure.fromConfig = function(config) {
-	var adventure = new Ambience.App.Adventure();
+Ambience.Adventure.fromConfig = function(config) {
+	var adventure = new Ambience.Adventure();
 	
 	adventure.title = config.title;
 	adventure.version = config.version;
@@ -116,4 +116,4 @@ Ambience.App.Adventure.fromConfig = function(config) {
 
 // Adventure version, unrelated to application version.
 // Should be increased whenever the format of an adventure changes.
-Ambience.App.Adventure.version = 2;
+Ambience.Adventure.version = 2;

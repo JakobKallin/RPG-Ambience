@@ -268,8 +268,8 @@
 		};
 	};
 	
-	window.Ambience.GoogleDrive = function() {
-	window.Ambience.GoogleDrive.prototype = {
+	Ambience.GoogleDrive = function() {};
+	Ambience.GoogleDrive.prototype = {
 		name: 'Google Drive',
 		imageLimit: 5,
 		soundLimit: 1,

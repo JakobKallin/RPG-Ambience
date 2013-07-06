@@ -18,6 +18,7 @@
 					var picker = new google.picker.PickerBuilder()
 						.setAppId('907013371139')
 						.addView(new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES))
+						.setOAuthToken(gapi.auth.getToken().access_token)
 						.setCallback(onPickerAction)
 						.build();
 					picker.setVisible(true);

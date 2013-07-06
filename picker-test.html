@@ -9,7 +9,7 @@
 				gapi.auth.authorize({
 					client_id: '907013371139.apps.googleusercontent.com',
 					scope: 'https://www.googleapis.com/auth/drive.file',
-					immediate: true
+					immediate: false
 				});
 			}
 			
@@ -52,33 +52,7 @@
 				});
 				request.addEventListener('load', function() {
 					var item = JSON.parse(request.responseText);
-					downloadFile(item);
-				});
-				
-				request.send();
-			}
-			
-			function downloadFile(item) {
-				var request = new XMLHttpRequest();
-				var token = gapi.auth.getToken().access_token;
-				request.open('GET', item.downloadUrl);
-				request.responseType = 'blob';
-				request.setRequestHeader('Authorization', 'Bearer ' + token);
-				
-				request.addEventListener('error', function(e) {
-					console.log(e);
-				});
-				request.addEventListener('abort', function(e) {
-					console.log(e);
-				});
-				request.addEventListener('load', function() {
-					var blob = request.response;
-					var url = window.URL.createObjectURL(blob);
-					var img = document.createElement('img');
-					img.src = url;
-					
-					document.body.innerHTML = '';
-					document.body.appendChild(img);
+					console.log(item);
 				});
 				
 				request.send();

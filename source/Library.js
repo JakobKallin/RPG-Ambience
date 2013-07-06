@@ -59,7 +59,7 @@
 				} else if ( sessionExpiration instanceof Date ) {
 					var now = new Date();
 					var timeToExpiration = sessionExpiration.getTime() - now.getTime();
-					var timeToNextLogin = timeToExpiration - backend.loginAgainAdvance;
+					var timeToNextLogin = timeToExpiration - (backend.loginAgainAdvance || 60 * 1000);
 					window.setTimeout(loginAgain, timeToNextLogin);
 					
 					console.log('Time to expiration: ' + timeToExpiration);
@@ -91,23 +91,14 @@
 			
 			return (
 				this.backend
-				.listAdventures()
-				.then(downloadAdventureFiles)
-				.then(parseAdventureFiles)
+				.downloadAdventures()
+				.then(parseAdventureJSON)
 				.then(addAdventures)
 			);
 			
-			function downloadAdventureFiles(ids) {
-				return when.parallel(ids.map(function(id) {
-					return function() {
-						return library.backend.downloadTextFile(id);
-					};
-				}));
-			}
-			
-			function parseAdventureFiles(files) {
-				return when.map(files, function(file) {
-					var config = JSON.parse(file.contents);
+			function parseAdventureJSON(jsonList) {
+				return when.map(jsonList, function(json) {
+					var config = JSON.parse(json);
 					return Ambience.Adventure.fromConfig(config);
 				});
 			}

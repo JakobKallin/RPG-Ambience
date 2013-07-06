@@ -96,7 +96,9 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 	
 	$scope.loadImageFile = function(file) {
 		console.log('Loading image file "' + file.id + '"');
-		$scope.app.library.loadImageFile(file.id).then(onFileLoaded);
+		$scope.app.library.loadImageFile(file.id).then(onFileLoaded).otherwise(function(e) {
+			debugger;
+		});
 		
 		function onFileLoaded(loadedFile) {
 			$scope.$apply(function() {

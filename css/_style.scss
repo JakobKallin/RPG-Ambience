@@ -1,5 +1,6 @@
 $gui-background: hsl(0, 0%, 10%);
 $gui-border: hsl(0, 0%, 25%);
+$note-color: hsl(0, 0%, 40%);
 
 %soft-focus {
 	background-color: hsl(0, 0%, 12.5%);
@@ -68,10 +69,34 @@ input[type=number] {
 	width: 3.5em;
 }
 
+/* Placeholder styling doesn't seem to work in Chrome if all selectors are included in the same declaration, so they are listed separately here. */
+
+@mixin placeholder() {
+	font-style: italic;
+	color: $note-color;
+}
+
+::-webkit-input-placeholder {
+	@include placeholder();
+}
+
+::-moz-placeholder {
+	@include placeholder();
+}
+
+::-ms-input-placeholder {
+	@include placeholder();
+}
+
+/* Used for empty images, for example. */
+.placeholder {
+	@include placeholder();
+}
+
 /* Multi-purpose classes */
 
 .note {
-	color: hsl(0, 0%, 40%);
+	color: $note-color;
 }
 
 .tab-list {

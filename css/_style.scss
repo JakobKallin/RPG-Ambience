@@ -162,6 +162,24 @@ input[type=number] {
 			content: ": ";
 		}
 	}
+	
+	.message {
+		padding: 0.5em;
+		margin-bottom: 1em;
+		text-align: center;
+		color: black;
+		background-color: hsl(60, 75%, 50%);
+		
+		@include flexbox(row);
+		
+		.text {
+			@include flex(1);
+		}
+		
+		.close {
+			margin-left: 0.5em;
+		}
+	}
 
 	.view-list {
 		.scene-view {
@@ -452,6 +470,7 @@ input[type=number] {
 .stage-overlay form {
 	float: left;
 	padding: 1em;
+	line-height: 2;
 }
 
 /* Splash screen */

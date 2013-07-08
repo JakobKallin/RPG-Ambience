@@ -41,22 +41,20 @@ Ambience.Adventure = function() {
 Ambience.Adventure.prototype.toConfig = function() {
 	var copy = copyObject(this);
 	
-	// Delete everything except the file IDs, because other info might change.
 	copy.scenes.forEach(function(scene) {
+		// Delete URLs as these are likely or guaranteed to change between sessions.
+		// Filenames and MIME types might change, but they usually don't and will provide useful information while files are loading, so keep them.
+		
 		if ( scene.image.file ) {
 			delete scene.image.file.url;
 			delete scene.image.file.thumbnail;
-			delete scene.image.file.name;
-			delete scene.image.file.mimeType;
 		}
 		
 		scene.sound.tracks.forEach(function(sound) {
 			delete sound.url;
-			delete sound.name;
-			delete sound.mimeType;
 		});
 		
-		// Remove file load progress.
+		// Remove file load progress because this is only a GUI concern.
 		scene.media.forEach(function(file) {
 			delete file.progress;
 		})

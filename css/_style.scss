@@ -69,6 +69,10 @@ input[type=number] {
 	width: 3.5em;
 }
 
+progress {
+	width: 100%;
+}
+
 /* Placeholder styling doesn't seem to work in Chrome if all selectors are included in the same declaration, so they are listed separately here. */
 
 @mixin placeholder() {
@@ -605,4 +609,9 @@ input[type=number] {
 	height: 1em;
 	padding: 0.125em 0;
 	font-size: 0.625em;
+}
+
+/* Google OAuth adds an iframe to the body element, which seems to take up space in Firefox. */
+body > iframe {
+	display: none;
 }

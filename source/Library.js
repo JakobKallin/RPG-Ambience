@@ -32,12 +32,6 @@
 		get name() {
 			return this.backend.name;
 		},
-		get selectImageFileLabel() {
-			return this.backend.selectImageFileLabel;
-		},
-		get selectSoundFilesLabel() {
-			return this.backend.selectSoundFilesLabel;
-		},
 		login: function() {
 			console.log('Logging in to backend ' + this.backend.name);
 			
@@ -149,11 +143,19 @@
 				});
 			}
 		},
+		
 		selectImageFile: function() {
 			return this.backend.selectImageFile();
 		},
+		get selectImageFileLabel() {
+			return this.backend.selectImageFileLabel;
+		},
+		
 		selectSoundFiles: function() {
 			return this.backend.selectSoundFiles();
+		},
+		get selectSoundFilesLabel() {
+			return this.backend.selectSoundFilesLabel;
 		}
 	};
 
@@ -178,8 +180,7 @@
 			inProgress.push(deferred);
 			return (
 				deferred.task()
-				.then(deferred.resolve)
-				.otherwise(deferred.reject)
+				.then(deferred.resolve, deferred.reject, deferred.notify)
 				.ensure(function() {
 					onDeferredCompleted(deferred)
 				})
@@ -188,9 +189,9 @@
 		
 		var onDeferredCompleted = function(deferred) {
 			inProgress.remove(deferred);
-			var nextTask = inLine.shift();
-			if ( nextTask ) {
-				execute(nextTask);
+			var nextDeferred = inLine.shift();
+			if ( nextDeferred ) {
+				execute(nextDeferred);
 			}
 		};
 		

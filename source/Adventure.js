@@ -54,6 +54,11 @@ Ambience.Adventure.prototype.toConfig = function() {
 			delete sound.url;
 			delete sound.name;
 			delete sound.mimeType;
+		});
+		
+		// Remove file load progress.
+		scene.media.forEach(function(file) {
+			delete file.progress;
 		})
 	});
 	

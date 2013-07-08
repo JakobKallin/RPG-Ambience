@@ -32,7 +32,7 @@
 		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
 		<script src="libraries/ambience-stage/source/Scene.js"></script>
 		
-		<script src="source/App.Controller.js"></script>
+		<script src="source/Controller.js"></script>
 		<script src="source/Theater.js"></script>
 		<script src="source/Adventure.js"></script>
 		<script src="source/ExampleAdventure.js"></script>
@@ -41,10 +41,10 @@
 		<script src="source/Scene.Image.js"></script>
 		<script src="source/Scene.Text.js"></script>
 		<script src="source/Scene.Sound.js"></script>
+		<script src="source/MediaFile.js"></script>
 		<script src="source/LocalBackend.js"></script>
 		<script src="source/Library.js"></script>
 		<script src="source/GoogleDriveBackend.js"></script>
-		<script src="source/AdventureController.js"></script>
 		
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
@@ -56,7 +56,7 @@
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
-	<body data-ng-controller="Ambience.App.Controller">
+	<body data-ng-controller="Ambience.Controller">
 		<div id="stage" class="stage">
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
@@ -70,8 +70,7 @@
 			<div
 				id="editor"
 				class="editor"
-				data-ng-show="editorIsVisible"
-				data-ng-controller="Ambience.AdventureController">
+				data-ng-show="editorIsVisible">
 				<div class="main-controls">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -100,12 +99,12 @@
 						<li class="action play">
 							<button
 								type="button"
-								data-ng-click="playSelected()">Play</button>
+								data-ng-click="playScene(app.scene)">Play</button>
 						</li>
 						<li class="action stop">
 							<button
 								type="button"
-								data-ng-click="stopCurrent()">Stop</button>
+								data-ng-click="stopScene()">Stop</button>
 						</li>
 					</ul>
 				</div>
@@ -146,7 +145,7 @@
 							<div class="add-scene">
 								<button
 									type="button"
-									data-ng-click="addScene()">Add Scene</button>
+									data-ng-click="addSceneAfter(app.scene, app.adventure)">Add Scene</button>
 							</div>
 						</div>
 						<div class="scene-editor" data-ui-if="app.adventure">
@@ -155,12 +154,12 @@
 									<li class="action copy">
 										<button
 											type="button"
-											data-ng-click="copyScene(app.scene)">Copy Scene</button>
+											data-ng-click="copyScene(app.scene, app.adventure)">Copy Scene</button>
 									</li>
 									<li class="action remove">
 										<button
 											type="button"
-											data-ng-click="removeScene(app.scene)">Delete Scene</button>
+											data-ng-click="removeScene(app.scene, app.adventure)">Delete Scene</button>
 									</li>
 								</ul>
 								<scene-preview data-ng-scene="app.scene"></scene-preview>
@@ -214,10 +213,14 @@
 									<pane
 										data-heading="Image"
 										id="image-tab">
-										<div class="primary-secondary">
+										<div class="primary-secondary" style="position: relative">
 											<span
 												class="primary"
 												data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
+											<!-- "less than" does not work properly below, probably due to some coercion. However, the XMLHttpRequest "load" listener makes sure that progress is notified as 1.0 on completion. -->
+											<div class="primary" data-ui-if="app.scene.image.file && app.scene.image.file.progress != 1.0">
+												<progress max="1.0" value="{{app.scene.image.file.progress}}"></progress>
+											</div>
 											<span
 												class="primary placeholder"
 												data-ui-if="!app.scene.image.file">No image selected</span>
@@ -225,8 +228,7 @@
 												type="button"
 												class="secondary"
 												data-ng-hide="app.scene.image.file"
-												data-ng-click="selectImage(app.scene)"
-												accept="">{{app.library.selectImageFileLabel}}</button>
+												data-ng-click="selectImage(app.scene)">{{app.library.selectImageFileLabel}}</button>
 											<button
 												type="button"
 												class="secondary"
@@ -279,7 +281,7 @@
 													<button
 														type="button"
 														class="secondary"
-														data-ng-click="removeTrack(app.scene, track)">Remove</button>
+														data-ng-click="removeTrack(track, app.scene)">Remove</button>
 													<audio
 														data-ng-src="{{track.url}}"
 														preload="auto"></audio>

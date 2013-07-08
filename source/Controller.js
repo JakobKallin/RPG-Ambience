@@ -4,16 +4,12 @@
 
 Ambience.App = {};
 
-Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLibrary) {
+Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrary) {
 	$scope.playScene = function(scene) {
 		ambience.play(scene);
 	};
 	
-	$scope.playSelected = function() {
-		$scope.playScene($scope.app.scene);
-	};
-	
-	$scope.stopCurrent = function() {
+	$scope.stopScene = function() {
 		ambience.fadeOutTopmost();
 	};
 	
@@ -94,35 +90,6 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		});
 	};
 	
-	$scope.loadImageFile = function(file) {
-		console.log('Loading image file "' + file.id + '"');
-		$scope.app.library.loadImageFile(file.id).then(onFileLoaded).otherwise(function(e) {
-			debugger;
-		});
-		
-		function onFileLoaded(loadedFile) {
-			$scope.$apply(function() {
-				file.url = loadedFile.url;
-				file.name = loadedFile.name;
-				file.mimeType = loadedFile.mimeType;
-				file.thumbnail = loadedFile.thumbnail;
-			});
-		}
-	};
-	
-	$scope.loadSoundFile = function(file) {
-		console.log('Loading sound file "' + file.id + '"');
-		$scope.app.library.loadSoundFile(file.id).then(onFileLoaded);
-		
-		function onFileLoaded(loadedFile) {
-			$scope.$apply(function() {
-				file.url = loadedFile.url;
-				file.name = loadedFile.name;
-				file.mimeType = loadedFile.mimeType;
-			});
-		}
-	};
-	
 	// Note that this code assumes that a library will only be selected once.
 	$scope.selectLibrary = function(newLibrary) {
 		console.log('Selecting library: ' + newLibrary.name);
@@ -136,7 +103,10 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 			newLibrary.adventuresAreBeingLoaded = true;
 			newLibrary.login()
 			.then(newLibrary.loadAdventures.bind(newLibrary))
-			.then(onAllAdventuresLoaded);
+			.then(onAllAdventuresLoaded)
+			.otherwise(function(e) {
+				debugger;
+			});
 		}
 		
 		function onAllAdventuresLoaded(adventures) {
@@ -259,6 +229,126 @@ Ambience.App.Controller = function($scope, ambience, localLibrary, googleDriveLi
 		console.log('Setting library to saved setting: ' + googleDriveLibrary.name)
 		$scope.selectLibrary(googleDriveLibrary);
 	}
+	
+	$scope.addSceneAfter = function(sceneBefore, adventure) {
+		var scene = new Ambience.App.Scene()
+		adventure.scenes.insertAfter(scene, sceneBefore);
+		$scope.app.scene = scene;
+		
+		return scene;
+	};
+	
+	$scope.selectScene = function(scene) {
+		$scope.app.scene = scene;
+	};
+	
+	$scope.isSelected = function(scene) {
+		return scene === $scope.app.scene;
+	};
+
+	$scope.copyScene = function(scene, adventure) {
+		// We don't create an actual copy because getters and setters are not copied (only their values).
+		// TODO: Nested objects (like tracks) should be deeply copied.
+		var newScene = new Ambience.App.Scene();
+		Object.overlay(newScene, scene);
+		
+		var index = adventure.scenes.indexOf($scope.app.scene) + 1
+		adventure.scenes.splice(index, 0, newScene);
+		$scope.selectScene(newScene);
+	};
+
+	$scope.removeScene = function(scene, adventure) {
+		nextScene = adventure.scenes.closest(scene);
+		adventure.scenes.remove(scene);
+		
+		if ( nextScene ) {
+			$scope.selectScene(nextScene);
+		} else {
+			$scope.addSceneAfter(adventure);
+		}
+	};
+	
+	$scope.loadMedia = function(scene) {
+		scenes.forEach(function(scene) {
+			if ( scene.image.file ) {
+				$scope.loadImageFile(scene.image.file);
+			}
+			scene.sound.tracks.forEach($scope.loadSoundFile);
+		});
+	};
+	
+	$scope.selectImage = function(scene) {
+		$scope.app.library.selectImageFile()
+		.then(function(file) {
+			$scope.$apply(function() {
+				scene.image.file = file;
+				$scope.loadImageFile(file);
+			});
+		});
+	};
+	
+	$scope.removeImage = function(scene) {
+		scene.image.file = null;
+	};
+	
+	$scope.loadImageFile = function(file) {
+		console.log('Loading image file "' + file.id + '"');
+		
+		$scope.app.library.loadImageFile(file.id)
+		.then(onFileLoaded, undefined, onLoadProgress);
+		
+		function onFileLoaded(loadedFile) {
+			$scope.$apply(function() {
+				file.url = loadedFile.url;
+				file.name = loadedFile.name;
+				file.mimeType = loadedFile.mimeType;
+				file.thumbnail = loadedFile.thumbnail;
+			});
+		}
+		
+		function onLoadProgress(percentage) {
+			$scope.$apply(function() {
+				file.progress = percentage;
+			});
+		}
+	};
+	
+	$scope.selectTracks = function(scene) {
+		$scope.app.library.selectSoundFiles()
+		.then(function(ids) {
+			ids.forEach(function(id) {
+				var file = new Ambience.MediaFile();
+				file.id = id;
+				$scope.loadSoundFile(file);
+				$scope.$apply(function() {
+					scene.sound.tracks.push(file);
+				});
+			});
+		});
+	};
+	
+	$scope.removeTrack = function(track, scene) {
+		scene.sound.tracks.remove(track);
+	};
+	
+	$scope.loadSoundFile = function(file) {
+		console.log('Loading sound file "' + file.id + '"');
+		
+		$scope.app.library.loadSoundFile(file.id)
+		.then(onFileLoaded, undefined, onLoadProgress);
+		
+		function onFileLoaded(loadedFile) {
+			$scope.$apply(function() {
+				file.url = loadedFile.url;
+				file.name = loadedFile.name;
+				file.mimeType = loadedFile.mimeType;
+			});
+		}
+		
+		function onLoadProgress(percentage) {
+			file.progress = percentage;
+		}
+	};
 };
 
-Ambience.App.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];
+Ambience.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

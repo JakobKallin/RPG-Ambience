@@ -5,7 +5,8 @@
 'use strict';
 
 (function() {
-	var appId = '907013371139.apps.googleusercontent.com';
+	var appId = '907013371139';
+	var clientId = appId + '.apps.googleusercontent.com';
 	
 	function loadScript(url) {
 		var deferred = when.defer();
@@ -17,6 +18,7 @@
 		element.addEventListener('error', function(event) {
 			deferred.reject(event);
 		});
+		element.async = true;
 		element.src = url;
 		document.head.appendChild(element);
 		
@@ -26,6 +28,7 @@
 	function loadGoogleDriveApi() {
 		console.log('Loading Google Drive API');
 		var deferred = when.defer();
+		
 		gapi.client.load('drive', 'v2', function() {
 			deferred.resolve();
 		});
@@ -33,14 +36,34 @@
 		return deferred.promise;
 	}
 	
+	function loadGooglePickerApi() {
+		console.log('Loading Google Picker API');
+		var deferred = when.defer();
+		
+		google.load('picker', '1', { callback: function() {
+			deferred.resolve();
+		}});
+		
+		return deferred.promise;
+	}
+	
 	function loadGoogleApi() {
-		return when(function() {
-			return loadScript('http://www.google.com/jsapi?key=AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM')
-		})
+		return when.all([
+			loadScript('http://www.google.com/jsapi?key=AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM'),
+			loadScript('https://apis.google.com/js/client.js').then(function() {
+				var deferred = when.defer();
+				gapi.load('client', { callback: function() {
+					deferred.resolve();
+				}});
+				return deferred.promise;
+			})
+		])
 		.then(function() {
-			return loadScript('https://apis.google.com/js/client.js')
-		})
-		.then(loadGoogleDriveApi);
+			return when.parallel([
+				loadGoogleDriveApi,
+				loadGooglePickerApi
+			]);
+		});
 	}
 	
 	function login(immediate) {
@@ -49,8 +72,9 @@
 		loadGoogleApi().then(function() {
 			gapi.auth.authorize(
 				{
-					client_id: appId,
-					scope: 'https://www.googleapis.com/auth/drive.file',
+					client_id: clientId,
+					// This should be drive.file, as discussed in https://github.com/JakobKallin/RPG-Ambience/issues/47.
+					scope: 'https://www.googleapis.com/auth/drive',
 					immediate: immediate
 				},
 				onPossibleAuth
@@ -192,18 +216,25 @@
 				request.addEventListener('abort', deferred.reject);
 				request.addEventListener('load', function() {
 					var blob = request.response;
-					var media = {
-						id: id,
-						url: window.URL.createObjectURL(blob),
-						name: item.title,
-						mimeType: item.mimeType
-					};
+					var media = new Ambience.MediaFile();
+					media.id = id;
+					media.url = window.URL.createObjectURL(blob);
+					media.name = item.title;
+					media.mimeType = item.mimeType;
 					
 					if ( item.thumbnailLink ) {
 						media.thumbnail = item.thumbnailLink;
 					}
 					
+					// Make sure that progress can be assumed to be 1.0 on completion.
+					deferred.notify(1.0);
 					deferred.resolve(media);
+				});
+				request.addEventListener('progress', function(event) {
+					if ( event.lengthComputable ) {
+						var percentage = event.loaded / event.total;
+						deferred.notify(percentage);
+					}
 				});
 				
 				request.send();
@@ -215,11 +246,78 @@
 			return when(null);
 		},
 		selectImageFile: function() {
-			return when(null);
+			var self = this;
+			
+			console.log('Selecting image file from Google Drive');
+			var deferred = when.defer();
+			
+			var views = {
+				docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
+				upload: new google.picker.DocsUploadView()
+			};
+			views.docs.setIncludeFolders(true);
+			
+			var picker = new google.picker.PickerBuilder()
+				.setAppId(appId)
+				.addView(views.docs)
+				.addView(views.upload)
+				.setCallback(onPickerAction)
+				.build();
+			picker.setVisible(true);
+			
+			return deferred.promise;
+			
+			function onPickerAction(data) {
+				if ( data.action === google.picker.Action.PICKED ) {
+					var metadata = data.docs[0];
+					var file = new Ambience.MediaFile();
+					file.id = metadata.id;
+					file.name = metadata.name;
+					file.mimeType = metadata.mimeType;
+					
+					deferred.resolve(file);
+				}
+				// TODO: Should reject if cancelled.
+			}
 		},
 		selectImageFileLabel: 'Select Image From Google Drive',
 		selectSoundFiles: function() {
-			return when(null)
+			var self = this;
+			
+			console.log('Selecting sound files from Google Drive');
+			var deferred = when.defer();
+			
+			var views = {
+				docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
+				upload: new google.picker.DocsUploadView()
+			};
+			
+			var mimeTypes = [
+				'audio/mpeg',
+				'audio/ogg',
+				'audio/webm',
+				'audio/wave',
+				'audio/wav',
+				'audio/x-wav'
+			];
+			var picker = new google.picker.PickerBuilder()
+				.setAppId(appId)
+				.addView(views.docs)
+				.addView(views.upload)
+				.setSelectableMimeTypes(mimeTypes.join(','))
+				.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+				.setCallback(onPickerAction)
+				.build();
+			picker.setVisible(true);
+			
+			return deferred.promise;
+			
+			function onPickerAction(data) {
+				if ( data.action === google.picker.Action.PICKED ) {
+					var ids = data.docs.map(get('id'));
+					deferred.resolve(ids);
+				}
+			}
 		},
 		selectSoundFilesLabel: 'Add Tracks From Google Drive'
 	};

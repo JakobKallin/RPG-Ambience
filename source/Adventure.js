@@ -47,7 +47,7 @@ Ambience.Adventure.prototype.toConfig = function() {
 		
 		if ( scene.image.file ) {
 			delete scene.image.file.url;
-			delete scene.image.file.thumbnail;
+			delete scene.image.file.previewUrl;
 		}
 		
 		scene.sound.tracks.forEach(function(sound) {
@@ -102,8 +102,9 @@ Ambience.Adventure.prototype.toConfig = function() {
 };
 
 Ambience.Adventure.fromConfig = function(config) {
+	Ambience.Adventure.upgradeConfig(config);
+
 	var adventure = new Ambience.Adventure();
-	
 	adventure.title = config.title;
 	adventure.version = config.version;
 	adventure.creationDate = new Date(config.creationDate);
@@ -117,6 +118,29 @@ Ambience.Adventure.fromConfig = function(config) {
 	return adventure;
 };
 
+Ambience.Adventure.upgradeConfig = function(config) {
+	if ( config.version === 2 ) {
+		// Adventures of version 2 only contain IDs of media files, not names and MIME types.
+		// Add these here so that they are properly queued when downloaded.
+		config.scenes.forEach(function(scene) {
+			var imageFile = scene.image.file;
+			if ( imageFile ) {
+				imageFile.name = 'Unknown filename';
+				imageFile.mimeType = 'image/unknown';
+			}
+			
+			scene.sound.tracks.forEach(function(soundFile) {
+				soundFile.name = 'Unknown filename';
+				soundFile.mimeType = 'audio/unknown';
+			});
+		});
+		
+		config.version = 3;
+	}
+};
+
 // Adventure version, unrelated to application version.
 // Should be increased whenever the format of an adventure changes.
-Ambience.Adventure.version = 2;
+Ambience.Adventure.version = 3;
+
+// New in version 3: Names and MIME types of files are serialized.

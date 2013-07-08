@@ -5,18 +5,6 @@
 'use strict';
 
 (function() {
-	// Load image files and sound files one at a time, respectively.
-	function loadMediaFile(id, type) {
-		var queue = this[type + 'Queue'];
-		var backend = this.backend;
-		
-		var download = function() {
-			return backend.downloadMediaFile(id);
-		};
-		
-		return queue.add(download);
-	}
-	
 	Ambience.Library = function(backend) {
 		this.sessionExpiration = null;
 		this.hasLoggedOut = false;
@@ -123,11 +111,16 @@
 				})
 			);
 		},
-		loadImageFile: function(id) {
-			return loadMediaFile.bind(this)(id, 'image');
-		},
-		loadSoundFile: function(id) {
-			return loadMediaFile.bind(this)(id, 'sound');
+		// Load image files and sound files in batches.
+		loadMediaFile: function(file) {
+			var queue = file.mimeType.startsWith('image') ? this.imageQueue : this.soundQueue;
+			var backend = this.backend;
+			
+			var download = function() {
+				return backend.downloadMediaFile(file);
+			};
+			
+			return queue.add(download);
 		},
 		saveFile: function(file) {
 			var library = this;

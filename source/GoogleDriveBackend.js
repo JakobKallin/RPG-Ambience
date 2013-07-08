@@ -4,82 +4,37 @@
 
 'use strict';
 
-(function() {
-	var appId = '907013371139';
-	var clientId = appId + '.apps.googleusercontent.com';
-	
-	function loadScript(url) {
+Ambience.GoogleDriveBackend = function() {};
+Ambience.GoogleDriveBackend.prototype = {
+	appId: '907013371139',
+	get clientId() {
+		return this.appId + '.apps.googleusercontent.com';
+	},
+	name: 'Google Drive',
+	imageLimit: 6,
+	soundLimit: 3,
+	loginAgainAdvance: 60 * 1000,
+	login: function() {
+		return this.loginImmediate(false);
+	},
+	loginAgain: function() {
+		return this.loginImmediate(true);
+	},
+	loginImmediate: function(immediate) {
+		var backend = this;
 		var deferred = when.defer();
 		
-		var element = document.createElement('script');
-		element.addEventListener('load', function() {
-			deferred.resolve();
-		});
-		element.addEventListener('error', function(event) {
-			deferred.reject(event);
-		});
-		element.async = true;
-		element.src = url;
-		document.head.appendChild(element);
-		
-		return deferred.promise;
-	}
-	
-	function loadGoogleDriveApi() {
-		console.log('Loading Google Drive API');
-		var deferred = when.defer();
-		
-		gapi.client.load('drive', 'v2', function() {
-			deferred.resolve();
-		});
-			
-		return deferred.promise;
-	}
-	
-	function loadGooglePickerApi() {
-		console.log('Loading Google Picker API');
-		var deferred = when.defer();
-		
-		google.load('picker', '1', { callback: function() {
-			deferred.resolve();
-		}});
-		
-		return deferred.promise;
-	}
-	
-	function loadGoogleApi() {
-		return when.all([
-			loadScript('http://www.google.com/jsapi?key=AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM'),
-			loadScript('https://apis.google.com/js/client.js').then(function() {
-				var deferred = when.defer();
-				gapi.load('client', { callback: function() {
-					deferred.resolve();
-				}});
-				return deferred.promise;
-			})
-		])
-		.then(function() {
-			return when.parallel([
-				loadGoogleDriveApi,
-				loadGooglePickerApi
-			]);
-		});
-	}
-	
-	function login(immediate) {
-		var deferred = when.defer();
-		
-		loadGoogleApi().then(function() {
+		this.loadGoogleApi().then(function() {
 			gapi.auth.authorize(
 				{
-					client_id: clientId,
+					client_id: backend.clientId,
 					// This should be drive.file, as discussed in https://github.com/JakobKallin/RPG-Ambience/issues/47.
 					scope: 'https://www.googleapis.com/auth/drive',
 					immediate: immediate
 				},
 				onPossibleAuth
 			);
-		});
+		}).otherwise(deferred.reject);
 		
 		return deferred.promise;
 		
@@ -97,9 +52,64 @@
 				deferred.reject();
 			}
 		}
-	}
-	
-	function makeRequest(request) {
+	},
+	loadScript: function(url) {
+		var deferred = when.defer();
+		
+		var element = document.createElement('script');
+		element.addEventListener('load', function() {
+			deferred.resolve();
+		});
+		element.addEventListener('error', function(event) {
+			deferred.reject(event);
+		});
+		element.async = true;
+		element.src = url;
+		document.head.appendChild(element);
+		
+		return deferred.promise;
+	},
+	loadGoogleDriveApi: function() {
+		console.log('Loading Google Drive API');
+		var deferred = when.defer();
+		
+		gapi.client.load('drive', 'v2', function() {
+			deferred.resolve();
+		});
+			
+		return deferred.promise;
+	},
+	loadGooglePickerApi: function() {
+		console.log('Loading Google Picker API');
+		var deferred = when.defer();
+		
+		google.load('picker', '1', { callback: function() {
+			deferred.resolve();
+		}});
+		
+		return deferred.promise;
+	},
+	loadGoogleApi: function() {
+		var backend = this;
+		
+		return when.all([
+			this.loadScript('http://www.google.com/jsapi?key=AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM'),
+			this.loadScript('https://apis.google.com/js/client.js').then(function() {
+				var deferred = when.defer();
+				gapi.load('client', { callback: function() {
+					deferred.resolve();
+				}});
+				return deferred.promise;
+			})
+		])
+		.then(function() {
+			return when.parallel([
+				backend.loadGoogleDriveApi,
+				backend.loadGooglePickerApi
+			]);
+		});
+	},
+	makeRequest: function(request) {
 		var deferred = when.defer();
 		
 		request.execute(function(response) {
@@ -111,9 +121,8 @@
 		});
 		
 		return deferred.promise;
-	}
-	
-	function downloadItem(item) {
+	},
+	downloadItem: function(item) {
 		var deferred = when.defer();
 		
 		var request = new XMLHttpRequest();
@@ -131,194 +140,199 @@
 		request.send();
 		
 		return deferred.promise;
-	}
-	
-	Ambience.GoogleDriveBackend = function() {};
-	Ambience.GoogleDriveBackend.prototype = {
-		name: 'Google Drive',
-		imageLimit: 5,
-		soundLimit: 1,
-		loginAgainAdvance: 60 * 1000,
-		login: function() {
-			return login(false);
-		},
-		loginAgain: function() {
-			return login(true);
-		},
-		downloadAdventures: function() {
-			console.log('Requesting adventures from Google Drive');
-			
-			// The Google Drive API does not support the "or" operator, so for now we only search for application/json. (https://developers.google.com/drive/search-parameters)
-			// TODO: This should be fixed in the future so that manually created files (with the wrong mime type) can also be used.
-			var query = "trashed = false and mimeType = 'application/json'";
-			var filesPerRequest = 100;
-			var request = gapi.client.drive.files.list({
-				q: query,
-				maxResults: filesPerRequest
-			});
-			
-			var deferred = when.defer();
-			var filePromises = [];
-			makeRequest(request).then(onResponse);
-			
-			return deferred.promise;
-			
-			function onResponse(response) {
-				// It appears that not even an empty array is returned when there are zero items, so create one here.
-				if ( !response.items ) {
-					response.items = [];
-				}
-				
-				console.log('Receiving metadata for ' + response.items.length + ' files');
-				
-				// We apparently cannot query for file extensions in the Google Drive API so we filter here instead.
-				var matchingItems = response.items.filter(function(item) {
-					return item.fileExtension === 'ambience'
-				});
-				
-				filePromises = filePromises.concat(matchingItems.map(downloadItem));
-				
-				if ( response.items.length === filesPerRequest && response.nextPageToken ) {
-					console.log('Requesting next page of files');
-					
-					var nextRequest = gapi.client.drive.files.list({
-						q: query,
-						maxResults: filesPerRequest,
-						pageToken: response.nextPageToken
-					});
-					makeRequest(nextRequest).then(onResponse);
-				} else {
-					console.log('Done requesting file pages');
-					
-					when.all(filePromises).then(function(files) {
-						console.log('Done downloading adventure files');
-						deferred.resolve(files);
-					});
-				}
+	},
+	downloadAdventures: function() {
+		console.log('Requesting adventures from Google Drive');
+		var backend = this;
+		
+		// The Google Drive API does not support the "or" operator, so for now we only search for application/json. (https://developers.google.com/drive/search-parameters)
+		// TODO: This should be fixed in the future so that manually created files (with the wrong mime type) can also be used.
+		var query = "trashed = false and mimeType = 'application/json'";
+		var filesPerRequest = 100;
+		var request = gapi.client.drive.files.list({
+			q: query,
+			maxResults: filesPerRequest
+		});
+		
+		var deferred = when.defer();
+		var filePromises = [];
+		this.makeRequest(request).then(onResponse).otherwise(deferred.reject);
+		
+		return deferred.promise;
+		
+		function onResponse(response) {
+			// It appears that not even an empty array is returned when there are zero items, so create one here.
+			if ( !response.items ) {
+				response.items = [];
 			}
-		},
-		// Media files, whose contents will not be used directly but rather through URLs.
-		downloadMediaFile: function(id) {
-			var request = gapi.client.drive.files.get({
-				fileId: id
+			
+			console.log('Receiving metadata for ' + response.items.length + ' files');
+			
+			// We apparently cannot query for file extensions in the Google Drive API so we filter here instead.
+			var matchingItems = response.items.filter(function(item) {
+				return item.fileExtension === 'ambience'
 			});
 			
-			return makeRequest(request).then(function(item) {
-				var deferred = when.defer();
-				
-				var request = new XMLHttpRequest();
-				var token = gapi.auth.getToken().access_token;
-				request.open('GET', item.downloadUrl);
-				request.responseType = 'blob';
-				request.setRequestHeader('Authorization', 'Bearer ' + token);
-				
-				request.addEventListener('error', deferred.reject);
-				request.addEventListener('abort', deferred.reject);
-				request.addEventListener('load', function() {
-					var blob = request.response;
-					var media = new Ambience.MediaFile();
-					media.id = id;
-					media.url = window.URL.createObjectURL(blob);
-					media.name = item.title;
-					media.mimeType = item.mimeType;
-					
-					if ( item.thumbnailLink ) {
-						media.thumbnail = item.thumbnailLink;
-					}
-					
-					// Make sure that progress can be assumed to be 1.0 on completion.
-					deferred.notify(1.0);
-					deferred.resolve(media);
-				});
-				request.addEventListener('progress', function(event) {
-					if ( event.lengthComputable ) {
-						var percentage = event.loaded / event.total;
-						deferred.notify(percentage);
-					}
-				});
-				
-				request.send();
-				
-				return deferred.promise;
-			});
-		},
-		uploadFile: function(file) {
-			return when(null);
-		},
-		selectImageFile: function() {
-			var self = this;
+			filePromises = filePromises.concat(matchingItems.map(backend.downloadItem));
 			
-			console.log('Selecting image file from Google Drive');
+			if ( response.items.length === filesPerRequest && response.nextPageToken ) {
+				console.log('Requesting next page of files');
+				
+				var nextRequest = gapi.client.drive.files.list({
+					q: query,
+					maxResults: filesPerRequest,
+					pageToken: response.nextPageToken
+				});
+				backend.makeRequest(nextRequest).then(onResponse).otherwise(deferred.reject);
+			} else {
+				console.log('Done requesting file pages');
+				
+				when.all(filePromises).then(function(files) {
+					console.log('Done downloading adventure files');
+					deferred.resolve(files);
+				})
+				.otherwise(deferred.reject);
+			}
+		}
+	},
+	// Media files, whose contents will not be used directly but rather through URLs.
+	downloadMediaFile: function(file) {
+		var request = gapi.client.drive.files.get({
+			fileId: file.id
+		});
+		
+		return this.makeRequest(request).then(function(item) {
 			var deferred = when.defer();
 			
-			var views = {
-				docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
-				upload: new google.picker.DocsUploadView()
-			};
-			views.docs.setIncludeFolders(true);
+			var request = new XMLHttpRequest();
+			var token = gapi.auth.getToken().access_token;
+			request.open('GET', item.downloadUrl);
+			request.responseType = 'blob';
+			request.setRequestHeader('Authorization', 'Bearer ' + token);
 			
-			var picker = new google.picker.PickerBuilder()
-				.setAppId(appId)
-				.addView(views.docs)
-				.addView(views.upload)
-				.setCallback(onPickerAction)
-				.build();
-			picker.setVisible(true);
+			request.addEventListener('error', deferred.reject);
+			request.addEventListener('abort', deferred.reject);
+			request.addEventListener('load', function() {
+				var blob = request.response;
+				file.url = window.URL.createObjectURL(blob);
+				file.name = item.title;
+				file.mimeType = item.mimeType;
+				
+				if ( item.thumbnailLink ) {
+					file.previewUrl = item.thumbnailLink;
+				}
+				
+				// Make sure that progress can be assumed to be 1.0 on completion.
+				deferred.notify(1.0);
+				deferred.resolve(file);
+			});
+			request.addEventListener('progress', function(event) {
+				if ( event.lengthComputable ) {
+					var percentage = event.loaded / event.total;
+					deferred.notify(percentage);
+				}
+			});
+			
+			request.send();
 			
 			return deferred.promise;
-			
-			function onPickerAction(data) {
-				if ( data.action === google.picker.Action.PICKED ) {
-					var metadata = data.docs[0];
+		});
+	},
+	uploadFile: function(file) {
+		return when(null);
+	},
+	selectImageFile: function() {
+		console.log('Selecting image file from Google Drive');
+		var deferred = when.defer();
+		
+		var views = {
+			docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
+			upload: new google.picker.DocsUploadView()
+		};
+		views.docs.setIncludeFolders(true);
+		
+		var picker = new google.picker.PickerBuilder()
+			.setAppId(this.appId)
+			.addView(views.docs)
+			.addView(views.upload)
+			.setCallback(onPickerAction)
+			.build();
+		picker.setVisible(true);
+		
+		return deferred.promise;
+		
+		function onPickerAction(data) {
+			if ( data.action === google.picker.Action.PICKED ) {
+				var metadata = data.docs[0];
+				var file = new Ambience.MediaFile();
+				file.id = metadata.id;
+				file.name = metadata.name;
+				file.mimeType = metadata.mimeType;
+				
+				deferred.resolve(file);
+			}
+			// TODO: Should reject if cancelled.
+		}
+	},
+	selectImageFileLabel: 'Select Image From Google Drive',
+	selectSoundFiles: function() {
+		console.log('Selecting sound files from Google Drive');
+		var deferred = when.defer();
+		
+		var views = {
+			docs: new google.picker.DocsView(google.picker.ViewId.DOCS),
+			upload: new google.picker.DocsUploadView()
+		};
+		
+		var mimeTypes = [
+			'audio/mpeg',
+			'audio/ogg',
+			'audio/webm',
+			'audio/wave',
+			'audio/wav',
+			'audio/x-wav'
+		];
+		var picker = new google.picker.PickerBuilder()
+			.setAppId(this.appId)
+			.addView(views.docs)
+			.addView(views.upload)
+			.setSelectableMimeTypes(mimeTypes.join(','))
+			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+			.setCallback(onPickerAction)
+			.build();
+		picker.setVisible(true);
+		
+		return deferred.promise;
+		
+		function onPickerAction(data) {
+			if ( data.action === google.picker.Action.PICKED ) {
+				var files = data.docs.map(function(metadata) {
 					var file = new Ambience.MediaFile();
 					file.id = metadata.id;
 					file.name = metadata.name;
 					file.mimeType = metadata.mimeType;
 					
-					deferred.resolve(file);
-				}
-				// TODO: Should reject if cancelled.
+					return file;
+				});
+				deferred.resolve(files);
 			}
-		},
-		selectImageFileLabel: 'Select Image From Google Drive',
-		selectSoundFiles: function() {
-			var self = this;
-			
-			console.log('Selecting sound files from Google Drive');
-			var deferred = when.defer();
-			
-			var views = {
-				docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
-				upload: new google.picker.DocsUploadView()
-			};
-			
-			var mimeTypes = [
-				'audio/mpeg',
-				'audio/ogg',
-				'audio/webm',
-				'audio/wave',
-				'audio/wav',
-				'audio/x-wav'
-			];
-			var picker = new google.picker.PickerBuilder()
-				.setAppId(appId)
-				.addView(views.docs)
-				.addView(views.upload)
-				.setSelectableMimeTypes(mimeTypes.join(','))
-				.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-				.setCallback(onPickerAction)
-				.build();
-			picker.setVisible(true);
-			
-			return deferred.promise;
-			
-			function onPickerAction(data) {
-				if ( data.action === google.picker.Action.PICKED ) {
-					var ids = data.docs.map(get('id'));
-					deferred.resolve(ids);
-				}
-			}
-		},
-		selectSoundFilesLabel: 'Add Tracks From Google Drive'
+		}
+	},
+	selectSoundFilesLabel: 'Add Tracks From Google Drive'
+};
+
+Ambience.HttpRequest = function() {
+	var request = Object.create(new XMLHttpRequest());
+	var deferred = when.defer();
+	
+	request.addEventListener('load', deferred.resolve);
+	request.addEventListener('error', deferred.reject);
+	request.addEventListener('abort', deferred.reject);
+	request.addEventListener('progress', deferred.notify);
+	
+	request.send = function() {
+		return deferred.promise;
 	};
-})();
+	
+	return request;
+};

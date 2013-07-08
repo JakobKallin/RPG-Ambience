@@ -5,6 +5,7 @@
 Ambience.MediaFile = function() {
 	this.id = null;
 	this.url = null;
+	this.previewUrl = null;
 	this.name = null;
 	this.mimeType = null;
 };

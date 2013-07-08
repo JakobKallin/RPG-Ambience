@@ -278,6 +278,10 @@
 														data-ng-class="{ unsupported: !trackIsPlayable(track) }">
 														{{track.name}}
 													</span>
+													<!-- See image section above for comments. -->
+													<div class="primary" data-ui-if="track.progress != 1.0">
+														<progress max="1.0" value="{{track.progress}}"></progress>
+													</div>
 													<button
 														type="button"
 														class="secondary"

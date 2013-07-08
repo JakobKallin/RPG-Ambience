@@ -84,9 +84,9 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		mediaLoadedAdventures.push(adventure);
 		adventure.scenes.forEach(function(scene) {
 			if ( scene.image.file ) {
-				$scope.loadImageFile(scene.image.file);
+				$scope.loadMediaFile(scene.image.file);
 			}
-			scene.sound.tracks.forEach($scope.loadSoundFile);
+			scene.sound.tracks.forEach($scope.loadMediaFile);
 		});
 	};
 	
@@ -105,7 +105,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			.then(newLibrary.loadAdventures.bind(newLibrary))
 			.then(onAllAdventuresLoaded)
 			.otherwise(function(e) {
-				debugger;
+				console.log('Logging in to library failed.');
 			});
 		}
 		
@@ -271,39 +271,21 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	$scope.loadMedia = function(scene) {
 		scenes.forEach(function(scene) {
 			if ( scene.image.file ) {
-				$scope.loadImageFile(scene.image.file);
+				$scope.loadMediaFile(scene.image.file);
 			}
-			scene.sound.tracks.forEach($scope.loadSoundFile);
+			scene.sound.tracks.forEach($scope.loadMediaFile);
 		});
 	};
 	
-	$scope.selectImage = function(scene) {
-		$scope.app.library.selectImageFile()
-		.then(function(file) {
-			$scope.$apply(function() {
-				scene.image.file = file;
-				$scope.loadImageFile(file);
-			});
-		});
-	};
-	
-	$scope.removeImage = function(scene) {
-		scene.image.file = null;
-	};
-	
-	$scope.loadImageFile = function(file) {
-		console.log('Loading image file "' + file.id + '"');
+	$scope.loadMediaFile = function(file) {
+		console.log('Loading media file "' + file.name + '"');
 		
-		$scope.app.library.loadImageFile(file.id)
+		$scope.app.library.loadMediaFile(file)
 		.then(onFileLoaded, undefined, onLoadProgress);
 		
 		function onFileLoaded(loadedFile) {
-			$scope.$apply(function() {
-				file.url = loadedFile.url;
-				file.name = loadedFile.name;
-				file.mimeType = loadedFile.mimeType;
-				file.thumbnail = loadedFile.thumbnail;
-			});
+			// This callback used to copy the "loadedFile" properties to "file", but now they are the same; "file" is actually mutated inside the library.
+			$scope.$apply(function() {});
 		}
 		
 		function onLoadProgress(percentage) {
@@ -313,15 +295,27 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		}
 	};
 	
+	$scope.selectImage = function(scene) {
+		$scope.app.library.selectImageFile()
+		.then(function(file) {
+			$scope.$apply(function() {
+				scene.image.file = file;
+				$scope.loadMediaFile(file);
+			});
+		});
+	};
+	
+	$scope.removeImage = function(scene) {
+		scene.image.file = null;
+	};
+	
 	$scope.selectTracks = function(scene) {
 		$scope.app.library.selectSoundFiles()
-		.then(function(ids) {
-			ids.forEach(function(id) {
-				var file = new Ambience.MediaFile();
-				file.id = id;
-				$scope.loadSoundFile(file);
+		.then(function(files) {
+			files.forEach(function(file) {
 				$scope.$apply(function() {
 					scene.sound.tracks.push(file);
+					$scope.loadMediaFile(file);
 				});
 			});
 		});
@@ -329,25 +323,6 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	
 	$scope.removeTrack = function(track, scene) {
 		scene.sound.tracks.remove(track);
-	};
-	
-	$scope.loadSoundFile = function(file) {
-		console.log('Loading sound file "' + file.id + '"');
-		
-		$scope.app.library.loadSoundFile(file.id)
-		.then(onFileLoaded, undefined, onLoadProgress);
-		
-		function onFileLoaded(loadedFile) {
-			$scope.$apply(function() {
-				file.url = loadedFile.url;
-				file.name = loadedFile.name;
-				file.mimeType = loadedFile.mimeType;
-			});
-		}
-		
-		function onLoadProgress(percentage) {
-			file.progress = percentage;
-		}
 	};
 };
 

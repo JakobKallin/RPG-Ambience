@@ -196,11 +196,10 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	window.addEventListener('beforeunload', function(event) {
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
-			try {
-				$scope.app.library.saveAdventures();
-			} catch(error) {
-				return 'There was an error saving your adventure:\n\n' + error.message;
-			}
+			console.log('Saving adventures');
+			$scope.app.library.saveAdventures().otherwise(function(error) {
+				console.log('There was an error saving adventures');
+			});
 		}
 		
 		// TODO: We should check every activated library for exit messages.

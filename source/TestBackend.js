@@ -32,22 +32,15 @@ Ambience.TestBackend.prototype = {
 			return expiration;
 		});
 	},
-	listAdventures: function() {
+	downloadAdventures: function() {
 		return when.parallel([
 			function() {
-				return when.delay(100, 'Adventure one');
+				return when.delay(100, Ambience.ExampleAdventure.json);
 			},
 			function() {
-				return when.delay(200, 'Adventure two');
+				return when.delay(200, Ambience.ExampleAdventure.json);
 			}
 		]);
-	},
-	// Files with text contents (adventures in this case).
-	downloadTextFile: function(id) {
-		return when.delay(100, {
-			id: id,
-			contents: JSON.stringify({ id: id })
-		});
 	},
 	// Media files, whose contents will not be used directly but rather through URLs.
 	downloadMediaFile: function(id) {
@@ -62,8 +55,10 @@ Ambience.TestBackend.prototype = {
 			});
 		}
 	},
-	uploadFile: function(file) {
-		return when.delay(100);
+	uploadBlob: function(blob, id) {
+		return when.delay(100).then(function() {
+			return id || blob.name;
+		});
 	},
 	selectImageFile: function() {
 		var deferred = when.defer();

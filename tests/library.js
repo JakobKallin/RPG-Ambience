@@ -29,7 +29,7 @@ describe('Library', function() {
 	
 	it('saves new adventure', function() {
 		var adventureHasBeenSaved = false;
-		library.adventures = [ { title: 'New adventure'} ];
+		library.adventures = [ new Ambience.Adventure() ];
 		
 		runs(function() {
 			promise = library.saveAdventures().then(function() {
@@ -46,7 +46,7 @@ describe('Library', function() {
 	
 	it('saves modified adventure', function() {
 		var modifiedAdventureHasBeenSaved = false;
-		var adventure = { title: 'New adventure'};
+		var adventure = new Ambience.Adventure();
 		library.adventures = [adventure];
 		
 		// Save the first time.
@@ -73,7 +73,8 @@ describe('Library', function() {
 	
 	it('does not save unmodified adventure', function() {
 		var adventureWasUploaded;
-		var adventure = { title: 'Adventure'};
+		var adventure = new Ambience.Adventure();
+		adventure.id = adventure.title = 'Adventure to save twice';
 		library.adventures = [adventure];
 		
 		runs(function() {
@@ -81,16 +82,16 @@ describe('Library', function() {
 				// Save the first time.
 				library.saveAdventures()
 				// Save the second time, with no modifications to the adventure.
-				.then(library.saveAdventures.bind(library))
-				.then(function(results) {
-					adventureWasUploaded = results[0];
+				.then(function() {
+					spyOn(library.backend, 'uploadBlob');
+					return library.saveAdventures();
 				});
 		});
 		
 		waitsForPromise();
 		
 		runs(function() {
-			expect(adventureWasUploaded).toBe(false);
+			expect(library.backend.uploadBlob).not.toHaveBeenCalled();
 		});
 	});
 	
@@ -98,7 +99,7 @@ describe('Library', function() {
 		var imageHasLoaded = false;
 		
 		runs(function() {
-			promise = library.selectImage().then(function(image) {
+			promise = library.selectImageFile().then(function(image) {
 				imageHasLoaded = true;
 			});
 		});
@@ -114,7 +115,7 @@ describe('Library', function() {
 		var progressHasBeenNotified = false;
 		
 		runs(function() {
-			promise = library.selectImage().then(undefined, undefined, function() {
+			promise = library.selectImageFile().then(undefined, undefined, function() {
 				progressHasBeenNotified = true;
 			});
 		});
@@ -130,10 +131,10 @@ describe('Library', function() {
 		var loaded = [false, false];
 		
 		runs(function() {
-			library.loadImageFile('one').then(function() {
+			library.loadMediaFile({ id: 'one', mimeType: 'image/jpeg' }).then(function() {
 				loaded[0] = true;
 			});
-			library.loadImageFile('two').then(function() {
+			library.loadMediaFile({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
 				loaded[1] = true;
 			});
 		});
@@ -157,13 +158,13 @@ describe('Library', function() {
 		var loaded = false;
 		
 		runs(function() {
-			library.loadImageFile('one');
+			library.loadMediaFile({ id: 'one', mimeType: 'image/jpeg' });
 		});
 		
 		waits(150);
 		
 		runs(function() {
-			library.loadImageFile('two').then(function() {
+			library.loadMediaFile({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
 				loaded = true;
 			});
 		});
@@ -179,10 +180,10 @@ describe('Library', function() {
 		var loaded = { image: false, sound: false };
 		
 		runs(function() {
-			library.loadImageFile('image').then(function() {
+			library.loadMediaFile({ id: 'image', mimeType: 'image/jpeg' }).then(function() {
 				loaded.image = true;
 			});
-			library.loadMedia('sound').then(function() {
+			library.loadMediaFile({ id: 'sound', mimeType: 'audio/ogg' }).then(function() {
 				loaded.sound = true;
 			});
 		});
@@ -201,7 +202,7 @@ describe('Library', function() {
 		
 		runs(function() {
 			backend.isOnline = false;
-			library.loadImageFile('image').otherwise(function() {
+			library.loadMediaFile({ id: 'one', mimeType: 'image/jpeg' }).otherwise(function() {
 				firstMediaFailed = true;
 			})
 			// After the first download has failed, make sure the next one will succeed.
@@ -209,7 +210,7 @@ describe('Library', function() {
 				backend.isOnline = true;
 			});
 			
-			library.loadImageFile('image').then(function() {
+			library.loadMediaFile({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
 				secondMediaLoaded = true;
 			});
 		});

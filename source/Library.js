@@ -74,14 +74,17 @@
 			return (
 				this.backend
 				.downloadAdventures()
-				.then(parseAdventureJSON)
+				.then(parseAdventureFiles)
 				.then(addAdventures)
 			);
 			
-			function parseAdventureJSON(jsonList) {
-				return when.map(jsonList, function(json) {
-					var config = JSON.parse(json);
-					return Ambience.Adventure.fromConfig(config);
+			function parseAdventureFiles(files) {
+				return when.map(files, function(file) {
+					var config = JSON.parse(file.contents);
+					var adventure = Ambience.Adventure.fromConfig(config);
+					adventure.id = file.id;
+					console.log('Parsed adventure "' + adventure.title + '" (' + adventure.id + ')');
+					return adventure;
 				});
 			}
 			
@@ -100,17 +103,47 @@
 			return when.parallel(
 				library.adventures
 				.map(function(adventure) {
-					var file = {
-						id: adventure.id,
-						name: adventure.title,
-						contents: adventure.toConfig()
-					};
 					return function() {
-						return library.saveFile(file);
+						// Note that the file object is only used once; the resulting file ID is saved into the adventure itself. A new file object is created the next time that the adventure is saved.
+						var file = library.fileFromAdventure(adventure);
+						return library.saveFile(file).then(function(fileId) {
+							// Save the ID so that it can be used later to prevent uploads of unchanged files.
+							adventure.id = fileId;
+						});
 					};
 				})
 			);
 		},
+		saveFile: function(file) {
+			var library = this;
+			
+			if ( file.id && file.contents === this.latestFileContents[file.id] ) {
+				console.log('Not uploading file "' + file.name + '", because it is unchanged.');
+				return when(file.id);
+			} else {
+				return this.backend.uploadFile(file).then(function(fileId) {
+					// "fileId" is new if there was none before.
+					library.latestFileContents[fileId] = file.contents;
+					return fileId;
+				})
+				.otherwise(function(e) {
+					debugger;
+				});
+			}
+		},
+		fileFromAdventure: function(adventure) {
+			var file = new Ambience.BackendFile();
+			file.id = adventure.id;
+			file.name = adventure.title + '.ambience';
+			file.mimeType = 'application/json';
+			
+			var config = adventure.toConfig();
+			var json = angular.toJson(config);
+			file.contents = json;
+			
+			return file;
+		},
+		
 		// Load image files and sound files in batches.
 		loadMediaFile: function(file) {
 			var queue = file.mimeType.startsWith('image') ? this.imageQueue : this.soundQueue;
@@ -121,20 +154,6 @@
 			};
 			
 			return queue.add(download);
-		},
-		saveFile: function(file) {
-			var library = this;
-			
-			if ( file.contents === this.latestFileContents[file.id] ) {
-				// "false" means that the file has not been uploaded.
-				return false;
-			} else {
-				return this.backend.uploadFile(file).then(function() {
-					library.latestFileContents[file.id] = file.contents;
-					// "true" means that the file has been uploaded.
-					return true;
-				});
-			}
 		},
 		
 		selectImageFile: function() {

@@ -55,9 +55,14 @@ Ambience.Adventure.prototype.toConfig = function() {
 		});
 		
 		// Remove file load progress because this is only a GUI concern.
-		scene.media.forEach(function(file) {
+		// Note that we're working on a copy, so the getter property "media" is not available.
+		// The reason getters are not copied is because they would be redundantly serialized, which is not desirable.
+		if ( scene.image.file ) {
+			delete scene.image.file.progress;
+		}
+		scene.sound.tracks.forEach(function(file) {
 			delete file.progress;
-		})
+		});
 	});
 	
 	// Delete adventure ID; this is storage-specific.

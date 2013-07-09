@@ -131,7 +131,12 @@ Ambience.GoogleDriveBackend.prototype = {
 		request.setRequestHeader('Authorization', 'Bearer ' + token);
 		
 		request.addEventListener('load', function() {
-			deferred.resolve(request.responseText);
+			var file = new Ambience.BackendFile();
+			file.id = item.id;
+			file.name = item.name;
+			file.mimeType = item.mimeType;
+			file.contents = request.responseText;
+			deferred.resolve(file);
 		});
 		request.addEventListener('error', function(error) {
 			deferred.reject(error);
@@ -239,7 +244,60 @@ Ambience.GoogleDriveBackend.prototype = {
 		});
 	},
 	uploadFile: function(file) {
-		return when(null);
+		var backend = this;
+		
+		var boundary = '-------314159265358979323846';
+		var delimiter = "\r\n--" + boundary + "\r\n";
+		var close_delim = "\r\n--" + boundary + "--";
+		
+		if ( file.id ) {
+			console.log('Uploading old file "' + file.name + '".');
+			var path = '/upload/drive/v2/files/' + file.id;
+			var method = 'PUT';
+		} else {
+			console.log('Uploading new file "' + file.name + '".');
+			var path = '/upload/drive/v2/files';
+			var method = 'POST';
+		}
+		
+		var blob = new Blob([file.contents], { type: file.mimeType });
+		var reader = new Ambience.FileReader();
+		return reader.readAsDataURL(blob).then(function() {
+			var dataURL = reader.result;
+			var base64Data = dataURL.substring(dataURL.indexOf(',') + 1);
+			var contentType = file.mimeType || 'application/octet-stream';
+			var metadata = {
+				'title': file.name,
+				'mimeType': contentType
+			};
+			
+			var multipartRequestBody =
+				delimiter +
+				'Content-Type: application/json\r\n\r\n' +
+				JSON.stringify(metadata) +
+				delimiter +
+				'Content-Type: ' + contentType + '\r\n' +
+				'Content-Transfer-Encoding: base64\r\n' +
+				'\r\n' +
+				base64Data +
+				close_delim;
+			
+			var request = gapi.client.request({
+				'path': path,
+				'method': method,
+				'params': {'uploadType': 'multipart'},
+				'headers': {
+					'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+				},
+				'body': multipartRequestBody
+			});
+			
+			return backend.makeRequest(request).then(function(response) {
+				console.log('Done uploading file "' + file.name + '"');
+				// If the file was just created, we need to return its newly created ID so that we can identify it. We use it to only upload files when they have changed.
+				return response.id;
+			});
+		});
 	},
 	selectImageFile: function() {
 		console.log('Selecting image file from Google Drive');
@@ -330,9 +388,29 @@ Ambience.HttpRequest = function() {
 	request.addEventListener('abort', deferred.reject);
 	request.addEventListener('progress', deferred.notify);
 	
+	var originalSend = request.send;
 	request.send = function() {
+		originalSend.apply(request, arguments);
 		return deferred.promise;
 	};
 	
 	return request;
+};
+
+Ambience.FileReader = function() {
+	var originalReader = new FileReader();
+	var reader = Object.create(originalReader);
+	var deferred = when.defer();
+	
+	originalReader.onload = deferred.resolve;
+	originalReader.onerror = deferred.reject;
+	originalReader.onabort = deferred.reject;
+	originalReader.onprogress = deferred.notify;
+	
+	reader.readAsDataURL = function() {
+		originalReader.readAsDataURL.apply(originalReader, arguments);
+		return deferred.promise;
+	};
+	
+	return reader;
 };

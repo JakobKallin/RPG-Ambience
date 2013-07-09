@@ -68,6 +68,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	$scope.removeAdventure = function(adventure) {
 		$scope.app.adventure = $scope.app.library.adventures.closest(adventure);
 		$scope.app.library.adventures.remove(adventure);
+		$scope.app.library.adventuresToRemove.push(adventure);
 	};
 	
 	var mediaLoadedAdventures = [];
@@ -196,9 +197,9 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	window.addEventListener('beforeunload', function(event) {
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
-			console.log('Saving adventures');
-			$scope.app.library.saveAdventures().otherwise(function(error) {
-				console.log('There was an error saving adventures');
+			console.log('Syncing adventures');
+			$scope.app.library.syncAdventures().otherwise(function(error) {
+				console.log('There was an error syncing adventures');
 			});
 		}
 		
@@ -210,19 +211,21 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				return event.returnValue = returnValue;
 			}
 		}
+		
+		return 'beforeUnload';
 	});
 	
 	var saveInterval = 60 * 1 * 1000;
-	function saveAdventures() {
+	function syncAdventures() {
 		// Only save if the adventures have been loaded. Otherwise they might be overwritten with an empty list.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
-			$scope.app.library.saveAdventures();
+			$scope.app.library.syncAdventures();
 		} else {
-			console.log('Delaying adventure saving until adventures for this library have loaded');
+			console.log('Delaying adventure syncing until adventures for this library have loaded');
 		}
-		window.setTimeout(saveAdventures, saveInterval);
+		window.setTimeout(syncAdventures, saveInterval);
 	}
-	window.setTimeout(saveAdventures, saveInterval);
+	window.setTimeout(syncAdventures, saveInterval);
 	
 	if ( window.localStorage.library === googleDriveLibrary.name ) {
 		console.log('Setting library to saved setting: ' + googleDriveLibrary.name)

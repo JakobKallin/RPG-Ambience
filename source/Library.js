@@ -11,6 +11,7 @@
 		
 		this.backend = backend;
 		this.adventures = null;
+		this.adventuresToRemove = [];
 		this.latestFileContents = {};
 		this.imageQueue = new Ambience.TaskQueue(this.backend.imageLimit || 1);
 		this.soundQueue = new Ambience.TaskQueue(this.backend.soundLimit || 1);
@@ -96,23 +97,32 @@
 				return adventures;
 			}
 		},
-		saveAdventures: function() {
+		syncAdventures: function() {
 			var library = this;
 			var backend = this.backend;
 			
-			return when.parallel(
-				library.adventures
-				.map(function(adventure) {
-					return function() {
-						// Note that the file object is only used once; the resulting file ID is saved into the adventure itself. A new file object is created the next time that the adventure is saved.
-						var file = library.fileFromAdventure(adventure);
-						return library.saveFile(file).then(function(fileId) {
-							// Save the ID so that it can be used later to prevent uploads of unchanged files.
-							adventure.id = fileId;
-						});
-					};
-				})
-			);
+			var savePromises = library.adventures.map(function(adventure) {
+				// Note that the file object is only used once; the resulting file ID is saved into the adventure itself. A new file object is created the next time that the adventure is saved.
+				var file = library.fileFromAdventure(adventure);
+				return library.saveFile(file).then(function(fileId) {
+					// Save the ID so that it can be used later to prevent uploads of unchanged files.
+					adventure.id = fileId;
+				});
+			});
+			
+			var removePromises = library.adventuresToRemove.map(function(adventure) {
+				// We can only remove the adventure if it has an ID, which means that it's already saved.
+				if ( adventure.id ) {
+					console.log('Removing adventure "' + adventure.title + '"');
+					return backend.removeFile(adventure.id);
+				} else {
+					console.log('Not removing adventure "' + adventure.title + '" because it has not been saved yet');
+					return true;
+				}
+			});
+			library.adventuresToRemove.clear();
+			
+			return when.all(savePromises.concat(removePromises));
 		},
 		saveFile: function(file) {
 			var library = this;

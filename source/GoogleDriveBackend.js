@@ -376,7 +376,16 @@ Ambience.GoogleDriveBackend.prototype = {
 			}
 		}
 	},
-	selectSoundFilesLabel: 'Add Tracks From Google Drive'
+	selectSoundFilesLabel: 'Add Tracks From Google Drive',
+	
+	removeFile: function(id) {
+		var request = gapi.client.drive.files.trash({
+			fileId: id
+		});
+		return this.makeRequest(request).then(function() {
+			console.log('File ' + id + ' was removed from Google Drive');
+		});
+	}
 };
 
 Ambience.HttpRequest = function() {

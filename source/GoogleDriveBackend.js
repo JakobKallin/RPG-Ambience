@@ -15,12 +15,12 @@ Ambience.GoogleDriveBackend.prototype = {
 	soundLimit: 3,
 	loginAgainAdvance: 60 * 1000,
 	login: function() {
-		return this.loginImmediate(false);
+		return this.loginToGoogleDrive(false);
 	},
 	loginAgain: function() {
-		return this.loginImmediate(true);
+		return this.loginToGoogleDrive(true);
 	},
-	loginImmediate: function(immediate) {
+	loginToGoogleDrive: function(immediate) {
 		var backend = this;
 		var deferred = when.defer();
 		

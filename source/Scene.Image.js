@@ -7,4 +7,13 @@ Ambience.App.Scene.Image = function() {
 		file: null,
 		size: 'contain'
 	};
-}
+};
+
+Ambience.App.Scene.Image.fromConfig = function(config) {
+	var image = new Ambience.App.Scene.Image();
+	Object.overlay(image, config);
+	if ( config.file ) {
+		image.file = Ambience.MediaFile.fromConfig(config.file);
+	}
+	return image;
+};

@@ -167,8 +167,41 @@
 			return file;
 		},
 		
+		exampleMedia: {
+			'example:city': { name: 'ishtar_rooftop', type: 'image' },
+			'example:dragon-image': { name: 'sintel-wallpaper-dragon', type: 'image' },
+			'example:dragon-sound': { name: 'dragon', type: 'audio' },
+			'example:music': { name: '9-Trailer_Music', type: 'audio' }
+		},
+		loadExampleMediaFile: function(file) {
+			var name = this.exampleMedia[file.id].name;
+			var type = this.exampleMedia[file.id].type;
+			if ( type === 'audio' && window.audioCanPlayType('audio/ogg') ) {
+				var mimeType = 'audio/ogg';
+				var extension = 'ogg';
+			} else if ( type === 'audio' ) {
+				var mimeType = 'audio/mpeg';
+				var extension = 'mp3';
+			} else {
+				var mimeType = 'image/jpeg';
+				var extension = 'jpg';
+			}
+			
+			file.url = 'example/' + name + '.' + extension;
+			file.name = name + '.' + extension;
+			file.mimeType = mimeType;
+			
+			// We don't have a "deferred" to send progress events through, so simply set 100% completion directly on the file.
+			file.progress = 1.0;
+			
+			return when(file);
+		},
 		// Load image files and sound files in batches.
 		loadMediaFile: function(file) {
+			if ( this.exampleMedia[file.id] ) {
+				return this.loadExampleMediaFile(file);
+			}
+			
 			var queue = file.mimeType.startsWith('image') ? this.imageQueue : this.soundQueue;
 			var backend = this.backend;
 			

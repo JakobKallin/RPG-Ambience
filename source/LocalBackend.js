@@ -17,41 +17,16 @@ Ambience.LocalBackend.prototype = {
 		return when(Infinity);
 	},
 	downloadAdventures: function() {
-		return when([Ambience.ExampleAdventure.json]);
+		var file = new Ambience.BackendFile();
+		file.id = 'example';
+		file.name = 'Example adventure.ambience';
+		file.mimeType = 'application/json';
+		file.contents = Ambience.ExampleAdventure.json;
+		return when([file]);
 	},
 	// Media files, whose contents will not be used directly but rather through URLs.
-	downloadMediaFile: function(id) {
-		var exampleMedia = {
-			'example:city': { name: 'ishtar_rooftop', type: 'image' },
-			'example:dragon-image': { name: 'sintel-wallpaper-dragon', type: 'image' },
-			'example:dragon-sound': { name: 'dragon', type: 'audio' },
-			'example:music': { name: '9-Trailer_Music', type: 'audio' }
-		};
-		
-		if ( exampleMedia[id] ) {
-			var name = exampleMedia[id].name;
-			var type = exampleMedia[id].type;
-			if ( type === 'audio' && window.audioCanPlayType('audio/ogg') ) {
-				var mimeType = 'audio/ogg';
-				var extension = 'ogg';
-			} else if ( type === 'audio' ) {
-				var mimeType = 'audio/mpeg';
-				var extension = 'mp3';
-			} else {
-				var mimeType = 'image/jpeg';
-				var extension = 'jpg';
-			}
-			var url = 'example/' + name + '.' + extension;
-			
-			return when({
-				id: id,
-				url: url,
-				name: name + '.' + extension,
-				mimeType: mimeType
-			});
-		} else {
-			throw new Error('Attempting to load a non-existing example media file.')
-		}
+	downloadMediaFile: function(file) {
+		throw new Error('Attempting to load non-example file from local backend');
 	},
 	uploadFile: function(file) {
 		return when(null);

@@ -9,3 +9,9 @@ Ambience.MediaFile = function() {
 	this.name = null;
 	this.mimeType = null;
 };
+
+Ambience.MediaFile.fromConfig = function(config) {
+	var file = new Ambience.MediaFile();
+	Object.overlay(file, config);
+	return config;
+};

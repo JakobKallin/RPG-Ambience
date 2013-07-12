@@ -228,6 +228,7 @@ Ambience.GoogleDriveBackend.prototype = {
 				}
 				
 				// Make sure that progress can be assumed to be 1.0 on completion.
+				// We don't want to risk the progress meter halting on "almost 1.0".
 				deferred.notify(1.0);
 				deferred.resolve(file);
 			});

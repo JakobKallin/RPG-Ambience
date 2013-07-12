@@ -31,3 +31,11 @@ Ambience.App.Scene = function() {
 		}
 	};
 };
+
+Ambience.App.Scene.fromConfig = function(config) {
+	var scene = new Ambience.App.Scene();
+	Object.overlay(scene, config);
+	scene.image = Ambience.App.Scene.Image.fromConfig(config.image);
+	scene.sound = Ambience.App.Scene.Sound.fromConfig(config.sound);
+	return scene;
+};

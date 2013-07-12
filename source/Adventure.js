@@ -115,8 +115,7 @@ Ambience.Adventure.fromConfig = function(config) {
 	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {
-		var scene = new Ambience.App.Scene();
-		Object.overlay(scene, sceneConfig);
+		var scene = Ambience.App.Scene.fromConfig(sceneConfig);
 		adventure.scenes.push(scene);
 	});
 	

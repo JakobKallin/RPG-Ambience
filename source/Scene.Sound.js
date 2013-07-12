@@ -13,3 +13,12 @@ Ambience.App.Scene.Sound = function() {
 		overlap: 0
 	};
 }
+
+Ambience.App.Scene.Sound.fromConfig = function(config) {
+	var sound = new Ambience.App.Scene.Sound();
+	Object.overlay(sound, config);
+	sound.tracks = config.tracks.map(function(trackConfig) {
+		return new Ambience.MediaFile.fromConfig(trackConfig);
+	});
+	return sound;
+};

@@ -195,6 +195,12 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	document.addEventListener('keypress', $scope.onKeyPress);
 	document.addEventListener('keydown', $scope.onKeyDown);
 	window.addEventListener('beforeunload', function(event) {
+		// Return immediately if we're using the local library, which cannot save anything to begin with.
+		// If we don't do this, the library will believe that the backend is saving if an adventure is changed, because the state change signaling that saving is done happens asynchronously.
+		if ( $scope.app.library === localLibrary ) {
+			return;
+		}
+		
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
 			console.log('Syncing adventures');
@@ -299,7 +305,11 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		.then(function(file) {
 			$scope.$apply(function() {
 				scene.image.file = file;
-				$scope.loadMediaFile(file);
+				if ( file.url ) {
+					file.progress = 1.0;
+				} else {
+					$scope.loadMediaFile(file);
+				}
 			});
 		});
 	};

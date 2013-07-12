@@ -296,9 +296,13 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			$scope.$apply(function() {});
 		}
 		
-		function onLoadProgress(percentage) {
+		function onLoadProgress(percentageOrPreviewUrl) {
 			$scope.$apply(function() {
-				file.progress = percentage;
+				if ( typeof percentageOrPreviewUrl === 'string' ) {
+					file.previewUrl = percentageOrPreviewUrl;
+				} else {
+					file.progress = percentageOrPreviewUrl;
+				}
 			});
 		}
 	};

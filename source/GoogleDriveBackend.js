@@ -209,6 +209,10 @@ Ambience.GoogleDriveBackend.prototype = {
 		return this.makeRequest(request).then(function(item) {
 			var deferred = when.defer();
 			
+			if ( item.thumbnailLink ) {
+				deferred.notify(item.thumbnailLink);
+			}
+			
 			var request = new XMLHttpRequest();
 			var token = gapi.auth.getToken().access_token;
 			request.open('GET', item.downloadUrl);
@@ -222,10 +226,6 @@ Ambience.GoogleDriveBackend.prototype = {
 				file.url = window.URL.createObjectURL(blob);
 				file.name = item.title;
 				file.mimeType = item.mimeType;
-				
-				if ( item.thumbnailLink ) {
-					file.previewUrl = item.thumbnailLink;
-				}
 				
 				// Make sure that progress can be assumed to be 1.0 on completion.
 				// We don't want to risk the progress meter halting on "almost 1.0".

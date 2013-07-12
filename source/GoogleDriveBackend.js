@@ -209,6 +209,7 @@ Ambience.GoogleDriveBackend.prototype = {
 		return this.makeRequest(request).then(function(item) {
 			var deferred = when.defer();
 			
+			// Send a notification event about the preview URL being available, so that images can be displayed quickly.
 			if ( item.thumbnailLink ) {
 				deferred.notify(item.thumbnailLink);
 			}

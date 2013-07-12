@@ -81,6 +81,11 @@
 			
 			function parseAdventureFiles(files) {
 				return when.map(files, function(file) {
+					// Important: store the file contents so that it will not be saved if unchanged.
+					// Without this, every adventure will be saved once even if it is unchanged.
+					// This is because "latestFileContents" is otherwise only set when uploading, not when downloading.
+					library.latestFileContents[file.id] = file.contents;
+					
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.Adventure.fromConfig(config);
 					adventure.id = file.id;
@@ -124,20 +129,28 @@
 			
 			return when.all(savePromises.concat(removePromises));
 		},
+		filesBeingSaved: 0,
+		get adventuresAreBeingSaved() {
+			return this.filesBeingSaved > 0;
+		},
 		saveFile: function(file) {
 			var library = this;
 			
-			if ( file.id && file.contents === this.latestFileContents[file.id] ) {
+			if ( file.id && file.contents === library.latestFileContents[file.id] ) {
 				console.log('Not uploading file "' + file.name + '", because it is unchanged.');
 				return when(file.id);
 			} else {
-				return this.backend.uploadFile(file).then(function(fileId) {
+				library.filesBeingSaved += 1;
+				return library.backend.uploadFile(file).then(function(fileId) {
 					// "fileId" is new if there was none before.
 					library.latestFileContents[fileId] = file.contents;
 					return fileId;
 				})
 				.otherwise(function(e) {
-					debugger;
+					console.log('There was an error uploading file "' + file.name + '"');
+				})
+				.ensure(function() {
+					library.filesBeingSaved -= 1;
 				});
 			}
 		},

@@ -203,16 +203,13 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			});
 		}
 		
-		// TODO: We should check every activated library for exit messages.
-		
-		if ( $scope.app.library.onExit ) {
-			var returnValue = $scope.app.library.onExit();
-			if ( returnValue !== undefined ) {
-				return event.returnValue = returnValue;
+		if ( $scope.app.library.adventuresAreBeingSaved ) {
+			var exitMessage = 'Your adventures are currently being saved. If you exit now, you risk losing data.';
+			if ( exitMessage !== undefined ) {
+				// We both return the message and set it to "event.returnValue" due to browser differences.
+				return event.returnValue = exitMessage;
 			}
 		}
-		
-		return 'beforeUnload';
 	});
 	
 	var saveInterval = 60 * 1 * 1000;

@@ -312,6 +312,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		.then(function(file) {
 			$scope.$apply(function() {
 				scene.image.file = file;
+				// The local library receives a URL immediately, so do not attempt to load it.
 				if ( file.url ) {
 					file.progress = 1.0;
 				} else {
@@ -331,7 +332,12 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			files.forEach(function(file) {
 				$scope.$apply(function() {
 					scene.sound.tracks.push(file);
-					$scope.loadMediaFile(file);
+					// The local library receives a URL immediately, so do not attempt to load it.
+					if ( file.url ) {
+						file.progress = 1.0;
+					} else {
+						$scope.loadMediaFile(file);
+					}
 				});
 			});
 		});

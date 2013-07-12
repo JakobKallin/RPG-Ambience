@@ -115,6 +115,9 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				$scope.app.library = newLibrary;
 				newLibrary.adventuresHaveBeenLoaded = true;
 				newLibrary.adventuresAreBeingLoaded = false;
+				
+				// Only save library setting if adventures have successfully loaded, as they have here.
+				window.localStorage.library = newLibrary.name;
 			};
 
 			$scope.$apply(callback);

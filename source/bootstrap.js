@@ -18,7 +18,7 @@ window.addEventListener('load', function() {
 	module.directive('textButton', Ambience.TextButton);
 	module.directive('scenePreview', Ambience.ScenePreview);
 	module.directive('toggleButton', Ambience.ToggleButton);
-	module.directive('split', Ambience.Split);
+	module.directive('resize', Ambience.Resize);
 	module.directive('noPointer', Ambience.NoPointer);
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);

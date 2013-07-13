@@ -2,49 +2,47 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Split = function() {
+Ambience.Resize = function() {
 	return {
 		restrict: 'A',
 		link: function(scope, $element, attrs) {
 			var element = $element[0];
-			var left = element.firstElementChild;
-			var right = left.nextElementSibling;
-			var splitter = createSplitter();
+			var splitter = new Splitter();
 			
 			splitter.addEventListener('mousedown', onMouseDown);
 			document.addEventListener('mouseup', onMouseUp);
 			document.addEventListener('mousemove', onMouseMove);
 			
 			var isPressed = false;
-			var latestLeftWidth;
+			var latestWidth;
 			
-			// Set left width to zero when split-collapse-left is true.
-			scope.$watch(attrs.splitCollapseLeft, function(value) {
+			var initialWidth = Number(attrs.split);
+			update(initialWidth);
+			
+			// Set width to zero when "resize-empty" is true.
+			scope.$watch(attrs.resizeEmpty, function(value) {
 				if ( value ) {
 					// Allow the previous width to be recovered later by not setting zero as the latest width.
 					updateSilently(0);
 				} else {
-					update(latestLeftWidth);
+					update(latestWidth);
 				}
 			});
 			
-			// Set left width to zero when split-collapse-left is true.
-			scope.$watch(attrs.splitCollapseRight, function(value) {
+			// Set width to hundred when "resize full" is true.
+			scope.$watch(attrs.resizeFull, function(value) {
 				if ( value ) {
 					// Allow the previous width to be recovered later by not setting zero as the latest width.
 					updateSilently(1);
 				} else {
-					update(latestLeftWidth);
+					update(latestWidth);
 				}
 			});
 			
-			var initialLeftWidth = Number(attrs.split);
-			update(initialLeftWidth);
-			
-			function createSplitter() {
+			function Splitter() {
 				var splitter = document.createElement('div');
 				splitter.className = 'splitter';
-				left.appendChild(splitter);
+				element.appendChild(splitter);
 				
 				return splitter;
 			}
@@ -70,19 +68,17 @@ Ambience.Split = function() {
 				}
 			}
 			
-			function updateSilently(newLeftWidth) {
-				if ( newLeftWidth === undefined ) {
-					newLeftWidth = latestLeftWidth;
+			function updateSilently(newWidth) {
+				if ( newWidth === undefined ) {
+					newWidth = latestWidth;
 				}
 				
-				var newRightWidth = 1 - newLeftWidth;
-				left.style.width = (newLeftWidth * 100) + '%';
-				right.style.width = (newRightWidth * 100) + '%';
+				element.style.width = (newWidth * 100) + '%';
 			}
 			
-			function update(newLeftWidth) {
-				updateSilently(newLeftWidth);
-				latestLeftWidth = newLeftWidth;
+			function update(newWidth) {
+				updateSilently(newWidth);
+				latestWidth = newWidth;
 			}
 		}
 	};

@@ -51,7 +51,7 @@
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
 		<script src="source/ToggleButton.js"></script>
-		<script src="source/Split.js"></script>
+		<script src="source/Resize.js"></script>
 		<script src="source/NoPointer.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
@@ -77,14 +77,14 @@
 		<div
 			id="interface"
 			class="interface"
-			data-split="0.75"
-			data-split-collapse-left="!editorIsVisible"
-			data-split-collapse-right="app.stageIsDetached"
 			data-ng-show="app.library.adventuresHaveBeenLoaded">
 			<div
 				id="editor"
 				class="editor"
-				data-ng-show="editorIsVisible">
+				data-ng-show="editorIsVisible"
+				data-resize="0.75"
+				data-resize-empty="!editorIsVisible"
+				data-resize-full="app.stageIsDetached">
 				<div class="main-controls">
 					<ul class="action-list adventure">
 						<li class="action">
@@ -548,7 +548,7 @@
 					</pane>
 				</tabs>
 			</div>
-			<no-pointer
+			<!-- <no-pointer
 				class="stage-overlay"
 				data-always-show-when="editorIsVisible"
 				data-hide-delay="1000">
@@ -562,7 +562,7 @@
 						</li>
 					</ul>
 				</form>
-			</no-pointer>
+			</no-pointer> -->
 		</div>
 		<div class="splash" data-ui-if="app.library.adventuresAreBeingLoaded">
 			<div>

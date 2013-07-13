@@ -141,10 +141,7 @@ progress {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		height: 2em;
-	}
-	
-	.secondary {
-		margin-left: 0.5em;
+		margin-right: 1em;
 	}
 }
 
@@ -341,7 +338,6 @@ progress {
 
 		.add-scene {
 			display: block;
-			padding: 0 1em;
 			
 			button {
 				width: 100%;

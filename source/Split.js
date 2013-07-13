@@ -28,6 +28,16 @@ Ambience.Split = function() {
 				}
 			});
 			
+			// Set left width to zero when split-collapse-left is true.
+			scope.$watch(attrs.splitCollapseRight, function(value) {
+				if ( value ) {
+					// Allow the previous width to be recovered later by not setting zero as the latest width.
+					updateSilently(1);
+				} else {
+					update(latestLeftWidth);
+				}
+			});
+			
 			var initialLeftWidth = Number(attrs.split);
 			update(initialLeftWidth);
 			

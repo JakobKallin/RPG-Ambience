@@ -55,11 +55,22 @@
 		<script src="source/NoPointer.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
+		<script src="source/Detached.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
 	<body data-ng-controller="Ambience.Controller">
-		<div id="stage" class="stage">
+		<div id="stage" class="stage" data-detached="app.stageIsDetached">
+			<form class="stage-editor" style="position: absolute; top: 0; right: 0; z-index: 1">
+				<ul class="stage-actions">
+					<li>
+						<toggle-button
+							data-ng-model="app.stageIsDetached"
+							data-ng-true="Restore Stage"
+							data-ng-false="Detach Stage"></toggle-button>
+					</li>
+				</ul>
+			</form>
 			<div id="background" class="layer"></div>
 			<div id="foreground" class="layer"></div>
 		</div>
@@ -68,6 +79,7 @@
 			class="interface"
 			data-split="0.75"
 			data-split-collapse-left="!editorIsVisible"
+			data-split-collapse-right="app.stageIsDetached"
 			data-ng-show="app.library.adventuresHaveBeenLoaded">
 			<div
 				id="editor"
@@ -541,7 +553,7 @@
 				data-always-show-when="editorIsVisible"
 				data-hide-delay="1000">
 				<form>
-					<ul class="action-list">
+					<ul class="editor-actions">
 						<li class="action toggle">
 							<toggle-button
 								data-ng-model="$parent.editorIsVisible"

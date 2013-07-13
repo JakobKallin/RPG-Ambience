@@ -44,11 +44,13 @@ $note-color: hsl(0, 0%, 40%);
 
 /* General styling */
 
-.editor, button, select, input, textarea {
-	font-family: Georgia, serif;
+.splash, .interface, .stage-editor {
+	button, select, input, textarea {
+		font-family: Georgia, serif;
+	}
 }
 
-.interface button {
+.interface button, .stage-editor button {
 	height: 1.875em; /* Leave 1px above and below. */
 	padding-left: 0.25em;
 	padding-right: 0.25em;
@@ -172,7 +174,7 @@ progress {
 
 		.action-list {
 			li, form {
-				display: inline;
+				float: left;
 			}
 			
 			li:not(:last-child) {
@@ -494,6 +496,12 @@ progress {
 
 .stage-overlay form {
 	float: left;
+	padding: 1em;
+	line-height: 2;
+}
+
+.stage form {
+	float: right;
 	padding: 1em;
 	line-height: 2;
 }

@@ -49,7 +49,8 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			local: localLibrary,
 			googleDrive: googleDriveLibrary
 		},
-		orderedLibraries: [localLibrary, googleDriveLibrary]
+		orderedLibraries: [localLibrary, googleDriveLibrary],
+		stageIsDetached: false
 	};
 	
 	$scope.createAdventure = function() {

@@ -22,6 +22,7 @@ window.addEventListener('load', function() {
 	module.directive('noPointer', Ambience.NoPointer);
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);
+	module.directive('detached', Ambience.Detached);
 	module.service('ambience', function() {
 		return new Ambience.App.Theater(
 			new Ambience.Stage(document.getElementById('background')),

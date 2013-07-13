@@ -3,7 +3,7 @@
 	[
 		{
 			"path": ".",
-			"folder_exclude_patterns": ["libraries", "tests/jasmine"],
+			"folder_exclude_patterns": ["libraries", "tests/jasmine", ".sass-cache"],
 			"file_exclude_patterns": ["*.sublime-workspace", "*.ogg", "*.css"]
 		}
 	]

@@ -52,7 +52,7 @@
 		<script src="source/ScenePreview.js"></script>
 		<script src="source/ToggleButton.js"></script>
 		<script src="source/Resize.js"></script>
-		<script src="source/NoPointer.js"></script>
+		<script src="source/HideCursorAfter.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
 		<script src="source/Detached.js"></script>
@@ -60,7 +60,12 @@
 		<script src="source/bootstrap.js"></script>
 	</head>
 	<body data-ng-controller="Ambience.Controller">
-		<div id="stage" class="stage" data-detached="app.stageIsDetached">
+		<div
+			id="stage"
+			class="stage"
+			data-detached="app.stageIsDetached"
+			data-hide-cursor-after="1"
+			data-never-hide-cursor-when="editorIsVisible">
 			<form class="stage-editor" style="position: absolute; top: 0; right: 0; z-index: 1">
 				<ul class="stage-actions">
 					<li>

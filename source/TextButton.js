@@ -7,8 +7,8 @@ Ambience.TextButton = function() {
 		restrict: 'E',
 		template:
 			'<form>' +
-				'<button type="button" ng-hide="active">{{label}}</button>' +
-				'<input type="text" ng-model="value" ng-show="active">' +
+				'<button type="button">{{label}}</button>' +
+				'<input type="text" ng-model="value">' +
 			'</form>',
 		scope: {
 			value: '=ngModel',
@@ -21,25 +21,28 @@ Ambience.TextButton = function() {
 			var button = form.querySelector('button');
 			var input = form.querySelector('input');
 			
+			// We set visibility inside a watch instead of "show" and "hide" directives because the directives take effect before the watch, so we are not able to observe the width of the button before it's hidden. Adding a click listener only works when a click activates the input, but it can also be activated by a change to the "active-when" attribute.
 			scope.$watch('active', function(active) {
 				if ( active ) {
+					input.style.width = button.offsetWidth + 'px';
+					button.style.display = 'none';
+					input.style.display = '';
+					
 					// We must do this after Angular applies its own DOM transformations.
 					setTimeout(function() {
 						input.focus();
 						input.select();
 					}, 0);
+				} else {
+					button.style.display = '';
+					input.style.display = 'none';
 				}
 			});
 			
 			button.addEventListener('click', function(event) {
-				// Make the button and the input have equal widths.
-				// Only do this once, but note that this will not be enough if the "Rename Adventure" label changes.
-				// We need to do it in here because the button is not visible when the app first loads.
-				if ( !input.style.width ) {
-					input.style.width = button.offsetWidth + 'px';
-				}
 				scope.$apply(function() { scope.active = true; });
 			});
+
 			input.addEventListener('blur', function(event) {
 				scope.$apply(function() { scope.active = false; });
 			});

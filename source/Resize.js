@@ -16,26 +16,30 @@ Ambience.Resize = function() {
 			var isPressed = false;
 			var latestWidth;
 			
-			var initialWidth = Number(attrs.split);
+			var initialWidth = Number(attrs.resize);
 			update(initialWidth);
 			
 			// Set width to zero when "resize-empty" is true.
-			scope.$watch(attrs.resizeEmpty, function(value) {
-				if ( value ) {
+			scope.$watch(attrs.resizeEmpty, function(shouldBeEmpty) {
+				if ( shouldBeEmpty ) {
 					// Allow the previous width to be recovered later by not setting zero as the latest width.
 					updateSilently(0);
+					splitter.style.display = 'none';
 				} else {
 					update(latestWidth);
+					splitter.style.display = '';
 				}
 			});
 			
 			// Set width to hundred when "resize full" is true.
-			scope.$watch(attrs.resizeFull, function(value) {
-				if ( value ) {
+			scope.$watch(attrs.resizeFull, function(shouldBeFull) {
+				if ( shouldBeFull ) {
 					// Allow the previous width to be recovered later by not setting zero as the latest width.
 					updateSilently(1);
+					splitter.style.display = 'none';
 				} else {
 					update(latestWidth);
+					splitter.style.display = '';
 				}
 			});
 			

@@ -65,11 +65,16 @@
 			id="stage"
 			class="stage"
 			data-detached="app.stageIsDetached"
-			data-ng-show="app.library.adventuresHaveBeenLoaded">
+			data-ng-show="app.library.adventuresHaveBeenLoaded"
+			data-hide-cursor-after="1"
+			data-always-show-cursor-when="app.stageIsAttached">
+			<div id="background" class="layer"></div>
+			<div id="foreground" class="layer"></div>
+			<!-- The form should be last in order to appear above the layers. -->
 			<form
 				class="stage-editor"
 				data-show-on-movement="1"
-				data-always-show-when="editorIsVisible">
+				data-always-show-when="app.stageIsAttached">
 				<ul class="stage-actions">
 					<li>
 						<toggle-button
@@ -79,17 +84,14 @@
 					</li>
 				</ul>
 			</form>
-			<div id="background" class="layer"></div>
-			<div id="foreground" class="layer"></div>
 		</div>
 		<div
 			id="editor"
 			class="editor"
-			data-ng-show="app.library.adventuresHaveBeenLoaded && editorIsVisible"
+			data-ng-show="app.library.adventuresHaveBeenLoaded"
 			data-resize="0.75"
-			data-resize-empty="!editorIsVisible"
 			data-resize-full="app.stageIsDetached">
-			<div class="main-controls">
+			<div class="main-controls" style="overflow: hidden">
 				<ul class="action-list adventure">
 					<li class="action">
 						<select
@@ -552,21 +554,6 @@
 				</pane>
 			</tabs>
 		</div>
-		<!-- <no-pointer
-			class="stage-overlay"
-			data-always-show-when="editorIsVisible"
-			data-hide-delay="1000">
-			<form>
-				<ul class="editor-actions">
-					<li class="action toggle">
-						<toggle-button
-							data-ng-model="$parent.editorIsVisible"
-							data-ng-true="Hide Editor"
-							data-ng-false="Show Editor"></toggle-button>
-					</li>
-				</ul>
-			</form>
-		</no-pointer> -->
 		<div class="splash" data-ui-if="app.library.adventuresAreBeingLoaded">
 			<div>
 				<p>Loading your adventures…</p>

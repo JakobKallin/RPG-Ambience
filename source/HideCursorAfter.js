@@ -36,7 +36,9 @@ Ambience.HideCursorAfter = function() {
 			}
 			
 			function hideCursor() {
-				element.style.cursor = 'none';
+				if ( !scope.$eval(attrs.alwaysShowCursorWhen) ) {
+					element.style.cursor = 'none';
+				}
 			}
 		}
 	};

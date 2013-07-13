@@ -48,6 +48,10 @@ button, select, input, textarea {
 	font-family: Georgia, serif;
 }
 
+button {
+	white-space: nowrap;
+}
+
 .editor button, .stage-editor button {
 	height: 1.875em; /* Leave 1px above and below. */
 	padding-left: 0.25em;
@@ -165,11 +169,6 @@ progress {
 		@include flex-wrap();
 		margin-bottom: 1em;
 
-		.action-list.adventure {
-			@include flex(1);
-			margin-right: 0.5em;
-		}
-
 		.action-list {
 			li, form {
 				float: left;
@@ -178,6 +177,20 @@ progress {
 			li:not(:last-child) {
 				margin-right: 0.5em;
 			}
+		}
+		
+		.action-list.adventure {
+			@include flex(1);
+			margin-right: 0.5em;
+		}
+		
+		/* "gui" instead of "editor" because that would clash with "editor" selected above. */
+		.action-list.gui {
+			position: absolute;
+			top: 0;
+			left: 100%;
+			padding: 1em;
+			padding-left: 1.375em;
 		}
 		
 		select, input {

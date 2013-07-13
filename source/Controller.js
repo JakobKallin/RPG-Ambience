@@ -50,7 +50,10 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			googleDrive: googleDriveLibrary
 		},
 		orderedLibraries: [localLibrary, googleDriveLibrary],
-		stageIsDetached: false
+		stageIsDetached: false,
+		get stageIsAttached() {
+			return !this.stageIsDetached;
+		}
 	};
 	
 	$scope.createAdventure = function() {
@@ -193,8 +196,6 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	$scope.trackIsPlayable = function(track) {
 		return window.audioCanPlayType(track.mimeType);
 	};
-	
-	$scope.editorIsVisible = true;
 	
 	document.addEventListener('keypress', $scope.onKeyPress);
 	document.addEventListener('keydown', $scope.onKeyDown);

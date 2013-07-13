@@ -44,13 +44,11 @@ $note-color: hsl(0, 0%, 40%);
 
 /* General styling */
 
-.splash, .interface, .stage-editor {
-	button, select, input, textarea {
-		font-family: Georgia, serif;
-	}
+button, select, input, textarea {
+	font-family: Georgia, serif;
 }
 
-.interface button, .stage-editor button {
+.editor button, .stage-editor button {
 	height: 1.875em; /* Leave 1px above and below. */
 	padding-left: 0.25em;
 	padding-right: 0.25em;

@@ -22,7 +22,6 @@ Ambience.HideCursorAfter = function() {
 				var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 				if ( mouseHasMoved ) {
 					showCursor();
-					console.log('Hiding cursor in ' + hideDelay + ' ms');
 					cursorTimer = window.setTimeout(hideCursor, hideDelay);
 				}
 				

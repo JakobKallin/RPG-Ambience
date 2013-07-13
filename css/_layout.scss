@@ -9,56 +9,47 @@ body {
 	height: 100%;
 }
 
-.interface {
+.editor {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 100%;
+	width: 75%;
 	height: 100%;
-	@include flexbox(row);
 	
-	.stage-overlay {
-		width: 25%;
+	@include flexbox(column);
+
+	.main-controls {
 	}
 	
-	.editor {
-		width: 75%;
+	.message {
+	}
+
+	.view-list {
+		@include flex(1);
 		@include flexbox(column);
-		height: 100%;
 
-		.main-controls {
-		}
-		
-		.message {
-		}
-
-		.view-list {
+		/* ">" selector because we should not affect other tab content lists. */
+		> .tab-content-list {
 			@include flex(1);
 			@include flexbox(column);
 
-			/* ">" selector because we should not affect other tab content lists. */
-			> .tab-content-list {
+			> * {
 				@include flex(1);
-				@include flexbox(column);
-
-				> * {
-					@include flex(1);
-				}
-				
 			}
 			
-			.scene-view {
-				@include flexbox(row);
+		}
+		
+		.scene-view {
+			@include flexbox(row);
 
-				.scene-list {
-					@include flex(0.4);
-					overflow: auto;
-				}
+			.scene-list {
+				@include flex(0.4);
+				overflow: auto;
+			}
 
-				.scene-editor {
-					@include flex(0.6);
-					overflow: auto;
-				}
+			.scene-editor {
+				@include flex(0.6);
+				overflow: auto;
 			}
 		}
 	}

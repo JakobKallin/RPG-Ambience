@@ -53,6 +53,7 @@
 		<script src="source/ToggleButton.js"></script>
 		<script src="source/Resize.js"></script>
 		<script src="source/HideCursorAfter.js"></script>
+		<script src="source/ShowOnMovement.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
 		<script src="source/Detached.js"></script>
@@ -64,9 +65,11 @@
 			id="stage"
 			class="stage"
 			data-detached="app.stageIsDetached"
-			data-hide-cursor-after="1"
-			data-never-hide-cursor-when="editorIsVisible">
-			<form class="stage-editor" style="position: absolute; top: 0; right: 0; z-index: 1">
+			data-ng-show="app.library.adventuresHaveBeenLoaded">
+			<form
+				class="stage-editor"
+				data-show-on-movement="1"
+				data-always-show-when="editorIsVisible">
 				<ul class="stage-actions">
 					<li>
 						<toggle-button
@@ -80,495 +83,490 @@
 			<div id="foreground" class="layer"></div>
 		</div>
 		<div
-			id="interface"
-			class="interface"
-			data-ng-show="app.library.adventuresHaveBeenLoaded">
-			<div
-				id="editor"
-				class="editor"
-				data-ng-show="editorIsVisible"
-				data-resize="0.75"
-				data-resize-empty="!editorIsVisible"
-				data-resize-full="app.stageIsDetached">
-				<div class="main-controls">
-					<ul class="action-list adventure">
-						<li class="action">
-							<select
-								data-ng-model="app.adventure"
-								data-ng-options="a.title for a in app.library.adventures"></select>
-						</li>
-						<li class="action new">
+			id="editor"
+			class="editor"
+			data-ng-show="app.library.adventuresHaveBeenLoaded && editorIsVisible"
+			data-resize="0.75"
+			data-resize-empty="!editorIsVisible"
+			data-resize-full="app.stageIsDetached">
+			<div class="main-controls">
+				<ul class="action-list adventure">
+					<li class="action">
+						<select
+							data-ng-model="app.adventure"
+							data-ng-options="a.title for a in app.library.adventures"></select>
+					</li>
+					<li class="action new">
+						<button
+							type="button"
+							data-ng-click="createAdventure()">New Adventure</button>
+					</li>
+					<li class="action rename">
+						<text-button
+							data-ng-model="app.adventure.title"
+							data-ng-label="Rename Adventure"
+							data-active-when="app.renameInProgress"></text-button>
+					</li>
+					<li class="action delete">
+						<button
+							type="button"
+							data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
+					</li>
+				</ul>
+				<ul class="action-list playback">
+					<li class="action play">
+						<button
+							type="button"
+							data-ng-click="playScene(app.scene)">Play</button>
+					</li>
+					<li class="action stop">
+						<button
+							type="button"
+							data-ng-click="stopScene()">Stop</button>
+					</li>
+				</ul>
+			</div>
+			<tabs class="view-list" id="view-list">
+				<pane
+					id="scene-tab"
+					class="scene-view"
+					data-heading="Scenes">
+					<div class="notice" data-ui-if="!app.adventure">
+						<p>You have no adventures</p>
+						<p>
 							<button
 								type="button"
-								data-ng-click="createAdventure()">New Adventure</button>
-						</li>
-						<li class="action rename">
-							<text-button
-								data-ng-model="app.adventure.title"
-								data-ng-label="Rename Adventure"
-								data-active-when="app.renameInProgress"></text-button>
-						</li>
-						<li class="action delete">
+								data-ng-click="loadExampleAdventure()">Load an Example Adventure</button>
+						</p>
+					</div>
+					<div class="scene-list" data-ui-if="app.adventure">
+						<ul
+							data-ui-sortable="{ distance: 10, axis: 'y' }"
+							data-ng-model="app.adventure.scenes">
+							<li
+								class="scene"
+								data-ng-repeat="scene in app.adventure.scenes"
+								data-ng-class="{ selected: isSelected(scene) }">
+								<a
+									href=""
+									data-ng-click="selectScene(scene)">
+									<scene-preview data-ng-scene="scene"></scene-preview>
+									<span data-ui-if="scene.name">{{scene.name}}</span>
+									<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
+									<div class="icons">
+										<img data-ui-if="scene.mixin" src="images/mixin.svg" title="Mixin">
+										<img data-ui-if="scene.isForeground" src="images/foreground.svg" title="Foreground">
+									</div>
+								</a>
+							</li>
+						</ul>
+						<div class="add-scene">
 							<button
 								type="button"
-								data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
-						</li>
-					</ul>
-					<ul class="action-list playback">
-						<li class="action play">
-							<button
-								type="button"
-								data-ng-click="playScene(app.scene)">Play</button>
-						</li>
-						<li class="action stop">
-							<button
-								type="button"
-								data-ng-click="stopScene()">Stop</button>
-						</li>
-					</ul>
-				</div>
-				<tabs class="view-list" id="view-list">
-					<pane
-						id="scene-tab"
-						class="scene-view"
-						data-heading="Scenes">
-						<div class="notice" data-ui-if="!app.adventure">
-							<p>You have no adventures</p>
-							<p>
-								<button
-									type="button"
-									data-ng-click="loadExampleAdventure()">Load an Example Adventure</button>
-							</p>
+								data-ng-click="addSceneAfter(app.scene, app.adventure)">Add Scene</button>
 						</div>
-						<div class="scene-list" data-ui-if="app.adventure">
-							<ul
-								data-ui-sortable="{ distance: 10, axis: 'y' }"
-								data-ng-model="app.adventure.scenes">
-								<li
-									class="scene"
-									data-ng-repeat="scene in app.adventure.scenes"
-									data-ng-class="{ selected: isSelected(scene) }">
-									<a
-										href=""
-										data-ng-click="selectScene(scene)">
-										<scene-preview data-ng-scene="scene"></scene-preview>
-										<span data-ui-if="scene.name">{{scene.name}}</span>
-										<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
-										<div class="icons">
-											<img data-ui-if="scene.mixin" src="images/mixin.svg" title="Mixin">
-											<img data-ui-if="scene.isForeground" src="images/foreground.svg" title="Foreground">
-										</div>
-									</a>
+					</div>
+					<div class="scene-editor" data-ui-if="app.adventure">
+						<div class="scene">
+							<ul class="action-list">
+								<li class="action copy">
+									<button
+										type="button"
+										data-ng-click="copyScene(app.scene, app.adventure)">Copy Scene</button>
+								</li>
+								<li class="action remove">
+									<button
+										type="button"
+										data-ng-click="removeScene(app.scene, app.adventure)">Delete Scene</button>
 								</li>
 							</ul>
-							<div class="add-scene">
-								<button
-									type="button"
-									data-ng-click="addSceneAfter(app.scene, app.adventure)">Add Scene</button>
+							<scene-preview data-ng-scene="app.scene"></scene-preview>
+							<div class="options general">
+								<table>
+									<tr>
+										<th><label for="name">Name</label></th>
+										<td>
+											<input
+												id="name"
+												type="text"
+												placeholder="Untitled"
+												data-ng-model="app.scene.name">
+										</td>
+									</tr>
+									<tr>
+										<th><label for="key">Hotkey</label></th>
+										<td>
+											<key-input
+												id="key"
+												data-ng-model="app.scene.key"></key-input>
+										</td>
+									</tr>
+									<tr>
+										<th><label for="layer">Layer</label></th>
+										<td>
+											<ul class="control-list">
+												<li>
+													<select
+														id="layer"
+														data-ng-model="app.scene.layer">
+														<option value="background">Background</option>
+														<option value="foreground">Foreground</option>
+													</select>
+												</li>
+												<li>
+													<label for="mixin" title="{{help.mixin}}">
+														<input
+															id="mixin"
+															type="checkbox"
+															data-ng-model="app.scene.mixin">
+														Mixin
+													</label>
+												</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
 							</div>
-						</div>
-						<div class="scene-editor" data-ui-if="app.adventure">
-							<div class="scene">
-								<ul class="action-list">
-									<li class="action copy">
+							<tabs class="options specific">
+								<pane
+									data-heading="Image"
+									id="image-tab">
+									<div class="primary-secondary" style="position: relative">
+										<span
+											class="primary"
+											data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
+										<!-- "less than" does not work properly below, probably due to some coercion. However, the XMLHttpRequest "load" listener makes sure that progress is notified as 1.0 on completion. -->
+										<div class="primary" data-ui-if="app.scene.image.file && app.scene.image.file.progress != 1.0">
+											<progress max="1.0" value="{{app.scene.image.file.progress}}"></progress>
+										</div>
+										<span
+											class="primary placeholder"
+											data-ui-if="!app.scene.image.file">No image selected</span>
 										<button
 											type="button"
-											data-ng-click="copyScene(app.scene, app.adventure)">Copy Scene</button>
-									</li>
-									<li class="action remove">
+											class="secondary"
+											data-ng-hide="app.scene.image.file"
+											data-ng-click="selectImage(app.scene)">{{app.library.selectImageFileLabel}}</button>
 										<button
 											type="button"
-											data-ng-click="removeScene(app.scene, app.adventure)">Delete Scene</button>
-									</li>
-								</ul>
-								<scene-preview data-ng-scene="app.scene"></scene-preview>
-								<div class="options general">
+											class="secondary"
+											data-ng-show="app.scene.image.file"
+											data-ng-click="removeImage(app.scene)">Remove</button>
+									</div>
+									<ul class="control-list">
+										<li>
+											<label for="size-contain">
+												<input
+													id="size-contain"
+													type="radio"
+													name="image-size"
+													value="contain"
+													data-ng-model="app.scene.image.size">
+												<span>Fit</span>
+											</label>
+										</li>
+										<li>
+											<label for="size-cover">
+												<input
+													id="size-cover"
+													type="radio"
+													name="image-size"
+													value="cover"
+													data-ng-model="app.scene.image.size">
+												<span>Fill</span>
+											</label>
+										</li>
+									</ul>
+								</pane>
+								<pane
+									data-heading="Sound"
+									id="sound-tab">
+									<div class="track-list">
+										<p
+											class="placeholder"
+											data-ui-if="app.scene.sound.tracks.length == 0">
+											No tracks added
+										</p>
+										<ol
+											data-ui-sortable="{ distance: 10, axis: 'y' }"
+											data-ng-model="app.scene.sound.tracks">
+											<li data-ng-repeat="track in app.scene.sound.tracks" class="primary-secondary">
+												<span
+													class="primary"
+													data-ng-class="{ unsupported: !trackIsPlayable(track) }">
+													{{track.name}}
+												</span>
+												<!-- See image section above for comments. -->
+												<div class="primary" data-ui-if="track.progress != 1.0">
+													<progress max="1.0" value="{{track.progress}}"></progress>
+												</div>
+												<button
+													type="button"
+													class="secondary"
+													data-ng-click="removeTrack(track, app.scene)">Remove</button>
+												<audio
+													data-ng-src="{{track.url}}"
+													preload="auto"></audio>
+											</li>
+										</ol>
+										<button
+											type="button"
+											data-ng-click="selectTracks(app.scene)">{{app.library.selectSoundFilesLabel}}</button>
+									</div>
 									<table>
 										<tr>
-											<th><label for="name">Name</label></th>
-											<td>
-												<input
-													id="name"
-													type="text"
-													placeholder="Untitled"
-													data-ng-model="app.scene.name">
-											</td>
-										</tr>
-										<tr>
-											<th><label for="key">Hotkey</label></th>
-											<td>
-												<key-input
-													id="key"
-													data-ng-model="app.scene.key"></key-input>
-											</td>
-										</tr>
-										<tr>
-											<th><label for="layer">Layer</label></th>
+											<th><label>Playback</label></th>
 											<td>
 												<ul class="control-list">
 													<li>
-														<select
-															id="layer"
-															data-ng-model="app.scene.layer">
-															<option value="background">Background</option>
-															<option value="foreground">Foreground</option>
-														</select>
+														<label for="loop">
+															<input
+																id="loop"
+																type="checkbox"
+																data-ng-model="app.scene.sound.loop">
+															<span>Loop</span>
+														</label>
 													</li>
 													<li>
-														<label for="mixin" title="{{help.mixin}}">
+														<label for="shuffle">
 															<input
-																id="mixin"
+																id="shuffle"
 																type="checkbox"
-																data-ng-model="app.scene.mixin">
-															Mixin
+																data-ng-model="app.scene.sound.shuffle">
+															<span>Shuffle</span>
 														</label>
 													</li>
 												</ul>
 											</td>
 										</tr>
-									</table>
-								</div>
-								<tabs class="options specific">
-									<pane
-										data-heading="Image"
-										id="image-tab">
-										<div class="primary-secondary" style="position: relative">
-											<span
-												class="primary"
-												data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
-											<!-- "less than" does not work properly below, probably due to some coercion. However, the XMLHttpRequest "load" listener makes sure that progress is notified as 1.0 on completion. -->
-											<div class="primary" data-ui-if="app.scene.image.file && app.scene.image.file.progress != 1.0">
-												<progress max="1.0" value="{{app.scene.image.file.progress}}"></progress>
-											</div>
-											<span
-												class="primary placeholder"
-												data-ui-if="!app.scene.image.file">No image selected</span>
-											<button
-												type="button"
-												class="secondary"
-												data-ng-hide="app.scene.image.file"
-												data-ng-click="selectImage(app.scene)">{{app.library.selectImageFileLabel}}</button>
-											<button
-												type="button"
-												class="secondary"
-												data-ng-show="app.scene.image.file"
-												data-ng-click="removeImage(app.scene)">Remove</button>
-										</div>
-										<ul class="control-list">
-											<li>
-												<label for="size-contain">
-													<input
-														id="size-contain"
-														type="radio"
-														name="image-size"
-														value="contain"
-														data-ng-model="app.scene.image.size">
-													<span>Fit</span>
-												</label>
-											</li>
-											<li>
-												<label for="size-cover">
-													<input
-														id="size-cover"
-														type="radio"
-														name="image-size"
-														value="cover"
-														data-ng-model="app.scene.image.size">
-													<span>Fill</span>
-												</label>
-											</li>
-										</ul>
-									</pane>
-									<pane
-										data-heading="Sound"
-										id="sound-tab">
-										<div class="track-list">
-											<p
-												class="placeholder"
-												data-ui-if="app.scene.sound.tracks.length == 0">
-												No tracks added
-											</p>
-											<ol
-												data-ui-sortable="{ distance: 10, axis: 'y' }"
-												data-ng-model="app.scene.sound.tracks">
-												<li data-ng-repeat="track in app.scene.sound.tracks" class="primary-secondary">
-													<span
-														class="primary"
-														data-ng-class="{ unsupported: !trackIsPlayable(track) }">
-														{{track.name}}
-													</span>
-													<!-- See image section above for comments. -->
-													<div class="primary" data-ui-if="track.progress != 1.0">
-														<progress max="1.0" value="{{track.progress}}"></progress>
-													</div>
-													<button
-														type="button"
-														class="secondary"
-														data-ng-click="removeTrack(track, app.scene)">Remove</button>
-													<audio
-														data-ng-src="{{track.url}}"
-														preload="auto"></audio>
-												</li>
-											</ol>
-											<button
-												type="button"
-												data-ng-click="selectTracks(app.scene)">{{app.library.selectSoundFilesLabel}}</button>
-										</div>
-										<table>
-											<tr>
-												<th><label>Playback</label></th>
-												<td>
-													<ul class="control-list">
-														<li>
-															<label for="loop">
-																<input
-																	id="loop"
-																	type="checkbox"
-																	data-ng-model="app.scene.sound.loop">
-																<span>Loop</span>
-															</label>
-														</li>
-														<li>
-															<label for="shuffle">
-																<input
-																	id="shuffle"
-																	type="checkbox"
-																	data-ng-model="app.scene.sound.shuffle">
-																<span>Shuffle</span>
-															</label>
-														</li>
-													</ul>
-												</td>
-											</tr>
-											<tr>
-												<th>
-													<label for="volume">Volume</label>
-												</th>
-												<td>
-													<input
-														id="volume"
-														type="number"
-														min="0"
-														max="100"
-														step="10"
-														data-ng-model="app.scene.sound.volume">
-													<span class="note">%</span>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="overlap" title="{{help.overlap}}">Overlap</label></th>
-												<td>
-													<input
-														id="overlap"
-														type="number"
-														min="0"
-														data-ng-model="app.scene.sound.overlap">
-													<span class="note">seconds</span>
-												</td>
-											</tr>
-										</table>
-									</pane>
-									<pane
-										data-heading="Text"
-										id="text-tab">
-										<div class="text-string">
-											<textarea
-												id="text"
-												rows="5"
-												placeholder="Text"
-												data-ng-model="app.scene.text.string"></textarea>
-										</div>
-										<ul class="control-list font-properties">
-											<li>
+										<tr>
+											<th>
+												<label for="volume">Volume</label>
+											</th>
+											<td>
 												<input
-													id="font"
-													type="text"
-													placeholder="Font"
-													data-ng-model="app.scene.text.font">
-											</li>
-											<li>
-												<input
-													id="font-size"
+													id="volume"
 													type="number"
-													min="3"
-													max="30"
-													step="0.5"
-													data-ng-model="app.scene.text.size">
-											</li>
-											<li>
-												<label for="bold">
-													<input
-														id="bold"
-														type="checkbox"
-														data-ng-model="app.scene.text.bold">
-													<span><b>Bold</b></span>
-												</label>
-											</li>
-											<li>
-												<label for="italic">
-													<input
-														id="italic"
-														type="checkbox"
-														data-ng-model="app.scene.text.italic">
-													<span><i>Italic</i></span>
-												</label>
-											</li>
-											<li>
+													min="0"
+													max="100"
+													step="10"
+													data-ng-model="app.scene.sound.volume">
+												<span class="note">%</span>
+											</td>
+										</tr>
+										<tr>
+											<th><label for="overlap" title="{{help.overlap}}">Overlap</label></th>
+											<td>
 												<input
-													id="font-color"
+													id="overlap"
+													type="number"
+													min="0"
+													data-ng-model="app.scene.sound.overlap">
+												<span class="note">seconds</span>
+											</td>
+										</tr>
+									</table>
+								</pane>
+								<pane
+									data-heading="Text"
+									id="text-tab">
+									<div class="text-string">
+										<textarea
+											id="text"
+											rows="5"
+											placeholder="Text"
+											data-ng-model="app.scene.text.string"></textarea>
+									</div>
+									<ul class="control-list font-properties">
+										<li>
+											<input
+												id="font"
+												type="text"
+												placeholder="Font"
+												data-ng-model="app.scene.text.font">
+										</li>
+										<li>
+											<input
+												id="font-size"
+												type="number"
+												min="3"
+												max="30"
+												step="0.5"
+												data-ng-model="app.scene.text.size">
+										</li>
+										<li>
+											<label for="bold">
+												<input
+													id="bold"
+													type="checkbox"
+													data-ng-model="app.scene.text.bold">
+												<span><b>Bold</b></span>
+											</label>
+										</li>
+										<li>
+											<label for="italic">
+												<input
+													id="italic"
+													type="checkbox"
+													data-ng-model="app.scene.text.italic">
+												<span><i>Italic</i></span>
+											</label>
+										</li>
+										<li>
+											<input
+												id="font-color"
+												type="color"
+												data-ng-model="app.scene.text.color"
+												data-spectrum>
+										</li>
+									</ul>
+									<table>
+										<tr>
+											<th><label for="text-alignment">Align</label></th>
+											<td>
+												<select
+													id="text-alignment"
+													data-ng-model="app.scene.text.alignment">
+													<option value="left">Left</option>
+													<option value="center">Center</option>
+													<option value="right">Right</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<th><label for="text-padding">Padding</label></th>
+											<td>
+												<input
+													id="text-padding"
+													type="number"
+													min="0"
+													max="40"
+													step="2"
+													data-ng-model="app.scene.text.padding">
+											</td>
+										</tr>
+									</table>
+								</pane>
+								<pane
+									data-heading="Other"
+									id="other-tab">
+									<table>
+										<tr>
+											<th><label for="background-color">Background</label></th>
+											<td>
+												<input
+													id="background-color"
 													type="color"
-													data-ng-model="app.scene.text.color"
+													data-ng-model="app.scene.background.color"
 													data-spectrum>
-											</li>
-										</ul>
-										<table>
-											<tr>
-												<th><label for="text-alignment">Align</label></th>
-												<td>
-													<select
-														id="text-alignment"
-														data-ng-model="app.scene.text.alignment">
-														<option value="left">Left</option>
-														<option value="center">Center</option>
-														<option value="right">Right</option>
-													</select>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="text-padding">Padding</label></th>
-												<td>
-													<input
-														id="text-padding"
-														type="number"
-														min="0"
-														max="40"
-														step="2"
-														data-ng-model="app.scene.text.padding">
-												</td>
-											</tr>
-										</table>
-									</pane>
-									<pane
-										data-heading="Other"
-										id="other-tab">
-										<table>
-											<tr>
-												<th><label for="background-color">Background</label></th>
-												<td>
-													<input
-														id="background-color"
-														type="color"
-														data-ng-model="app.scene.background.color"
-														data-spectrum>
-												</td>
-											</tr>
-											<tr>
-												<th><label for="fade">Fade</label></th>
-												<td>
-													<ul class="control-list">
-														<li>
-															<input
-																id="fade"
-																type="number"
-																min="0"
-																data-ng-model="app.scene.fade.duration">
-															<span class="note">seconds</span>
-														</li>
-														<li>
-															<select data-ng-model="app.scene.fade.direction">
-																<option value="in out">In and out</option>
-																<option value="in">In</option>
-																<option value="out">Out</option>
-															</select>
-														</li>
-													</ul>
-												</td>
-											</tr>
-										</table>
-									</pane>
-								</tabs>
-							</div>
+											</td>
+										</tr>
+										<tr>
+											<th><label for="fade">Fade</label></th>
+											<td>
+												<ul class="control-list">
+													<li>
+														<input
+															id="fade"
+															type="number"
+															min="0"
+															data-ng-model="app.scene.fade.duration">
+														<span class="note">seconds</span>
+													</li>
+													<li>
+														<select data-ng-model="app.scene.fade.direction">
+															<option value="in out">In and out</option>
+															<option value="in">In</option>
+															<option value="out">Out</option>
+														</select>
+													</li>
+												</ul>
+											</td>
+										</tr>
+									</table>
+								</pane>
+							</tabs>
 						</div>
-					</pane>
-					<pane
-						id="help-tab"
-						class="help-view"
-						data-heading="Help">
-						<ul class="table-of-contents">
-							<li><a href="#help-introduction">What RPG Ambience is</a></li>
-							<li><a href="#help-overview">How RPG Ambience works</a></li>
-							<li><a href="#help-playing-scenes">Playing scenes</a></li>
-							<li><a href="#help-stopping-scenes">Stopping scenes</a></li>
-							<li><a href="#help-saving-adventures">Saving adventures</a></li>
-							<li><a href="#help-developers">For developers</a></li>
-							<li><a href="#help-contact">Contact</a></li>
-							<li><a href="#help-disclaimer">Disclaimer</a></li>
-						</ul>
-						
-						<h2 id="help-introduction">What RPG Ambience is</h2>
-						<p>RPG Ambience is a media player that enables roleplayers to bring their sessions to life using sound and visuals. It is free software that runs directly in your browser.</p>
-						
-						<h2 id="help-overview">How RPG Ambience works</h2>
-						<p>RPG Ambience is built around <dfn>scenes</dfn>. Scenes are made up of images, sounds, and text grouped together in any combination. Scenes are played and stopped using keyboard shortcuts. Scenes are organized under <dfn>adventures</dfn>.</p>
-						
-						<p>The interface of RPG Ambience consists of two parts: the editor and the stage.</p>
-						<ul>
-							<li><dfn>The editor</dfn> (the left half of the screen) contains your adventures and the scenes in them, including controls to edit them.</li>
-							<li><dfn>The stage</dfn> (the right half of the screen) is where the scenes in your adventures are played.</li>
-						</ul>
-						
-						<h2 id="help-playing-scenes">Playing scenes</h2>
-						<p>There are three ways to play a scene:</p>
-						<ul>
-							<li>Press the hotkey associated with the scene.</li>
-							<li>Type the scene's name and press <button type="button">Enter</button> on your keyboard.</li>
-							<li>Press the <button type="button">Play</button> button in the upper right corner of the editor.</li>
-						</ul>
-						<p>When starting a scene by typing its name, it's enough to type only the first few letters of the name.</p>
-						
-						<h2 id="help-stopping-scenes">Stopping scenes</h2>
-						<p>There are two ways to stop a scene:</p>
-						<ul>
-							<li>Press <button type="button">Enter</button> on your keyboard.</li>
-							<li>Press the <button type="button">Stop</button> button in the upper right corner of the editor.</li>
-						</ul>
-						<p>Using either of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
-						
-						<h2 id="help-saving-adventures">Saving adventures</h2>
-						<p>If you choose to save your adventures in Google Drive, all of the adventures that you create, including the sound and image files in them, are automatically saved on a regular basis and every time you close RPG Ambience.</p>
-						
-						<h2 id="help-developers">For developers</h2>
-						<p>RPG Ambience is licensed under the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>. Its source code is available in the project's <a href="https://github.com/JakobKallin/RPG-Ambience">GitHub repository</a>.</p>
-						
-						<h2 id="help-contact">Contact</h2>
-						<p>You can leave feedback about RPG Ambience in the following ways:</p>
-						<ul>
-							<li>Send an email to <a href="mailto:rpg.ambience@gmail.com">rpg.ambience@gmail.com</a>.</li>
-							<li>Create an issue on <a href="https://github.com/JakobKallin/RPG-Ambience/issues">the project's GitHub page</a> (for bug reports).</li>
-							<li>Post to <a href="https://groups.google.com/forum/#!forum/rpg-ambience">the project's Google Group</a>.</li>
-						</ul>
-						
-						<h2 id="help-disclaimer">Disclaimer</h2>
-						<p>While RPG Ambience does its best to save all of your data, data loss can still occur because of network failures or programming errors. Do not use RPG Ambience to store your only copy of important data.</p>
-					</pane>
-				</tabs>
-			</div>
-			<!-- <no-pointer
-				class="stage-overlay"
-				data-always-show-when="editorIsVisible"
-				data-hide-delay="1000">
-				<form>
-					<ul class="editor-actions">
-						<li class="action toggle">
-							<toggle-button
-								data-ng-model="$parent.editorIsVisible"
-								data-ng-true="Hide Editor"
-								data-ng-false="Show Editor"></toggle-button>
-						</li>
+					</div>
+				</pane>
+				<pane
+					id="help-tab"
+					class="help-view"
+					data-heading="Help">
+					<ul class="table-of-contents">
+						<li><a href="#help-introduction">What RPG Ambience is</a></li>
+						<li><a href="#help-overview">How RPG Ambience works</a></li>
+						<li><a href="#help-playing-scenes">Playing scenes</a></li>
+						<li><a href="#help-stopping-scenes">Stopping scenes</a></li>
+						<li><a href="#help-saving-adventures">Saving adventures</a></li>
+						<li><a href="#help-developers">For developers</a></li>
+						<li><a href="#help-contact">Contact</a></li>
+						<li><a href="#help-disclaimer">Disclaimer</a></li>
 					</ul>
-				</form>
-			</no-pointer> -->
+					
+					<h2 id="help-introduction">What RPG Ambience is</h2>
+					<p>RPG Ambience is a media player that enables roleplayers to bring their sessions to life using sound and visuals. It is free software that runs directly in your browser.</p>
+					
+					<h2 id="help-overview">How RPG Ambience works</h2>
+					<p>RPG Ambience is built around <dfn>scenes</dfn>. Scenes are made up of images, sounds, and text grouped together in any combination. Scenes are played and stopped using keyboard shortcuts. Scenes are organized under <dfn>adventures</dfn>.</p>
+					
+					<p>The interface of RPG Ambience consists of two parts: the editor and the stage.</p>
+					<ul>
+						<li><dfn>The editor</dfn> (the left half of the screen) contains your adventures and the scenes in them, including controls to edit them.</li>
+						<li><dfn>The stage</dfn> (the right half of the screen) is where the scenes in your adventures are played.</li>
+					</ul>
+					
+					<h2 id="help-playing-scenes">Playing scenes</h2>
+					<p>There are three ways to play a scene:</p>
+					<ul>
+						<li>Press the hotkey associated with the scene.</li>
+						<li>Type the scene's name and press <button type="button">Enter</button> on your keyboard.</li>
+						<li>Press the <button type="button">Play</button> button in the upper right corner of the editor.</li>
+					</ul>
+					<p>When starting a scene by typing its name, it's enough to type only the first few letters of the name.</p>
+					
+					<h2 id="help-stopping-scenes">Stopping scenes</h2>
+					<p>There are two ways to stop a scene:</p>
+					<ul>
+						<li>Press <button type="button">Enter</button> on your keyboard.</li>
+						<li>Press the <button type="button">Stop</button> button in the upper right corner of the editor.</li>
+					</ul>
+					<p>Using either of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
+					
+					<h2 id="help-saving-adventures">Saving adventures</h2>
+					<p>If you choose to save your adventures in Google Drive, all of the adventures that you create, including the sound and image files in them, are automatically saved on a regular basis and every time you close RPG Ambience.</p>
+					
+					<h2 id="help-developers">For developers</h2>
+					<p>RPG Ambience is licensed under the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>. Its source code is available in the project's <a href="https://github.com/JakobKallin/RPG-Ambience">GitHub repository</a>.</p>
+					
+					<h2 id="help-contact">Contact</h2>
+					<p>You can leave feedback about RPG Ambience in the following ways:</p>
+					<ul>
+						<li>Send an email to <a href="mailto:rpg.ambience@gmail.com">rpg.ambience@gmail.com</a>.</li>
+						<li>Create an issue on <a href="https://github.com/JakobKallin/RPG-Ambience/issues">the project's GitHub page</a> (for bug reports).</li>
+						<li>Post to <a href="https://groups.google.com/forum/#!forum/rpg-ambience">the project's Google Group</a>.</li>
+					</ul>
+					
+					<h2 id="help-disclaimer">Disclaimer</h2>
+					<p>While RPG Ambience does its best to save all of your data, data loss can still occur because of network failures or programming errors. Do not use RPG Ambience to store your only copy of important data.</p>
+				</pane>
+			</tabs>
 		</div>
+		<!-- <no-pointer
+			class="stage-overlay"
+			data-always-show-when="editorIsVisible"
+			data-hide-delay="1000">
+			<form>
+				<ul class="editor-actions">
+					<li class="action toggle">
+						<toggle-button
+							data-ng-model="$parent.editorIsVisible"
+							data-ng-true="Hide Editor"
+							data-ng-false="Show Editor"></toggle-button>
+					</li>
+				</ul>
+			</form>
+		</no-pointer> -->
 		<div class="splash" data-ui-if="app.library.adventuresAreBeingLoaded">
 			<div>
 				<p>Loading your adventures…</p>

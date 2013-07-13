@@ -119,7 +119,10 @@
 				// We can only remove the adventure if it has an ID, which means that it's already saved.
 				if ( adventure.id ) {
 					console.log('Removing adventure "' + adventure.title + '"');
-					return backend.removeFile(adventure.id);
+					library.filesBeingSynced += 1;
+					return backend.removeFile(adventure.id).then(function() {
+						library.filesBeingSynced -= 1;
+					});
 				} else {
 					console.log('Not removing adventure "' + adventure.title + '" because it has not been saved yet');
 					return true;
@@ -129,9 +132,9 @@
 			
 			return when.all(savePromises.concat(removePromises));
 		},
-		filesBeingSaved: 0,
-		get adventuresAreBeingSaved() {
-			return this.filesBeingSaved > 0;
+		filesBeingSynced: 0,
+		get adventuresAreBeingSynced() {
+			return this.filesBeingSynced > 0;
 		},
 		saveFile: function(file) {
 			var library = this;
@@ -140,7 +143,7 @@
 				console.log('Not uploading file "' + file.name + '", because it is unchanged.');
 				return when(file.id);
 			} else {
-				library.filesBeingSaved += 1;
+				library.filesBeingSynced += 1;
 				return library.backend.uploadFile(file).then(function(fileId) {
 					// "fileId" is new if there was none before.
 					library.latestFileContents[fileId] = file.contents;
@@ -150,7 +153,7 @@
 					console.log('There was an error uploading file "' + file.name + '"');
 				})
 				.ensure(function() {
-					library.filesBeingSaved -= 1;
+					library.filesBeingSynced -= 1;
 				});
 			}
 		},

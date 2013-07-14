@@ -22,12 +22,16 @@ Ambience.ShowOnMovement = function() {
 			
 			element.parentNode.addEventListener('mousemove', function(event) {
 				// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved.
+				// This is needed even though this directive doesn't affect the cursor, because others might.
 				var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 				previousX = event.screenX;
 				previousY = event.screenY;
 				
 				if ( mouseHasMoved ) {
 					showTemporarily();
+					
+					// This is needed because the mouse can apparently leave the element without a "mouseout" event (specifically when entering fullscreen), so we track the cursor's position on every move.
+					mouseIsOverElement = event.originalTarget === element;
 				}
 			});
 			element.addEventListener('mouseover', function() {

@@ -2,7 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Sound = function(container, stopSceneIfSoundOnly, includeInFade, removeFromFade) {
+AmbienceStage.Sound = function(container, stopSceneIfSoundOnly, includeInFade, removeFromFade) {
 	var scene;
 	var trackIndex;
 	var tracks = [];
@@ -33,7 +33,7 @@ Ambience.Sound = function(container, stopSceneIfSoundOnly, includeInFade, remove
 			stopSceneIfSoundOnly();
 		} else if ( scene.sound.loop || !allTracksHavePlayed ) {
 			var trackPath = scene.sound.tracks[trackIndex];
-			var track = new Ambience.Track(trackPath, container, scene.sound.volume, includeInFade, removeFromFade);
+			var track = new AmbienceStage.Track(trackPath, container, scene.sound.volume, includeInFade, removeFromFade);
 			var onEnded = [function() { removeTrack(track); }, playNextTrack];
 			
 			track.play({ onTimeUpdate: onTimeUpdate, onEnded: onEnded });
@@ -74,7 +74,7 @@ Ambience.Sound = function(container, stopSceneIfSoundOnly, includeInFade, remove
 	};
 };
 
-Ambience.Track = function(path, container, maxVolume, includeInFade, removeFromFade) {
+AmbienceStage.Track = function(path, container, maxVolume, includeInFade, removeFromFade) {
 	var node = document.createElement('audio');
 	node.src = path;
 	node.volume = maxVolume;

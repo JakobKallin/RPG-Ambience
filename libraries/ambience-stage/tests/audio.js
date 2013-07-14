@@ -9,7 +9,7 @@ describe('Ambience audio', function() {
 	beforeEach(function() {
 		stageNode = document.createElement('div');
 		document.body.appendChild(stageNode);
-		stage = new Ambience.DebugStage(stageNode);
+		stage = new AmbienceStage.DebugStage(stageNode);
 	});
 	
 	afterEach(function() {
@@ -18,7 +18,7 @@ describe('Ambience audio', function() {
 	
 	it('fades audio volume', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Sound']);
+			var scene = new AmbienceStage.Scene(['Sound']);
 			scene.fade.in = 1000;
 			scene.sound.tracks = ['test-audio.ogg'];
 			stage.play(scene);
@@ -42,7 +42,7 @@ describe('Ambience audio', function() {
 	
 	it('stops one-shot audio scenes when audio ends', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Sound']);
+			var scene = new AmbienceStage.Scene(['Sound']);
 			scene.sound.tracks = ['test-audio-2s.ogg'];
 			scene.sound.loop = false;
 			
@@ -64,7 +64,7 @@ describe('Ambience audio', function() {
 	
 	it('removes audio element when audio ends', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Image', 'Sound']);
+			var scene = new AmbienceStage.Scene(['Image', 'Sound']);
 			scene.image.url = 'test-image.jpg';
 			scene.sound.tracks = ['test-audio-2s.ogg'];
 			scene.sound.loop = false;
@@ -81,7 +81,7 @@ describe('Ambience audio', function() {
 	
 	it('overlaps', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Sound']);
+			var scene = new AmbienceStage.Scene(['Sound']);
 			scene.sound.overlap = 2;
 			scene.sound.tracks = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
 			scene.sound.loop = false;
@@ -103,7 +103,7 @@ describe('Ambience audio', function() {
 	
 	it('respects fade level when a new track is started during fade', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Sound']);
+			var scene = new AmbienceStage.Scene(['Sound']);
 			scene.sound.tracks = ['test-audio-5s.ogg', 'test-audio-5s.ogg'];
 			scene.fade.out = 10000;
 			stage.play(scene);

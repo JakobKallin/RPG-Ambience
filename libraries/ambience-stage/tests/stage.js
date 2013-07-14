@@ -9,7 +9,7 @@ describe('Ambience stage', function() {
 	beforeEach(function() {
 		stageNode = document.createElement('div');
 		document.body.appendChild(stageNode);
-		stage = new Ambience.DebugStage(stageNode);
+		stage = new AmbienceStage.DebugStage(stageNode);
 	});
 	
 	afterEach(function() {
@@ -17,11 +17,11 @@ describe('Ambience stage', function() {
 	});
 	
 	it('stops current scene when starting new scene', function() {
-		var scene = new Ambience.Scene(['Image']);
+		var scene = new AmbienceStage.Scene(['Image']);
 		scene.image.url = 'test-image.jpg';
 		stage.play(scene);
 		
-		var newScene = new Ambience.Scene(['Image']);
+		var newScene = new AmbienceStage.Scene(['Image']);
 		scene.image.url = 'test-image.jpg';
 		stage.play(scene);
 		
@@ -30,7 +30,7 @@ describe('Ambience stage', function() {
 	
 	it("fades the entire stage's opacity", function() {
 		runs(function() {
-			var scene = new Ambience.Scene();
+			var scene = new AmbienceStage.Scene();
 			scene.fade.in = 1000;
 			stage.play(scene);
 		});
@@ -53,7 +53,7 @@ describe('Ambience stage', function() {
 	
 	it('stops all media after fading out', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Background', 'Image', 'Sound', 'Text']);
+			var scene = new AmbienceStage.Scene(['Background', 'Image', 'Sound', 'Text']);
 			scene.fade.in = scene.fade.out = 1000;
 			scene.background.color = 'red';
 			scene.image.url = 'test-image.jpg';
@@ -86,7 +86,7 @@ describe('Ambience stage', function() {
 
 	it('interrupts scene that is fading out', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Image']);
+			var scene = new AmbienceStage.Scene(['Image']);
 			scene.image.url = 'test-image.jpg';
 			scene.fade.out = 1000;
 			stage.play(scene);
@@ -106,7 +106,7 @@ describe('Ambience stage', function() {
 	// This test guards against possible leftover state.
 	// In particular, a previous bug made a stopped stage appear to be fading out even though it was not.
 	it('plays scene again after immediate fade-out', function() {
-		var scene = new Ambience.Scene(['Image']);
+		var scene = new AmbienceStage.Scene(['Image']);
 		scene.image.url = 'test-image.jpg';
 		
 		stage.play(scene);

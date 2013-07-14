@@ -2,9 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var Ambience = {};
-
-Ambience.Stage = function(node) {
+var AmbienceStage = function(node) {
 	var fade = null;
 	var isFadingOut = false;
 	var scene = null
@@ -25,10 +23,10 @@ Ambience.Stage = function(node) {
 	};
 	
 	var mediaPlayers = {
-		'background': new Ambience.Background(node),
-		'image': new Ambience.Image(node),
-		'sound': new Ambience.Sound(node, stopSceneIfSoundOnly, includeInFade, removeFromFade),
-		'text': new Ambience.Text(node)
+		'background': new AmbienceStage.Background(node),
+		'image': new AmbienceStage.Image(node),
+		'sound': new AmbienceStage.Sound(node, stopSceneIfSoundOnly, includeInFade, removeFromFade),
+		'text': new AmbienceStage.Text(node)
 	};
 
 	stop();

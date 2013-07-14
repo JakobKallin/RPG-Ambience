@@ -2,7 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Scene = function(media) {
+AmbienceStage.Scene = function(media) {
 	var self = this;
 
 	self.fade = {
@@ -12,12 +12,12 @@ Ambience.Scene = function(media) {
 
 	media = media || [];
 	media.forEach(function(name) {
-		self[name.toLowerCase()] = new Ambience.Scene[name]();
+		self[name.toLowerCase()] = new AmbienceStage.Scene[name]();
 	});
 };
 
 
-Ambience.Scene.prototype = {
+AmbienceStage.Scene.prototype = {
 	get isVisual() {
 		return Boolean(
 			this.image ||
@@ -32,8 +32,8 @@ Ambience.Scene.prototype = {
 	}
 };
 
-Ambience.Scene.Sound = function() {};
-Ambience.Scene.Sound.prototype = {
+AmbienceStage.Scene.Sound = function() {};
+AmbienceStage.Scene.Sound.prototype = {
 	overlap: 0,
 	shuffle: false,
 	loop: true,
@@ -43,16 +43,16 @@ Ambience.Scene.Sound.prototype = {
 	}
 };
 
-Ambience.Scene.Image = function() {};
-Ambience.Scene.Image.prototype = {
+AmbienceStage.Scene.Image = function() {};
+AmbienceStage.Scene.Image.prototype = {
 	url: null
 };
-Ambience.Scene.Text = function() {};
-Ambience.Scene.Text.prototype = {
+AmbienceStage.Scene.Text = function() {};
+AmbienceStage.Scene.Text.prototype = {
 	string: null
 };
 
-Ambience.Scene.Background = function() {};
-Ambience.Scene.Background.prototype = {
+AmbienceStage.Scene.Background = function() {};
+AmbienceStage.Scene.Background.prototype = {
 	color: 'black'
 };

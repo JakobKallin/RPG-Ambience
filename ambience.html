@@ -33,8 +33,9 @@
 		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
 		<script src="libraries/ambience-stage/source/Scene.js"></script>
 		
+		<script>var Ambience = {};</script>
 		<script src="source/Controller.js"></script>
-		<script src="source/Theater.js"></script>
+		<script src="source/Stage.js"></script>
 		<script src="source/Adventure.js"></script>
 		<script src="source/ExampleAdventure.js"></script>
 		<script src="source/Scene.js"></script>
@@ -54,37 +55,17 @@
 		<script src="source/Resize.js"></script>
 		<script src="source/HideCursorAfter.js"></script>
 		<script src="source/ShowOnMovement.js"></script>
+		<script src="source/StageDirective.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
-		<script src="source/Detached.js"></script>
 		
 		<script src="source/bootstrap.js"></script>
 	</head>
 	<body data-ng-controller="Ambience.Controller">
-		<div
-			id="stage"
+		<ambience-stage
 			class="stage"
-			data-detached="app.stageIsDetached"
-			data-ng-show="app.library.adventuresHaveBeenLoaded"
-			data-hide-cursor-after="1"
-			data-always-show-cursor-when="app.stageIsAttached">
-			<div id="background" class="layer"></div>
-			<div id="foreground" class="layer"></div>
-			<!-- The form should be last in order to appear above the layers. -->
-			<form
-				class="stage-editor"
-				data-show-on-movement="1"
-				data-always-show-when="app.stageIsAttached">
-				<ul class="stage-actions">
-					<li>
-						<toggle-button
-							data-ng-model="app.stageIsDetached"
-							data-ng-true="Restore Stage"
-							data-ng-false="Detach Stage"></toggle-button>
-					</li>
-				</ul>
-			</form>
-		</div>
+			data-is-detached="app.stageIsDetached"
+			data-adventure="app.adventure"></ambience-stage>
 		<div
 			id="editor"
 			class="editor"

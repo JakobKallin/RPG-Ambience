@@ -2,7 +2,7 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.Background = function(node) {
+AmbienceStage.Background = function(node) {
 	function play(scene) {
 		if ( scene.background ) {
 			node.style.background = scene.background.color;
@@ -10,7 +10,7 @@ Ambience.Background = function(node) {
 	}
 	
 	function stop() {
-		node.style.background = Ambience.Scene.Background.prototype.color;
+		node.style.background = AmbienceStage.Scene.Background.prototype.color;
 	}
 	
 	return {

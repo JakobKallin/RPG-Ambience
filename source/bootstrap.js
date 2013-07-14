@@ -23,12 +23,9 @@ window.addEventListener('load', function() {
 	module.directive('showOnMovement', Ambience.ShowOnMovement);
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);
-	module.directive('detached', Ambience.Detached);
+	module.directive('ambienceStage', Ambience.StageDirective);
 	module.service('ambience', function() {
-		return new Ambience.App.Theater(
-			new Ambience.Stage(document.getElementById('background')),
-			new Ambience.Stage(document.getElementById('foreground'))
-		);
+		return new Ambience.Stage();
 	});
 	module.service('localLibrary', function() {
 		return new Ambience.Library(new Ambience.LocalBackend());

@@ -46,4 +46,9 @@
 			text-rendering: optimizeLegibility;
 		}
 	}
+	
+	form {
+		/* The cursor should always be visible above the stage GUI, even when the pointer over the stage is hidden. */
+		cursor: auto;
+	}
 }

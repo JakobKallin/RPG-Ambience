@@ -9,7 +9,7 @@ describe('Ambience mixin', function() {
 	beforeEach(function() {
 		stageNode = document.createElement('div');
 		document.body.appendChild(stageNode);
-		stage = new Ambience.DebugStage(stageNode);
+		stage = new AmbienceStage.DebugStage(stageNode);
 	});
 	
 	beforeEach(function() {
@@ -28,11 +28,11 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('replaces defined properties', function() {
-		var scene = new Ambience.Scene(['Text']);
+		var scene = new AmbienceStage.Scene(['Text']);
 		scene.text.string = 'Test';
 		stage.play(scene);
 		
-		var mixin = new Ambience.Scene(['Text']);
+		var mixin = new AmbienceStage.Scene(['Text']);
 		mixin.text.string = 'Mixin';
 		stage.mixin(mixin);
 		
@@ -40,11 +40,11 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('retains undefined properties', function() {
-		var scene = new Ambience.Scene(['Text']);
+		var scene = new AmbienceStage.Scene(['Text']);
 		scene.text.string = 'Test';
 		stage.play(scene);
 		
-		var mixin = new Ambience.Scene(['Image']);
+		var mixin = new AmbienceStage.Scene(['Image']);
 		mixin.image.url = 'test-image.jpg';
 		stage.mixin(mixin);
 		
@@ -54,11 +54,11 @@ describe('Ambience mixin', function() {
 	
 	it('ignores fading when a scene is already playing', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Text']);
+			var scene = new AmbienceStage.Scene(['Text']);
 			scene.text.string = 'Test';
 			stage.play(scene);
 			
-			var mixin = new Ambience.Scene(['Text']);
+			var mixin = new AmbienceStage.Scene(['Text']);
 			mixin.text.string = 'Mixin';
 			mixin.fade.in = 2000;
 			stage.mixin(mixin);
@@ -73,7 +73,7 @@ describe('Ambience mixin', function() {
 	
 	it('respects fading when a scene is not already playing', function() {
 		runs(function() {
-			var mixin = new Ambience.Scene(['Text']);
+			var mixin = new AmbienceStage.Scene(['Text']);
 			mixin.text.string = 'Mixin';
 			mixin.fade.in = 2000;
 			stage.mixin(mixin);
@@ -88,7 +88,7 @@ describe('Ambience mixin', function() {
 	
 	it('respects opacity when mixed-in during fade', function() {
 		runs(function() {
-			var base = new Ambience.Scene(['Image']);
+			var base = new AmbienceStage.Scene(['Image']);
 			base.image.url = 'test-image.jpg';
 			base.fade.in = 2000;
 			stage.play(base);
@@ -97,7 +97,7 @@ describe('Ambience mixin', function() {
 		waits(500);
 		
 		runs(function() {
-			var mixin = new Ambience.Scene(['Text']);
+			var mixin = new AmbienceStage.Scene(['Text']);
 			mixin.text.string = 'Mixin';
 			stage.mixin(mixin);
 		});
@@ -111,7 +111,7 @@ describe('Ambience mixin', function() {
 	
 	it('respects volume when mixed-in during fade', function() {
 		runs(function() {
-			var base = new Ambience.Scene(['Sound']);
+			var base = new AmbienceStage.Scene(['Sound']);
 			base.sound.tracks = ['test-audio.ogg'];
 			base.fade.in = 2000;
 			stage.play(base);
@@ -120,7 +120,7 @@ describe('Ambience mixin', function() {
 		waits(500);
 		
 		runs(function() {
-			var mixin = new Ambience.Scene(['Sound']);
+			var mixin = new AmbienceStage.Scene(['Sound']);
 			mixin.sound.tracks = ['test-audio.ogg'];
 			stage.mixin(mixin);
 		});
@@ -134,11 +134,11 @@ describe('Ambience mixin', function() {
 	
 	it('keeps playing visual scene even after audio of mixed-in one-shot audio scene ends', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Image']);
+			var scene = new AmbienceStage.Scene(['Image']);
 			scene.image.url = 'test-image.jpg';
 			stage.play(scene);
 			
-			var mixin = new Ambience.Scene(['Sound']);
+			var mixin = new AmbienceStage.Scene(['Sound']);
 			mixin.sound.tracks = ['test-audio-2s.ogg'];
 			mixin.sound.loop = false;
 			stage.mixin(mixin);
@@ -158,12 +158,12 @@ describe('Ambience mixin', function() {
 	});
 	
 	it('displays visual mixin even when previous scene was not visual', function() {
-		var scene = new Ambience.Scene(['Sound']);
+		var scene = new AmbienceStage.Scene(['Sound']);
 		scene.sound.tracks = ['test-audio-2s.ogg'];
 		scene.sound.loop = false;
 		stage.play(scene);
 		
-		var mixin = new Ambience.Scene(['Image']);
+		var mixin = new AmbienceStage.Scene(['Image']);
 		mixin.image.url = 'test-image.jpg';
 		stage.mixin(mixin);
 		
@@ -172,12 +172,12 @@ describe('Ambience mixin', function() {
 	
 	it('respects volume of mixed-in scene', function() {
 		runs(function() {
-			var scene = new Ambience.Scene(['Sound']);
+			var scene = new AmbienceStage.Scene(['Sound']);
 			scene.sound.tracks = ['test-audio-2s.ogg'];
 			scene.sound.loop = false;
 			stage.play(scene);
 			
-			var mixin = new Ambience.Scene(['Sound']);
+			var mixin = new AmbienceStage.Scene(['Sound']);
 			mixin.sound.tracks = ['test-audio-2s.ogg'];
 			mixin.sound.volume = 0.5;
 			mixin.sound.loop = false;

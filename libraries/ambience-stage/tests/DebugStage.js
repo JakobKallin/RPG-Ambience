@@ -2,8 +2,8 @@
 // Copyright 2012 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.DebugStage = function(node) {
-	var stage = new Ambience.Stage(node);
+AmbienceStage.DebugStage = function(node) {
+	var stage = new AmbienceStage(node);
 	
 	Object.defineProperty(stage, 'imageNode', {
 		get: function() {

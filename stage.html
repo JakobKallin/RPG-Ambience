@@ -9,7 +9,11 @@
 		
 		<script>
 			window.opener.addEventListener('unload', function() {
-				window.close();
+				// It seems that this is run even if "window" has been closed, so check for existence first.
+				// This isn't a real problem, but it logs an unnecessary error message.
+				if ( window ) {
+					window.close();
+				}
 			});
 		</script>
 	</head>

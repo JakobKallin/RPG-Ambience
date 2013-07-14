@@ -2,16 +2,21 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.App.Theater = function(background, foreground) {
-	function play(appScene) {
+Ambience.Stage = function() {
+	this.background = null;
+	this.foreground = null;
+};
+
+Ambience.Stage.prototype = {
+	play: function(appScene) {
 		if ( !appScene ) {
 			return;
 		}
 		
 		if ( appScene.layer === 'foreground' ) {
-			var layer = foreground;
+			var layer = this.foreground;
 		} else {
-			var layer = background;
+			var layer = this.background;
 		}
 		
 		if ( appScene.mixin ) {
@@ -20,27 +25,27 @@ Ambience.App.Theater = function(background, foreground) {
 			var method = layer.play;
 		}
 		
-		var theaterScene = convertScene(appScene);
+		var theaterScene = this.convertScene(appScene);
 		method(theaterScene);
-	}
+	},
 	
-	function fadeOutForeground() {
-		foreground.fadeOut();
-	}
+	fadeOutForeground: function() {
+		this.foreground.fadeOut();
+	},
 	
-	function fadeOutBackground() {
-		background.fadeOut();
-	}
+	fadeOutBackground: function() {
+		this.background.fadeOut();
+	},
 	
-	function fadeOutTopmost() {
-		if ( foreground.sceneIsPlaying ) {
-			fadeOutForeground();
-		} else if ( background.sceneIsPlaying ) {
-			fadeOutBackground();
+	fadeOutTopmost: function() {
+		if ( this.foreground.sceneIsPlaying ) {
+			this.fadeOutForeground();
+		} else if ( this.background.sceneIsPlaying ) {
+			this.fadeOutBackground();
 		}
-	}
+	},
 	
-	function convertScene(appScene) {
+	convertScene: function(appScene) {
 		var actualTracks = appScene.sound.tracks.filter(function(track) {
 			return Boolean(
 				track.url &&
@@ -61,7 +66,7 @@ Ambience.App.Theater = function(background, foreground) {
 			}
 		}
 		
-		var theaterScene = new Ambience.Scene(mediaTypesPresent);
+		var theaterScene = new AmbienceStage.Scene(mediaTypesPresent);
 
 		var fadeDuration = appScene.fade.duration * 1000;
 		theaterScene.fade.in = appScene.fade.direction.contains('in') ? fadeDuration : 0;
@@ -96,18 +101,11 @@ Ambience.App.Theater = function(background, foreground) {
 		}
 		
 		return theaterScene;
+	},
+	get sceneIsPlaying() {
+		return Boolean(
+			this.background.sceneIsPlaying ||
+			this.foreground.sceneIsPlaying
+		);
 	}
-	
-	return {
-		play: play,
-		fadeOutForeground: fadeOutForeground,
-		fadeOutBackground: fadeOutBackground,
-		fadeOutTopmost: fadeOutTopmost,
-		get sceneIsPlaying() {
-			return Boolean(
-				background.sceneIsPlaying ||
-				foreground.sceneIsPlaying
-			);
-		}
-	};
 };

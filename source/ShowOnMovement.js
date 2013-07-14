@@ -5,6 +5,9 @@
 // This directive hides the children of the element when the cursor is not over it and has not moved for a given period of time.
 // It doesn't hide the element itself, because a hidden element does not receive mouse events.
 // We could use "opacity: 0" to hide it, but then it would still be keyboard-focusable.
+
+'use strict';
+
 Ambience.ShowOnMovement = function() {
 	return {
 		restrict: 'A',
@@ -12,12 +15,12 @@ Ambience.ShowOnMovement = function() {
 			var element = $element[0];
 			
 			var hideTimer;
-			var hideDelay = Number(attrs.showUnderCursor) * 1000;
+			var hideDelay = Number(attrs.showOnMovement) * 1000;
 			var previousX;
 			var previousY;
 			var mouseIsOverElement = false;
 			
-			document.body.addEventListener('mousemove', function() {
+			element.parentNode.addEventListener('mousemove', function(event) {
 				// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved.
 				var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
 				previousX = event.screenX;
@@ -39,6 +42,9 @@ Ambience.ShowOnMovement = function() {
 			scope.$watch(attrs.alwaysShowWhen, function(shouldBeShown) {
 				if ( shouldBeShown ) {
 					show();
+				} else {
+					// Hide it after a delay if the attribute changes, because mouse movement will cancel the timer.
+					hideAfterDelay();
 				}
 			})
 			
@@ -68,7 +74,11 @@ Ambience.ShowOnMovement = function() {
 			}
 			
 			function hideAfterDelay() {
-				hideTimer = window.setTimeout(hide, hideDelay);
+				// This is somewhat of an edge case, but the scheduling of hiding should itself only be performed when the conditions below are true.
+				// If not, the element can be hidden earlier than one second after they become false, which is incorrect.
+				if ( !mouseIsOverElement && !scope.$eval(attrs.alwaysShowWhen) ) {
+					hideTimer = window.setTimeout(hide, hideDelay);
+				}
 			}
 		}
 	};

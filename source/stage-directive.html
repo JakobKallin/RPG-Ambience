@@ -1,0 +1,25 @@
+<div
+	data-hide-cursor-after="1"
+	data-always-show-cursor-when="!isDetached">
+	<div class="layer background"></div>
+	<div class="layer foreground"></div>
+	<!-- The form should be last in order to appear above the layers. -->
+	<form
+		class="stage-editor"
+		data-show-on-movement="1"
+		data-always-show-when="!isDetached">
+		<ul class="stage-actions">
+			<li>
+				<toggle-button
+					data-ng-model="isDetached"
+					data-ng-true="Restore Stage"
+					data-ng-false="Detach Stage"></toggle-button>
+			</li>
+		</ul>
+	</form>
+	<!-- data-ng-show="app.library.adventuresHaveBeenLoaded" -->
+	<!-- data-hide-cursor-after="1" -->
+	<!-- data-always-show-cursor-when="app.stageIsAttached" -->
+	<!-- data-show-on-movement="1" -->
+	<!-- data-always-show-when="app.stageIsAttached" -->
+</div>

@@ -29,7 +29,7 @@ Ambience.StageDirective = function(ambience) {
 			
 			scope.$watch('isDetached', function(shouldBeDetached) {
 				if ( shouldBeDetached ) {
-					otherWindow = window.open('stage.html', '_blank');
+					otherWindow = window.open('stage.html', '_blank', 'menubar=no,toolbar=no,location=no,personalbar=no,status=no');
 					
 					otherWindow.addEventListener('load', function() {
 						console.log('Detaching element');

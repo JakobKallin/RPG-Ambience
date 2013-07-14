@@ -29,9 +29,6 @@ Ambience.ShowOnMovement = function() {
 				
 				if ( mouseHasMoved ) {
 					showTemporarily();
-					
-					// This is needed because the mouse can apparently leave the element without a "mouseout" event (specifically when entering fullscreen), so we track the cursor's position on every move.
-					mouseIsOverElement = event.originalTarget === element;
 				}
 			});
 			element.addEventListener('mouseover', function() {
@@ -41,6 +38,9 @@ Ambience.ShowOnMovement = function() {
 			element.addEventListener('mouseout', function() {
 				mouseIsOverElement = false;
 				hideAfterDelay();
+			});
+			element.addEventListener('mouseover', function() {
+				mouseIsOverElement = true;
 			});
 			
 			scope.$watch(attrs.alwaysShowWhen, function(shouldBeShown) {

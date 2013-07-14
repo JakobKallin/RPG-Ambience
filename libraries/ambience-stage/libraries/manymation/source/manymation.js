@@ -5,20 +5,27 @@ window.requestAnimationFrame =
 
 var Manymation = {};
 
-Manymation.animate = function(duration, onEnded, targets) {
-	var animation = new Manymation.Animation(duration, onEnded, targets);
+Manymation.animate = function(duration, onEnded, targets, useRequestAnimationFrame) {
+	useRequestAnimationFrame = useRequestAnimationFrame === undefined ? true : false;
+	var animation = new Manymation.Animation(duration, onEnded, targets, useRequestAnimationFrame);
 	animation.start();
 	
 	return animation;
 };
 
-Manymation.Animation = function(duration, onEnded, targets) {
+Manymation.Animation = function(duration, onEnded, targets, useRequestAnimationFrame) {
 	targets = targets || [];
+	useRequestAnimationFrame = useRequestAnimationFrame === undefined ? true : false;
+	var useSetInterval = !useRequestAnimationFrame;
 	
 	// This needs to be zero because we can track targets before starting the
 	// animation.
 	var elapsedTime = 0;
 	var startTime;
+	
+	// Settings specific to "setInterval".
+	var intervalLength = 50; // Frequency of ticks if "setInterval" is used.
+	var intervalTimer = null; // The interval timer itself, which will be cleared on completion.
 	
 	var hasBegun = false;
 	var hasEnded = false;
@@ -29,12 +36,19 @@ Manymation.Animation = function(duration, onEnded, targets) {
 		
 		var isOver = elapsedTime >= duration || hasEnded;
 		if ( isOver ) {
+			if ( useSetInterval ) {
+				window.clearInterval(intervalTimer);
+			}
+			
 			complete(onEnded);
 		} else {
 			targets.map(function(target) {
 				update(target, progress(elapsedTime));
 			});
-			window.requestAnimationFrame(tick);
+			
+			if ( useRequestAnimationFrame ) {
+				window.requestAnimationFrame(tick);
+			}
 		}
 	};
 	
@@ -51,7 +65,11 @@ Manymation.Animation = function(duration, onEnded, targets) {
 		if ( duration === 0 ) {
 			complete(onEnded);
 		} else {
-			window.requestAnimationFrame(tick);
+			if ( useRequestAnimationFrame ) {
+				window.requestAnimationFrame(tick);
+			} else {
+				intervalTimer = window.setInterval(tick, intervalLength);
+			}
 		}
 	};
 	

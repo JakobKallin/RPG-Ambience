@@ -2,7 +2,9 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-var AmbienceStage = function(node) {
+var AmbienceStage = function(node, useRequestAnimationFrame) {
+	useRequestAnimationFrame = useRequestAnimationFrame === undefined ? true : false;
+	
 	var fade = null;
 	var isFadingOut = false;
 	var scene = null
@@ -108,7 +110,7 @@ var AmbienceStage = function(node) {
 			node.style.visibility = 'visible';
 		}
 		var targets = (fade) ? fade.targets : undefined;
-		fade = new Manymation.Animation(scene.fade.in, undefined, targets);
+		fade = new Manymation.Animation(scene.fade.in, undefined, targets, useRequestAnimationFrame);
 		includeInFade(node.style, 'opacity', 0, 0.999)
 		fade.start();
 	}
@@ -119,7 +121,7 @@ var AmbienceStage = function(node) {
 		} else {
 			fade.cancel();
 			reverseTargets(fade.targets);
-			fade = new Manymation.Animation(scene.fade.out, stop, fade.targets);
+			fade = new Manymation.Animation(scene.fade.out, stop, fade.targets, useRequestAnimationFrame);
 			
 			// This needs to be set before starting the fade, because it might be instantaneous.
 			// If it is, isFadingOut will be true even though the stage is not fading out.

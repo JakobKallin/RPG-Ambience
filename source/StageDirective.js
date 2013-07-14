@@ -18,8 +18,8 @@ Ambience.StageDirective = function(ambience) {
 			
 			// The "ambience" service is given two DOM nodes to play scenes on.
 			// Is there a more decoupled way of doing this than having a service access the DOM?
-			ambience.background = new AmbienceStage(element.querySelector('.background'));
-			ambience.foreground = new AmbienceStage(element.querySelector('.foreground'));
+			ambience.background = new AmbienceStage(element.querySelector('.background'), false);
+			ambience.foreground = new AmbienceStage(element.querySelector('.foreground'), false);
 			
 			document.addEventListener('keypress', onKeyPress);
 			document.addEventListener('keydown', onKeyDown);

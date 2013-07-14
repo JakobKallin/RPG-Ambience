@@ -6,6 +6,8 @@
 // It doesn't hide the element itself, because a hidden element does not receive mouse events.
 // We could use "opacity: 0" to hide it, but then it would still be keyboard-focusable.
 
+// TODO: The mouse can leave an element without triggering "mouseout" or "mousemove" events, like when entering fullscreen. Ideally, the directive should handle this as well.
+
 'use strict';
 
 Ambience.ShowOnMovement = function() {

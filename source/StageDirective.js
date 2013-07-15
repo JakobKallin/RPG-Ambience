@@ -42,6 +42,11 @@ Ambience.StageDirective = function(ambience) {
 						// Make sure that keyboard commands work in the new window (as well as the old one).
 						otherWindow.document.addEventListener('keypress', onKeyPress);
 						otherWindow.document.addEventListener('keydown', onKeyDown);
+						
+						// Keep audio elements playing.
+						Array.prototype.forEach.call(detachedElement.getElementsByTagName('audio'), function(audioElement) {
+							audioElement.play();
+						});
 					});
 					
 					otherWindow.addEventListener('beforeunload', function() {
@@ -49,6 +54,11 @@ Ambience.StageDirective = function(ambience) {
 						
 						var reattachedElement = document.adoptNode(element);
 						nextSibling.parentNode.insertBefore(reattachedElement, nextSibling);
+						
+						// Keep audio elements playing.
+						Array.prototype.forEach.call(reattachedElement.getElementsByTagName('audio'), function(audioElement) {
+							audioElement.play();
+						});
 						
 						// Pressing the toggle button already sets "isDetached" inside a scope, so only set it manually when the window is closed without pressing the button (such as when closing the window manually).
 						if ( scope.isDetached ) {

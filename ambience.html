@@ -473,6 +473,21 @@
 					</div>
 				</pane>
 				<pane
+					id="playback-tab"
+					class="playback-view"
+					data-heading="Playback">
+					<ul class="playback-scene-list">
+						<li data-ng-repeat="scene in app.adventure.scenes">
+							<button data-ng-click="playScene(scene)">{{scene.name}}</button>
+						</li>
+					</ul>
+					<div class="stop-playback">
+						<button
+							type="button"
+							data-ng-click="stopScene()">Stop Scene</button>
+					</div>
+				</pane>
+				<pane
 					id="help-tab"
 					class="help-view"
 					data-heading="Help">

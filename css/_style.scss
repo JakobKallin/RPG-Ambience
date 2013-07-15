@@ -1,15 +1,19 @@
+$text-color: hsl(0, 0%, 75%);
 $gui-background: hsl(0, 0%, 10%);
 $gui-border: hsl(0, 0%, 25%);
 $note-color: hsl(0, 0%, 40%);
 
+/* Generally for hover and focus. */
 %soft-focus {
 	background-color: hsl(0, 0%, 12.5%);
 }
 
+/* Generally for selected elements. */
 %medium-focus {
 	background-color: hsl(0, 0%, 17.5%);
 }
 
+/* Generally for clicked elements. */
 %strong-focus {
 	background-color: hsl(220, 50%, 20%);
 	border-color: hsl(220, 50%, 50%);
@@ -53,7 +57,7 @@ button {
 }
 
 .editor button, .stage-editor button {
-	height: 1.875em; /* Leave 1px above and below. */
+	height: 2em;
 	padding-left: 0.25em;
 	padding-right: 0.25em;
 }
@@ -119,7 +123,7 @@ progress {
 			padding-left: 0.5em;
 			padding-right: 0.5em;
 			border-bottom-width: 0;
-			color: hsl(0, 0%, 75%);
+			color: $text-color;
 			text-decoration: none;
 			
 			&:hover, &:focus {
@@ -161,7 +165,7 @@ progress {
 	position: relative; /* Splitter is absolutely positioned. */
 	padding: 1em 2em 2em 2em;
 	line-height: 2;
-	color: hsl(0, 0%, 75%);
+	color: $text-color;
 	background-color: $gui-background;
 
 	.main-controls {
@@ -221,17 +225,66 @@ progress {
 	}
 
 	.view-list {
+		> * {
+			overflow: auto;
+		}
+		
 		.scene-view {
 			/* Create a border below the tabs. */
 			border-top: 1px solid $gui-border;
 			padding-top: 1em;
 		}
 		
-		.options-view, .help-view {
-			padding: 1.5em;
+		.playback-view {
 			border: 1px solid $gui-border;
+			padding: 0;
+			
+			@include flexbox(column);
+			
+			.playback-scene-list {
+				@include flex(1);
+				margin: 0.5em; /* Account for margin around scene icons. */
+				overflow: auto;
+				text-align: center;
+				
+				li {
+					display: inline-block;
+					width: 7.5em;
+					height: 7.5em;
+					margin: 0.5em;
+					
+					button {
+						@extend %box;
+						display: block;
+						width: 100%;
+						height: 100%;
+						color: $text-color;
+						
+						&:hover, &:focus {
+							@extend %soft-focus;
+						}
+						
+						&:active {
+							@extend %strong-focus;
+						}
+					}
+				}
+			}
+			
+			.stop-playback {
+				margin: 1em;
+				
+				button {
+					width: 100%;
+					font-size: 2em;
+				}
+			}
+		}
+		
+		.help-view {
+			border: 1px solid $gui-border;
+			padding: 1.5em;
 			line-height: 1.5;
-			overflow: auto;
 			
 			h2 {
 				font-weight: normal;
@@ -355,7 +408,6 @@ progress {
 			button {
 				width: 100%;
 				font-size: 1.5em;
-				padding: 0.25em;
 			}
 		}
 	}

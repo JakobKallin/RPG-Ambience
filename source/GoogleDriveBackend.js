@@ -264,8 +264,9 @@ Ambience.GoogleDriveBackend.prototype = {
 		
 		var blob = new Blob([file.contents], { type: file.mimeType });
 		var reader = new Ambience.FileReader();
-		return reader.readAsDataURL(blob).then(function() {
-			var dataURL = reader.result;
+		return reader.readAsDataURL(blob).then(function(event) {
+			// "event.target" below because "reader" is not the actual FileReader but rather a promise-wrapper.
+			var dataURL = event.target.result;
 			var base64Data = dataURL.substring(dataURL.indexOf(',') + 1);
 			var contentType = file.mimeType || 'application/octet-stream';
 			var metadata = {
@@ -299,6 +300,8 @@ Ambience.GoogleDriveBackend.prototype = {
 				// If the file was just created, we need to return its newly created ID so that we can identify it. We use it to only upload files when they have changed.
 				return response.id;
 			});
+		}).otherwise(function(e) {
+			console.log('something wrong with filereader');
 		});
 	},
 	selectImageFile: function() {
@@ -390,6 +393,7 @@ Ambience.GoogleDriveBackend.prototype = {
 	}
 };
 
+// This might have to be altered in order to work in Firefox; see comments on FileReader below.
 Ambience.HttpRequest = function() {
 	var request = Object.create(new XMLHttpRequest());
 	var deferred = when.defer();
@@ -408,9 +412,9 @@ Ambience.HttpRequest = function() {
 	return request;
 };
 
+// This FileReader could be implemented in a more flexible way using prototypes, but Firefox throws obscure error messages when tampering with FileReader like that.
 Ambience.FileReader = function() {
 	var originalReader = new FileReader();
-	var reader = Object.create(originalReader);
 	var deferred = when.defer();
 	
 	originalReader.onload = deferred.resolve;
@@ -418,10 +422,8 @@ Ambience.FileReader = function() {
 	originalReader.onabort = deferred.reject;
 	originalReader.onprogress = deferred.notify;
 	
-	reader.readAsDataURL = function() {
-		originalReader.readAsDataURL.apply(originalReader, arguments);
+	this.readAsDataURL = function(file) {
+		originalReader.readAsDataURL(file);
 		return deferred.promise;
 	};
-	
-	return reader;
 };

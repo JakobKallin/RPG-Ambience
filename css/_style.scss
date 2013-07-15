@@ -248,7 +248,7 @@ progress {
 				text-align: center;
 				
 				li {
-					display: inline-block;
+					float: left;
 					width: 7.5em;
 					height: 7.5em;
 					margin: 0.5em;
@@ -258,7 +258,10 @@ progress {
 						display: block;
 						width: 100%;
 						height: 100%;
+						padding: 0;
 						color: $text-color;
+						
+						@include flexbox(column);
 						
 						&:hover, &:focus {
 							@extend %soft-focus;
@@ -266,6 +269,29 @@ progress {
 						
 						&:active {
 							@extend %strong-focus;
+						}
+						
+						.preview {
+							@extend %preview-box;
+							
+							width: 7.375em; /* Subtract two pixels for left and right border on button. */
+							height: 4.1484375em; /* Widescreen ratio */
+							
+							.text.outer {
+								font-size: 7.5em; /* Text inside will be scaled relative to the box's width. */
+							}
+						}
+						
+						.name {
+							@include flex(1);
+							display: table;
+							
+							@include flexbox(row);
+							@include flex-align-items(center);
+							
+							span {
+								width: 100%;
+							}
 						}
 					}
 				}

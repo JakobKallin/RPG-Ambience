@@ -12,7 +12,7 @@ Ambience.ScenePreview = function() {
 				'</div>' +
 			'</div>',
 		scope: {
-			scene: '=ngScene'
+			scene: '='
 		},
 		replace: true,
 		link: function(scope, $element, attrs) {

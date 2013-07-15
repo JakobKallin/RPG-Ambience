@@ -15,6 +15,11 @@
 	-webkit-flex-wrap: wrap;
 }
 
+@mixin flex-align-items($alignment) {
+	align-items: $alignment;
+	-webkit-align-items: $alignment;
+}
+
 @import "defaults";
 /*@import "debug";*/
 @import "layout";

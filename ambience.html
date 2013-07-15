@@ -133,7 +133,7 @@
 								<a
 									href=""
 									data-ng-click="selectScene(scene)">
-									<scene-preview data-ng-scene="scene"></scene-preview>
+									<scene-preview data-scene="scene"></scene-preview>
 									<span data-ui-if="scene.name">{{scene.name}}</span>
 									<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
 									<div class="icons">
@@ -163,7 +163,7 @@
 										data-ng-click="removeScene(app.scene, app.adventure)">Delete Scene</button>
 								</li>
 							</ul>
-							<scene-preview data-ng-scene="app.scene"></scene-preview>
+							<scene-preview data-scene="app.scene"></scene-preview>
 							<div class="options general">
 								<table>
 									<tr>
@@ -478,7 +478,12 @@
 					data-heading="Playback">
 					<ul class="playback-scene-list">
 						<li data-ng-repeat="scene in app.adventure.scenes">
-							<button data-ng-click="playScene(scene)">{{scene.name}}</button>
+							<button data-ng-click="playScene(scene)">
+								<scene-preview data-scene="scene"></scene-preview>
+								<div class="name">
+									<span>{{scene.name}}</span>
+								</div>
+							</button>
 						</li>
 					</ul>
 					<div class="stop-playback">

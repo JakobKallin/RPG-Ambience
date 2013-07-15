@@ -300,8 +300,6 @@ Ambience.GoogleDriveBackend.prototype = {
 				// If the file was just created, we need to return its newly created ID so that we can identify it. We use it to only upload files when they have changed.
 				return response.id;
 			});
-		}).otherwise(function(e) {
-			console.log('something wrong with filereader');
 		});
 	},
 	selectImageFile: function() {

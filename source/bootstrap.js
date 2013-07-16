@@ -24,6 +24,7 @@ window.addEventListener('load', function() {
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);
 	module.directive('ambienceStage', Ambience.StageDirective);
+	module.directive('fullscreen', Ambience.Fullscreen);
 	module.service('ambience', function() {
 		return new Ambience.Stage();
 	});

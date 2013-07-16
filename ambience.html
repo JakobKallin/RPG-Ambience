@@ -56,6 +56,7 @@
 		<script src="source/HideCursorAfter.js"></script>
 		<script src="source/ShowOnMovement.js"></script>
 		<script src="source/StageDirective.js"></script>
+		<script src="source/Fullscreen.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
 		
@@ -476,6 +477,9 @@
 					id="playback-tab"
 					class="playback-view"
 					data-heading="Playback">
+					<div class="enter-fullscreen">
+						<button type="button" data-fullscreen>Enter Fullscreen</button>
+					</div>
 					<ul class="playback-scene-list">
 						<li data-ng-repeat="scene in app.adventure.scenes">
 							<button data-ng-click="playScene(scene)">

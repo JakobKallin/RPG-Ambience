@@ -239,12 +239,37 @@ progress {
 			border: 1px solid $gui-border;
 			padding: 0;
 			
+			/* Fullscreen-specific: fill entire width and use background color. */
+			width: 100%;
+			background-color: $gui-background;
+			
 			@include flexbox(column);
+			
+			> * {
+				overflow: auto; /* Make sure scrollbars appear when needed. */
+			}
+			
+			.stop-playback {
+				@include flex-order(2);
+				margin: 1em;
+				
+				button {
+					width: 100%;
+					font-size: 2em;
+				}
+			}
+			
+			.enter-fullscreen {
+				@include flex-order(3);
+				margin: 1em;
+				margin-top: 0; /* Account for margin below stop button. */
+				text-align: center;
+			}
 			
 			.playback-scene-list {
 				@include flex(1);
+				@include flex-order(1);
 				margin: 0.5em; /* Account for margin around scene icons. */
-				overflow: auto;
 				text-align: center;
 				
 				li {
@@ -294,15 +319,6 @@ progress {
 							}
 						}
 					}
-				}
-			}
-			
-			.stop-playback {
-				margin: 1em;
-				
-				button {
-					width: 100%;
-					font-size: 2em;
 				}
 			}
 		}

@@ -20,6 +20,11 @@
 	-webkit-align-items: $alignment;
 }
 
+@mixin flex-order($order) {
+	order: $order;
+	-webkit-order: $order;
+}
+
 @import "defaults";
 /*@import "debug";*/
 @import "layout";

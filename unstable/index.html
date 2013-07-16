@@ -6,21 +6,21 @@
 		<link rel="stylesheet" href="style.css">
 		<link rel="icon" type="image/png" href="images/icon.png">
 		<script>
+			var handleUnstableClick = function(event) {
+				var shouldContinue = confirm(
+					'You are about to use the unstable version of RPG Ambience. ' +
+					'No functionality is guaranteed and your adventure files might become incompatible with the stable version.' + '\n\n' +
+					'Do you want to continue?'
+				);
+				
+				if ( !shouldContinue ) {
+					event.preventDefault();
+					return false;
+				}
+			}
+			
 			// "Cheat" by loading the media for the trailer already.
 			window.addEventListener('load', function() {
-				var ambienceLink = document.querySelector('a[href="ambience.html"]').addEventListener('click', function(event) {
-					var shouldContinue = confirm(
-						'You are about to use the unstable version of RPG Ambience. ' +
-						'No functionality is guaranteed and your adventure files might become incompatible with the stable version.' + '\n\n' +
-						'Do you want to continue?'
-					);
-					
-					if ( !shouldContinue ) {
-						event.preventDefault();
-						return false;
-					}
-				});
-				
 				var supportedFormat = function(path) {
 					var audio = document.createElement('audio');
 					if ( audio.canPlayType('audio/ogg') ) {
@@ -73,7 +73,8 @@
 					<li>Fade scenes in and out</li>
 					<li>Free, browser-based, and open-source</li>
 				</ul>
-				<p><a class="action navigate" href="ambience.html">Try RPG Ambience</a></p>
+				<!-- Inline click listener so that we don't have to wait for a load event. -->
+				<p><a class="action navigate" href="ambience.html" onclick="handleUnstableClick(event)">Try RPG Ambience</a></p>
 			</div>
 		</div>
 		<p class="github"><a href="https://github.com/JakobKallin/RPG-Ambience">Fork me on GitHub</a></p>

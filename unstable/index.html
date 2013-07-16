@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>RPG Ambience - Bring your game to life</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="icon" type="image/png" href="images/icon.png">
+		<script>
+			// "Cheat" by loading the media for the trailer already.
+			window.addEventListener('load', function() {
+				var ambienceLink = document.querySelector('a[href="ambience.html"]').addEventListener('click', function(event) {
+					var shouldContinue = confirm(
+						'You are about to use the unstable version of RPG Ambience. ' +
+						'No functionality is guaranteed and your adventure files might become incompatible with the stable version.' + '\n\n' +
+						'Do you want to continue?'
+					);
+					
+					if ( !shouldContinue ) {
+						event.preventDefault();
+						return false;
+					}
+				});
+				
+				var supportedFormat = function(path) {
+					var audio = document.createElement('audio');
+					if ( audio.canPlayType('audio/ogg') ) {
+						return path + '.ogg';
+					} else {
+						return path + '.mp3';
+					}
+				};
+				
+				window.requestAnimationFrame =
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					window.msRequestAnimationFrame;
+				
+				if ( window.requestAnimationFrame ) {
+					document.querySelector('a[href="teaser.html"]').style.display = '';
+					
+					['dragon', '9-Trailer_Music'].forEach(function(filename) {
+						var path = 'example/' + supportedFormat(filename);
+						var node = document.createElement('audio');
+						document.body.appendChild(node);
+						node.src = path;
+						node.volume = 0;
+						node.play();
+					});
+					
+					['ishtar_rooftop.jpg', 'sintel-wallpaper-dragon.jpg'].forEach(function(filename) {
+						var path = 'example/' + filename;
+						var node = document.createElement('img');
+						node.src = path;
+					});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<h1>RPG Ambience</h1>
+		<h2>Bring your game to life with music and visuals</h2>
+		<div class="preview">
+			<div class="teaser">
+				<a href="teaser.html" class="action-container" style="display: none">
+					<span class="action play">Watch Teaser</span>
+				</a>
+			</div><!--
+			--><div class="information">
+				<ul class="features">
+					<li>Design scenes with music, images, and text</li>
+					<li>Bind scenes to keyboard shortcuts</li>
+					<li>Loop and shuffle music</li>
+					<li>Fade scenes in and out</li>
+					<li>Free, browser-based, and open-source</li>
+				</ul>
+				<p><a class="action navigate" href="ambience.html">Try RPG Ambience</a></p>
+			</div>
+		</div>
+		<p class="github"><a href="https://github.com/JakobKallin/RPG-Ambience">Fork me on GitHub</a></p>
+		<p class="footer">Artwork © copyright Blender Foundation | <a href="http://www.sintel.org">www.sintel.org</a></p>
+		<p class="footer"><a href="mailto:rpg.ambience@gmail.com">Contact</a></p>
+	</body>
+</html>

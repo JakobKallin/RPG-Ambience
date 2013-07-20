@@ -344,6 +344,7 @@ Ambience.GoogleDriveBackend.prototype = {
 			docs: new google.picker.DocsView(google.picker.ViewId.DOCS),
 			upload: new google.picker.DocsUploadView()
 		};
+		views.docs.setIncludeFolders(true);
 		
 		var mimeTypes = [
 			'audio/mpeg',

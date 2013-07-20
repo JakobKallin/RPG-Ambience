@@ -17,7 +17,9 @@ describe('Library', function() {
 	
 	it('loads adventures', function() {
 		runs(function() {
-			promise = library.loadAdventures();
+			promise = library.loadAdventures().otherwise(function(e) {
+				console.log(e.message);
+			});
 		});
 		
 		waitsForPromise();
@@ -27,71 +29,72 @@ describe('Library', function() {
 		});
 	});
 	
-	it('saves new adventure', function() {
-		var adventureHasBeenSaved = false;
+	it('syncs new adventure', function() {
+		var adventureHasBeenSynced = false;
 		library.adventures = [ new Ambience.Adventure() ];
 		
 		runs(function() {
-			promise = library.saveAdventures().then(function() {
-				adventureHasBeenSaved = true;
+			promise = library.syncAdventures().then(function() {
+				adventureHasBeenSynced = true;
 			});
 		});
 		
 		waitsForPromise();
 		
 		runs(function() {
-			expect(adventureHasBeenSaved).toBe(true);
+			expect(adventureHasBeenSynced).toBe(true);
 		})
 	});
 	
-	it('saves modified adventure', function() {
-		var modifiedAdventureHasBeenSaved = false;
+	it('syncs modified adventure', function() {
+		var modifiedAdventureHasBeenSynced = false;
 		var adventure = new Ambience.Adventure();
 		library.adventures = [adventure];
 		
-		// Save the first time.
+		// Sync the first time.
 		runs(function() {
-			promise = library.saveAdventures();
+			promise = library.syncAdventures();
 		});
 		
 		waitsForPromise();
 		
-		// Save the second time, with modifications to the adventure.
+		// Sync the second time, with modifications to the adventure.
 		runs(function() {
 			adventure.title = 'Modified adventure';
-			promise = library.saveAdventures().then(function() {
-				modifiedAdventureHasBeenSaved = true;
+			promise = library.syncAdventures().then(function() {
+				modifiedAdventureHasBeenSynced = true;
 			});
 		});
 		
 		waitsForPromise();
 		
 		runs(function() {
-			expect(modifiedAdventureHasBeenSaved).toBe(true);
+			expect(modifiedAdventureHasBeenSynced).toBe(true);
 		});
 	});
 	
-	it('does not save unmodified adventure', function() {
+	// This test checks the internals of the backend. How can this be improved?
+	it('does not sync unmodified adventure', function() {
 		var adventureWasUploaded;
 		var adventure = new Ambience.Adventure();
-		adventure.id = adventure.title = 'Adventure to save twice';
+		adventure.id = adventure.title = 'Adventure to sync twice';
 		library.adventures = [adventure];
 		
 		runs(function() {
 			promise =
-				// Save the first time.
-				library.saveAdventures()
-				// Save the second time, with no modifications to the adventure.
+				// Sync the first time.
+				library.syncAdventures()
+				// Sync the second time, with no modifications to the adventure.
 				.then(function() {
-					spyOn(library.backend, 'uploadBlob');
-					return library.saveAdventures();
+					spyOn(library.backend, 'uploadFile');
+					return library.syncAdventures();
 				});
 		});
 		
 		waitsForPromise();
 		
 		runs(function() {
-			expect(library.backend.uploadBlob).not.toHaveBeenCalled();
+			expect(library.backend.uploadFile).not.toHaveBeenCalled();
 		});
 	});
 	

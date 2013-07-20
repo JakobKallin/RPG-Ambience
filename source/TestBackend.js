@@ -33,13 +33,17 @@ Ambience.TestBackend.prototype = {
 		});
 	},
 	downloadAdventures: function() {
-		return when.parallel([
-			function() {
-				return when.delay(100, Ambience.ExampleAdventure.json);
-			},
-			function() {
-				return when.delay(200, Ambience.ExampleAdventure.json);
-			}
+		var files = [new Ambience.BackendFile(), new Ambience.BackendFile()];
+		files.forEach(function(file, index) {
+			file.id = index;
+			file.name = index;
+			file.mimeType = 'application/json';
+			file.contents = Ambience.ExampleAdventure.json;
+		});
+		
+		return when.all([
+			when.delay(100, files[0]),
+			when.delay(200, files[1])
 		]);
 	},
 	// Media files, whose contents will not be used directly but rather through URLs.
@@ -55,9 +59,9 @@ Ambience.TestBackend.prototype = {
 			});
 		}
 	},
-	uploadBlob: function(blob, id) {
+	uploadFile: function(file) {
 		return when.delay(100).then(function() {
-			return id || blob.name;
+			return file.id || file.name;
 		});
 	},
 	selectImageFile: function() {

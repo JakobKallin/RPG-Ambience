@@ -304,8 +304,24 @@ progress {
 							}
 						}
 						
-						.name {
+						.label {
+							@include flexbox(row);
 							line-height: 2em;
+							padding-left: 0.5em;
+							padding-right: 0.5em;
+							
+							.name {
+								@include flex(1);
+								overflow: hidden;
+								white-space: nowrap;
+								text-overflow: ellipsis;
+							}
+							
+							.key {
+								color: $note-color;
+								&:before { content: "(" }
+								&:after { content: ")" }
+							}
 						}
 					}
 				}
@@ -412,9 +428,9 @@ progress {
 					font-size: 5em; /* Text inside will be scaled relative to the box's width. */
 				}
 			}
-				
+			
 			.key {
-				opacity: 0.5;
+				color: $note-color;
 				&:before { content: "(" }
 				&:after { content: ")" }
 			}

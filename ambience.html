@@ -486,8 +486,9 @@
 						<li data-ng-repeat="scene in app.adventure.scenes">
 							<button data-ng-click="playScene(scene)">
 								<scene-preview data-scene="scene"></scene-preview>
-								<div class="name">
-									<span>{{scene.name}}</span>
+								<div class="label">
+									<span class="name">{{scene.name}}</span>
+									<span data-ui-if="scene.key" class="key">{{scene.key}}</span>
 								</div>
 							</button>
 						</li>

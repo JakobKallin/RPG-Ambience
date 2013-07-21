@@ -319,8 +319,13 @@ progress {
 							
 							.key {
 								color: $note-color;
-								&:before { content: "(" }
-								&:after { content: ")" }
+								&:before {
+									content: " (";
+									white-space: pre;
+								}
+								&:after {
+									content: ")";
+								}
 							}
 						}
 					}

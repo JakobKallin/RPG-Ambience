@@ -332,6 +332,7 @@ progress {
 			border: 1px solid $gui-border;
 			padding: 1.5em;
 			line-height: 1.5;
+			overflow: auto;
 			
 			h2 {
 				font-weight: normal;

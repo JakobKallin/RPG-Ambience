@@ -253,45 +253,4 @@
 			}
 		}
 	};
-
-	Ambience.TaskQueue = function(limit) {
-		var inLine = [];
-		var inProgress = [];
-		
-		var add = function(task) {
-			var deferred = when.defer();
-			deferred.task = task;
-			
-			if ( inProgress.length < limit ) {
-				execute(deferred);
-			} else {
-				inLine.push(deferred);
-			}
-			
-			return deferred.promise;
-		};
-		
-		var execute = function(deferred) {
-			inProgress.push(deferred);
-			return (
-				deferred.task()
-				.then(deferred.resolve, deferred.reject, deferred.notify)
-				.ensure(function() {
-					onDeferredCompleted(deferred)
-				})
-			);
-		};
-		
-		var onDeferredCompleted = function(deferred) {
-			inProgress.remove(deferred);
-			var nextDeferred = inLine.shift();
-			if ( nextDeferred ) {
-				execute(nextDeferred);
-			}
-		};
-		
-		return {
-			add: add
-		};
-	};
 })();

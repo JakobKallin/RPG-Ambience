@@ -15,6 +15,12 @@ describe('Library', function() {
 		promise = null;
 	});
 	
+	function waitsForPromise() {
+		waitsFor(function() {
+			return promise.inspect().state !== 'pending';
+		}, 'Promise was not resolved in time', 2000);
+	}
+	
 	it('loads adventures', function() {
 		runs(function() {
 			promise = library.loadAdventures().otherwise(function(e) {
@@ -130,6 +136,7 @@ describe('Library', function() {
 		});
 	});
 	
+	// This test seems to fail sometimes because of unreliable delays.
 	it('loads media sequentially', function() {
 		var loaded = [false, false];
 		
@@ -199,33 +206,6 @@ describe('Library', function() {
 		});
 	});
 	
-	it('loads next media even if previous download failed', function() {
-		var firstMediaFailed = false;
-		var secondMediaLoaded = false;
-		
-		runs(function() {
-			backend.isOnline = false;
-			library.loadMediaFile({ id: 'one', mimeType: 'image/jpeg' }).otherwise(function() {
-				firstMediaFailed = true;
-			})
-			// After the first download has failed, make sure the next one will succeed.
-			.ensure(function() {
-				backend.isOnline = true;
-			});
-			
-			library.loadMediaFile({ id: 'two', mimeType: 'image/jpeg' }).then(function() {
-				secondMediaLoaded = true;
-			});
-		});
-		
-		waits(250);
-		
-		runs(function() {
-			expect(firstMediaFailed).toBe(true);
-			expect(secondMediaLoaded).toBe(true);
-		});
-	});
-	
 	it('logs in again before session expires', function() {
 		backend.sessionDuration = 300;
 		backend.loginAgainAdvance = 150;
@@ -243,10 +223,4 @@ describe('Library', function() {
 			library.logout();
 		});
 	});
-	
-	function waitsForPromise() {
-		waitsFor(function() {
-			return promise.inspect().state !== 'pending';
-		}, 'Promise was not resolved in time', 2000);
-	}
 });

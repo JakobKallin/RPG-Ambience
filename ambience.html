@@ -500,6 +500,18 @@
 					</div>
 				</pane>
 				<pane
+					id="backup-tab"
+					class="backup-view"
+					data-heading="Backup">
+					<h2>Adventure Backup</h2>
+					<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer.</p>
+					<ul>
+						<li data-ng-repeat="adventure in app.library.adventures">
+							<button data-ng-click="app.library.saveAdventureToComputer(adventure)">{{adventure.title}}</button>
+						</li>
+					</ul>
+				</pane>
+				<pane
 					id="help-tab"
 					class="help-view"
 					data-heading="Help">

@@ -227,6 +227,30 @@
 		},
 		get selectSoundFilesLabel() {
 			return this.backend.selectSoundFilesLabel;
+		},
+		
+		saveAdventureToComputer: function(adventure) {
+			var json = angular.toJson(adventure.toConfig());
+			var blob = new Blob([json], { type: 'application/json' });
+			var filename = adventure.title + '.ambience';
+			
+			if ( navigator.msSaveBlob ) {
+				navigator.msSaveBlob(blob, filename);
+			} else {
+				var url = URL.createObjectURL(blob);
+				var link = document.createElement('a');
+				link.download = filename;
+				link.href = url;
+				link.target = '_blank';
+				link.style.display = 'none';
+				
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+				
+				// Revoking the blob URL here seems to cause download failures sometimes, so let's not do it.
+				// URL.revokeObjectURL(url);
+			}
 		}
 	};
 

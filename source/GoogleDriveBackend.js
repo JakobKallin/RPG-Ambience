@@ -148,11 +148,29 @@ Ambience.GoogleDriveBackend.prototype = {
 	},
 	downloadAdventures: function() {
 		console.log('Requesting adventures from Google Drive');
+		
+		// Google Drive doesn't seem to support searching for multiple MIME types in the same query, so we make separate queries for each type. The reason we filter by MIME type to begin with is that we are using the `drive` scope (which is an issue in itself) and we don't want to list every single file in the user's drive.
+		return when.all([
+			// Files uploaded by the Ambience app have the `json` type.
+			this.downloadAdventuresWithMimeType('application/json'),
+			// Files uploaded by the user seem to have the `octet-stream` type.
+			this.downloadAdventuresWithMimeType('application/octet-stream')
+		])
+		.then(function(fileLists) {
+			console.log('Done downloading adventure files');
+			
+			// This is essentially `[].concat(firstArray, secondArray, ...)` but using `concat.apply` doesn't work as expected on array-like objects.
+			return fileLists.reduce(function(resultArray, singleArray) {
+				return resultArray.concat(singleArray);
+			});
+		});
+	},
+	downloadAdventuresWithMimeType: function(mimeType) {
 		var backend = this;
 		
 		// The Google Drive API does not support the "or" operator, so for now we only search for application/json. (https://developers.google.com/drive/search-parameters)
 		// TODO: This should be fixed in the future so that manually created files (with the wrong mime type) can also be used.
-		var query = "trashed = false and mimeType = 'application/json'";
+		var query = "trashed = false and mimeType = '" + mimeType + "'";
 		var filesPerRequest = 100;
 		var request = gapi.client.drive.files.list({
 			q: query,
@@ -171,7 +189,7 @@ Ambience.GoogleDriveBackend.prototype = {
 				response.items = [];
 			}
 			
-			console.log('Receiving metadata for ' + response.items.length + ' files');
+			console.log('Receiving metadata for ' + response.items.length + ' files of type ' + mimeType);
 			
 			// We apparently cannot query for file extensions in the Google Drive API so we filter here instead.
 			var matchingItems = response.items.filter(function(item) {
@@ -181,7 +199,7 @@ Ambience.GoogleDriveBackend.prototype = {
 			filePromises = filePromises.concat(matchingItems.map(backend.downloadItem));
 			
 			if ( response.items.length === filesPerRequest && response.nextPageToken ) {
-				console.log('Requesting next page of files');
+				console.log('Requesting next page of files for type ' + mimeType);
 				
 				var nextRequest = gapi.client.drive.files.list({
 					q: query,
@@ -190,10 +208,9 @@ Ambience.GoogleDriveBackend.prototype = {
 				});
 				backend.makeRequest(nextRequest).then(onResponse).otherwise(deferred.reject);
 			} else {
-				console.log('Done requesting file pages');
+				console.log('Done requesting file pages for type ' + mimeType);
 				
 				when.all(filePromises).then(function(files) {
-					console.log('Done downloading adventure files');
 					deferred.resolve(files);
 				})
 				.otherwise(deferred.reject);

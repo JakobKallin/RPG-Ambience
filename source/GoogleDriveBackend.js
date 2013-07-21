@@ -103,9 +103,9 @@ Ambience.GoogleDriveBackend.prototype = {
 			})
 		])
 		.then(function() {
-			return when.parallel([
-				backend.loadGoogleDriveApi,
-				backend.loadGooglePickerApi
+			return when.all([
+				backend.loadGoogleDriveApi(),
+				backend.loadGooglePickerApi()
 			]);
 		});
 	},

@@ -168,7 +168,7 @@ progress {
 	color: $text-color;
 	background-color: $gui-background;
 
-	.main-controls {
+	.adventure-controls {
 		@include flexbox(row);
 		@include flex-wrap();
 		margin-bottom: 1em;
@@ -593,6 +593,15 @@ progress {
 			.unsupported:before {
 				content: "Unsupported format: ";
 			}
+		}
+	}
+	
+	.scene-player {
+		margin-left: 1em;
+		margin-top: 3em;
+		
+		.stage {
+			border: 1px solid $gui-border;
 		}
 	}
 	

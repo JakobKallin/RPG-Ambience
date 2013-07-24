@@ -7,81 +7,56 @@
 describe('Task queue', function() {
 	var queue;
 	
+	function SuccessTask(delay) {
+		delay = typeof delay === 'number' ? delay : 100;
+		return function() {
+			return when.delay(delay);
+		};
+	}
+	
+	function FailTask(delay) {
+		delay = typeof delay === 'number' ? delay : 100;
+		return function() {
+			var deferred = when.defer();
+			when.delay(delay).then(deferred.reject);
+			return deferred.promise;
+		}
+	}
+	
 	beforeEach(function() {
 		queue = new Ambience.TaskQueue(1)
-		
-		this.addMatchers({
-			toBeBetween: function(first, second) {
-				var lowest = Math.min(first, second);
-				var highest = Math.max(first, second);
-				
-				return lowest <= this.actual && this.actual <= highest;
-			}
-		});
 	});
 	
-	it('executes task immediately when below capacity', function() {
+	it('executes task immediately when below capacity', function(done) {
+		queue.add(new SuccessTask()).then(done);
+		
+		setTimeout(function() {
+			done(new Error('Task was not executed within 200 ms.'));
+		}, 200);
+	});
+	
+	it('executes task later when above capacity', function(done) {
 		var taskWasExecuted = false;
 		
-		runs(function() {
-			queue.add(function() {
-				return when.delay(100).then(function() {
-					taskWasExecuted = true;
-				});
-			});
+		queue.add(new SuccessTask(200));
+		queue.add(new SuccessTask(200)).then(function() {
+			taskWasExecuted = true;
 		});
 		
-		waits(150);
+		// The task cannot complete too early.
+		setTimeout(function() {
+			expect(taskWasExecuted).to.be(false);
+		}, 300);
 		
-		runs(function() {
-			expect(taskWasExecuted).toBe(true);
-		});
+		// But it must complete at some point.
+		setTimeout(function() {
+			expect(taskWasExecuted).to.be(true);
+			done();
+		}, 500);
 	});
 	
-	it('executes task later when above capacity', function() {
-		var taskWasExecuted = false;
-		
-		runs(function() {
-			queue.add(function() {
-				return when.delay(100);
-			});
-			queue.add(function() {
-				return when.delay(100).then(function() {
-					taskWasExecuted = true;
-				});
-			});
-		});
-		
-		// It seems that we need a generous delay for this to work properly.
-		waits(500);
-		
-		runs(function() {
-			expect(taskWasExecuted).toBe(true);
-		});
-	});
-	
-	it('executes next task even if previous task failed', function() {
-		var firstTaskFailed = false;
-		var secondTaskSucceeded = false;
-		
-		runs(function() {
-			queue.add(function() {
-				return when.defer().reject();
-			}).otherwise(function() {
-				firstTaskFailed = true;
-			});
-			
-			queue.add(function() {
-				secondTaskSucceeded = true;
-			});
-		});
-		
-		// We need a delay here, as in the test above.
-		waits(100);
-		
-		runs(function() {
-			expect(firstTaskFailed).toBe(true);
-			expect(secondTaskSucceeded).toBe(true);
-		});
+	it('executes next task even if previous task failed', function(done) {
+		queue.add(new FailTask());
+		queue.add(new SuccessTask()).then(done);
 	});
 });

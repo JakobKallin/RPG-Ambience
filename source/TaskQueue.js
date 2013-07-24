@@ -5,8 +5,8 @@
 'use strict';
 
 Ambience.TaskQueue = function(limit) {
-	var inLine = [];
-	var inProgress = [];
+	var inLine = new List();
+	var inProgress = new List();
 	
 	var add = function(task) {
 		var deferred = when.defer();

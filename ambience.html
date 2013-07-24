@@ -200,7 +200,7 @@
 									<pane
 										data-heading="Image"
 										id="image-tab">
-										<div class="primary-secondary" style="position: relative">
+										<div class="primary-secondary">
 											<span
 												class="primary"
 												data-ui-if="app.scene.image.file">{{app.scene.image.file.name}}</span>
@@ -561,13 +561,23 @@
 						class="stage"
 						data-is-detached="app.stageIsDetached"
 						data-adventure="app.adventure"></ambience-stage>
-					<ul>
-						<li><button
-							type="button"
-							data-ng-click="playScene(app.scene)">Play</button></li>
-						<li><button
-							type="button"
-							data-ng-click="stopScene()">Stop</button></li>
+					<ul class="playback-controls">
+						<li>
+							<button
+								type="button"
+								data-ng-click="playScene(app.scene)">Play</button>
+						</li>
+						<li>
+							<button
+								type="button"
+								data-ng-click="stopScene()">Stop</button>
+						</li>
+					</ul>
+					<ul class="player-controls">
+						<li>
+							<button
+								type="button">Open Player in New Window</button>
+						</li>
 					</ul>
 				</div>
 			</div>

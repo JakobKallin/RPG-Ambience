@@ -230,9 +230,8 @@ progress {
 		}
 		
 		.scene-view {
-			/* Create a border below the tabs. */
-			border-top: 1px solid $gui-border;
-			padding-top: 1em;
+			border: 1px solid $gui-border;
+			padding: 1em;
 		}
 		
 		.playback-view {
@@ -469,9 +468,6 @@ progress {
 		margin-left: 0.5em;
 		
 		.scene {
-			@extend %box;
-			
-			padding: 1em;
 			overflow: hidden;
 			
 			.action-list {
@@ -598,10 +594,44 @@ progress {
 	
 	.scene-player {
 		margin-left: 1em;
-		margin-top: 3em;
+		margin-top: 2em;
+		
+		/* Account for borders above and below tabs. */
+		border-top: 2px solid transparent;
 		
 		.stage {
+			width: 20em;
+			height: 11.25em;
 			border: 1px solid $gui-border;
+			margin-bottom: 0.5em;
+		}
+		
+		.playback-controls {
+			@include flexbox(row);
+			margin-bottom: 0.5em;
+			
+			> * {
+				@include flex(1);
+				margin-right: 0.25em;
+				
+				button {
+					width: 100%;
+					font-size: 2em;
+				}
+			}
+			
+			> * + * {
+				margin-left: 0.25em;
+				margin-right: 0;
+			}
+		}
+		
+		.player-controls {
+			text-align: center;
+			
+			> * {
+				display: inline;
+			}
 		}
 	}
 	

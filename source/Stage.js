@@ -88,15 +88,17 @@ Ambience.Stage.prototype = {
 		}
 		
 		if ( theaterScene.text ) {
+			// The scene can be played either in a separate window or in a preview element, so find the width of the element in order to get the correct text size.
+			var layer = appScene.layer === 'foreground' ? this.foreground : this.background;
 			theaterScene.text.string = appScene.text.string;
 			theaterScene.text.style = {
-				fontSize: (window.innerWidth * appScene.text.size / 100) + 'px',
+				fontSize: (layer.node.clientWidth * appScene.text.size / 100) + 'px',
 				fontFamily: appScene.text.font,
 				fontStyle: appScene.text.style,
 				fontWeight: appScene.text.weight,
 				color: appScene.text.color,
 				textAlign: appScene.text.alignment,
-				padding: '0 ' + (window.innerWidth * appScene.text.padding / 100) + 'px'
+				padding: '0 ' + (layer.node.clientWidth * appScene.text.padding / 100) + 'px'
 			};
 		}
 		

@@ -31,7 +31,7 @@ describe('Task queue', function() {
 		queue.add(new SuccessTask()).then(done);
 		
 		setTimeout(function() {
-			done(new Error('Task was not executed within 200 ms.'));
+			done(new Error('Task was not executed within 200 ms'));
 		}, 200);
 	});
 	
@@ -58,5 +58,20 @@ describe('Task queue', function() {
 	it('executes next task even if previous task failed', function(done) {
 		queue.add(new FailTask());
 		queue.add(new SuccessTask()).then(done);
+	});
+	
+	it('does not execute tasks that were cleared', function(done) {
+		queue.add(new SuccessTask(200));
+		queue.add(new SuccessTask(200)).then(function() {
+			done(new Error('Task was executed after being cleared'))
+		});
+		
+		setTimeout(function() {
+			queue.clear();
+		}, 100);
+		
+		setTimeout(function() {
+			done();
+		}, 500);
 	});
 });

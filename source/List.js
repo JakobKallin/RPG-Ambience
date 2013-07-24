@@ -14,3 +14,7 @@ List.prototype.remove = function(value) {
 		this.splice(index, 1);
 	}
 };
+
+List.prototype.clear = function() {
+	this.splice(0, this.length);
+};

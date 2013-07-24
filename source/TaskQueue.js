@@ -8,7 +8,7 @@ Ambience.TaskQueue = function(limit) {
 	var inLine = new List();
 	var inProgress = new List();
 	
-	var add = function(task) {
+	this.add = function(task) {
 		var deferred = when.defer();
 		deferred.task = task;
 		
@@ -21,7 +21,11 @@ Ambience.TaskQueue = function(limit) {
 		return deferred.promise;
 	};
 	
-	var execute = function(deferred) {
+	this.clear = function() {
+		inLine.clear();
+	};
+	
+	function execute(deferred) {
 		inProgress.push(deferred);
 		
 		// We want this to be async so that .
@@ -32,17 +36,13 @@ Ambience.TaskQueue = function(limit) {
 				onDeferredCompleted(deferred)
 			});
 		}, 0);
-	};
+	}
 	
-	var onDeferredCompleted = function(deferred) {
+	function onDeferredCompleted(deferred) {
 		inProgress.remove(deferred);
 		var nextDeferred = inLine.shift();
 		if ( nextDeferred ) {
 			execute(nextDeferred);
 		}
-	};
-	
-	return {
-		add: add
-	};
+	}
 };

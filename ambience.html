@@ -56,7 +56,6 @@
 		<script src="source/ToggleButton.js"></script>
 		<script src="source/Resize.js"></script>
 		<script src="source/HideCursorAfter.js"></script>
-		<script src="source/ShowOnMovement.js"></script>
 		<script src="source/StageDirective.js"></script>
 		<script src="source/Fullscreen.js"></script>
 		<script src="source/KeyInput.js"></script>
@@ -556,7 +555,9 @@
 						<p>While RPG Ambience does its best to save all of your data, data loss can still occur because of network failures or programming errors. Do not use RPG Ambience to store your only copy of important data.</p>
 					</pane>
 				</tabs>
-				<div class="scene-player">
+				<div
+					class="scene-player"
+					data-ng-show="!app.stageIsDetached">
 					<ambience-stage
 						class="stage"
 						data-is-detached="app.stageIsDetached"
@@ -575,8 +576,10 @@
 					</ul>
 					<ul class="player-controls">
 						<li>
-							<button
-								type="button">Open Player in New Window</button>
+							<toggle-button
+								data-ng-model="app.stageIsDetached"
+								data-ng-true="Restore Player"
+								data-ng-false="Open Player in New Window"></toggle-button>
 						</li>
 					</ul>
 				</div>

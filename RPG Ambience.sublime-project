@@ -4,7 +4,7 @@
 		{
 			"path": ".",
 			"folder_exclude_patterns": ["libraries", "tests/jasmine", ".sass-cache"],
-			"file_exclude_patterns": ["*.sublime-workspace", "*.ogg", "*.css"]
+			"file_exclude_patterns": ["*.sublime-workspace", "*.css", "*.ogg", "*.mp3"]
 		}
 	]
 }

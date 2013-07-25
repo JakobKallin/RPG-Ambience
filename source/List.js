@@ -16,5 +16,11 @@ List.prototype.remove = function(value) {
 };
 
 List.prototype.clear = function() {
-	this.splice(0, this.length);
+	return this.splice(0, this.length);
 };
+
+Object.defineProperty(List.prototype, 'last', {
+	get: function() {
+		return this[this.length - 1];
+	}
+});

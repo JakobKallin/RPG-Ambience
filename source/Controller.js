@@ -24,6 +24,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			adventure = newAdventure;
 			if ( newAdventure ) {
 				$scope.app.scene = newAdventure.scenes[0];
+				$scope.clearMediaQueue();
 				$scope.loadAdventureMedia(newAdventure);
 			} else {
 				$scope.app.scene = null;
@@ -75,24 +76,42 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		$scope.app.library.adventuresToRemove.push(adventure);
 	};
 	
-	var mediaLoadedAdventures = [];
+	$scope.clearMediaQueue = function() {
+		$scope.app.library.clearMediaQueue();
+	};
+	
 	$scope.loadAdventureMedia = function(adventure) {
-		if ( mediaLoadedAdventures.contains(adventure) ) {
-			console.log(
-				'Not requesting media for adventure "' + adventure.title +
-				'" because it has already been requested'
-			);
-			return;
+		console.log('Loading media for adventure "' + adventure.title + '"');
+		adventure.media.forEach(function(file) {
+			if ( file.hasBegunLoading ) {
+				console.log('Not loading media file "' + file.name + '" because it has already begun loading');
+			} else {
+				$scope.loadMediaFile(file);
+			}
+		});
+	};
+	
+	$scope.loadMediaFile = function(file) {
+		console.log('Loading media file "' + file.name + '"');
+		
+		$scope.app.library.loadMediaFile(file)
+		.then(onFileLoaded, undefined, onLoadProgress);
+		file.hasBegunLoading = true;
+		
+		function onFileLoaded(loadedFile) {
+			// This callback used to copy the "loadedFile" properties to "file", but now they are the same; "file" is actually mutated inside the library.
+			$scope.$apply(function() {});
 		}
 		
-		console.log('Loading media for adventure "' + adventure.title + '"');
-		mediaLoadedAdventures.push(adventure);
-		adventure.scenes.forEach(function(scene) {
-			if ( scene.image.file ) {
-				$scope.loadMediaFile(scene.image.file);
-			}
-			scene.sound.tracks.forEach($scope.loadMediaFile);
-		});
+		function onLoadProgress(percentageOrPreviewUrl) {
+			$scope.$apply(function() {
+				if ( typeof percentageOrPreviewUrl === 'string' ) {
+					file.previewUrl = percentageOrPreviewUrl;
+				} else {
+					file.progress = percentageOrPreviewUrl;
+				}
+			});
+		}
 	};
 	
 	// Note that this code assumes that a library will only be selected once.
@@ -219,37 +238,6 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			$scope.selectScene(nextScene);
 		} else {
 			$scope.addSceneAfter(adventure);
-		}
-	};
-	
-	$scope.loadMedia = function(scene) {
-		scenes.forEach(function(scene) {
-			if ( scene.image.file ) {
-				$scope.loadMediaFile(scene.image.file);
-			}
-			scene.sound.tracks.forEach($scope.loadMediaFile);
-		});
-	};
-	
-	$scope.loadMediaFile = function(file) {
-		console.log('Loading media file "' + file.name + '"');
-		
-		$scope.app.library.loadMediaFile(file)
-		.then(onFileLoaded, undefined, onLoadProgress);
-		
-		function onFileLoaded(loadedFile) {
-			// This callback used to copy the "loadedFile" properties to "file", but now they are the same; "file" is actually mutated inside the library.
-			$scope.$apply(function() {});
-		}
-		
-		function onLoadProgress(percentageOrPreviewUrl) {
-			$scope.$apply(function() {
-				if ( typeof percentageOrPreviewUrl === 'string' ) {
-					file.previewUrl = percentageOrPreviewUrl;
-				} else {
-					file.progress = percentageOrPreviewUrl;
-				}
-			});
 		}
 	};
 	

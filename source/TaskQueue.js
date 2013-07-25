@@ -22,7 +22,7 @@ Ambience.TaskQueue = function(limit) {
 	};
 	
 	this.clear = function() {
-		inLine.clear();
+		return inLine.clear();
 	};
 	
 	function execute(deferred) {

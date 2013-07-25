@@ -212,7 +212,18 @@
 				return backend.downloadMediaFile(file);
 			};
 			
+			// Add this so we can access the after clearing the media queue (which returns a list of tasks).
+			download.target = file;
+			
 			return queue.add(download);
+		},
+		clearMediaQueue: function() {
+			var clearedDeferreds = this.imageQueue.clear().concat(this.soundQueue.clear());
+			clearedDeferreds.forEach(function(deferred) {
+				var file = deferred.task.target;
+				console.log('Removing file "' + file.name + '" from media queue');
+				file.hasBegunLoading = false;
+			});
 		},
 		
 		selectImageFile: function() {

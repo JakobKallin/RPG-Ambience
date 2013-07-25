@@ -9,21 +9,25 @@ Ambience.TaskQueue = function(limit) {
 	var inProgress = new List();
 	
 	this.add = function(task) {
+		return add(task, 'push');
+	};
+	
+	this.prepend = function(task) {
+		return add(task, 'unshift');
+	};
+	
+	function add(task, methodName) {
 		var deferred = when.defer();
 		deferred.task = task;
 		
 		if ( inProgress.length < limit ) {
 			execute(deferred);
 		} else {
-			inLine.push(deferred);
+			inLine[methodName](deferred);
 		}
 		
 		return deferred.promise;
-	};
-	
-	this.clear = function() {
-		return inLine.clear();
-	};
+	}
 	
 	function execute(deferred) {
 		inProgress.push(deferred);

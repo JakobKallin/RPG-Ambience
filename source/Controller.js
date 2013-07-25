@@ -24,7 +24,6 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			adventure = newAdventure;
 			if ( newAdventure ) {
 				$scope.app.scene = newAdventure.scenes[0];
-				$scope.clearMediaQueue();
 				$scope.loadAdventureMedia(newAdventure);
 			} else {
 				$scope.app.scene = null;
@@ -76,19 +75,22 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		$scope.app.library.adventuresToRemove.push(adventure);
 	};
 	
-	$scope.clearMediaQueue = function() {
-		$scope.app.library.clearMediaQueue();
-	};
-	
+	var mediaLoadedAdventures = [];
 	$scope.loadAdventureMedia = function(adventure) {
-		console.log('Loading media for adventure "' + adventure.title + '"');
-		adventure.media.forEach(function(file) {
-			if ( file.hasBegunLoading ) {
-				console.log('Not loading media file "' + file.name + '" because it has already begun loading');
-			} else {
+		if ( mediaLoadedAdventures.contains(adventure) ) {
+			console.log(
+				'Not loading media for adventure "' + adventure.title + '"' +
+				' because it has already begun loading'
+			);
+		} else {
+			console.log('Loading media for adventure "' + adventure.title + '"');
+			// Note that we use `slice` because `reverse` mutates the array.
+			// Also note that we use `reverse` because the library prepends each file to the media queue, and we want the first scene's media to be loaded first.
+			adventure.media.slice(0).reverse().forEach(function(file) {
 				$scope.loadMediaFile(file);
-			}
-		});
+			});
+			mediaLoadedAdventures.push(adventure);
+		}
 	};
 	
 	$scope.loadMediaFile = function(file) {
@@ -96,7 +98,6 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		
 		$scope.app.library.loadMediaFile(file)
 		.then(onFileLoaded, undefined, onLoadProgress);
-		file.hasBegunLoading = true;
 		
 		function onFileLoaded(loadedFile) {
 			// This callback used to copy the "loadedFile" properties to "file", but now they are the same; "file" is actually mutated inside the library.

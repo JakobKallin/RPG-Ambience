@@ -60,18 +60,21 @@ describe('Task queue', function() {
 		queue.add(new SuccessTask()).then(done);
 	});
 	
-	it('does not execute tasks that were cleared', function(done) {
-		queue.add(new SuccessTask(200));
-		queue.add(new SuccessTask(200)).then(function() {
-			done(new Error('Task was executed after being cleared'))
+	it('executes prepended tasks first', function(done) {
+		var completed = [];
+		
+		queue.add(new SuccessTask(100));
+		queue.add(new SuccessTask(100)).then(function() {
+			completed.push('appended');
+		});
+		queue.prepend(new SuccessTask(100)).then(function() {
+			completed.push('prepended');
 		});
 		
 		setTimeout(function() {
-			queue.clear();
-		}, 100);
-		
-		setTimeout(function() {
+			expect(completed[0]).to.be('prepended');
+			expect(completed[1]).to.be('appended');
 			done();
-		}, 500);
+		}, 400);
 	});
 });

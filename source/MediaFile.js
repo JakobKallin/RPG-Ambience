@@ -10,9 +10,6 @@ Ambience.MediaFile = function() {
 	this.mimeType = null;
 	
 	this.progress = 0;
-	
-	// This property is used to know which files can be removed from the media queue (those that haven't begun loading at all).
-	this.hasBegunLoading = false;
 };
 
 Ambience.MediaFile.fromConfig = function(config) {

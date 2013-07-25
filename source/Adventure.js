@@ -59,11 +59,9 @@ Ambience.Adventure.prototype.toConfig = function() {
 		// The reason getters are not copied is because they would be redundantly serialized, which is not desirable.
 		if ( scene.image.file ) {
 			delete scene.image.file.progress;
-			delete scene.image.file.hasBegunLoading;
 		}
 		scene.sound.tracks.forEach(function(file) {
 			delete file.progress;
-			delete file.hasBegunLoading;
 		});
 	});
 	

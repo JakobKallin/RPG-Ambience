@@ -86,7 +86,8 @@ progress {
 
 @mixin placeholder() {
 	font-style: italic;
-	color: $note-color;
+	/* `!important` is needed in IE for some reason. */
+	color: $note-color !important;
 }
 
 ::-webkit-input-placeholder {
@@ -97,7 +98,7 @@ progress {
 	@include placeholder();
 }
 
-::-ms-input-placeholder {
+:-ms-input-placeholder {
 	@include placeholder();
 }
 
@@ -143,14 +144,21 @@ progress {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-		
+	
+	/* `display: block` is required for IE. */
 	.primary {
 		@include flex(1);
+		display: block;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		height: 2em;
 		margin-right: 1em;
+	}
+	
+	.secondary {
+		display: block;
+		width: auto;
 	}
 }
 
@@ -310,14 +318,17 @@ progress {
 							padding-left: 0.5em;
 							padding-right: 0.5em;
 							
+							/* `display: block` because IE requires it. */
 							.name {
 								@include flex(1);
+								display: block;
 								overflow: hidden;
 								white-space: nowrap;
 								text-overflow: ellipsis;
 							}
 							
 							.key {
+								display: block;
 								color: $note-color;
 								&:before {
 									content: " (";

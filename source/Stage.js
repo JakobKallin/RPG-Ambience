@@ -109,5 +109,10 @@ Ambience.Stage.prototype = {
 			this.background.sceneIsPlaying ||
 			this.foreground.sceneIsPlaying
 		);
+	},
+	
+	stopAll: function() {
+		this.background.stop();
+		this.foreground.stop();
 	}
 };

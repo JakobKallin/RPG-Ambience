@@ -2,7 +2,9 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-// This directive controls playback of the Ambience Stage as well as the "Detach Stage" button.
+'use strict';
+
+// This directive controls playback of the Ambience Stage as well as the "Open Player in New Window" button.
 // The problem with extracting the detach functionality into a separate directive is that both windows (the editor and the stage) should respond to keyboard events, which means that event listeners have to be registered with both windows. I have not come up with a way of doing this cleanly with a separate "detach" directive.
 Ambience.StageDirective = function(ambience) {
 	return {
@@ -16,64 +18,53 @@ Ambience.StageDirective = function(ambience) {
 		link: function(scope, $element, attrs) {
 			var element = $element[0];
 			
-			// The "ambience" service is given two DOM nodes to play scenes on.
-			// Is there a more decoupled way of doing this than having a service access the DOM?
-			ambience.background = new AmbienceStage(element.querySelector('.background'), false);
-			ambience.foreground = new AmbienceStage(element.querySelector('.foreground'), false);
-			
+			attach();
 			document.addEventListener('keypress', onKeyPress);
 			document.addEventListener('keydown', onKeyDown);
 			
-			var nextSibling = element.nextSibling;
-			var otherWindow = null;
-			
 			scope.$watch('isDetached', function(shouldBeDetached) {
 				if ( shouldBeDetached ) {
-					var width = Math.round(window.outerWidth / 2);
-					var height = Math.round(window.outerHeight / 2);
-					otherWindow = window.open('stage.html', '_blank', 'width=' + width + ',height=' + height);
-					
-					otherWindow.addEventListener('load', function() {
-						console.log('Detaching element');
-						
-						var detachedElement = otherWindow.document.adoptNode(element);
-						otherWindow.document.body.appendChild(detachedElement);
-						
-						// Make sure that keyboard commands work in the new window (as well as the old one).
-						otherWindow.document.addEventListener('keypress', onKeyPress);
-						otherWindow.document.addEventListener('keydown', onKeyDown);
-						
-						// Keep audio elements playing.
-						Array.prototype.forEach.call(detachedElement.getElementsByTagName('audio'), function(audioElement) {
-							audioElement.play();
-						});
-					});
-					
-					otherWindow.addEventListener('beforeunload', function() {
-						console.log('Reattaching element');
-						
-						var reattachedElement = document.adoptNode(element);
-						nextSibling.parentNode.insertBefore(reattachedElement, nextSibling);
-						
-						// Keep audio elements playing.
-						Array.prototype.forEach.call(reattachedElement.getElementsByTagName('audio'), function(audioElement) {
-							audioElement.play();
-						});
-						
-						// Pressing the toggle button already sets "isDetached" inside a scope, so only set it manually when the window is closed without pressing the button (such as when closing the window manually).
-						if ( scope.isDetached ) {
-							scope.$apply(function() {
-								scope.isDetached = false;
-							});
-						}
-					});
+					detach();
 				} else {
-					if ( otherWindow ) {
-						console.log('Closing detached window');
-						otherWindow.close();
-					}
+					attach();
 				}
 			});
+			
+			function attach() {
+				if ( ambience.background && ambience.foreground ) {
+					// Sounds continue even after closing the window, so make sure everything is stopped.
+					ambience.stopAll();
+				}
+				
+				// The "ambience" service is given two DOM nodes to play scenes on.
+				// Is there a more decoupled way of doing this than having a service access the DOM?
+				ambience.background = new AmbienceStage(element.querySelector('.background'));
+				ambience.foreground = new AmbienceStage(element.querySelector('.foreground'));
+			}
+			
+			function detach() {
+				ambience.stopAll();
+				
+				var width = Math.round(window.outerWidth / 2);
+				var height = Math.round(window.outerHeight / 2);
+				var otherWindow = window.open('stage.html', '_blank', 'width=' + width + ',height=' + height);
+				
+				otherWindow.addEventListener('load', function() {
+					ambience.background = new AmbienceStage(otherWindow.document.querySelector('.background'));
+					ambience.foreground = new AmbienceStage(otherWindow.document.querySelector('.foreground'));
+					
+					// Make sure that keyboard commands work in the new window (as well as the old one).
+					otherWindow.document.addEventListener('keypress', onKeyPress);
+					otherWindow.document.addEventListener('keydown', onKeyDown);
+				});
+				
+				otherWindow.addEventListener('beforeunload', function() {
+					attach();
+					scope.$apply(function() {
+						scope.isDetached = false;
+					});
+				});
+			}
 			
 			function onKeyDown(event) {
 				var key = Key.name(event.keyCode);

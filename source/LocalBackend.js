@@ -50,15 +50,15 @@ Ambience.LocalBackend.prototype = {
 		input.style.display = 'none';
 		document.body.appendChild(input);
 		
-		// This should be before the call to click.
+		// This should be before the call to `click`.
 		// It makes more sense semantically, and IE10 seems to require it.
+		var deferred = when.defer();
 		input.addEventListener('change', function(event) {
 			onFilesSelected(event.target.files);
 		});
 		
 		input.click();
 		
-		var deferred = when.defer();
 		return deferred.promise;
 		
 		function onFilesSelected(domFiles) {

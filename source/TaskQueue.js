@@ -4,6 +4,7 @@
 
 'use strict';
 
+// This queue only executes tasks asynchronously (using `setTimeout` with delay 0) because this allows for "transactions" by adding multiple items to the front of the queue in any order.
 Ambience.TaskQueue = function(limit) {
 	var inLine = new List();
 	var inProgress = new List();

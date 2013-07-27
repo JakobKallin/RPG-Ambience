@@ -212,7 +212,7 @@
 				return backend.downloadMediaFile(file);
 			};
 			
-			return queue.prepend(download);
+			return queue.add(download);
 		},
 		
 		selectImageFile: function() {

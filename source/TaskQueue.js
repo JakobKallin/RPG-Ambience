@@ -7,46 +7,39 @@
 Ambience.TaskQueue = function(limit) {
 	var inLine = new List();
 	var inProgress = new List();
+	var executionTimer = null;
 	
 	this.add = function(task) {
-		return add(task, 'push');
-	};
-	
-	this.prepend = function(task) {
-		return add(task, 'unshift');
-	};
-	
-	function add(task, methodName) {
 		var deferred = when.defer();
 		deferred.task = task;
-		
-		if ( inProgress.length < limit ) {
-			execute(deferred);
-		} else {
-			inLine[methodName](deferred);
-		}
+		inLine.unshift(deferred);
+		scheduleExecution();
 		
 		return deferred.promise;
-	}
+	};
 	
-	function execute(deferred) {
-		inProgress.push(deferred);
-		
-		// We want this to be async so that .
-		setTimeout(function() {
-			deferred.task()
-			.then(deferred.resolve, deferred.reject, deferred.notify)
-			.ensure(function() {
-				onDeferredCompleted(deferred)
-			});
-		}, 0);
-	}
-	
-	function onDeferredCompleted(deferred) {
-		inProgress.remove(deferred);
-		var nextDeferred = inLine.shift();
-		if ( nextDeferred ) {
-			execute(nextDeferred);
+	function scheduleExecution() {
+		if ( executionTimer === null ) {
+			executionTimer = setTimeout(execute, 0);
 		}
+	}
+	
+	function execute() {
+		executionTimer = null;
+		
+		var deferredsToExecute = inLine.slice(0, limit - inProgress.length);
+		deferredsToExecute.forEach(function(deferred) {
+			inLine.remove(deferred);
+			inProgress.push(deferred);
+			
+			setTimeout(function() {
+				deferred.task()
+				.then(deferred.resolve, deferred.reject, deferred.notify)
+				.ensure(function() {
+					inProgress.remove(deferred);
+					scheduleExecution();
+				});
+			}, 0);
+		});
 	}
 };

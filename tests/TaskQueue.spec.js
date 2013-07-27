@@ -38,10 +38,11 @@ describe('Task queue', function() {
 	it('executes task later when above capacity', function(done) {
 		var taskWasExecuted = false;
 		
-		queue.add(new SuccessTask(200));
+		// Note that the queue is FIFO, so the task below should be executed last.
 		queue.add(new SuccessTask(200)).then(function() {
 			taskWasExecuted = true;
 		});
+		queue.add(new SuccessTask(200));
 		
 		// The task cannot complete too early.
 		setTimeout(function() {
@@ -58,23 +59,5 @@ describe('Task queue', function() {
 	it('executes next task even if previous task failed', function(done) {
 		queue.add(new FailTask());
 		queue.add(new SuccessTask()).then(done);
-	});
-	
-	it('executes prepended tasks first', function(done) {
-		var completed = [];
-		
-		queue.add(new SuccessTask(100));
-		queue.add(new SuccessTask(100)).then(function() {
-			completed.push('appended');
-		});
-		queue.prepend(new SuccessTask(100)).then(function() {
-			completed.push('prepended');
-		});
-		
-		setTimeout(function() {
-			expect(completed[0]).to.be('prepended');
-			expect(completed[1]).to.be('appended');
-			done();
-		}, 400);
 	});
 });

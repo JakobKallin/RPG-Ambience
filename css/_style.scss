@@ -171,7 +171,6 @@ progress {
 }
 
 .editor {
-	position: relative; /* Splitter is absolutely positioned. */
 	padding: 1em 2em 2em 2em;
 	line-height: 2;
 	color: $text-color;
@@ -747,21 +746,6 @@ progress {
 			font-size: 0.75em;
 		}
 	}
-}
-
-/* Splitter */
-
-.splitter {
-	@extend %box;
-	
-	position: absolute;
-	top: 0;
-	right: -0.375em;
-	width: 0.375em;
-	height: 100%;
-	cursor: w-resize;
-	border-top-width: 0;
-	border-bottom-width: 0;
 }
 
 /* Spectrum color picker */

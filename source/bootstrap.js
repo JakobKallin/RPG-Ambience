@@ -19,7 +19,6 @@ window.addEventListener('load', function() {
 	module.directive('scenePreview', Ambience.ScenePreview);
 	module.directive('toggleButton', Ambience.ToggleButton);
 	module.directive('resize', Ambience.Resize);
-	module.directive('hideCursorAfter', Ambience.HideCursorAfter);
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);
 	module.directive('ambienceStage', Ambience.StageDirective);

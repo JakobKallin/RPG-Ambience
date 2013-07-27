@@ -15,6 +15,40 @@
 					window.close();
 				}
 			});
+			
+			window.addEventListener('load', function() {
+				var stageNode = document.querySelector('.stage');
+				var cursorTimer;
+				var hideDelay = 1000;
+				var previousX;
+				var previousY;
+				
+				stageNode.addEventListener('mousemove', showCursorTemporarily);
+				stageNode.addEventListener('mouseover', showCursorTemporarily);
+				stageNode.addEventListener('mouseout', showCursor);
+				
+				function showCursorTemporarily(event) {
+					// Setting the cursor style seems to trigger a mousemove event, so we have to make sure that the mouse has really moved or we will be stuck in an infinite loop.
+					var mouseHasMoved = event.screenX !== previousX || event.screenY !== previousY;
+					if ( mouseHasMoved ) {
+						showCursor();
+						cursorTimer = window.setTimeout(hideCursor, hideDelay);
+					}
+					
+					previousX = event.screenX;
+					previousY = event.screenY;
+				}
+				
+				function showCursor() {
+					// Prevent any old timeouts from coming into effect.
+					window.clearTimeout(cursorTimer);
+					stageNode.style.cursor = 'auto';
+				}
+				
+				function hideCursor() {
+					stageNode.style.cursor = 'none';
+				}
+			});
 		</script>
 	</head>
 	<body>

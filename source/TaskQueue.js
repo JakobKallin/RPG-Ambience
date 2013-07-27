@@ -32,14 +32,12 @@ Ambience.TaskQueue = function(limit) {
 			inLine.remove(deferred);
 			inProgress.push(deferred);
 			
-			setTimeout(function() {
-				deferred.task()
-				.then(deferred.resolve, deferred.reject, deferred.notify)
-				.ensure(function() {
-					inProgress.remove(deferred);
-					scheduleExecution();
-				});
-			}, 0);
+			deferred.task()
+			.then(deferred.resolve, deferred.reject, deferred.notify)
+			.ensure(function() {
+				inProgress.remove(deferred);
+				scheduleExecution();
+			});
 		});
 	}
 };

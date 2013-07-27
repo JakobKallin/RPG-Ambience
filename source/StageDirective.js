@@ -47,7 +47,7 @@ Ambience.StageDirective = function(ambience) {
 				
 				var width = Math.round(window.outerWidth / 2);
 				var height = Math.round(window.outerHeight / 2);
-				var otherWindow = window.open('stage.html', '_blank', 'width=' + width + ',height=' + height);
+				var otherWindow = window.open('player.html', '_blank', 'width=' + width + ',height=' + height);
 				
 				otherWindow.addEventListener('load', function() {
 					ambience.background = new AmbienceStage(otherWindow.document.querySelector('.background'));

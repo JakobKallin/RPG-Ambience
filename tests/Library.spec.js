@@ -137,6 +137,7 @@ describe('Library', function() {
 	});
 	
 	// This test seems to fail sometimes because of unreliable delays.
+	// Note that media added later is downloaded first, because they are prepended to the queue.
 	it('loads media sequentially', function() {
 		var loaded = [false, false];
 		
@@ -152,8 +153,8 @@ describe('Library', function() {
 		waits(150);
 		
 		runs(function() {
-			expect(loaded[0]).toBe(true);
-			expect(loaded[1]).toBe(false);
+			expect(loaded[0]).toBe(false);
+			expect(loaded[1]).toBe(true);
 		});
 		
 		waits(100);

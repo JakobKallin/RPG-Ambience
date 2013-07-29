@@ -6,7 +6,7 @@
 
 // This directive controls playback of the Ambience Stage as well as the "Open Player in New Window" button.
 // The problem with extracting the detach functionality into a separate directive is that both windows (the editor and the stage) should respond to keyboard events, which means that event listeners have to be registered with both windows. I have not come up with a way of doing this cleanly with a separate "detach" directive.
-Ambience.StageDirective = function(ambience) {
+Ambience.PlayerDirective = function(ambience) {
 	return {
 		restrict: 'E',
 		templateUrl: 'source/stage-directive.html',

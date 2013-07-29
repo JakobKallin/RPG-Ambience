@@ -36,7 +36,7 @@
 		
 		<script>var Ambience = {};</script>
 		<script src="source/Controller.js"></script>
-		<script src="source/Stage.js"></script>
+		<script src="source/Player.js"></script>
 		<script src="source/Adventure.js"></script>
 		<script src="source/ExampleAdventure.js"></script>
 		<script src="source/Scene.js"></script>
@@ -54,7 +54,7 @@
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
 		<script src="source/ToggleButton.js"></script>
-		<script src="source/StageDirective.js"></script>
+		<script src="source/PlayerDirective.js"></script>
 		<script src="source/Fullscreen.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
@@ -556,10 +556,10 @@
 				<div
 					class="scene-player"
 					data-ng-show="!app.stageIsDetached">
-					<ambience-stage
+					<ambience-player
 						class="stage"
 						data-is-detached="app.stageIsDetached"
-						data-adventure="app.adventure"></ambience-stage>
+						data-adventure="app.adventure"></ambience-player>
 					<ul class="playback-controls">
 						<li>
 							<button

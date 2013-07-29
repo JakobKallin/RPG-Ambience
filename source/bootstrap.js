@@ -20,10 +20,10 @@ window.addEventListener('load', function() {
 	module.directive('toggleButton', Ambience.ToggleButton);
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);
-	module.directive('ambienceStage', Ambience.StageDirective);
+	module.directive('ambiencePlayer', Ambience.PlayerDirective);
 	module.directive('fullscreen', Ambience.Fullscreen);
 	module.service('ambience', function() {
-		return new Ambience.Stage();
+		return new Ambience.Player();
 	});
 	module.service('localLibrary', function() {
 		return new Ambience.Library(new Ambience.LocalBackend());

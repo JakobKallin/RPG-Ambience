@@ -6,12 +6,15 @@
 		
 		<script src="source/extensions.js"></script>
 		
+		<script src="libraries/ambience-stage/libraries/when/when.js"></script>
 		<script src="libraries/ambience-stage/libraries/manymation/source/manymation.js"></script>
+		<script src="libraries/ambience-stage/source/List.js"></script>
 		<script src="libraries/ambience-stage/source/Stage.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Background.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Image.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Sound.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
+		<script src="libraries/ambience-stage/source/ScenePlayer.js"></script>
 		<script src="libraries/ambience-stage/source/Scene.js"></script>
 		
 		<script>
@@ -38,11 +41,11 @@
 			};
 			
 			var startTeaser = function(background, foreground) {
-				var soundtrack = new Ambience.Scene(['Sound']);
+				var soundtrack = new AmbienceStage.Scene(['Sound']);
 				soundtrack.sound.tracks = [supportedFormat('example/9-Trailer_Music')];
 				soundtrack.sound.loop = false;
 				
-				var imagine = new Ambience.Scene(['Text']);
+				var imagine = new AmbienceStage.Scene(['Text']);
 				imagine.text.string = 'Don’t just imagine your world';
 				imagine.text.style = {
 					fontSize: '4.5em',
@@ -51,7 +54,7 @@
 				};
 				imagine.fade.in = imagine.fade.out = 1600;
 				
-				var life = new Ambience.Scene(['Text']);
+				var life = new AmbienceStage.Scene(['Text']);
 				life.text.string = 'Bring it to life';
 				life.text.style = {
 					fontSize: '9em',
@@ -60,19 +63,19 @@
 				};
 				life.fade.out = 1600;
 				
-				var city = new Ambience.Scene(['Image']);
+				var city = new AmbienceStage.Scene(['Image']);
 				city.image.url = 'example/ishtar_rooftop.jpg';
 				city.image.style = { backgroundSize: 'cover' };
 				city.fade.in = city.fade.out = 4000;
 				
-				var dragon = new Ambience.Scene(['Image', 'Sound']);
+				var dragon = new AmbienceStage.Scene(['Image', 'Sound']);
 				dragon.image.url = 'example/sintel-wallpaper-dragon.jpg',
 				dragon.image.style = { backgroundSize: 'cover' };
 				dragon.sound.tracks = [supportedFormat('example/dragon')];
 				dragon.sound.loop = false;
 				dragon.fade.out = 3200;
 				
-				var title = new Ambience.Scene(['Text']);
+				var title = new AmbienceStage.Scene(['Text']);
 				title.text.string = 'RPG Ambience';
 				title.text.style = {
 					fontSize: '9em',
@@ -144,7 +147,7 @@
 			window.addEventListener('load', function() {
 				var layers = ['background', 'foreground'].map(function(id) {
 					var node = document.getElementById(id);
-					return new Ambience.Stage(node);
+					return new AmbienceStage(node);
 				});
 				var background = layers[0];
 				var foreground = layers[1];

@@ -459,7 +459,7 @@
 						id="playback-tab"
 						class="playback-view"
 						data-heading="Playback">
-						<div class="enter-fullscreen">
+						<div class="enter-fullscreen" data-ui-if="features.fullscreen">
 							<button type="button" data-fullscreen>Enter Fullscreen</button>
 						</div>
 						<ul class="playback-scene-list">
@@ -484,7 +484,7 @@
 						class="backup-view"
 						data-heading="Backup">
 						<h2>Adventure Backup</h2>
-						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer.</p>
+						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer. You can later upload them manually to Google Drive.</p>
 						<ul>
 							<li data-ng-repeat="adventure in app.library.adventures">
 								<button data-ng-click="app.library.saveAdventureToComputer(adventure)">{{adventure.title}}</button>
@@ -501,6 +501,7 @@
 							<li><a href="#help-playing-scenes">Playing scenes</a></li>
 							<li><a href="#help-stopping-scenes">Stopping scenes</a></li>
 							<li><a href="#help-saving-adventures">Saving adventures</a></li>
+							<li><a href="#help-adventure-backup">Adventure backup</a></li>
 							<li><a href="#help-developers">For developers</a></li>
 							<li><a href="#help-contact">Contact</a></li>
 							<li><a href="#help-disclaimer">Disclaimer</a></li>
@@ -510,33 +511,38 @@
 						<p>RPG Ambience is a media player that enables roleplayers to bring their sessions to life using sound and visuals. It is free software that runs directly in your browser.</p>
 						
 						<h2 id="help-overview">How RPG Ambience works</h2>
-						<p>RPG Ambience is built around <dfn>scenes</dfn>. Scenes are made up of images, sounds, and text grouped together in any combination. Scenes are played and stopped using keyboard shortcuts. Scenes are organized under <dfn>adventures</dfn>.</p>
+						<p>RPG Ambience is built around <dfn>scenes</dfn>. Scenes are made up of images, sounds, and text grouped together in any combination. Scenes are played and stopped using keyboard shortcuts. <dfn>Adventures</dfn> are collections of related scenes.</p>
 						
-						<p>The interface of RPG Ambience consists of two parts: the editor and the stage.</p>
+						<p>The interface of RPG Ambience consists of two parts: the editor and the player.</p>
 						<ul>
-							<li><dfn>The editor</dfn> (the left half of the screen) contains your adventures and the scenes in them, including controls to edit them.</li>
-							<li><dfn>The stage</dfn> (the right half of the screen) is where the scenes in your adventures are played.</li>
+							<li><dfn>The editor</dfn> (the left part of the screen) contains your adventures and the scenes in them, including controls to edit them.</li>
+							<li><dfn>The player</dfn> (the right part of the screen) is where the scenes in your adventures are played. The player can be opened in a separate window.</li>
 						</ul>
 						
 						<h2 id="help-playing-scenes">Playing scenes</h2>
-						<p>There are three ways to play a scene:</p>
+						<p>There are four ways to play a scene:</p>
 						<ul>
+							<li>Click on the scene under the <em>Playback</em> tab.</li>
+							<li>Press the <button type="button">Play</button> button below the player.</li>
 							<li>Press the hotkey associated with the scene.</li>
 							<li>Type the scene's name and press <button type="button">Enter</button> on your keyboard.</li>
-							<li>Press the <button type="button">Play</button> button in the upper right corner of the editor.</li>
 						</ul>
 						<p>When starting a scene by typing its name, it's enough to type only the first few letters of the name.</p>
 						
 						<h2 id="help-stopping-scenes">Stopping scenes</h2>
-						<p>There are two ways to stop a scene:</p>
+						<p>There are three ways to stop a scene:</p>
 						<ul>
+							<li>Press the <button type="button">Stop</button> button under the <em>Playback</em> tab.</li>
+							<li>Press the <button type="button">Stop</button> button below the player.</li>
 							<li>Press <button type="button">Enter</button> on your keyboard.</li>
-							<li>Press the <button type="button">Stop</button> button in the upper right corner of the editor.</li>
 						</ul>
-						<p>Using either of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
+						<p>Using any of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
 						
 						<h2 id="help-saving-adventures">Saving adventures</h2>
 						<p>If you choose to save your adventures in Google Drive, all of the adventures that you create, including the sound and image files in them, are automatically saved on a regular basis and every time you close RPG Ambience.</p>
+						
+						<h2 id="help-adventure-backup">Adventure backup</h2>
+						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons under the <em>Backup</em> tab to save them as files to your computer. You can later upload them manually to Google Drive.</p>
 						
 						<h2 id="help-developers">For developers</h2>
 						<p>RPG Ambience is licensed under the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>. Its source code is available in the project's <a href="https://github.com/JakobKallin/RPG-Ambience">GitHub repository</a>.</p>

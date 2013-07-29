@@ -393,9 +393,9 @@ progress {
 				color: hsl(60, 100%, 50%);
 			}
 			
-			dfn {
-				font-weight: bold;
-				font-style: normal;
+			em, dfn {
+				color: hsl(60, 75%, 50%);
+				font-style: italic;
 			}
 		}
 		

@@ -285,6 +285,12 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	$scope.removeTrack = function(track, scene) {
 		scene.sound.tracks.remove(track);
 	};
+	
+	$scope.features = {
+		fullscreen: ['moz', 'webkit'].some(function(prefix) {
+			return Boolean((prefix + 'RequestFullScreen') in document.body);
+		})
+	}
 };
 
 Ambience.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

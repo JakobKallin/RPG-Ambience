@@ -10,12 +10,20 @@ Ambience.Fullscreen = function() {
 		link: function(scope, $element, attrs) {
 			var element = $element[0];
 			
+			var prefix = 'mozFullScreenElement' in document ? 'moz' : 'webkit';
+			
 			element.addEventListener('click', function() {
-				element.parentNode.parentNode.webkitRequestFullScreen();
+				element.parentNode.parentNode[prefix + 'RequestFullScreen']();
 			});
 			
-			document.addEventListener('webkitfullscreenchange', function() {
-				if ( document.webkitFullscreenElement === element.parentNode.parentNode ) {
+			document.addEventListener(prefix + 'fullscreenchange', function() {
+				if ( prefix === 'webkit' ) {
+					var fullscreenElement = document['webkitFullscreenElement'];
+				} else {
+					var fullscreenElement = document['mozFullScreenElement'];
+				}
+				
+				if ( fullscreenElement === element.parentNode.parentNode ) {
 					element.parentNode.style.display = 'none';
 				} else {
 					element.parentNode.style.display = '';

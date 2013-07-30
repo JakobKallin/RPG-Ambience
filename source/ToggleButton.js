@@ -11,11 +11,14 @@ Ambience.ToggleButton = function() {
 		},
 		replace: true,
 		link: function(scope, $element, attrs) {
-			scope.label = (scope.state === true) ? attrs.ngTrue : attrs.ngFalse;
+			Object.defineProperty(scope, 'label', {
+				get: function() {
+					return (scope.state === true) ? attrs.ngTrue : attrs.ngFalse;
+				}
+			});
 			
 			scope.toggle = function() {
 				scope.state = !scope.state;
-				scope.label = (scope.state === true) ? attrs.ngTrue : attrs.ngFalse;
 			};
 		}
 	};

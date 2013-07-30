@@ -2,14 +2,14 @@
 // Copyright 2012-2013 Jakob Kallin
 // License: GNU GPL (http://www.gnu.org/licenses/gpl-3.0.txt)
 
-Ambience.App.Adventure = function() {
+Ambience.Adventure = function() {
 	var self = this;
 	
 	self.title = '';
 	self.scenes = [];
 	self.creationDate = new Date();
 	
-	self.version = Ambience.App.Adventure.version;
+	self.version = Ambience.Adventure.version;
 	
 	Object.defineProperty(self, 'media', {
 		get: function() {
@@ -38,23 +38,31 @@ Ambience.App.Adventure = function() {
 	};
 };
 
-Ambience.App.Adventure.prototype.toConfig = function() {
+Ambience.Adventure.prototype.toConfig = function() {
 	var copy = copyObject(this);
 	
-	// Delete everything except the file IDs, because other info might change.
 	copy.scenes.forEach(function(scene) {
+		// Delete URLs as these are likely or guaranteed to change between sessions.
+		// Filenames and MIME types might change, but they usually don't and will provide useful information while files are loading, so keep them.
+		
 		if ( scene.image.file ) {
 			delete scene.image.file.url;
-			delete scene.image.file.thumbnail;
-			delete scene.image.file.name;
-			delete scene.image.file.mimeType;
+			delete scene.image.file.previewUrl;
 		}
 		
 		scene.sound.tracks.forEach(function(sound) {
 			delete sound.url;
-			delete sound.name;
-			delete sound.mimeType;
-		})
+		});
+		
+		// Remove file load progress because this is only a GUI concern.
+		// Note that we're working on a copy, so the getter property "media" is not available.
+		// The reason getters are not copied is because they would be redundantly serialized, which is not desirable.
+		if ( scene.image.file ) {
+			delete scene.image.file.progress;
+		}
+		scene.sound.tracks.forEach(function(file) {
+			delete file.progress;
+		});
 	});
 	
 	// Delete adventure ID; this is storage-specific.
@@ -98,22 +106,45 @@ Ambience.App.Adventure.prototype.toConfig = function() {
 	}
 };
 
-Ambience.App.Adventure.fromConfig = function(config) {
-	var adventure = new Ambience.App.Adventure();
-	
+Ambience.Adventure.fromConfig = function(config) {
+	Ambience.Adventure.upgradeConfig(config);
+
+	var adventure = new Ambience.Adventure();
 	adventure.title = config.title;
 	adventure.version = config.version;
 	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {
-		var scene = new Ambience.App.Scene();
-		Object.overlay(scene, sceneConfig);
+		var scene = Ambience.App.Scene.fromConfig(sceneConfig);
 		adventure.scenes.push(scene);
 	});
 	
 	return adventure;
 };
 
+Ambience.Adventure.upgradeConfig = function(config) {
+	if ( config.version === 2 ) {
+		// Adventures of version 2 only contain IDs of media files, not names and MIME types.
+		// Add these here so that they are properly queued when downloaded.
+		config.scenes.forEach(function(scene) {
+			var imageFile = scene.image.file;
+			if ( imageFile ) {
+				imageFile.name = 'Unknown filename';
+				imageFile.mimeType = 'image/unknown';
+			}
+			
+			scene.sound.tracks.forEach(function(soundFile) {
+				soundFile.name = 'Unknown filename';
+				soundFile.mimeType = 'audio/unknown';
+			});
+		});
+		
+		config.version = 3;
+	}
+};
+
 // Adventure version, unrelated to application version.
 // Should be increased whenever the format of an adventure changes.
-Ambience.App.Adventure.version = 2;
+Ambience.Adventure.version = 3;
+
+// New in version 3: Names and MIME types of files are serialized.

@@ -14,25 +14,22 @@ window.addEventListener('load', function() {
 	document.body.addEventListener('keydown', stopPropagation);
 	document.body.addEventListener('keypress', stopPropagation);
 	
-	var module = angular.module('ambience', ['ui', 'ui.bootstrap']);
+	var module = angular.module('ambience', ['ui', 'ui.bootstrap', 'ui.sortable']);
 	module.directive('textButton', Ambience.TextButton);
 	module.directive('scenePreview', Ambience.ScenePreview);
 	module.directive('toggleButton', Ambience.ToggleButton);
-	module.directive('split', Ambience.Split);
-	module.directive('noPointer', Ambience.NoPointer);
 	module.directive('keyInput', Ambience.KeyInput);
 	module.directive('spectrum', Ambience.Spectrum);
+	module.directive('ambiencePlayer', Ambience.PlayerDirective);
+	module.directive('fullscreen', Ambience.Fullscreen);
 	module.service('ambience', function() {
-		return new Ambience.App.Theater(
-			new Ambience.Stage(document.getElementById('background')),
-			new Ambience.Stage(document.getElementById('foreground'))
-		);
+		return new Ambience.Player();
 	});
 	module.service('localLibrary', function() {
-		return new Ambience.App.LocalLibrary();
+		return new Ambience.Library(new Ambience.LocalBackend());
 	});
 	module.service('googleDriveLibrary', function() {
-		return new Ambience.App.GoogleDriveLibrary();
+		return new Ambience.Library(new Ambience.GoogleDriveBackend());
 	});
 	
 	var browserIsSupported = Boolean(window.URL);

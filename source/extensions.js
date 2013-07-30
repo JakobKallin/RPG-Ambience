@@ -70,6 +70,7 @@ Array.prototype.closest = function(value) {
 };
 
 Array.prototype.insertAfter = function(value, previous) {
+	// "index" is 0 if previous is not in the list, so "value" is added to the beginning.
 	var index = this.indexOf(previous) + 1;
 	this.splice(index, 0, value);
 };
@@ -88,6 +89,10 @@ String.prototype.endsWith = function(suffix) {
 
 String.prototype.firstToLowerCase = function() {
 	return this.charAt(0).toLowerCase() + this.substring(1);
+};
+
+String.prototype.firstToUpperCase = function() {
+	return this.charAt(0).toUpperCase() + this.substring(1);
 };
 
 Object.defineProperty(String.prototype, 'isCharacter', {

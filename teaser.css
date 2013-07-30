@@ -14,7 +14,7 @@ p {
 	margin: 1em 0;
 	text-align: center;
 	color: white;
-	font-family: Constantia;
+	font-family: Constantia, serif;
 }
 
 .action {
@@ -86,6 +86,8 @@ a:hover {
 /* Ambience styling */
 .ambience {
 	overflow: hidden;
+	width: 100%;
+	height: 100%;
 }
 
 	.ambience .layer {
@@ -94,36 +96,42 @@ a:hover {
 		left: 0;
 		width: 100%;
 		height: 100%;
-		visibility: hidden;
-		opacity: 0;
 		cursor: inherit;
 	}
-
-		.ambience .layer .image {
+		
+		.ambience .layer .scene {
 			position: absolute;
 			top: 0;
 			left: 0;
-			background-position: center center;
-			background-repeat: no-repeat;
-			background-size: contain;
-			display: block;
 			width: 100%;
 			height: 100%;
 		}
+		
+			.ambience .layer .scene .image {
+				position: absolute;
+				top: 0;
+				left: 0;
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: contain;
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
 
-		.ambience .layer .text.outer {
-			position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
-			display: table;
-			height: 100%;
-			margin: 0 auto;
-			font-family: serif;
-		}
+			.ambience .layer .scene .text.outer {
+				position: relative; /* Needs to be positioned to stack above image, which is also positioned. */
+				display: table;
+				height: 100%;
+				margin: 0 auto;
+				font-family: Constantia, serif;
+			}
 
-		.ambience .layer .text.inner {
-			display: table-cell;
-			vertical-align: middle;
-			text-align: center;
-			color: white;
-			white-space: pre-line;
-			text-rendering: optimizeLegibility;
-		}
+			.ambience .layer .scene .text.inner {
+				display: table-cell;
+				vertical-align: middle;
+				text-align: center;
+				color: white;
+				white-space: pre-line;
+				text-rendering: optimizeLegibility;
+			}

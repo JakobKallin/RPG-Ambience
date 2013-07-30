@@ -120,7 +120,7 @@
 				if ( adventure.id ) {
 					console.log('Removing adventure "' + adventure.title + '"');
 					library.filesBeingSynced += 1;
-					return backend.removeFile(adventure.id).then(function() {
+					return backend.removeFile(adventure.id).ensure(function() {
 						library.filesBeingSynced -= 1;
 					});
 				} else {

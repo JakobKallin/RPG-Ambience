@@ -184,6 +184,9 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		
 		if ( $scope.app.library.adventuresAreBeingSynced ) {
 			var exitMessage = 'Your adventures are currently being saved. If you exit now, you risk losing data.';
+			exitMessage += '\n\n';
+			exitMessage += 'If this message persists, save your adventures under the Backup tab and then upload them manually.';
+			
 			if ( exitMessage !== undefined ) {
 				// We both return the message and set it to "event.returnValue" due to browser differences.
 				return event.returnValue = exitMessage;

@@ -1,4 +1,3 @@
 *.sublime-workspace
 .sass-cache
-css/*.css
 test.html

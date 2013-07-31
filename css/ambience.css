@@ -153,7 +153,7 @@ body {
     text-rendering: optimizeLegibility; }
 
 /* General styling */
-button, select, input, textarea {
+.editor, button, select, input, textarea {
   font-family: Georgia, serif; }
 
 button {

@@ -492,6 +492,43 @@
 						</ul>
 					</pane>
 					<pane
+						id="art-search-tab"
+						data-heading="Art Search">
+						<form class="primary-secondary">
+							<input
+								type="text"
+								class="primary"
+								placeholder="Search for art on CGHub"
+								data-ng-model="searchEngines.cgHub.query">
+							<button
+								type="submit"
+								class="secondary"
+								data-ng-click="searchEngines.cgHub.execute(searchEngines.cgHub.query)">Search CGHub</button>
+						</form>
+						<form class="primary-secondary">
+							<input
+								type="text"
+								class="primary"
+								placeholder="Search for digital art on DeviantArt"
+								data-ng-model="searchEngines.deviantArt.query">
+							<button
+								type="submit"
+								class="secondary"
+								data-ng-click="searchEngines.deviantArt.execute(searchEngines.deviantArt.query)">Search DeviantArt</button>
+						</form>
+						<form class="primary-secondary">
+							<input
+								type="text"
+								class="primary"
+								placeholder="Search for concept art on Google"
+								data-ng-model="searchEngines.google.query">
+							<button
+								type="submit"
+								class="secondary"
+								data-ng-click="searchEngines.google.execute(searchEngines.google.query)">Search Google</button>
+						</form>
+					</pane>
+					<pane
 						id="help-tab"
 						class="help-view"
 						data-heading="Help">

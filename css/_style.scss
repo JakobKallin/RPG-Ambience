@@ -48,7 +48,7 @@ $note-color: hsl(0, 0%, 40%);
 
 /* General styling */
 
-button, select, input, textarea {
+.editor, button, select, input, textarea {
 	font-family: Georgia, serif;
 }
 
@@ -343,7 +343,7 @@ progress {
 			}
 		}
 		
-		.backup-view, .help-view {
+		.backup-view, #art-search-tab, .help-view {
 			border: 1px solid $gui-border;
 			padding: 1.5em;
 			line-height: 1.5;
@@ -401,6 +401,12 @@ progress {
 		
 		.help-view button {
 			height: 1.5em;
+		}
+	}
+	
+	#art-search-tab {
+		form {
+			margin-bottom: 0.5em;
 		}
 	}
 

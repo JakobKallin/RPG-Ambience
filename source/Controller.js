@@ -293,6 +293,31 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		fullscreen: ['moz', 'webkit'].some(function(prefix) {
 			return Boolean((prefix + 'RequestFullScreen') in document.body);
 		})
+	};
+	
+	$scope.searchEngines = {
+		cgHub: {
+			query: '',
+			execute: function(query) {
+				// Note that CGHub doesn't use normal URL query parameters, so a user could inject special sequences (such as ../) into the URL.
+				// As far as I know, however, this should not be a security issue since only the user himself can manipulate the text input.
+				window.open('http://cghub.com/images/search/text:' + encodeURIComponent(query) + '/');
+			}
+		},
+		deviantArt: {
+			query: '',
+			execute: function(query) {
+				window.open('http://www.deviantart.com/digitalart/paintings/?q=' + encodeURIComponent(query));
+			}
+		},
+		google: {
+			query: '',
+			execute: function(query) {
+				window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(query) + '+"concept+art"')
+			}
+		}
+		// Adding a search engine that calls all the others at the same time might be possible. At least in Chrome, however, any calls to `window.open` beyond the first one opens a new window rather than a new tab.
+		// This functionality might be better saved for a possible integrated search in the future.
 	}
 };
 

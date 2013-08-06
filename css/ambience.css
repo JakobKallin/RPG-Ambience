@@ -393,40 +393,42 @@ progress {
                 white-space: pre; }
               .editor .view-list .playback-view .playback-scene-list li button .label .key:after {
                 content: ")"; }
-  .editor .view-list .backup-view, .editor .view-list .help-view {
+  .editor .view-list .backup-view, .editor .view-list #art-search-tab, .editor .view-list .help-view {
     border: 1px solid #404040;
     padding: 1.5em;
     line-height: 1.5;
     overflow: auto; }
-    .editor .view-list .backup-view h2, .editor .view-list .help-view h2 {
+    .editor .view-list .backup-view h2, .editor .view-list #art-search-tab h2, .editor .view-list .help-view h2 {
       font-weight: normal;
       font-size: 1.5em;
       color: #dfdf20; }
-    .editor .view-list .backup-view p, .editor .view-list .backup-view ul, .editor .view-list .help-view p, .editor .view-list .help-view ul {
+    .editor .view-list .backup-view p, .editor .view-list .backup-view ul, .editor .view-list #art-search-tab p, .editor .view-list #art-search-tab ul, .editor .view-list .help-view p, .editor .view-list .help-view ul {
       margin-bottom: 1em; }
-    .editor .view-list .backup-view ul, .editor .view-list .help-view ul {
+    .editor .view-list .backup-view ul, .editor .view-list #art-search-tab ul, .editor .view-list .help-view ul {
       margin-left: 2em;
       margin-right: 2em; }
-    .editor .view-list .backup-view li, .editor .view-list .help-view li {
+    .editor .view-list .backup-view li, .editor .view-list #art-search-tab li, .editor .view-list .help-view li {
       display: list-item; }
-    .editor .view-list .backup-view ul li, .editor .view-list .help-view ul li {
+    .editor .view-list .backup-view ul li, .editor .view-list #art-search-tab ul li, .editor .view-list .help-view ul li {
       list-style-type: square; }
-    .editor .view-list .backup-view ul.controls, .editor .view-list .help-view ul.controls {
+    .editor .view-list .backup-view ul.controls, .editor .view-list #art-search-tab ul.controls, .editor .view-list .help-view ul.controls {
       margin-left: 0;
       margin-right: 0; }
-      .editor .view-list .backup-view ul.controls li, .editor .view-list .help-view ul.controls li {
+      .editor .view-list .backup-view ul.controls li, .editor .view-list #art-search-tab ul.controls li, .editor .view-list .help-view ul.controls li {
         list-style-type: none; }
-    .editor .view-list .backup-view a:link, .editor .view-list .help-view a:link {
+    .editor .view-list .backup-view a:link, .editor .view-list #art-search-tab a:link, .editor .view-list .help-view a:link {
       color: #dfdf20; }
-    .editor .view-list .backup-view a:visited, .editor .view-list .help-view a:visited {
+    .editor .view-list .backup-view a:visited, .editor .view-list #art-search-tab a:visited, .editor .view-list .help-view a:visited {
       color: #999933; }
-    .editor .view-list .backup-view a:hover, .editor .view-list .help-view a:hover {
+    .editor .view-list .backup-view a:hover, .editor .view-list #art-search-tab a:hover, .editor .view-list .help-view a:hover {
       color: yellow; }
-    .editor .view-list .backup-view em, .editor .view-list .backup-view dfn, .editor .view-list .help-view em, .editor .view-list .help-view dfn {
+    .editor .view-list .backup-view em, .editor .view-list .backup-view dfn, .editor .view-list #art-search-tab em, .editor .view-list #art-search-tab dfn, .editor .view-list .help-view em, .editor .view-list .help-view dfn {
       color: white;
       font-style: italic; }
   .editor .view-list .help-view button {
     height: 1.5em; }
+  .editor #art-search-tab form {
+    margin-bottom: 0.5em; }
   .editor .scene-list {
     margin-right: 0.5em; }
     .editor .scene-list .scene {

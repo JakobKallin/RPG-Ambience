@@ -516,6 +516,17 @@
 								class="secondary"
 								data-ng-click="searchEngines.deviantArt.execute(searchEngines.deviantArt.query)">Search DeviantArt</button>
 						</form>
+						<form class="primary-secondary">
+							<input
+								type="text"
+								class="primary"
+								placeholder="Search for concept art on Google"
+								data-ng-model="searchEngines.google.query">
+							<button
+								type="submit"
+								class="secondary"
+								data-ng-click="searchEngines.google.execute(searchEngines.google.query)">Search Google</button>
+						</form>
 					</pane>
 					<pane
 						id="help-tab"

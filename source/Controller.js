@@ -309,6 +309,12 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			execute: function(query) {
 				window.open('http://www.deviantart.com/digitalart/paintings/?q=' + encodeURIComponent(query));
 			}
+		},
+		google: {
+			query: '',
+			execute: function(query) {
+				window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(query) + '+"concept+art"')
+			}
 		}
 	}
 };

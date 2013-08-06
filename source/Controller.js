@@ -316,6 +316,8 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(query) + '+"concept+art"')
 			}
 		}
+		// Adding a search engine that calls all the others at the same time might be possible. At least in Chrome, however, any calls to `window.open` beyond the first one opens a new window rather than a new tab.
+		// This functionality might be better saved for a possible integrated search in the future.
 	}
 };
 

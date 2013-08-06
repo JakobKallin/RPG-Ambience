@@ -505,6 +505,17 @@
 								class="secondary"
 								data-ng-click="searchEngines.cgHub.execute(searchEngines.cgHub.query)">Search CGHub</button>
 						</form>
+						<form class="primary-secondary">
+							<input
+								type="text"
+								class="primary"
+								placeholder="Search for digital art on DeviantArt"
+								data-ng-model="searchEngines.deviantArt.query">
+							<button
+								type="submit"
+								class="secondary"
+								data-ng-click="searchEngines.deviantArt.execute(searchEngines.deviantArt.query)">Search DeviantArt</button>
+						</form>
 					</pane>
 					<pane
 						id="help-tab"

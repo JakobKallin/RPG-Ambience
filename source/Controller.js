@@ -303,6 +303,12 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				// As far as I know, however, this should not be a security issue since only the user himself can manipulate the text input.
 				window.open('http://cghub.com/images/search/text:' + encodeURIComponent(query) + '/');
 			}
+		},
+		deviantArt: {
+			query: '',
+			execute: function(query) {
+				window.open('http://www.deviantart.com/digitalart/paintings/?q=' + encodeURIComponent(query));
+			}
 		}
 	}
 };

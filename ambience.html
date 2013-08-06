@@ -492,6 +492,21 @@
 						</ul>
 					</pane>
 					<pane
+						id="art-search-tab"
+						data-heading="Art Search">
+						<form class="primary-secondary">
+							<input
+								type="text"
+								class="primary"
+								placeholder="Search for art on CGHub"
+								data-ng-model="searchEngines.cgHub.query">
+							<button
+								type="submit"
+								class="secondary"
+								data-ng-click="searchEngines.cgHub.execute(searchEngines.cgHub.query)">Search CGHub</button>
+						</form>
+					</pane>
+					<pane
 						id="help-tab"
 						class="help-view"
 						data-heading="Help">

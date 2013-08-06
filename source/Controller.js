@@ -293,6 +293,17 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		fullscreen: ['moz', 'webkit'].some(function(prefix) {
 			return Boolean((prefix + 'RequestFullScreen') in document.body);
 		})
+	};
+	
+	$scope.searchEngines = {
+		cgHub: {
+			query: '',
+			execute: function(query) {
+				// Note that CGHub doesn't use normal URL query parameters, so a user could inject special sequences (such as ../) into the URL.
+				// As far as I know, however, this should not be a security issue since only the user himself can manipulate the text input.
+				window.open('http://cghub.com/images/search/text:' + encodeURIComponent(query) + '/');
+			}
+		}
 	}
 };
 

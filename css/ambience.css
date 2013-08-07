@@ -555,6 +555,7 @@ progress {
   .editor .scene-player {
     margin-left: 1em;
     margin-top: 2em;
+    overflow: auto;
     /* Account for borders above and below tabs. */
     border-top: 2px solid transparent; }
     .editor .scene-player .stage {

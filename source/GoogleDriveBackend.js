@@ -327,7 +327,8 @@ Ambience.GoogleDriveBackend.prototype = {
 			docs: new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES),
 			upload: new google.picker.DocsUploadView()
 		};
-		views.docs.setIncludeFolders(true);
+		// The call below is commented out because it breaks the search functionality.
+		// views.docs.setIncludeFolders(true);
 		
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(this.appId)

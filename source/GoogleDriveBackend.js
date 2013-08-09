@@ -367,6 +367,7 @@ Ambience.GoogleDriveBackend.prototype = {
 		var mimeTypes = [
 			'audio/mpeg',
 			'audio/ogg',
+			'application/ogg',
 			'audio/webm',
 			'audio/wave',
 			'audio/wav',

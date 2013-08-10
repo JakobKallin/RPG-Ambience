@@ -8,7 +8,10 @@ Ambience.ScenePreview = function() {
 		template:
 			'<div class="preview" ng-style="layerStyle">' +
 				'<div class="text outer">' +
-					'<div class="text inner" ng-style="textStyle">{{scene.text.string}}</div>' +
+					'<div class="text inner" ng-style="textStyle" data-ng-show="scene.text.string">{{scene.text.string}}</div>' +
+					// We create a second text element and overload it to contain an audio symbol for audio-only scenes.
+					// This is a bit of a hack, but it should work fine since an audio-only scene should by definition never have text.
+					'<div class="text inner sound" data-ng-show="scene.isAural && !scene.isVisual">♫</div>' +
 				'</div>' +
 			'</div>',
 		scope: {

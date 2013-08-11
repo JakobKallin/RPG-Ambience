@@ -15,6 +15,13 @@ Ambience.App.Scene = function() {
 		get isForeground() {
 			return this.layer === 'foreground'
 		},
+		get isVisual() {
+			// This currently doesn't take background colors into account.
+			return Boolean(this.image.file || this.text.string);
+		},
+		get isAural() {
+			return this.sound.tracks.length > 0;
+		},
 		
 		background: new Ambience.App.Scene.Background(),
 		image: new Ambience.App.Scene.Image(),

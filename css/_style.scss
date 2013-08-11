@@ -44,6 +44,11 @@ $note-color: hsl(0, 0%, 40%);
 		white-space: pre-line;
 		text-rendering: optimizeLegibility;
 	}
+	
+	.text.inner.sound {
+		font-size: 0.3em;
+		color: hsl(0, 0%, 25%);
+	}
 }
 
 /* General styling */

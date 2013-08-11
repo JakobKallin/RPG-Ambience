@@ -151,6 +151,9 @@ body {
     color: white;
     white-space: pre-line;
     text-rendering: optimizeLegibility; }
+  .editor .view-list .playback-view .playback-scene-list li button .preview .text.inner.sound, .editor .scene-list .scene .preview .text.inner.sound, .editor .scene-editor .scene .preview .text.inner.sound {
+    font-size: 0.3em;
+    color: #404040; }
 
 /* General styling */
 .editor, button, select, input, textarea {

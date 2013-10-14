@@ -8,6 +8,7 @@ Ambience.Adventure = function() {
 	self.title = '';
 	self.scenes = [];
 	self.creationDate = new Date();
+	self.modificationDate = self.creationDate;
 	
 	self.version = Ambience.Adventure.version;
 	
@@ -71,6 +72,10 @@ Ambience.Adventure.prototype.toConfig = function() {
 	// Delete info on editing rights from Google Drive.
 	delete copy.isEditable;
 	
+	// Delete these; they are stored as file metadata.
+	delete copy.creationDate;
+	delete copy.modificationDate;
+	
 	return copy;
 	
 	function copyObject(original) {
@@ -112,7 +117,6 @@ Ambience.Adventure.fromConfig = function(config) {
 	var adventure = new Ambience.Adventure();
 	adventure.title = config.title;
 	adventure.version = config.version;
-	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {
 		var scene = Ambience.App.Scene.fromConfig(sceneConfig);

@@ -88,7 +88,12 @@
 					
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.Adventure.fromConfig(config);
+					
+					// Add file metadata to adventure object. These should be removed (and are removed) when saving as JSON.
 					adventure.id = file.id;
+					adventure.creationDate = file.creationDate;
+					adventure.modificationDate = file.modificationDate;
+					
 					console.log('Parsed adventure "' + adventure.title + '" (' + adventure.id + ')');
 					return adventure;
 				});
@@ -96,7 +101,7 @@
 			
 			function addAdventures(adventures) {
 				adventures.sort(function(a, b) {
-					return b.creationDate - a.creationDate;
+					return b.modificationDate - a.modificationDate;
 				});
 				library.adventures = adventures;
 				return adventures;

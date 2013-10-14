@@ -164,14 +164,15 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	};
 	
 	window.addEventListener('beforeunload', function(event) {
-		if ( ambience.sceneIsPlaying ) {
-			return event.returnValue = 'There is a scene playing.';
-		}
-		
 		// Return immediately if we're using the local library, which cannot save anything to begin with.
 		// If we don't do this, the library will believe that the backend is saving if an adventure is changed, because the state change signaling that saving has finished happens asynchronously.
 		if ( $scope.app.library === localLibrary ) {
-			return;
+			// This is repeated below because using the local library will cause a return before the check below.
+			if ( ambience.sceneIsPlaying ) {
+				return event.returnValue = 'There is a scene playing.';
+			} else {
+				return;
+			}
 		}
 		
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
@@ -191,6 +192,11 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				// We both return the message and set it to "event.returnValue" due to browser differences.
 				return event.returnValue = exitMessage;
 			}
+		}
+		
+		// Check this after checking saves, because this is less important.
+		if ( ambience.sceneIsPlaying ) {
+			return event.returnValue = 'There is a scene playing.';
 		}
 	});
 	

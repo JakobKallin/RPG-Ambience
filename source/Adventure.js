@@ -63,6 +63,7 @@ Ambience.Adventure.prototype.toConfig = function() {
 		}
 		scene.sound.tracks.forEach(function(file) {
 			delete file.progress;
+			delete file.previewUrl;
 		});
 	});
 	

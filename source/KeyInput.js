@@ -75,5 +75,6 @@ Ambience.KeyInput.bindableKeys = [
 	'F9',
 	'F10',
 	'F11',
-	'F12'
+	'F12',
+	'Space'
 ];

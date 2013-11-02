@@ -88,7 +88,12 @@
 					
 					var config = JSON.parse(file.contents);
 					var adventure = Ambience.Adventure.fromConfig(config);
+					
+					// Add file metadata to adventure object. These should be removed (and are removed) when saving as JSON.
 					adventure.id = file.id;
+					adventure.creationDate = file.creationDate;
+					adventure.modificationDate = file.modificationDate;
+					
 					console.log('Parsed adventure "' + adventure.title + '" (' + adventure.id + ')');
 					return adventure;
 				});
@@ -96,7 +101,7 @@
 			
 			function addAdventures(adventures) {
 				adventures.sort(function(a, b) {
-					return b.creationDate - a.creationDate;
+					return b.modificationDate - a.modificationDate;
 				});
 				library.adventures = adventures;
 				return adventures;
@@ -112,6 +117,8 @@
 				return library.saveFile(file).then(function(fileId) {
 					// Save the ID so that it can be used later to prevent uploads of unchanged files.
 					adventure.id = fileId;
+				}).otherwise(function(error) {
+					console.log(error.message);
 				});
 			});
 			
@@ -150,7 +157,8 @@
 					return fileId;
 				})
 				.otherwise(function(e) {
-					console.log('There was an error uploading file "' + file.name + '"');
+					// Throw error here or caller will receive "undefined" as new adventure ID.
+					throw new Error('There was an error uploading file "' + file.name + '"');
 				})
 				.ensure(function() {
 					library.filesBeingSynced -= 1;

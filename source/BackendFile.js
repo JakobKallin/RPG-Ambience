@@ -7,4 +7,6 @@ Ambience.BackendFile = function() {
 	this.name = null;
 	this.mimeType = null;
 	this.contents = null;
+	this.creationDate = null;
+	this.modificationDate = null;
 };

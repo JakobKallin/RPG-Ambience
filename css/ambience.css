@@ -178,7 +178,8 @@ input[type=text], input[type=number], input[type=color], select, textarea {
 
 /* Applied to all because even smaller numbers can have fractions. */
 input[type=number] {
-  width: 3.5em; }
+  width: 4em;
+  text-align: right; }
 
 progress {
   width: 100%; }

@@ -480,18 +480,6 @@
 						</div>
 					</pane>
 					<pane
-						id="backup-tab"
-						class="backup-view"
-						data-heading="Backup">
-						<h2>Adventure Backup</h2>
-						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer. You can later upload them manually to Google Drive.</p>
-						<ul>
-							<li data-ng-repeat="adventure in app.library.adventures">
-								<button data-ng-click="app.library.saveAdventureToComputer(adventure)">{{adventure.title}}</button>
-							</li>
-						</ul>
-					</pane>
-					<pane
 						id="art-search-tab"
 						data-heading="Art Search">
 						<form class="primary-secondary">
@@ -530,6 +518,18 @@
 								tabindex="-1"
 								data-ng-click="searchEngines.google.execute(searchEngines.query)">Search Google</button>
 						</form>
+					</pane>
+					<pane
+						id="backup-tab"
+						class="backup-view"
+						data-heading="Backup">
+						<h2>Adventure Backup</h2>
+						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer. You can later upload them manually to Google Drive.</p>
+						<ul>
+							<li data-ng-repeat="adventure in app.library.adventures">
+								<button data-ng-click="app.library.saveAdventureToComputer(adventure)">{{adventure.title}}</button>
+							</li>
+						</ul>
 					</pane>
 					<pane
 						id="help-tab"

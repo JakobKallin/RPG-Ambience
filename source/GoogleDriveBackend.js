@@ -136,6 +136,9 @@ Ambience.GoogleDriveBackend.prototype = {
 			file.name = item.name;
 			file.mimeType = item.mimeType;
 			file.contents = request.responseText;
+			file.creationDate = new Date(item.createdDate);
+			file.modificationDate = new Date(item.modifiedDate);
+			
 			deferred.resolve(file);
 		});
 		request.addEventListener('error', function(error) {

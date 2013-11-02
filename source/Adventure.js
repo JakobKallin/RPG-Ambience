@@ -8,6 +8,7 @@ Ambience.Adventure = function() {
 	self.title = '';
 	self.scenes = [];
 	self.creationDate = new Date();
+	self.modificationDate = self.creationDate;
 	
 	self.version = Ambience.Adventure.version;
 	
@@ -62,6 +63,7 @@ Ambience.Adventure.prototype.toConfig = function() {
 		}
 		scene.sound.tracks.forEach(function(file) {
 			delete file.progress;
+			delete file.previewUrl;
 		});
 	});
 	
@@ -70,6 +72,10 @@ Ambience.Adventure.prototype.toConfig = function() {
 	
 	// Delete info on editing rights from Google Drive.
 	delete copy.isEditable;
+	
+	// Delete these; they are stored as file metadata.
+	delete copy.creationDate;
+	delete copy.modificationDate;
 	
 	return copy;
 	
@@ -112,7 +118,6 @@ Ambience.Adventure.fromConfig = function(config) {
 	var adventure = new Ambience.Adventure();
 	adventure.title = config.title;
 	adventure.version = config.version;
-	adventure.creationDate = new Date(config.creationDate);
 	
 	config.scenes.forEach(function(sceneConfig) {
 		var scene = Ambience.App.Scene.fromConfig(sceneConfig);
@@ -124,6 +129,8 @@ Ambience.Adventure.fromConfig = function(config) {
 
 Ambience.Adventure.upgradeConfig = function(config) {
 	if ( config.version === 2 ) {
+		console.log('Upgrading adventure "' + config.title + '" from version 2 to 3');
+		
 		// Adventures of version 2 only contain IDs of media files, not names and MIME types.
 		// Add these here so that they are properly queued when downloaded.
 		config.scenes.forEach(function(scene) {
@@ -141,10 +148,20 @@ Ambience.Adventure.upgradeConfig = function(config) {
 		
 		config.version = 3;
 	}
+	
+	if ( config.version === 3 ) {
+		console.log('Upgrading adventure "' + config.title + '" from version 3 to 4');
+		
+		delete config.creationDate;
+		delete config.modificationDate;
+		
+		config.version = 4;
+	}
 };
 
 // Adventure version, unrelated to application version.
 // Should be increased whenever the format of an adventure changes.
-Ambience.Adventure.version = 3;
+Ambience.Adventure.version = 4;
 
 // New in version 3: Names and MIME types of files are serialized.
+// New in version 4: Creation and modification dates are not stored inside adventure itself.

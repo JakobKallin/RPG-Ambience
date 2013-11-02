@@ -129,6 +129,8 @@ Ambience.Adventure.fromConfig = function(config) {
 
 Ambience.Adventure.upgradeConfig = function(config) {
 	if ( config.version === 2 ) {
+		console.log('Upgrading adventure "' + config.title + '" from version 2 to 3');
+		
 		// Adventures of version 2 only contain IDs of media files, not names and MIME types.
 		// Add these here so that they are properly queued when downloaded.
 		config.scenes.forEach(function(scene) {
@@ -146,10 +148,20 @@ Ambience.Adventure.upgradeConfig = function(config) {
 		
 		config.version = 3;
 	}
+	
+	if ( config.version === 3 ) {
+		console.log('Upgrading adventure "' + config.title + '" from version 3 to 4');
+		
+		delete config.creationDate;
+		delete config.modificationDate;
+		
+		config.version = 4;
+	}
 };
 
 // Adventure version, unrelated to application version.
 // Should be increased whenever the format of an adventure changes.
-Ambience.Adventure.version = 3;
+Ambience.Adventure.version = 4;
 
 // New in version 3: Names and MIME types of files are serialized.
+// New in version 4: Creation and modification dates are not stored inside adventure itself.

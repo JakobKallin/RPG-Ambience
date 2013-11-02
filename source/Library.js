@@ -117,6 +117,8 @@
 				return library.saveFile(file).then(function(fileId) {
 					// Save the ID so that it can be used later to prevent uploads of unchanged files.
 					adventure.id = fileId;
+				}).otherwise(function(error) {
+					console.log(error.message);
 				});
 			});
 			
@@ -155,7 +157,8 @@
 					return fileId;
 				})
 				.otherwise(function(e) {
-					console.log('There was an error uploading file "' + file.name + '"');
+					// Throw error here or caller will receive "undefined" as new adventure ID.
+					throw new Error('There was an error uploading file "' + file.name + '"');
 				})
 				.ensure(function() {
 					library.filesBeingSynced -= 1;

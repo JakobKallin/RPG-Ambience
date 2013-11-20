@@ -174,7 +174,7 @@ Ambience.GoogleDriveBackend.prototype = {
 		// The Google Drive API does not support the "or" operator, so for now we only search for application/json. (https://developers.google.com/drive/search-parameters)
 		// TODO: This should be fixed in the future so that manually created files (with the wrong mime type) can also be used.
 		var query = "trashed = false and mimeType = '" + mimeType + "'";
-		var filesPerRequest = 100;
+		var filesPerRequest = 1000;
 		var request = gapi.client.drive.files.list({
 			q: query,
 			maxResults: filesPerRequest

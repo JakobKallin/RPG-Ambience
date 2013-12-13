@@ -15,6 +15,7 @@ window.addEventListener('load', function() {
 	document.body.addEventListener('keypress', stopPropagation);
 	
 	var module = angular.module('ambience', ['ui', 'ui.bootstrap', 'ui.sortable']);
+	module.directive('fileButton', Ambience.FileButton);
 	module.directive('textButton', Ambience.TextButton);
 	module.directive('scenePreview', Ambience.ScenePreview);
 	module.directive('toggleButton', Ambience.ToggleButton);

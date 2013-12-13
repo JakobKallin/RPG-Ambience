@@ -69,6 +69,19 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		$scope.app.adventure = adventure;
 	};
 	
+	$scope.addAdventureFromFile = function(file) {
+		var reader = new FileReader();
+		reader.onload = function() {
+			var json = reader.result;
+			var config = JSON.parse(json);
+			var adventure = Ambience.Adventure.fromConfig(config);
+			$scope.$apply(function() {
+				$scope.addAdventure(adventure);
+			});
+		};
+		reader.readAsText(file);
+	};
+	
 	$scope.removeAdventure = function(adventure) {
 		$scope.app.adventure = $scope.app.library.adventures.closest(adventure);
 		$scope.app.library.adventures.remove(adventure);

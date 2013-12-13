@@ -51,6 +51,7 @@
 		<script src="source/LocalBackend.js"></script>
 		<script src="source/GoogleDriveBackend.js"></script>
 		
+		<script src="source/FileButton.js"></script>
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
 		<script src="source/ToggleButton.js"></script>
@@ -523,8 +524,10 @@
 						id="backup-tab"
 						class="backup-view"
 						data-heading="Backup">
+						<h2>Open Adventure From File</h2>
+						<file-button data-when-file-selected="addAdventureFromFile"></file-button>
 						<h2>Adventure Backup</h2>
-						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer. You can later upload them manually to Google Drive.</p>
+						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons below to save them as files to your computer. You can later save them under "Adventure Recovery" above.</p>
 						<ul>
 							<li data-ng-repeat="adventure in app.library.adventures">
 								<button data-ng-click="app.library.saveAdventureToComputer(adventure)">{{adventure.title}}</button>

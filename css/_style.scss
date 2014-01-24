@@ -68,14 +68,8 @@ button {
 	padding-right: 0.25em;
 }
 
-input, textarea {
+input, textarea, select {
 	padding: 0.125em 0.25em;
-}
-
-input[type=text], input[type=number], input[type=color], select, textarea {
-	background-color: black;
-	color: hsl(0, 0%, 90%);
-	border: 1px solid hsl(0, 0%, 25%);
 }
 
 /* Applied to all because even smaller numbers can have fractions. */

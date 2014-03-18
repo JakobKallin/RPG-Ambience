@@ -14,6 +14,7 @@ Ambience.GoogleDriveBackend.prototype = {
 	imageLimit: 6,
 	soundLimit: 3,
 	loginAgainAdvance: 60 * 1000,
+	oAuthToken: null,
 	login: function() {
 		return this.loginToGoogleDrive(false);
 	},
@@ -44,6 +45,7 @@ Ambience.GoogleDriveBackend.prototype = {
 			if ( result && !result.error ) {
 				console.log('Google Drive login succeeded');
 				
+				backend.oAuthToken = result.access_token;
 				var duration = Number(result.expires_in) * 1000;
 				var expiration = new Date();
 				expiration.setMilliseconds(expiration.getMilliseconds() + duration);
@@ -325,6 +327,8 @@ Ambience.GoogleDriveBackend.prototype = {
 		});
 	},
 	selectImageFile: function() {
+		var backend = this;
+		
 		console.log('Selecting image file from Google Drive');
 		var deferred = when.defer();
 		
@@ -339,6 +343,7 @@ Ambience.GoogleDriveBackend.prototype = {
 			.setAppId(this.appId)
 			.addView(views.docs)
 			.addView(views.upload)
+			.setOAuthToken(backend.oAuthToken)
 			.setCallback(onPickerAction)
 			.build();
 		picker.setVisible(true);
@@ -360,6 +365,8 @@ Ambience.GoogleDriveBackend.prototype = {
 	},
 	selectImageFileLabel: 'Select Image From Google Drive',
 	selectSoundFiles: function() {
+		var backend = this;
+		
 		console.log('Selecting sound files from Google Drive');
 		var deferred = when.defer();
 		
@@ -384,6 +391,7 @@ Ambience.GoogleDriveBackend.prototype = {
 			.addView(views.upload)
 			.setSelectableMimeTypes(mimeTypes.join(','))
 			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+			.setOAuthToken(backend.oAuthToken)
 			.setCallback(onPickerAction)
 			.build();
 		picker.setVisible(true);

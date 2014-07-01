@@ -76,26 +76,39 @@
 				this.backend
 				.downloadAdventures()
 				.then(parseAdventureFiles)
+				// If an error occurred in `parseAdventureFiles`, `null` is
+				// returned, so remove those here.
+				.then(function(files) {
+					return files.filter(function(f) {
+						return f !== null;
+					});
+				})
 				.then(addAdventures)
 			);
 			
 			function parseAdventureFiles(files) {
 				return when.map(files, function(file) {
-					// Important: store the file contents so that it will not be saved if unchanged.
-					// Without this, every adventure will be saved once even if it is unchanged.
-					// This is because "latestFileContents" is otherwise only set when uploading, not when downloading.
-					library.latestFileContents[file.id] = file.contents;
-					
-					var config = JSON.parse(file.contents);
-					var adventure = Ambience.Adventure.fromConfig(config);
-					
-					// Add file metadata to adventure object. These should be removed (and are removed) when saving as JSON.
-					adventure.id = file.id;
-					adventure.creationDate = file.creationDate;
-					adventure.modificationDate = file.modificationDate;
-					
-					console.log('Parsed adventure "' + adventure.title + '" (' + adventure.id + ')');
-					return adventure;
+					try {
+						// Important: store the file contents so that it will not be saved if unchanged.
+						// Without this, every adventure will be saved once even if it is unchanged.
+						// This is because "latestFileContents" is otherwise only set when uploading, not when downloading.
+						library.latestFileContents[file.id] = file.contents;
+						
+						var config = JSON.parse(file.contents);
+						var adventure = Ambience.Adventure.fromConfig(config);
+						
+						// Add file metadata to adventure object. These should be removed (and are removed) when saving as JSON.
+						adventure.id = file.id;
+						adventure.creationDate = file.creationDate;
+						adventure.modificationDate = file.modificationDate;
+						
+						console.log('Parsed adventure "' + adventure.title + '" (' + adventure.id + ')');
+						return adventure;
+					}
+					catch (error) {
+						console.log('Failed to parse adventure from file');
+						return null;
+					}
 				});
 			}
 			

@@ -316,13 +316,6 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	
 	$scope.searchEngines = {
 		query: '',
-		cgHub: {
-			execute: function(query) {
-				// Note that CGHub doesn't use normal URL query parameters, so a user could inject special sequences (such as ../) into the URL.
-				// As far as I know, however, this should not be a security issue since only the user himself can manipulate the text input.
-				window.open('http://cghub.com/images/search/text:' + encodeURIComponent(query) + '/');
-			}
-		},
 		deviantArt: {
 			execute: function(query) {
 				window.open('http://www.deviantart.com/digitalart/paintings/?q=' + encodeURIComponent(query));

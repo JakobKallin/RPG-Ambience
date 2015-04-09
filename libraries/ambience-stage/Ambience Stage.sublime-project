@@ -1,0 +1,11 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": ".",
+			"file_exclude_patterns": ["*.ogg", "*.LICENSE", "LICENSE"],
+			"folder_exclude_patterns": ["libraries", "jasmine"]
+		}
+	]
+}

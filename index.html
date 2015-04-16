@@ -91,6 +91,11 @@
 							data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
 					</li>
 				</ul>
+				<div id="next-version-blurb" data-ui-if="!nextVersionBlurbClosed">
+					What do you want to see in the next version of RPG Ambience?
+					<a href="http://blog.rpg-ambience.com/articles/next-version/" target="_blank">Share your thoughts!</a>
+					<button data-ng-click="closeNextVersionBlurb()">Close</button>
+				</div>
 			</div>
 			<div class="scene-controls">
 				<tabs class="view-list" id="view-list">

@@ -328,7 +328,14 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		}
 		// Adding a search engine that calls all the others at the same time might be possible. At least in Chrome, however, any calls to `window.open` beyond the first one opens a new window rather than a new tab.
 		// This functionality might be better saved for a possible integrated search in the future.
-	}
+	};
+	
+	// Temporary next-version blurb.
+	$scope.closeNextVersionBlurb = function() {
+		$scope.nextVersionBlurbClosed = true;
+		localStorage.nextversion = true;
+	};
+	$scope.nextVersionBlurbClosed = 'nextversion' in localStorage;
 };
 
 Ambience.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

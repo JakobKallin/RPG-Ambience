@@ -269,9 +269,6 @@ progress {
     .editor .adventure-controls .action-list li:not(:last-child) {
       margin-right: 0.5em; }
     .editor .adventure-controls .action-list.adventure {
-      flex: 1;
-      -webkit-flex: 1;
-      -ms-flex: 1;
       margin-right: 0.5em; }
     .editor .adventure-controls .action-list.gui {
       position: absolute;
@@ -667,6 +664,24 @@ progress {
 body > iframe {
   display: none; }
 
+/* Temporary next-version blurb. */
+#next-version-blurb {
+  flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+  text-align: center;
+  color: black;
+  background-color: #ffea80; }
+  #next-version-blurb a {
+    color: blue;
+    text-decoration: underline; }
+  #next-version-blurb button {
+    float: right;
+    height: 1.5em;
+    margin-top: 0.25em; }
+
 .stage {
   position: relative;
   background-color: black;
@@ -713,3 +728,5 @@ body > iframe {
   .stage form {
     /* The cursor should always be visible above the stage GUI, even when the pointer over the stage is hidden. */
     cursor: auto; }
+
+/*# sourceMappingURL=ambience.css.map */

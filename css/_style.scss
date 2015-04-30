@@ -192,7 +192,6 @@ progress {
 		}
 		
 		.action-list.adventure {
-			@include flex(1);
 			margin-right: 0.5em;
 		}
 		
@@ -776,4 +775,25 @@ progress {
 /* Google OAuth adds an iframe to the body element, which seems to take up space in Firefox. */
 body > iframe {
 	display: none;
+}
+
+/* Temporary next-version blurb. */
+#next-version-blurb {
+	@include flex(1);
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+	text-align: center;
+	color: black;
+	background-color: hsl(50, 100%, 75%);
+	
+	a {
+		color: blue;
+		text-decoration: underline;
+	}
+	
+	button {
+		float: right;
+		height: 1.5em;
+		margin-top: 0.25em;
+	}
 }

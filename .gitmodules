@@ -1,9 +1,0 @@
-[submodule "libraries/ambience-stage"]
-	path = libraries/ambience-stage
-	url = https://github.com/JakobKallin/Ambience-Stage.git
-[submodule "tests/mocha"]
-	path = tests/mocha
-	url = https://github.com/visionmedia/mocha.git
-[submodule "tests/expect"]
-	path = tests/expect
-	url = https://github.com/LearnBoost/expect.js.git

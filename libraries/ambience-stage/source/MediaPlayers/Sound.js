@@ -93,6 +93,8 @@ AmbienceStage.Track = function(path, container, maxVolume, includeInFade, remove
 		// Details:
 		// https://code.google.com/p/chromium/issues/detail?id=178297
 		// http://blog.foolip.org/2014/02/10/media-playback-restrictions-in-blink/
+		node.play();
+		node.pause();
 		
 		if ( node.readyState === 0 ) {
 			node.addEventListener('loadedmetadata', function() {

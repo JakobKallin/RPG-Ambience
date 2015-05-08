@@ -88,6 +88,11 @@ AmbienceStage.Track = function(path, container, maxVolume, includeInFade, remove
 	// If we play before the duration is known, crossover may occur immediately.
 	function playWhenDurationKnown(callbacks) {
 		container.appendChild(node);
+		// Play and immediately pause, simply to remove playback restrictions in
+		// mobile browsers.
+		// Details:
+		// https://code.google.com/p/chromium/issues/detail?id=178297
+		// http://blog.foolip.org/2014/02/10/media-playback-restrictions-in-blink/
 		
 		if ( node.readyState === 0 ) {
 			node.addEventListener('loadedmetadata', function() {

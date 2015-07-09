@@ -19,7 +19,7 @@ suite('RPG Ambience', () => {
 				// a single large adventure containing most or all of the 
 				// relevant properties.
 				test('general', () => {
-					var before = {
+					const before = {
 						version: 4,
 						title: 'Adventure',
 						scenes: [
@@ -147,7 +147,7 @@ suite('RPG Ambience', () => {
 						]
 					};
 					
-					var after = {
+					const after = {
 						version: 5,
 						title: 'Adventure',
 						scenes: [

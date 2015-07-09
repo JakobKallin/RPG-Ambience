@@ -239,12 +239,21 @@ suite('RPG Ambience', () => {
 					assertEqual(upgrade(before), after);
 				});
 				
-				test('only accepts version 4 adventures', function() {
-				    assertError(() => upgrade({
+				// More rigourous tests for upgrades of older adventures are 
+				// in the previous version of RPG Ambience; the code that does 
+				// the upgrades has been included in the current version.
+				test('upgrades versions lower than 4', function() {
+					const before = {
 						title: 'Adventure',
 						scenes: [],
-						version: 3 
-					}), /version/);
+						version: 2
+					};
+					const after = {
+						title: 'Adventure',
+						scenes: [],
+						version: 5
+					};
+					assertEqual(upgrade(before), after)
 				});
 			});
 		});

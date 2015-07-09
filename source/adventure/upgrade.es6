@@ -2,6 +2,8 @@ window.RpgAmbience = window.RpgAmbience || {};
 window.RpgAmbience.Adventure = window.RpgAmbience.Adventure || {};
 
 RpgAmbience.Adventure.upgrade = function(adventure) {
+    upgradeOlderVersions(adventure);
+    
     if ( adventure.version !== 4 ) {
         throw new Error('Upgrade only supported from version 4 to 5.');
     }
@@ -62,5 +64,37 @@ RpgAmbience.Adventure.upgrade = function(adventure) {
         delete scene.sound;
         
         return scene;
+    }
+    
+    // The code below is taken straight from the previous version of RPG 
+    // Ambience, which also includes tests for it. To keep things simple, 
+    // the tests are not included in this version.
+    function upgradeOlderVersions(config) {
+        if ( config.version === 2 ) {
+    		// Adventures of version 2 only contain IDs of media files, not 
+            // names and MIME types. Add these here so that they are properly 
+            // queued when downloaded.
+    		config.scenes.forEach(function(scene) {
+    			var imageFile = scene.image.file;
+    			if ( imageFile ) {
+    				imageFile.name = 'Unknown filename';
+    				imageFile.mimeType = 'image/unknown';
+    			}
+    			
+    			scene.sound.tracks.forEach(function(soundFile) {
+    				soundFile.name = 'Unknown filename';
+    				soundFile.mimeType = 'audio/unknown';
+    			});
+    		});
+    		
+    		config.version = 3;
+    	}
+    	
+    	if ( config.version === 3 ) {
+    		delete config.creationDate;
+    		delete config.modificationDate;
+    		
+    		config.version = 4;
+    	}
     }
 };

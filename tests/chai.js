@@ -4662,7 +4662,7 @@ function inspect(obj, showHidden, depth, colors) {
     seen: [],
     stylize: function (str) { return str; }
   };
-  return formatValue(ctx, obj, (typeof depth === 'undefined' ? 2 : depth));
+  return formatValue(ctx, obj, (typeof depth === 'undefined' ? Infinity : depth));
 }
 
 // Returns true if object is a DOM element.

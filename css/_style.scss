@@ -234,6 +234,7 @@ progress {
 	.view-list {
 		> * {
 			overflow: auto;
+			flex-shrink: 0;
 		}
 		
 		.scene-view {

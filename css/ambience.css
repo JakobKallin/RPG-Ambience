@@ -299,7 +299,8 @@ progress {
     .editor .message .close {
       margin-left: 0.5em; }
   .editor .view-list > * {
-    overflow: auto; }
+    overflow: auto;
+    flex-shrink: 0; }
   .editor .view-list .scene-view {
     border: 1px solid #404040;
     padding: 1em; }

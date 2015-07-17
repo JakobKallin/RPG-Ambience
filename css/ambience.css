@@ -318,7 +318,8 @@ progress {
     -ms-flex-direction: column; }
     .editor .view-list .playback-view > * {
       overflow: auto;
-      /* Make sure scrollbars appear when needed. */ }
+      /* Make sure scrollbars appear when needed. */
+      flex-shrink: 0; }
     .editor .view-list .playback-view .stop-playback {
       order: 2;
       -webkit-order: 2;

@@ -24,6 +24,7 @@ body {
 	.scene-controls {
 		@include flex(1);
 		@include flexbox(row);
+		overflow: auto;
 		
 		.view-list {
 			@include flex(1);

@@ -66,7 +66,8 @@ body {
     display: -ms-flexbox;
     flex-direction: row;
     -webkit-flex-direction: row;
-    -ms-flex-direction: row; }
+    -ms-flex-direction: row;
+    overflow: auto; }
     .editor .scene-controls .view-list {
       flex: 1;
       -webkit-flex: 1;
@@ -91,19 +92,32 @@ body {
         .editor .scene-controls .view-list > .tab-content-list > * {
           flex: 1;
           -webkit-flex: 1;
-          -ms-flex: 1; }
+          -ms-flex: 1;
+          overflow: auto; }
       .editor .scene-controls .view-list .scene-view {
         display: flex;
         display: -webkit-flex;
         display: -ms-flexbox;
         flex-direction: row;
         -webkit-flex-direction: row;
-        -ms-flex-direction: row; }
+        -ms-flex-direction: row;
+        overflow: auto; }
         .editor .scene-controls .view-list .scene-view .scene-list {
           flex: 0.4;
           -webkit-flex: 0.4;
           -ms-flex: 0.4;
+          display: flex;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          flex-direction: column;
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
           overflow: auto; }
+          .editor .scene-controls .view-list .scene-view .scene-list ul {
+            flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            overflow: auto; }
         .editor .scene-controls .view-list .scene-view .scene-editor {
           flex: 0.6;
           -webkit-flex: 0.6;
@@ -318,7 +332,8 @@ progress {
     -ms-flex-direction: column; }
     .editor .view-list .playback-view > * {
       overflow: auto;
-      /* Make sure scrollbars appear when needed. */ }
+      /* Make sure scrollbars appear when needed. */
+      flex-shrink: 0; }
     .editor .view-list .playback-view .stop-playback {
       order: 2;
       -webkit-order: 2;

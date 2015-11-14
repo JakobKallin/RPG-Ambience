@@ -254,6 +254,7 @@ progress {
 			
 			> * {
 				overflow: auto; /* Make sure scrollbars appear when needed. */
+				flex-shrink: 0;
 			}
 			
 			.stop-playback {

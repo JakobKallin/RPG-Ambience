@@ -24,6 +24,7 @@ body {
 	.scene-controls {
 		@include flex(1);
 		@include flexbox(row);
+		overflow: auto;
 		
 		.view-list {
 			@include flex(1);
@@ -36,16 +37,23 @@ body {
 
 				> * {
 					@include flex(1);
+					overflow: auto;
 				}
-				
 			}
 			
 			.scene-view {
 				@include flexbox(row);
+				overflow: auto;
 
 				.scene-list {
 					@include flex(0.4);
+					@include flexbox(column);
 					overflow: auto;
+					
+					ul {
+						@include flex(1);
+						overflow: auto;
+					}
 				}
 
 				.scene-editor {

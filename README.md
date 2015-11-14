@@ -9,7 +9,7 @@ RPG Ambience is a media player that enables roleplayers to bring their sessions 
 For instructions on how to use RPG Ambience, consult the help document inside the application.
 
 ## Hosting your own copy of RPG Ambience
-If you want full control over the application, or if `rpg-ambience.com` ever goes offline, you can host your own copy of the application. As of November 2015, here's how you do it:
+If you want full control over the application, or if [`app.rpg-ambience.com`](http://app.rpg-ambience.com/) ever goes offline, you can host your own copy of the application. As of November 2015, here's how you do it:
 
 - Download the [latest source files](https://github.com/JakobKallin/RPG-Ambience/archive/gh-pages.zip), in the [`gh-pages` branch](https://github.com/JakobKallin/RPG-Ambience/tree/gh-pages).
 - Create a Google account (or use your existing account) and enable the Google Drive API and the Google Drive SDK.
@@ -17,8 +17,8 @@ If you want full control over the application, or if `rpg-ambience.com` ever goe
   - Replace `907013371139` with the app ID from your Google Drive API settings.
   - Replace `AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM` with the API key from your Google Drive API settings.
 - Serve the files using a standard web server like [Apache](https://httpd.apache.org/) or [Lighttpd](http://www.lighttpd.net/), or with a service like [GitHub Pages](https://pages.github.com/).
-- Add your server's hostname (possibly `localhost`) to the list of authorized JavaScript origins for your Google Drive API settings.
+- Add your server's hostname (possibly `localhost`) to the list of authorized JavaScript origins in your Google Drive API settings.
 
-After following these steps, your copy of RPG Ambience should work just like the official one.
+After following these steps, your copy of RPG Ambience should work just like the official one, only with a different account providing the Google Drive integration.
 
-*I have not tested the steps above and may have missed some step. If it doesn't work for you, please let me know.*
+*I have not tested the steps above and may have missed some step. If the instructions don't work for you, please let me know.*

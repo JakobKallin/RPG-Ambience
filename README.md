@@ -12,7 +12,7 @@ For instructions on how to use RPG Ambience, consult the help document inside th
 If you want full control over the application, or if [`app.rpg-ambience.com`](http://app.rpg-ambience.com/) ever goes offline, you can host your own copy of the application. As of November 2015, here's how you do it:
 
 - Download the [latest source files](https://github.com/JakobKallin/RPG-Ambience/archive/gh-pages.zip), in the [`gh-pages` branch](https://github.com/JakobKallin/RPG-Ambience/tree/gh-pages).
-- Create a Google account (or use your existing account) and enable the Google Drive API and the Google Drive SDK.
+- Create a Google account (or use your existing account) and enable the Google Drive API and the Google Drive SDK in the [Google Developers Console](https://console.developers.google.com/).
 - Make the following modifications to [`source/GoogleDriveBackend.js`](https://github.com/JakobKallin/RPG-Ambience/blob/gh-pages/source/GoogleDriveBackend.js):
   - Replace `907013371139` with the app ID from your Google Drive API settings.
   - Replace `AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM` with the API key from your Google Drive API settings.

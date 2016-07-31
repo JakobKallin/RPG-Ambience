@@ -142,7 +142,7 @@ body {
 
 /* Generally for clicked elements. */
 .editor .view-list .playback-view .playback-scene-list li button:active, .editor .scene-list .scene.selected a, .splash ul.buttons button:active {
-  background-color: #192a4d;
+  background-color: #1a2b4d;
   border-color: #406abf; }
 
 .tab-list > * a, .editor .view-list .playback-view .playback-scene-list li button, .editor .scene-list .scene a, .editor .scene-editor .scene .preview, .editor .scene-editor .scene .tab-content-list > * {
@@ -680,8 +680,8 @@ progress {
 body > iframe {
   display: none; }
 
-/* Temporary next-version blurb. */
-#next-version-blurb {
+/* Temporary soundboard blurb. */
+#soundboard-blurb {
   flex: 1;
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -690,10 +690,10 @@ body > iframe {
   text-align: center;
   color: black;
   background-color: #ffea80; }
-  #next-version-blurb a {
+  #soundboard-blurb a {
     color: blue;
     text-decoration: underline; }
-  #next-version-blurb button {
+  #soundboard-blurb button {
     float: right;
     height: 1.5em;
     margin-top: 0.25em; }

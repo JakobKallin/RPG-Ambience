@@ -8,11 +8,11 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	$scope.playScene = function(scene) {
 		ambience.play(scene);
 	};
-	
+
 	$scope.stopScene = function() {
 		ambience.fadeOutTopmost();
 	};
-	
+
 	var adventure = null;
 	var scene = null;
 	var library = localLibrary;
@@ -55,7 +55,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			return !this.stageIsDetached;
 		}
 	};
-	
+
 	$scope.createAdventure = function() {
 		var adventure = new Ambience.Adventure($scope);
 		adventure.title = 'Untitled adventure';
@@ -63,12 +63,12 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		$scope.addAdventure(adventure);
 		$scope.app.renameInProgress = true;
 	};
-	
+
 	$scope.addAdventure = function(adventure) {
 		$scope.app.library.adventures.unshift(adventure);
 		$scope.app.adventure = adventure;
 	};
-	
+
 	$scope.addAdventureFromFile = function(file) {
 		var reader = new FileReader();
 		reader.onload = function() {
@@ -81,13 +81,13 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		};
 		reader.readAsText(file);
 	};
-	
+
 	$scope.removeAdventure = function(adventure) {
 		$scope.app.adventure = $scope.app.library.adventures.closest(adventure);
 		$scope.app.library.adventures.remove(adventure);
 		$scope.app.library.adventuresToRemove.push(adventure);
 	};
-	
+
 	var mediaLoadedAdventures = [];
 	$scope.loadAdventureMedia = function(adventure) {
 		if ( mediaLoadedAdventures.contains(adventure) ) {
@@ -105,18 +105,18 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			mediaLoadedAdventures.push(adventure);
 		}
 	};
-	
+
 	$scope.loadMediaFile = function(file) {
 		console.log('Loading media file "' + file.name + '"');
-		
+
 		$scope.app.library.loadMediaFile(file)
 		.then(onFileLoaded, undefined, onLoadProgress);
-		
+
 		function onFileLoaded(loadedFile) {
 			// This callback used to copy the "loadedFile" properties to "file", but now they are the same; "file" is actually mutated inside the library.
 			$scope.$apply(function() {});
 		}
-		
+
 		function onLoadProgress(percentageOrPreviewUrl) {
 			$scope.$apply(function() {
 				if ( typeof percentageOrPreviewUrl === 'string' ) {
@@ -127,14 +127,14 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			});
 		}
 	};
-	
+
 	// Note that this code assumes that a library will only be selected once.
 	$scope.selectLibrary = function(newLibrary) {
 		console.log('Selecting library: ' + newLibrary.name);
-		
+
 		$scope.app.library = newLibrary;
 		$scope.libraryIsSelected = true;
-		
+
 		if ( !newLibrary.adventuresAreBeingLoaded && !newLibrary.adventuresHaveBeenLoaded ) {
 			// Set this state variable before the call to "loadAdventures()", in case it is synchronous and sets it to false immediately.
 			// (Is this a concern with when.js?)
@@ -146,13 +146,13 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				console.log('Logging in to library failed.');
 			});
 		}
-		
+
 		function onAllAdventuresLoaded(adventures) {
 			var callback = function() {
 				$scope.app.library = newLibrary;
 				newLibrary.adventuresHaveBeenLoaded = true;
 				newLibrary.adventuresAreBeingLoaded = false;
-				
+
 				// Only save library setting if adventures have successfully loaded, as they have here.
 				window.localStorage.library = newLibrary.name;
 			};
@@ -160,22 +160,22 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			$scope.$apply(callback);
 		}
 	};
-	
+
 	$scope.loadExampleAdventure = function() {
 		var adventure = new Ambience.ExampleAdventure();
 		$scope.app.library.adventures.push(adventure);
 		$scope.app.adventure = adventure;
 	};
-	
+
 	$scope.help = {
 		mixin: "When you play this scene, you retain the elements of the previous scene that are not redefined in this scene.",
 		overlap: "The next track will start this many seconds before the current track ends."
 	};
-	
+
 	$scope.trackIsPlayable = function(track) {
 		return window.audioCanPlayType(track.mimeType);
 	};
-	
+
 	window.addEventListener('beforeunload', function(event) {
 		// Return immediately if we're using the local library, which cannot save anything to begin with.
 		// If we don't do this, the library will believe that the backend is saving if an adventure is changed, because the state change signaling that saving has finished happens asynchronously.
@@ -187,7 +187,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				return;
 			}
 		}
-		
+
 		// Trigger a save right before the page closes. If no adventures have changed, this will set adventures.isSaving to false.
 		if ( $scope.app.library.adventuresHaveBeenLoaded ) {
 			console.log('Syncing adventures');
@@ -195,24 +195,24 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 				console.log('There was an error syncing adventures');
 			});
 		}
-		
+
 		if ( $scope.app.library.adventuresAreBeingSynced ) {
 			var exitMessage = 'Your adventures are currently being saved. If you exit now, you risk losing data.';
 			exitMessage += '\n\n';
 			exitMessage += 'If this message persists, save your adventures under the Backup tab and then upload them manually.';
-			
+
 			if ( exitMessage !== undefined ) {
 				// We both return the message and set it to "event.returnValue" due to browser differences.
 				return event.returnValue = exitMessage;
 			}
 		}
-		
+
 		// Check this after checking saves, because this is less important.
 		if ( ambience.sceneIsPlaying ) {
 			return event.returnValue = 'There is a scene playing.';
 		}
 	});
-	
+
 	var saveInterval = 60 * 1 * 1000;
 	function syncAdventures() {
 		// Only save if the adventures have been loaded. Otherwise they might be overwritten with an empty list.
@@ -224,24 +224,24 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		window.setTimeout(syncAdventures, saveInterval);
 	}
 	window.setTimeout(syncAdventures, saveInterval);
-	
+
 	if ( window.localStorage.library === googleDriveLibrary.name ) {
 		console.log('Setting library to saved setting: ' + googleDriveLibrary.name)
 		$scope.selectLibrary(googleDriveLibrary);
 	}
-	
+
 	$scope.addSceneAfter = function(sceneBefore, adventure) {
 		var scene = new Ambience.App.Scene()
 		adventure.scenes.insertAfter(scene, sceneBefore);
 		$scope.app.scene = scene;
-		
+
 		return scene;
 	};
-	
+
 	$scope.selectScene = function(scene) {
 		$scope.app.scene = scene;
 	};
-	
+
 	$scope.isSelected = function(scene) {
 		return scene === $scope.app.scene;
 	};
@@ -251,7 +251,7 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		// TODO: Nested objects (like tracks) should be deeply copied.
 		var newScene = new Ambience.App.Scene();
 		Object.overlay(newScene, scene);
-		
+
 		var index = adventure.scenes.indexOf($scope.app.scene) + 1
 		adventure.scenes.splice(index, 0, newScene);
 		$scope.selectScene(newScene);
@@ -260,14 +260,14 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 	$scope.removeScene = function(scene, adventure) {
 		nextScene = adventure.scenes.closest(scene);
 		adventure.scenes.remove(scene);
-		
+
 		if ( nextScene ) {
 			$scope.selectScene(nextScene);
 		} else {
 			$scope.addSceneAfter(adventure);
 		}
 	};
-	
+
 	$scope.selectImage = function(scene) {
 		$scope.app.library.selectImageFile()
 		.then(function(file) {
@@ -282,11 +282,11 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			});
 		});
 	};
-	
+
 	$scope.removeImage = function(scene) {
 		scene.image.file = null;
 	};
-	
+
 	$scope.selectTracks = function(scene) {
 		$scope.app.library.selectSoundFiles()
 		.then(function(files) {
@@ -303,17 +303,17 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 			});
 		});
 	};
-	
+
 	$scope.removeTrack = function(track, scene) {
 		scene.sound.tracks.remove(track);
 	};
-	
+
 	$scope.features = {
 		fullscreen: ['moz', 'webkit'].some(function(prefix) {
 			return Boolean((prefix + 'RequestFullScreen') in document.body);
 		})
 	};
-	
+
 	$scope.searchEngines = {
 		query: '',
 		deviantArt: {
@@ -329,13 +329,13 @@ Ambience.Controller = function($scope, ambience, localLibrary, googleDriveLibrar
 		// Adding a search engine that calls all the others at the same time might be possible. At least in Chrome, however, any calls to `window.open` beyond the first one opens a new window rather than a new tab.
 		// This functionality might be better saved for a possible integrated search in the future.
 	};
-	
-	// Temporary next-version blurb.
-	$scope.closeNextVersionBlurb = function() {
-		$scope.nextVersionBlurbClosed = true;
-		localStorage.nextversion = true;
+
+	// Temporary soundboard blurb.
+	$scope.closeSoundboardBlurb = function() {
+		$scope.soundboardBlurbClosed = true;
+		localStorage.soundboard = true;
 	};
-	$scope.nextVersionBlurbClosed = 'nextversion' in localStorage;
+	$scope.soundboardBlurbClosed = 'soundboard' in localStorage;
 };
 
 Ambience.Controller.$inject = ['$scope', 'ambience', 'localLibrary', 'googleDriveLibrary'];

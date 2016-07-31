@@ -3,28 +3,28 @@
 	<head>
 		<meta charset="utf-8">
 		<title>RPG Ambience</title>
-		
+
 		<link rel="stylesheet" href="css/ambience.css">
 		<link rel="icon" type="image/png" href="images/icon.png">
-		
+
 		<script src="source/extensions.js"></script>
 		<script src="source/List.js"></script>
-		
+
 		<script src="libraries/jquery-1.9.1.js"></script>
 		<script src="libraries/jquery-ui-1.10.2.custom.js"></script>
 		<script src="libraries/spectrum-1.0.9.js"></script>
 		<link rel="stylesheet" href="libraries/spectrum-1.0.9.css">
-		
+
 		<script src="libraries/angular.js"></script>
 		<script src="libraries/angular-ui.js"></script>
 		<script src="libraries/angular-ui-bootstrap-0.2.0.js"></script>
 		<script src="libraries/angular-ui-sortable.js"></script>
-		
+
 		<script src="libraries/when/when.js"></script>
-		
+
 		<script src="libraries/key.js"></script>
 		<script src="libraries/object-url-from-data-url.js"></script>
-		
+
 		<script src="libraries/ambience-stage/libraries/manymation/source/manymation.js"></script>
 		<script src="libraries/ambience-stage/source/Stage.js"></script>
 		<script src="libraries/ambience-stage/source/ScenePlayer.js"></script>
@@ -33,7 +33,7 @@
 		<script src="libraries/ambience-stage/source/MediaPlayers/Sound.js"></script>
 		<script src="libraries/ambience-stage/source/MediaPlayers/Text.js"></script>
 		<script src="libraries/ambience-stage/source/Scene.js"></script>
-		
+
 		<script>var Ambience = {};</script>
 		<script src="source/Controller.js"></script>
 		<script src="source/Player.js"></script>
@@ -50,7 +50,7 @@
 		<script src="source/BackendFile.js"></script>
 		<script src="source/LocalBackend.js"></script>
 		<script src="source/GoogleDriveBackend.js"></script>
-		
+
 		<script src="source/FileButton.js"></script>
 		<script src="source/TextButton.js"></script>
 		<script src="source/ScenePreview.js"></script>
@@ -59,7 +59,7 @@
 		<script src="source/Fullscreen.js"></script>
 		<script src="source/KeyInput.js"></script>
 		<script src="source/Spectrum.js"></script>
-		
+
 		<script src="source/bootstrap.js"></script>
 	</head>
 	<body data-ng-controller="Ambience.Controller">
@@ -91,10 +91,11 @@
 							data-ng-click="removeAdventure(app.adventure)">Delete Adventure</button>
 					</li>
 				</ul>
-				<div id="next-version-blurb" data-ui-if="!nextVersionBlurbClosed">
-					What do you want to see in the next version of RPG Ambience?
-					<a href="http://blog.rpg-ambience.com/articles/next-version/" target="_blank">Share your thoughts!</a>
-					<button data-ng-click="closeNextVersionBlurb()">Close</button>
+				<div id="soundboard-blurb" data-ui-if="!soundboardBlurbClosed">
+					Try out the new
+					<a href="http://blog.rpg-ambience.com/articles/soundboard-alpha" target="_blank">RPG Ambience Soundboard</a>
+					alpha!
+					<button data-ng-click="closeSoundboardBlurb()">Close</button>
 				</div>
 			</div>
 			<div class="scene-controls">
@@ -543,19 +544,19 @@
 							<li><a href="#help-contact">Contact</a></li>
 							<li><a href="#help-disclaimer">Disclaimer</a></li>
 						</ul>
-						
+
 						<h2 id="help-introduction">What RPG Ambience is</h2>
 						<p>RPG Ambience is a media player that enables roleplayers to bring their sessions to life using sound and visuals. It is free software that runs directly in your browser.</p>
-						
+
 						<h2 id="help-overview">How RPG Ambience works</h2>
 						<p>RPG Ambience is built around <dfn>scenes</dfn>. Scenes are made up of images, sounds, and text grouped together in any combination. Scenes are played and stopped using keyboard shortcuts. <dfn>Adventures</dfn> are collections of related scenes.</p>
-						
+
 						<p>The interface of RPG Ambience consists of two parts: the editor and the player.</p>
 						<ul>
 							<li><dfn>The editor</dfn> (the left part of the screen) contains your adventures and the scenes in them, including controls to edit them.</li>
 							<li><dfn>The player</dfn> (the right part of the screen) is where the scenes in your adventures are played. The player can be opened in a separate window.</li>
 						</ul>
-						
+
 						<h2 id="help-playing-scenes">Playing scenes</h2>
 						<p>There are four ways to play a scene:</p>
 						<ul>
@@ -565,7 +566,7 @@
 							<li>Type the scene's name and press <button type="button">Enter</button> on your keyboard.</li>
 						</ul>
 						<p>When starting a scene by typing its name, it's enough to type only the first few letters of the name.</p>
-						
+
 						<h2 id="help-stopping-scenes">Stopping scenes</h2>
 						<p>There are three ways to stop a scene:</p>
 						<ul>
@@ -574,19 +575,19 @@
 							<li>Press <button type="button">Enter</button> on your keyboard.</li>
 						</ul>
 						<p>Using any of these commands will only stop the topmost scene that is currently playing. To also stop the scene below it, use the command again.</p>
-						
+
 						<h2 id="help-saving-adventures">Saving adventures</h2>
 						<p>If you choose to save your adventures in Google Drive, all of the adventures that you create, including the sound and image files in them, are automatically saved on a regular basis and every time you close RPG Ambience.</p>
-						
+
 						<h2 id="help-adventure-backup">Adventure backup</h2>
 						<p>If you are unable to save your adventures due to network failure or some other error, use the buttons under the <em>Backup</em> tab to save them as files to your computer. You can later upload them manually to Google Drive.</p>
-						
+
 						<h2 id="help-finding-art">Where to find art</h2>
 						<p>If you want art to use in RPG Ambience but don't know where to begin looking, try using the search forms under the <em>Art Search</em> tab.</p>
-						
+
 						<h2 id="help-developers">For developers</h2>
 						<p>RPG Ambience is licensed under the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>. Its source code is available in the project's <a href="https://github.com/JakobKallin/RPG-Ambience">GitHub repository</a>.</p>
-						
+
 						<h2 id="help-contact">Contact</h2>
 						<p>You can leave feedback about RPG Ambience in the following ways:</p>
 						<ul>
@@ -595,7 +596,7 @@
 							<li>Post the project's <a href="https://plus.google.com/107989941817857897295">Google+ page</a> or <a href="https://www.facebook.com/RPGAmbience">Facebook page</a>.</li>
 							<li>Create an issue on <a href="https://github.com/JakobKallin/RPG-Ambience/issues">the project's GitHub page</a> (for bug reports).</li>
 						</ul>
-						
+
 						<h2 id="help-disclaimer">Disclaimer</h2>
 						<p>While RPG Ambience does its best to save all of your data, data loss can still occur because of network failures or programming errors. Do not use RPG Ambience to store your only copy of important data.</p>
 					</pane>

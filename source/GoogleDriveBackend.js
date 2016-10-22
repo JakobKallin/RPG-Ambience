@@ -375,21 +375,11 @@ Ambience.GoogleDriveBackend.prototype = {
 			upload: new google.picker.DocsUploadView()
 		};
 		views.docs.setIncludeFolders(true);
-		
-		var mimeTypes = [
-			'audio/mpeg',
-			'audio/ogg',
-			'application/ogg',
-			'audio/webm',
-			'audio/wave',
-			'audio/wav',
-			'audio/x-wav'
-		];
+
 		var picker = new google.picker.PickerBuilder()
 			.setAppId(this.appId)
 			.addView(views.docs)
 			.addView(views.upload)
-			.setSelectableMimeTypes(mimeTypes.join(','))
 			.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
 			.setOAuthToken(backend.oAuthToken)
 			.setCallback(onPickerAction)

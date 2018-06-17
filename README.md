@@ -1,3 +1,5 @@
+**Note: RPG Ambience is no longer in active development. Please [read the announcement](https://blog.rpg-ambience.com/articles/rpg-ambience-future/) for details.**
+
 # RPG Ambience
 
 *Bring your game to life with music and visuals*

@@ -1,0 +1,748 @@
+/* Default styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; }
+
+a {
+  color: inherit;
+  text-decoration: inherit; }
+
+img {
+  border: 0; }
+
+li {
+  display: block;
+  list-style-type: none; }
+
+*[title] {
+  cursor: help !important; }
+
+label {
+  white-space: nowrap; }
+
+label[for], label > span {
+  cursor: pointer; }
+
+button, input, select, textarea {
+  font-size: 1em; }
+
+button, input[type=radio], input[type=checkbox] {
+  cursor: pointer; }
+
+table {
+  border-collapse: collapse; }
+
+textarea {
+  resize: vertical; }
+
+/*@import "debug";*/
+html {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  /* This is needed when browsers round percentage values down, creating a gap between the editor and the stage. */ }
+
+body {
+  width: 100%;
+  height: 100%; }
+
+.editor {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column; }
+  .editor .scene-controls {
+    flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    overflow: auto; }
+    .editor .scene-controls .view-list {
+      flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      display: flex;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      flex-direction: column;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      /* ">" selector because we should not affect other tab content lists. */ }
+      .editor .scene-controls .view-list > .tab-content-list {
+        flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        display: flex;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column; }
+        .editor .scene-controls .view-list > .tab-content-list > * {
+          flex: 1;
+          -webkit-flex: 1;
+          -ms-flex: 1;
+          overflow: auto; }
+      .editor .scene-controls .view-list .scene-view {
+        display: flex;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        flex-direction: row;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        overflow: auto; }
+        .editor .scene-controls .view-list .scene-view .scene-list {
+          flex: 0.4;
+          -webkit-flex: 0.4;
+          -ms-flex: 0.4;
+          display: flex;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          flex-direction: column;
+          -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+          overflow: auto; }
+          .editor .scene-controls .view-list .scene-view .scene-list ul {
+            flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            overflow: auto; }
+        .editor .scene-controls .view-list .scene-view .scene-editor {
+          flex: 0.6;
+          -webkit-flex: 0.6;
+          -ms-flex: 0.6;
+          overflow: auto; }
+
+.splash {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
+/* Generally for hover and focus. */
+.tab-list > * a:hover, .tab-list > * a:focus, .editor .view-list .playback-view .playback-scene-list li button:hover, .editor .view-list .playback-view .playback-scene-list li button:focus, .editor .scene-list .scene a:hover, .splash ul.buttons button:hover, .splash ul.buttons button:focus {
+  background-color: #202020; }
+
+/* Generally for selected elements. */
+.tab-list > *.selected a {
+  background-color: #2d2d2d; }
+
+/* Generally for clicked elements. */
+.editor .view-list .playback-view .playback-scene-list li button:active, .editor .scene-list .scene.selected a, .splash ul.buttons button:active {
+  background-color: #1a2b4d;
+  border-color: #406abf; }
+
+.tab-list > * a, .editor .view-list .playback-view .playback-scene-list li button, .editor .scene-list .scene a, .editor .scene-editor .scene .preview, .editor .scene-editor .scene .tab-content-list > * {
+  background-color: #1a1a1a;
+  border: 1px solid #404040; }
+
+.editor .view-list .playback-view .playback-scene-list li button .preview, .editor .scene-list .scene .preview, .editor .scene-editor .scene .preview {
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden; }
+  .editor .view-list .playback-view .playback-scene-list li button .preview .text.outer, .editor .scene-list .scene .preview .text.outer, .editor .scene-editor .scene .preview .text.outer {
+    display: table;
+    height: 100%;
+    margin: 0 auto;
+    font-family: serif; }
+  .editor .view-list .playback-view .playback-scene-list li button .preview .text.inner, .editor .scene-list .scene .preview .text.inner, .editor .scene-editor .scene .preview .text.inner {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: white;
+    white-space: pre-line;
+    text-rendering: optimizeLegibility; }
+  .editor .view-list .playback-view .playback-scene-list li button .preview .text.inner.sound, .editor .scene-list .scene .preview .text.inner.sound, .editor .scene-editor .scene .preview .text.inner.sound {
+    font-size: 0.3em;
+    color: #404040; }
+
+/* General styling */
+.editor, button, select, input, textarea {
+  font-family: Georgia, serif; }
+
+button {
+  white-space: nowrap; }
+
+/* Button sizes for editor, but not for splash screens. */
+.editor button {
+  height: 2em;
+  padding-left: 0.25em;
+  padding-right: 0.25em; }
+
+input, textarea, select {
+  padding: 0.125em 0.25em; }
+
+/* Applied to all because even smaller numbers can have fractions. */
+input[type=number] {
+  width: 4em;
+  text-align: right; }
+
+progress {
+  width: 100%; }
+
+/* Placeholder styling doesn't seem to work in Chrome if all selectors are included in the same declaration, so they are listed separately here. */
+::-webkit-input-placeholder {
+  font-style: italic;
+  /* `!important` is needed in IE for some reason. */
+  color: #666666 !important; }
+
+::-moz-placeholder {
+  font-style: italic;
+  /* `!important` is needed in IE for some reason. */
+  color: #666666 !important; }
+
+:-ms-input-placeholder {
+  font-style: italic;
+  /* `!important` is needed in IE for some reason. */
+  color: #666666 !important; }
+
+/* Used for empty images, for example. */
+.placeholder {
+  font-style: italic;
+  /* `!important` is needed in IE for some reason. */
+  color: #666666 !important; }
+
+/* Multi-purpose classes */
+.note {
+  color: #666666; }
+
+.tab-list > * {
+  display: block;
+  float: left;
+  margin-right: 0.5em; }
+  .tab-list > * a {
+    display: block;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-bottom-width: 0;
+    color: #bfbfbf;
+    text-decoration: none; }
+
+.primary-secondary {
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* `display: block` is required for IE. */ }
+  .primary-secondary .primary {
+    flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 2em;
+    margin-right: 1em; }
+  .primary-secondary .secondary {
+    display: block;
+    width: auto; }
+
+.ui-sortable > * {
+  cursor: move; }
+
+.ui-sortable-helper {
+  cursor: move !important; }
+
+.editor {
+  padding: 1em 2em 2em 2em;
+  line-height: 2;
+  color: #bfbfbf;
+  background-color: #1a1a1a; }
+  .editor .adventure-controls {
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    margin-bottom: 1em;
+    /* "gui" instead of "editor" because that would clash with "editor" selected above. */ }
+    .editor .adventure-controls .action-list li, .editor .adventure-controls .action-list form {
+      float: left; }
+    .editor .adventure-controls .action-list li:not(:last-child) {
+      margin-right: 0.5em; }
+    .editor .adventure-controls .action-list.adventure {
+      margin-right: 0.5em; }
+    .editor .adventure-controls .action-list.gui {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      padding: 1em;
+      padding-left: 1.375em; }
+    .editor .adventure-controls select, .editor .adventure-controls input {
+      width: 12em; }
+    .editor .adventure-controls label:after {
+      content: ": "; }
+  .editor .message {
+    padding: 0.5em;
+    margin-bottom: 1em;
+    text-align: center;
+    color: black;
+    background-color: #dfdf20;
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row; }
+    .editor .message .text {
+      flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1; }
+    .editor .message .close {
+      margin-left: 0.5em; }
+  .editor .view-list > * {
+    overflow: auto;
+    flex-shrink: 0; }
+  .editor .view-list .scene-view {
+    border: 1px solid #404040;
+    padding: 1em; }
+  .editor .view-list .playback-view {
+    border: 1px solid #404040;
+    padding: 0;
+    /* Fullscreen-specific: fill entire width and use background color. */
+    width: 100%;
+    background-color: #1a1a1a;
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column; }
+    .editor .view-list .playback-view > * {
+      overflow: auto;
+      /* Make sure scrollbars appear when needed. */
+      flex-shrink: 0; }
+    .editor .view-list .playback-view .stop-playback {
+      order: 2;
+      -webkit-order: 2;
+      -ms-flex-order: 2;
+      margin: 1em; }
+      .editor .view-list .playback-view .stop-playback button {
+        width: 100%;
+        font-size: 2em; }
+    .editor .view-list .playback-view .enter-fullscreen {
+      order: 3;
+      -webkit-order: 3;
+      -ms-flex-order: 3;
+      margin: 1em;
+      margin-top: 0;
+      /* Account for margin below stop button. */
+      text-align: center; }
+    .editor .view-list .playback-view .playback-scene-list {
+      flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      order: 1;
+      -webkit-order: 1;
+      -ms-flex-order: 1;
+      margin: 0.5em;
+      /* Account for margin around scene icons. */
+      text-align: center; }
+      .editor .view-list .playback-view .playback-scene-list li {
+        float: left;
+        width: 7.5em;
+        margin: 0.5em; }
+        .editor .view-list .playback-view .playback-scene-list li button {
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          color: #bfbfbf; }
+          .editor .view-list .playback-view .playback-scene-list li button .preview {
+            width: 7.375em;
+            /* Subtract two pixels for left and right border on button. */
+            height: 4.1484375em;
+            /* Widescreen ratio */ }
+            .editor .view-list .playback-view .playback-scene-list li button .preview .text.outer {
+              font-size: 7.5em;
+              /* Text inside will be scaled relative to the box's width. */ }
+          .editor .view-list .playback-view .playback-scene-list li button .label {
+            display: flex;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            flex-direction: row;
+            -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+            line-height: 2em;
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+            /* `display: block` because IE requires it. */ }
+            .editor .view-list .playback-view .playback-scene-list li button .label .name {
+              flex: 1;
+              -webkit-flex: 1;
+              -ms-flex: 1;
+              display: block;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis; }
+            .editor .view-list .playback-view .playback-scene-list li button .label .key {
+              display: block;
+              color: #666666; }
+              .editor .view-list .playback-view .playback-scene-list li button .label .key:before {
+                content: " (";
+                white-space: pre; }
+              .editor .view-list .playback-view .playback-scene-list li button .label .key:after {
+                content: ")"; }
+  .editor .view-list .backup-view, .editor .view-list #art-search-tab, .editor .view-list .help-view {
+    border: 1px solid #404040;
+    padding: 1.5em;
+    line-height: 1.5;
+    overflow: auto; }
+    .editor .view-list .backup-view h2, .editor .view-list #art-search-tab h2, .editor .view-list .help-view h2 {
+      font-weight: normal;
+      font-size: 1.5em;
+      color: #dfdf20; }
+    .editor .view-list .backup-view p, .editor .view-list .backup-view ul, .editor .view-list #art-search-tab p, .editor .view-list #art-search-tab ul, .editor .view-list .help-view p, .editor .view-list .help-view ul {
+      margin-bottom: 1em; }
+    .editor .view-list .backup-view ul, .editor .view-list #art-search-tab ul, .editor .view-list .help-view ul {
+      margin-left: 2em;
+      margin-right: 2em; }
+    .editor .view-list .backup-view li, .editor .view-list #art-search-tab li, .editor .view-list .help-view li {
+      display: list-item; }
+    .editor .view-list .backup-view ul li, .editor .view-list #art-search-tab ul li, .editor .view-list .help-view ul li {
+      list-style-type: square; }
+    .editor .view-list .backup-view ul.controls, .editor .view-list #art-search-tab ul.controls, .editor .view-list .help-view ul.controls {
+      margin-left: 0;
+      margin-right: 0; }
+      .editor .view-list .backup-view ul.controls li, .editor .view-list #art-search-tab ul.controls li, .editor .view-list .help-view ul.controls li {
+        list-style-type: none; }
+    .editor .view-list .backup-view a:link, .editor .view-list #art-search-tab a:link, .editor .view-list .help-view a:link {
+      color: #dfdf20; }
+    .editor .view-list .backup-view a:visited, .editor .view-list #art-search-tab a:visited, .editor .view-list .help-view a:visited {
+      color: #999933; }
+    .editor .view-list .backup-view a:hover, .editor .view-list #art-search-tab a:hover, .editor .view-list .help-view a:hover {
+      color: yellow; }
+    .editor .view-list .backup-view em, .editor .view-list .backup-view dfn, .editor .view-list #art-search-tab em, .editor .view-list #art-search-tab dfn, .editor .view-list .help-view em, .editor .view-list .help-view dfn {
+      color: white;
+      font-style: italic; }
+  .editor .view-list .help-view button {
+    height: 1.5em; }
+  .editor #art-search-tab form {
+    margin-bottom: 0.5em; }
+  .editor .scene-list {
+    margin-right: 0.5em; }
+    .editor .scene-list .scene {
+      position: relative;
+      margin-bottom: 0.5em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis; }
+      .editor .scene-list .scene a {
+        display: block;
+        color: inherit;
+        text-decoration: inherit; }
+        .editor .scene-list .scene a:hover {
+          cursor: pointer; }
+      .editor .scene-list .scene .preview {
+        display: inline-block;
+        vertical-align: middle;
+        width: 5em;
+        height: 2.8125em;
+        /* Widescreen ratio */
+        margin-right: 0.5em; }
+        .editor .scene-list .scene .preview .text.outer {
+          font-size: 5em;
+          /* Text inside will be scaled relative to the box's width. */ }
+      .editor .scene-list .scene .key {
+        color: #666666; }
+        .editor .scene-list .scene .key:before {
+          content: "("; }
+        .editor .scene-list .scene .key:after {
+          content: ")"; }
+      .editor .scene-list .scene .icons {
+        position: absolute;
+        right: 0;
+        top: 0;
+        line-height: 2.8125;
+        margin-right: 0.75em; }
+        .editor .scene-list .scene .icons img {
+          opacity: 0.35;
+          border: 0; }
+    .editor .scene-list .add-scene {
+      display: block; }
+      .editor .scene-list .add-scene button {
+        width: 100%;
+        font-size: 1.5em; }
+  .editor .scene-editor {
+    margin-left: 0.5em; }
+    .editor .scene-editor .scene {
+      overflow: hidden; }
+      .editor .scene-editor .scene .action-list {
+        display: flex;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        flex-direction: row;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        overflow: auto;
+        margin-bottom: 1em; }
+        .editor .scene-editor .scene .action-list .action.copy {
+          flex: 1;
+          -webkit-flex: 1;
+          -ms-flex: 1; }
+      .editor .scene-editor .scene .action {
+        display: block;
+        float: left; }
+        .editor .scene-editor .scene .action :not(:last-child) {
+          margin-right: 0.5em; }
+        .editor .scene-editor .scene .action.remove {
+          float: right; }
+      .editor .scene-editor .scene .preview {
+        float: left;
+        width: 10em;
+        height: 5.625em;
+        /* Widescreen ratio */
+        margin-bottom: 1em;
+        margin-right: 1em; }
+        .editor .scene-editor .scene .preview .text.outer {
+          font-size: 10em;
+          /* Text inside will be scaled relative to the box's width. */ }
+      .editor .scene-editor .scene .tab-list {
+        overflow: auto;
+        margin-top: 0.5em; }
+      .editor .scene-editor .scene .tab-content-list > * {
+        padding: 1em; }
+      .editor .scene-editor .scene .options.general table {
+        min-width: 8em; }
+      .editor .scene-editor .scene .track-list {
+        padding-bottom: 1em;
+        border-bottom: 1px solid #404040;
+        margin-bottom: 1em; }
+      .editor .scene-editor .scene table, .editor .scene-editor .scene tbody {
+        display: block;
+        width: 100%; }
+      .editor .scene-editor .scene table td, .editor .scene-editor .scene table th {
+        padding: 0 0.25em; }
+      .editor .scene-editor .scene table th {
+        width: 0;
+        font-weight: normal;
+        text-align: right;
+        vertical-align: top;
+        white-space: nowrap; }
+        .editor .scene-editor .scene table th label:after {
+          content: ":"; }
+      .editor .scene-editor .scene table td {
+        width: 100%; }
+      .editor .scene-editor .scene table input[type=text], .editor .scene-editor .scene table textarea, .editor .scene-editor .scene table input[type=range] {
+        width: 100%; }
+      .editor .scene-editor .scene .options.specific {
+        clear: both; }
+        .editor .scene-editor .scene .options.specific table {
+          width: 100%; }
+      .editor .scene-editor .scene .control-list > * {
+        display: inline;
+        padding-right: 0.5em; }
+      .editor .scene-editor .scene .text-string textarea {
+        width: 100%; }
+      .editor .scene-editor .scene .font-properties {
+        padding-bottom: 1em;
+        border-bottom: 1px solid #404040;
+        margin-bottom: 1em; }
+      .editor .scene-editor .scene .unsupported {
+        color: #df2020; }
+      .editor .scene-editor .scene .unsupported:before {
+        content: "Unsupported format: "; }
+  .editor .scene-player {
+    margin-left: 1em;
+    margin-top: 2em;
+    overflow: auto;
+    /* Account for borders above and below tabs. */
+    border-top: 2px solid transparent; }
+    .editor .scene-player .stage {
+      width: 20em;
+      height: 11.25em;
+      border: 1px solid #404040;
+      margin-bottom: 0.5em; }
+    .editor .scene-player .playback-controls {
+      display: flex;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      flex-direction: row;
+      -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+      margin-bottom: 0.5em; }
+      .editor .scene-player .playback-controls > * {
+        flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        margin-right: 0.25em; }
+        .editor .scene-player .playback-controls > * button {
+          width: 100%;
+          font-size: 2em; }
+      .editor .scene-player .playback-controls > * + * {
+        margin-left: 0.25em;
+        margin-right: 0; }
+    .editor .scene-player .player-controls {
+      text-align: center; }
+      .editor .scene-player .player-controls > * {
+        display: inline; }
+  .editor .notice {
+    width: 100%;
+    height: 100%;
+    padding: 1.5em;
+    font-size: 1.5em;
+    line-height: 2;
+    text-align: center; }
+    .editor .notice button {
+      font-size: 0.67em; }
+
+.stage-overlay form {
+  float: left;
+  padding: 1em;
+  line-height: 2; }
+
+.stage form {
+  float: right;
+  padding: 1em;
+  line-height: 2; }
+
+/* Splash screen */
+.splash {
+  background-color: #1a1a1a;
+  color: white;
+  font-family: Constantia, Georgia, serif;
+  font-size: 1em;
+  line-height: 2;
+  text-align: center; }
+  .splash > * {
+    display: table-cell;
+    vertical-align: middle; }
+  .splash p {
+    font-weight: normal;
+    font-size: 2em;
+    line-height: 2; }
+  .splash p.note {
+    font-size: 1.5em; }
+  .splash ul {
+    display: block;
+    margin: 1em 0;
+    font-size: 1.5em; }
+  .splash ul.buttons + ul.buttons {
+    margin-top: 2em;
+    font-size: 1.25em; }
+  .splash ul.buttons li {
+    display: inline-block;
+    margin: 0 1em; }
+  .splash ul.buttons button {
+    display: block;
+    padding: 1em;
+    border: 1px solid #404040;
+    color: inherit;
+    background-color: transparent; }
+  .splash ul.buttons img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 1em;
+    width: 5em; }
+  .splash ul.buttons p {
+    font-size: 1em;
+    line-height: 1.5; }
+  .splash ul.buttons p.note {
+    font-size: 0.75em; }
+
+/* Spectrum color picker */
+.sp-replacer {
+  padding: 0.25em; }
+
+.sp-preview {
+  width: 1.5em;
+  height: 1em;
+  margin-right: 0.25em; }
+
+.sp-dd {
+  height: 1em;
+  padding: 0.125em 0;
+  font-size: 0.625em; }
+
+/* Google OAuth adds an iframe to the body element, which seems to take up space in Firefox. */
+body > iframe {
+  display: none; }
+
+/* Temporary future blurb. */
+#future-blurb {
+  flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+  text-align: center;
+  color: black;
+  background-color: #ffea80; }
+  #future-blurb a {
+    color: blue;
+    text-decoration: underline; }
+  #future-blurb button {
+    float: right;
+    height: 1.5em;
+    margin-top: 0.25em; }
+
+.stage {
+  position: relative;
+  background-color: black;
+  overflow: hidden;
+  width: 100%;
+  height: 100%; }
+  .stage .layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: inherit; }
+    .stage .layer .scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; }
+      .stage .layer .scene .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        display: block;
+        width: 100%;
+        height: 100%; }
+      .stage .layer .scene .text.outer {
+        position: relative;
+        /* Needs to be positioned in order to stack above image, which is also positioned. */
+        display: table;
+        height: 100%;
+        margin: 0 auto;
+        font-family: serif; }
+      .stage .layer .scene .text.inner {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        color: white;
+        white-space: pre-line;
+        text-rendering: optimizeLegibility; }
+  .stage form {
+    /* The cursor should always be visible above the stage GUI, even when the pointer over the stage is hidden. */
+    cursor: auto; }
+
+/*# sourceMappingURL=ambience.css.map */

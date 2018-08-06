@@ -1,0 +1,801 @@
+$text-color: hsl(0, 0%, 75%);
+$gui-background: hsl(0, 0%, 10%);
+$gui-border: hsl(0, 0%, 25%);
+$note-color: hsl(0, 0%, 40%);
+
+/* Generally for hover and focus. */
+%soft-focus {
+	background-color: hsl(0, 0%, 12.5%);
+}
+
+/* Generally for selected elements. */
+%medium-focus {
+	background-color: hsl(0, 0%, 17.5%);
+}
+
+/* Generally for clicked elements. */
+%strong-focus {
+	background-color: hsl(220, 50%, 20%);
+	border-color: hsl(220, 50%, 50%);
+}
+
+%box {
+	background-color: $gui-background;
+	border: 1px solid $gui-border;
+}
+
+%preview-box {
+	background-position: center center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+
+	.text.outer {
+		display: table;
+		height: 100%;
+		margin: 0 auto;
+		font-family: serif;
+	}
+
+	.text.inner {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		color: white;
+		white-space: pre-line;
+		text-rendering: optimizeLegibility;
+	}
+
+	.text.inner.sound {
+		font-size: 0.3em;
+		color: hsl(0, 0%, 25%);
+	}
+}
+
+/* General styling */
+
+.editor, button, select, input, textarea {
+	font-family: Georgia, serif;
+}
+
+button {
+	white-space: nowrap;
+}
+
+/* Button sizes for editor, but not for splash screens. */
+.editor button {
+	height: 2em;
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+}
+
+input, textarea, select {
+	padding: 0.125em 0.25em;
+}
+
+/* Applied to all because even smaller numbers can have fractions. */
+input[type=number] {
+	width: 4em;
+	text-align: right;
+}
+
+progress {
+	width: 100%;
+}
+
+/* Placeholder styling doesn't seem to work in Chrome if all selectors are included in the same declaration, so they are listed separately here. */
+
+@mixin placeholder() {
+	font-style: italic;
+	/* `!important` is needed in IE for some reason. */
+	color: $note-color !important;
+}
+
+::-webkit-input-placeholder {
+	@include placeholder();
+}
+
+::-moz-placeholder {
+	@include placeholder();
+}
+
+:-ms-input-placeholder {
+	@include placeholder();
+}
+
+/* Used for empty images, for example. */
+.placeholder {
+	@include placeholder();
+}
+
+/* Multi-purpose classes */
+
+.note {
+	color: $note-color;
+}
+
+.tab-list {
+	> * {
+		display: block;
+		float: left;
+		margin-right: 0.5em;
+
+		a {
+			@extend %box;
+			display: block;
+			padding-left: 0.5em;
+			padding-right: 0.5em;
+			border-bottom-width: 0;
+			color: $text-color;
+			text-decoration: none;
+
+			&:hover, &:focus {
+				@extend %soft-focus;
+			}
+		}
+
+		&.selected a {
+			@extend %medium-focus;
+		}
+	}
+}
+
+.primary-secondary {
+	@include flexbox(row);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	/* `display: block` is required for IE. */
+	.primary {
+		@include flex(1);
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		height: 2em;
+		margin-right: 1em;
+	}
+
+	.secondary {
+		display: block;
+		width: auto;
+	}
+}
+
+.ui-sortable > * {
+	cursor: move;
+}
+
+.ui-sortable-helper {
+	cursor: move !important;
+}
+
+.editor {
+	padding: 1em 2em 2em 2em;
+	line-height: 2;
+	color: $text-color;
+	background-color: $gui-background;
+
+	.adventure-controls {
+		@include flexbox(row);
+		@include flex-wrap();
+		margin-bottom: 1em;
+
+		.action-list {
+			li, form {
+				float: left;
+			}
+
+			li:not(:last-child) {
+				margin-right: 0.5em;
+			}
+		}
+
+		.action-list.adventure {
+			margin-right: 0.5em;
+		}
+
+		/* "gui" instead of "editor" because that would clash with "editor" selected above. */
+		.action-list.gui {
+			position: absolute;
+			top: 0;
+			left: 100%;
+			padding: 1em;
+			padding-left: 1.375em;
+		}
+
+		select, input {
+			width: 12em;
+		}
+
+		label:after {
+			content: ": ";
+		}
+	}
+
+	.message {
+		padding: 0.5em;
+		margin-bottom: 1em;
+		text-align: center;
+		color: black;
+		background-color: hsl(60, 75%, 50%);
+
+		@include flexbox(row);
+
+		.text {
+			@include flex(1);
+		}
+
+		.close {
+			margin-left: 0.5em;
+		}
+	}
+
+	.view-list {
+		> * {
+			overflow: auto;
+			flex-shrink: 0;
+		}
+
+		.scene-view {
+			border: 1px solid $gui-border;
+			padding: 1em;
+		}
+
+		.playback-view {
+			border: 1px solid $gui-border;
+			padding: 0;
+
+			/* Fullscreen-specific: fill entire width and use background color. */
+			width: 100%;
+			background-color: $gui-background;
+
+			@include flexbox(column);
+
+			> * {
+				overflow: auto; /* Make sure scrollbars appear when needed. */
+				flex-shrink: 0;
+			}
+
+			.stop-playback {
+				@include flex-order(2);
+				margin: 1em;
+
+				button {
+					width: 100%;
+					font-size: 2em;
+				}
+			}
+
+			.enter-fullscreen {
+				@include flex-order(3);
+				margin: 1em;
+				margin-top: 0; /* Account for margin below stop button. */
+				text-align: center;
+			}
+
+			.playback-scene-list {
+				@include flex(1);
+				@include flex-order(1);
+				margin: 0.5em; /* Account for margin around scene icons. */
+				text-align: center;
+
+				li {
+					float: left;
+					width: 7.5em;
+					margin: 0.5em;
+
+					button {
+						@extend %box;
+						display: block;
+						width: 100%;
+						height: 100%;
+						padding: 0;
+						color: $text-color;
+
+						&:hover, &:focus {
+							@extend %soft-focus;
+						}
+
+						&:active {
+							@extend %strong-focus;
+						}
+
+						.preview {
+							@extend %preview-box;
+
+							width: 7.375em; /* Subtract two pixels for left and right border on button. */
+							height: 4.1484375em; /* Widescreen ratio */
+
+							.text.outer {
+								font-size: 7.5em; /* Text inside will be scaled relative to the box's width. */
+							}
+						}
+
+						.label {
+							@include flexbox(row);
+							line-height: 2em;
+							padding-left: 0.5em;
+							padding-right: 0.5em;
+
+							/* `display: block` because IE requires it. */
+							.name {
+								@include flex(1);
+								display: block;
+								overflow: hidden;
+								white-space: nowrap;
+								text-overflow: ellipsis;
+							}
+
+							.key {
+								display: block;
+								color: $note-color;
+								&:before {
+									content: " (";
+									white-space: pre;
+								}
+								&:after {
+									content: ")";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.backup-view, #art-search-tab, .help-view {
+			border: 1px solid $gui-border;
+			padding: 1.5em;
+			line-height: 1.5;
+			overflow: auto;
+
+			h2 {
+				font-weight: normal;
+				font-size: 1.5em;
+				color: hsl(60, 75%, 50%);
+			}
+
+			p, ul {
+				margin-bottom: 1em;
+			}
+
+			ul {
+				margin-left: 2em;
+				margin-right: 2em;
+			}
+
+			li {
+				display: list-item;
+			}
+
+			ul li {
+				list-style-type: square;
+			}
+
+			ul.controls {
+				margin-left: 0;
+				margin-right: 0;
+
+				li {
+					list-style-type: none;
+				}
+			}
+
+			a:link {
+				color: hsl(60, 75%, 50%);
+			}
+
+			a:visited {
+				color: hsl(60, 50%, 40%);
+			}
+
+			a:hover {
+				color: hsl(60, 100%, 50%);
+			}
+
+			em, dfn {
+				color: white;
+				font-style: italic;
+			}
+		}
+
+		.help-view button {
+			height: 1.5em;
+		}
+	}
+
+	#art-search-tab {
+		form {
+			margin-bottom: 0.5em;
+		}
+	}
+
+	.scene-list {
+		margin-right: 0.5em;
+
+		.scene {
+			position: relative;
+			margin-bottom: 0.5em;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+
+			a {
+				@extend %box;
+
+				display: block;
+				color: inherit;
+				text-decoration: inherit;
+
+				&:hover {
+					cursor: pointer;
+					@extend %soft-focus;
+				}
+			}
+
+			&.selected a {
+				@extend %strong-focus;
+			}
+
+			.preview {
+				@extend %preview-box;
+
+				display: inline-block;
+				vertical-align: middle;
+				width: 5em;
+				height: 2.8125em; /* Widescreen ratio */
+				margin-right: 0.5em;
+
+				.text.outer {
+					font-size: 5em; /* Text inside will be scaled relative to the box's width. */
+				}
+			}
+
+			.key {
+				color: $note-color;
+				&:before { content: "(" }
+				&:after { content: ")" }
+			}
+
+			.icons {
+				position: absolute;
+				right: 0;
+				top: 0;
+				line-height: 2.8125;
+				margin-right: 0.75em;
+
+				img {
+					opacity: 0.35;
+					border: 0;
+				}
+			}
+		}
+
+		.add-scene {
+			display: block;
+
+			button {
+				width: 100%;
+				font-size: 1.5em;
+			}
+		}
+	}
+
+	.scene-editor {
+		margin-left: 0.5em;
+
+		.scene {
+			overflow: hidden;
+
+			.action-list {
+				@include flexbox(row);
+				overflow: auto;
+				margin-bottom: 1em;
+
+				.action.copy {
+					@include flex(1);
+				}
+			}
+
+			.action {
+				display: block;
+				float: left;
+
+				:not(:last-child) {
+					margin-right: 0.5em;
+				}
+
+				&.remove {
+					float: right;
+				}
+			}
+
+			.preview {
+				@extend %box;
+				@extend %preview-box;
+
+				float: left;
+				width: 10em;
+				height: 5.625em; /* Widescreen ratio */
+				margin-bottom: 1em;
+				margin-right: 1em;
+
+				.text.outer {
+					font-size: 10em; /* Text inside will be scaled relative to the box's width. */
+				}
+			}
+
+			.tab-list {
+				overflow: auto;
+				margin-top: 0.5em;
+			}
+
+			.tab-content-list > * {
+				@extend %box;
+				padding: 1em;
+			}
+
+			.options.general table {
+				min-width: 8em;
+			}
+
+			.track-list {
+				padding-bottom: 1em;
+				border-bottom: 1px solid $gui-border;
+				margin-bottom: 1em;
+			}
+
+			table, tbody {
+				display: block;
+				width: 100%;
+			}
+
+			table {
+				td, th {
+					padding: 0 0.25em;
+				}
+
+				th {
+					width: 0;
+					font-weight: normal;
+					text-align: right;
+					vertical-align: top;
+					white-space: nowrap;
+
+					label:after {
+						content: ":";
+					}
+				}
+
+				td {
+					width: 100%;
+				}
+
+				input[type=text], textarea, input[type=range] {
+					width: 100%;
+				}
+			}
+
+			.options.specific {
+				clear: both;
+
+				table {
+					width: 100%;
+				}
+			}
+
+			.control-list > * {
+				display: inline;
+				padding-right: 0.5em;
+			}
+
+			.text-string textarea {
+				width: 100%;
+			}
+
+			.font-properties {
+				padding-bottom: 1em;
+				border-bottom: 1px solid $gui-border;
+				margin-bottom: 1em;
+			}
+
+			.unsupported {
+				color: hsl(0, 75%, 50%);
+			}
+
+			.unsupported:before {
+				content: "Unsupported format: ";
+			}
+		}
+	}
+
+	.scene-player {
+		margin-left: 1em;
+		margin-top: 2em;
+		overflow: auto;
+
+		/* Account for borders above and below tabs. */
+		border-top: 2px solid transparent;
+
+		.stage {
+			width: 20em;
+			height: 11.25em;
+			border: 1px solid $gui-border;
+			margin-bottom: 0.5em;
+		}
+
+		.playback-controls {
+			@include flexbox(row);
+			margin-bottom: 0.5em;
+
+			> * {
+				@include flex(1);
+				margin-right: 0.25em;
+
+				button {
+					width: 100%;
+					font-size: 2em;
+				}
+			}
+
+			> * + * {
+				margin-left: 0.25em;
+				margin-right: 0;
+			}
+		}
+
+		.player-controls {
+			text-align: center;
+
+			> * {
+				display: inline;
+			}
+		}
+	}
+
+	.notice {
+		width: 100%;
+		height: 100%;
+		padding: 1.5em;
+		font-size: 1.5em;
+		line-height: 2;
+		text-align: center;
+
+		button {
+			font-size: 0.67em;
+		}
+	}
+}
+
+.stage-overlay form {
+	float: left;
+	padding: 1em;
+	line-height: 2;
+}
+
+.stage form {
+	float: right;
+	padding: 1em;
+	line-height: 2;
+}
+
+/* Splash screen */
+
+.splash {
+	background-color: $gui-background;
+	color: white;
+	font-family: Constantia, Georgia, serif;
+	font-size: 1em;
+	line-height: 2;
+	text-align: center;
+
+	> * {
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	p {
+		font-weight: normal;
+		font-size: 2em;
+		line-height: 2;
+	}
+
+	p.note {
+		font-size: 1.5em;
+	}
+
+	ul {
+		display: block;
+		margin: 1em 0;
+		font-size: 1.5em;
+	}
+
+	ul.buttons + ul.buttons {
+		margin-top: 2em;
+		font-size: 1.25em;
+	}
+
+	ul.buttons {
+		li {
+			display: inline-block;
+			margin: 0 1em;
+		}
+
+		button {
+			display: block;
+			padding: 1em;
+			border: 1px solid $gui-border;
+			color: inherit;
+			background-color: transparent;
+		}
+
+		button:hover, button:focus {
+			@extend %soft-focus;
+		}
+
+		button:active {
+			@extend %strong-focus;
+		}
+
+		img {
+			display: block;
+			margin: 0 auto;
+			margin-bottom: 1em;
+			width: 5em;
+		}
+
+		p {
+			font-size: 1em;
+			line-height: 1.5;
+		}
+
+		p.note {
+			font-size: 0.75em;
+		}
+	}
+}
+
+/* Spectrum color picker */
+
+.sp-replacer {
+	padding: 0.25em;
+}
+
+.sp-preview {
+	width: 1.5em;
+	height: 1em;
+	margin-right: 0.25em;
+}
+
+.sp-dd {
+	height: 1em;
+	padding: 0.125em 0;
+	font-size: 0.625em;
+}
+
+/* Google OAuth adds an iframe to the body element, which seems to take up space in Firefox. */
+body > iframe {
+	display: none;
+}
+
+/* Temporary future blurb. */
+#future-blurb {
+	@include flex(1);
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+	text-align: center;
+	color: black;
+	background-color: hsl(50, 100%, 75%);
+
+	a {
+		color: blue;
+		text-decoration: underline;
+	}
+
+	button {
+		float: right;
+		height: 1.5em;
+		margin-top: 0.25em;
+	}
+}

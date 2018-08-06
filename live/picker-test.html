@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Google Picker Test</title>
+		<script src="https://apis.google.com/js/client.js"></script>
+		<script src="http://www.google.com/jsapi?key=AIzaSyCTT934cGu2bDRbCUdx1bHS8PKT5tE34WM"></script>
+		<script>
+			function auth() {
+				gapi.auth.authorize({
+					client_id: '907013371139.apps.googleusercontent.com',
+					scope: 'https://www.googleapis.com/auth/drive.file',
+					immediate: false
+				});
+			}
+			
+			function showPicker() {
+				google.load('picker', '1', { callback: function() {
+					var picker = new google.picker.PickerBuilder()
+						.setAppId('907013371139')
+						.addView(new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES))
+						.setOAuthToken(gapi.auth.getToken().access_token)
+						.setCallback(onPickerAction)
+						.build();
+					picker.setVisible(true);
+					
+					function onPickerAction(data) {
+						if ( data.action === google.picker.Action.PICKED ) {
+							var id = data.docs[0].id;
+							downloadItem(id);
+						}
+					}
+				}});
+			}
+			
+			function downloadItem(id) {
+				var request = new XMLHttpRequest();
+				var token = gapi.auth.getToken().access_token;
+				request.open('GET', 'https://www.googleapis.com/drive/v2/files/' + id);
+				request.setRequestHeader('Authorization', 'Bearer ' + token);
+				
+				request.addEventListener('error', function(e) {
+					console.log(e);
+				});
+				request.addEventListener('abort', function(e) {
+					console.log(e);
+				});
+				request.addEventListener('load', function() {
+					var item = JSON.parse(request.responseText);
+					console.log(item);
+				});
+				
+				request.send();
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

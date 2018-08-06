@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Mocha Tests</title>
+		<link rel="stylesheet" href="mocha/mocha.css">
+	</head>
+	<body>
+		<div id="mocha"></div>
+		<script src="expect/expect.js"></script>
+		<script src="mocha/mocha.js"></script>
+		<script>mocha.setup('bdd');</script>
+		
+		<script>var Ambience = {};</script>
+		<script src="../libraries/when/when.js"></script>
+		<script src="../libraries/when/delay.js"></script>
+		<script src="../source/List.js"></script>
+		<script src="../source/TaskQueue.js"></script>
+		
+		<script src="TaskQueue.spec.js"></script>
+		
+		<script>mocha.run();</script>
+	</body>
+</html>

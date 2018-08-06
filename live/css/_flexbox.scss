@@ -1,0 +1,30 @@
+@mixin flexbox($direction) {
+	display: flex;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	flex-direction: $direction;
+	-webkit-flex-direction: $direction;
+	-ms-flex-direction: $direction;
+}
+
+@mixin flex($value) {
+	flex: $value;
+	-webkit-flex: $value;
+	-ms-flex: $value;
+}
+
+@mixin flex-wrap() {
+	flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+}
+
+@mixin flex-align-items($alignment) {
+	align-items: $alignment;
+	-webkit-align-items: $alignment;
+}
+
+@mixin flex-order($order) {
+	order: $order;
+	-webkit-order: $order;
+	-ms-flex-order: $order;
+}

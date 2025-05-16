@@ -1,4 +1,4 @@
-**Note: RPG Ambience is no longer in active development. Please [read the announcement](https://blog.ambience.tabletopsoftware.net/articles/rpg-ambience-future/) for details. For information on hosting your own version of RPG Ambience, please [read the instructions below](#hosting-your-own-copy-of-rpg-ambience).**
+**Note: RPG Ambience is no longer in active development. Please [read the announcement](https://blog.ambience.tabletopsoftware.net/articles/rpg-ambience-end/) for details. For information on hosting your own version of RPG Ambience, please [read the instructions below](#hosting-your-own-copy-of-rpg-ambience).**
 
 # RPG Ambience
 
